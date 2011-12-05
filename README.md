@@ -1,14 +1,30 @@
 RUIBY
 =====
 
-A simple helper for make ruby gui rapidly.
+A simple helper for building simple GUI ruby application rapidly.
+
+'simple' meen 'without great look&feel precision' 
+
 Inspirations from Shoes.
+
+Hrsd codes (gtk) comme from green_shoes.
+
 Based on gtk at first, should evolve for support awt (jruby) Forms (IronRuby) Qt...
 
 
 Status
 ======
-In developpement
+In developpement :
+* basic widget works (stack/flow/button/label/entry....)
+* threading support ok ( gui_invoke { } )
+* in development : source editor, video
+* waiting : data grid, list, treeview, systray
+
+Demo Hard copy at :
+http://regisaubarede.posterous.com/
+
+Code:
+http://github.com/raubarede/Ruiby
 
 License
 =======
