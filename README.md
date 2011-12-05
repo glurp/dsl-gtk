@@ -40,8 +40,6 @@ def component()
   stack do
     slot(label( <<-EEND
      This window is done with 55 LOC...
-     50 lines for create widgets, but don't do any traitment !
-     I will use that for Inscape extensions (SCADA Synoptics in SVG) 
     EEND
     ))
     separator
