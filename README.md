@@ -7,7 +7,7 @@ A simple helper for building simple GUI ruby application rapidly.
 
 Inspirations from Shoes.
 
-Hrsd codes (gtk) comme from green_shoes.
+Hard codes (gtk) copyed from green_shoes (thank you ashbb :) .
 
 Based on gtk at first, should evolve for support awt (jruby) Forms (IronRuby) Qt...
 
@@ -15,10 +15,10 @@ Based on gtk at first, should evolve for support awt (jruby) Forms (IronRuby) Qt
 Status
 ======
 In developpement :
-* basic widget works (stack/flow/button/label/entry....)
-* threading support ok ( gui_invoke { } )
-* in development : source editor, video
-* waiting : data grid, list, treeview, systray
+ * basic widget works (stack/flow/button/label/entry....)
+ * threading support ok ( gui_invoke { } )
+ * in development : source editor, video
+ * waiting : data grid, list, treeview, systray
 
 Demo Hard copy at :
 http://regisaubarede.posterous.com/
