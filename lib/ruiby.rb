@@ -68,9 +68,9 @@ Background
    delete(@a)
    threader(periode-pooling-queue) # at initialize(), declare multithread engine
    Thread.new {
-	 gtk_invoke { instructions }	# block will be evaluate (instance_eval on main windows object) 
+	 gui_invoke { instructions }	# block will be evaluate (instance_eval on main windows object) 
 									#in the main thread
-	 gtk_invoke_wait { instructions } # block will be evaluate, retrune when it is done
+	 gui_invoke_wait { instructions } # block will be evaluate, retrune when it is done
    }
 
 Root window/Graphics environnement
@@ -157,7 +157,7 @@ class Ruiby_gtk < Gtk::Window
 	
 	def append_to(cont,&blk) 
 		if $__mainthread__ != Thread.current
-			gtk_invoke { append_to(cont,&blk) }
+			gui_invoke { append_to(cont,&blk) }
 			return
 		end
 		@lcur << cont
@@ -167,7 +167,7 @@ class Ruiby_gtk < Gtk::Window
 	end
 	def clear_append_to(cont,&blk) 
 		if $__mainthread__ != Thread.current
-			gtk_invoke { clear_append_to(cont,&blk) }
+			gui_invoke { clear_append_to(cont,&blk) }
 			return
 		end
 		cont.children.each { |w| cont.remove(w) } 
@@ -182,7 +182,7 @@ class Ruiby_gtk < Gtk::Window
 	end
  	def slot_append_before(w,wref)
 		if $__mainthread__ != Thread.current
-			gtk_invoke { slot_append_before(w,wref) }
+			gui_invoke { slot_append_before(w,wref) }
 			return
 		end
  		parent=check_append("slot_append_before",w,wref)
@@ -196,7 +196,7 @@ class Ruiby_gtk < Gtk::Window
  	end
  	def slot_append_after(w,wref)
 		if $__mainthread__ != Thread.current
-			gtk_invoke { slot_append_after(w,wref) }
+			gui_invoke { slot_append_after(w,wref) }
 			return
 		end
  		parent=check_append("slot_append_after",w,wref)
@@ -211,7 +211,7 @@ class Ruiby_gtk < Gtk::Window
 	# delete a widget or a timer
 	def delete(w)
 		if $__mainthread__ != Thread.current
-			gtk_invoke { delete(w) }
+			gui_invoke { delete(w) }
 			return
 		end
 		if  GLib::Timeout === w
@@ -483,7 +483,7 @@ class Ruiby_gtk < Gtk::Window
 
 	def log(*txt)
 		if $__mainthread__ != Thread.current
-			gtk_invoke { log(*txt) }
+			gui_invoke { log(*txt) }
 			return
 		end
 		loglabel=create_log_window()
@@ -636,9 +636,9 @@ end
 #		$__mainthread__= Thread.current
 #		$___mainwindow__=self
 
-def gtk_invoke(&blk) 
+def gui_invoke(&blk) 
     if ! defined?($__mainwindow__)
-		puts("\n\ngtk_invoke() : initialize() of main windows not done!\n\n") 
+		puts("\n\ngui_invoke() : initialize() of main windows not done!\n\n") 
 		return
 	end
 	if $__mainthread__ != Thread.current
@@ -652,9 +652,9 @@ def gtk_invoke(&blk)
 	end
 end
 
-def gtk_invoke_wait(&blk) 
+def gui_invoke_wait(&blk) 
     if ! defined?($__mainwindow__)
-		puts("\n\ngtk_invoke_wait() : initialize() of main windows not done!\n\n") 
+		puts("\n\ngui_invoke_wait() : initialize() of main windows not done!\n\n") 
 		return
 	end
 	if $__mainthread__ != Thread.current

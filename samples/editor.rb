@@ -1,7 +1,8 @@
 #!/usr/bin/ruby
 # encoding: utf-8
-require_relative 'ruiby'
+require_relative '../lib/ruiby'
 
+# NOT READY!
 
 class RubyApp < Ruiby_gtk
     def initialize

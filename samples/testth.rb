@@ -1,7 +1,7 @@
 ﻿#!/usr/bin/ruby
 # encoding: utf-8
 
-require_relative 'ruiby'
+require_relative '../lib/ruiby'
 require 'open3'
 
 class RubyApp < Ruiby_gtk
@@ -34,11 +34,11 @@ class RubyApp < Ruiby_gtk
 		@ss=0
  		loop {
 		 	sleep(0.05)
-			gtk_invoke_wait { @ss=@lab.children.size }
+			gui_invoke_wait { @ss=@lab.children.size }
 			if @ss<20
-			  gtk_invoke { append_to(@lab) { sloti(label(Time.now.to_f.to_s))  } }
+			  gui_invoke { append_to(@lab) { sloti(label(Time.now.to_f.to_s))  } }
 			else
-			  gtk_invoke { @lab.children[0..3].each { |w| delete(w) } }
+			  gui_invoke { @lab.children[0..3].each { |w| delete(w) } }
 			end
 		}
 	end 
@@ -48,11 +48,11 @@ class RubyApp < Ruiby_gtk
 			Open3.popen3("ping 10.177.235.1") { |si,so,se| 
 				while str=(so.gets || se.gets)
 					if ii>10
-						gtk_invoke_wait { @fr.children[0..-3].each { |w| delete(w) } }   
+						gui_invoke_wait { @fr.children[0..-3].each { |w| delete(w) } }   
 						ii=3
 					end
 					log str
-					gtk_invoke { append_to(@fr) { sloti(label(str.chomp)) } }
+					gui_invoke { append_to(@fr) { sloti(label(str.chomp)) } }
 					ii+=1
 				end
 			}
