@@ -3,7 +3,7 @@ RUIBY
 
 A simple helper for building simple GUI ruby application rapidly.
 
-'simple' meen 'without great look&feel precision' 
+'simple' mean 'without great look&feel precision' 
 
 Inspirations from Shoes.
 
@@ -15,12 +15,13 @@ Based on gtk at first, should evolve for support awt (jruby) Forms (IronRuby) Qt
 Status
 ======
 In developpement :
- * basic widget works (stack/flow/button/label/entry....)
- * threading support ok ( gui_invoke { } )
- * in development : source editor, video
- * waiting : data grid, list, treeview, systray
 
-Demo Hard copy at :
+* basic widget works (stack/flow/button/label/entry....)
+* threading support ok ( gui_invoke { } )
+* in development : source editor, video
+* waiting : data grid, list, treeview, systray
+
+Hard copy of test.rb execution at :
 http://regisaubarede.posterous.com/
 
 Code:
@@ -32,7 +33,7 @@ LGPL, CC BY-SA
 
 Exemple 
 ======
-see samples in "./sample" directory
+see samples in "./samples" directory
 
 
 ```ruby
