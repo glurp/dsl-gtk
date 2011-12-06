@@ -9,7 +9,28 @@ Inspirations from Shoes.
 
 Hard codes (gtk) copyed from green_shoes (thank you ashbb :) .
 
-Based on gtk at first, should evolve for support awt (jruby) Forms (IronRuby) Qt...
+Based on gtk at first, should evolve for support swt (jruby) Forms (IronRuby) Qt...
+
+Design
+======
+Ruby expert will be desapointed : no multiple class, no modules, no meta-programming !
+I try do make a sample DSL avoiding instance_eval, dynamique methods and so on.
+So, For gtk , Ruiby is one-file only, one class.
+User must use it as :
+
+```
+class Application < Ruiby_gtk
+    def initialize()
+        super("application title",350,0)
+    end	
+	def component()        
+	  stack do
+		...
+	  end
+	end 
+	.....your code....
+end
+```
 
 
 Status
@@ -18,7 +39,7 @@ In developpement :
 
 * basic widget works (stack/flow/button/label/entry....)
 * threading support ok ( gui_invoke { } )
-* in development : source editor, video
+* in development :  video
 * waiting : data grid, list, treeview, systray
 
 Hard copy of test.rb execution at :

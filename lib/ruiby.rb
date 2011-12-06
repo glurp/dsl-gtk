@@ -2,7 +2,7 @@
 #            ruiby.rb :   not a dsl for Ruby/Gui
 #                         Gtk based. Future : Java/xwt and ir/Forms
 ###############################################################################################
-# Copyright 2011-2012 Regis d'Aubarede <regis.aubarede@gmail.com>
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -126,7 +126,18 @@ class Ruiby_gtk < Gtk::Window
 	end
 	def component
 	end
-
+	def window_position(x,y)
+		if 		x>=0 && y>=0
+			gravity= Gdk::Window::GRAVITY_NORTH_WEST
+		elsif 	x<0 && y>=0
+			gravity= Gdk::Window::GRAVITY_NORTH_EAST
+		elsif 	x>=0 && y<0
+			gravity= Gdk::Window::GRAVITY_SOUTH_WEST
+		elsif 	x<0 && y<0
+			gravity= Gdk::Window::GRAVITY_SOUTH_EAST
+		end
+		move(x.abs,y.abs)
+	end
 	############################ Slot : H/V Box or Frame
 	def vbox_scrolled(width,height,&b)
 		sw=slot(ScrolledWindow.new())
@@ -263,13 +274,14 @@ class Ruiby_gtk < Gtk::Window
 		items.each {|name_tooltip,v| 
 			name,tooltip=name_tooltip,nil
 			if ((ar=name_tooltip.split('/')).size>1)
-				name,tool_tip=*ar
+				name,tooltip=*ar
+				tooltip="  #{tooltip.capitalize}  "
 			end
 			iname=get_icon(name)
 			w=if iname
 				Gtk::ToolButton.new(iname).tap { |b|
 				  b.signal_connect("clicked") { v.call } if v
-			 	  b.set_tooltip_text tooltip if tooltip
+			 	  b.set_tooltip_text(tooltip) if tooltip
 			 	}
 			elsif name=~/^sep/i
 				Gtk::SeparatorToolItem.new
@@ -420,7 +432,7 @@ class Ruiby_gtk < Gtk::Window
 	# from: green shoes plugin
 	# options= :width  :height :on_change :lang :font
 	# @edit=slot(source_editor()).editor
-	# @edit.text=File.read(@filename)
+	# @edit.buffer.text=File.read(@filename)
 
     def source_editor(args={}) # from green_shoes plugin
       require 'gtksourceview2'
@@ -429,7 +441,7 @@ class Ruiby_gtk < Gtk::Window
       args[:height] = 300 unless args[:height]
   	  change_proc = proc { }
       (change_proc = args[:on_change]; args.delete :on_change) if args[:on_change]
-      sv = SourceView.new
+      sv = ::Gtk::SourceView.new
       sv.show_line_numbers = true
       sv.insert_spaces_instead_of_tabs = false
       sv.smart_home_end = Gtk::SourceView::SMART_HOME_END_ALWAYS
@@ -440,23 +452,25 @@ class Ruiby_gtk < Gtk::Window
       sv.modify_font(Pango::FontDescription.new(args[:font])) if args[:font]
 
       cb = ScrolledWindow.new
-	  def cb.editor() sv end
+	  cb.define_singleton_method(:editor) { sv }
+
       cb.set_size_request(args[:width], args[:height])
       cb.set_policy(POLICY_AUTOMATIC, POLICY_AUTOMATIC)
       cb.set_shadow_type(SHADOW_IN)
       cb.add(sv)
       cb.show_all
       args[:real], args[:app], args[:textview] = cb, self, sv
-      CodeBox.new(args).tap do |s|
-        s.change(&change_proc)
-        sv.buffer.signal_connect "changed" do
-          yield s
-        end if block_given?
-      end
+      # Gtk::CodeBox.new(args).tap do |s|
+        # s.change(&change_proc)
+        # sv.buffer.signal_connect "changed" do
+          # yield s
+        # end if block_given?
+      # end
 	  cb
     end
 	############################# Video
 	# from: green shoes plugin
+	# not ready!
 	
 	def video(uri,w=300,h=200)
 		wid=DrawingArea.new()
@@ -539,13 +553,21 @@ class Ruiby_gtk < Gtk::Window
 	end
 
 
-	def ask(*txt) prompt(*txt) end
+	def ask(*txt) 
+		text=txt.join(" ")
+        md = MessageDialog.new(self,
+            Dialog::DESTROY_WITH_PARENT,  Gtk::MessageDialog::QUESTION, 
+            MessageDialog::BUTTONS_YES_NO, text)
+		rep=md.run
+		md.destroy
+		return( rep==-8 )
+	end
 	def trace(*txt) message(MessageDialog::WARNING,*txt) end
 
 	def message(style,*txt)
 		text=txt.join(" ")
         md = MessageDialog.new(self,
-            Dialog::DESTROY_WITH_PARENT, style, 
+            Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::QUESTION, 
             MessageDialog::BUTTONS_CLOSE, text)
         md.run
         md.destroy
@@ -608,23 +630,35 @@ class Ruiby_gtk < Gtk::Window
          true
         }
 	end
-	# return handle of animation. can be stoped by delete(hanim)
-  	def anim(n,&blk) GLib::Timeout.add(n) { blk.call rescue log("#{$!} :\n  #{$!.backtrace[0..3].join("\n   ")}") ; true } end
+	# shot peridicly ; return handle of animation. can be stoped by delete(hanim)
+  	def anim(n,&blk) 
+		GLib::Timeout.add(n) { 
+			blk.call rescue log("#{$!} :\n  #{$!.backtrace[0..3].join("\n   ")}") 
+			true 
+		}
+	end
+	# one shot after some millisecs
+  	def after(n,&blk) 
+		GLib::Timeout.add(n) { 
+			blk.call rescue log("#{$!} :\n  #{$!.backtrace[0..3].join("\n   ")}") 
+			false
+		}
+	end
 end
 
 class Editor < Ruiby_gtk
     def initialize(w,filename)
 		@filename=filename
-        super("Edit #{filename}",150,0)
+        super("Edit #{filename}",350,0)
+		transient_for=w
+		destroy_with_parent=false
+		decorated=false
     end	
 	def component()        
 	  stack do
-		sloti(htoolbar({"open/ourir fichier"=>nil,"close/fermer le fichier"=>nil,
-			"undo/defaire"=>nil,"redo/refaire"=>proc { alert("e") },"ee"=>nil }))
-		separator
 		@edit=slot(source_editor()).editor
-		@edit.text=File.read(@filename)
-		sloti( button("Exit") {  })
+		@edit.buffer.text=File.read(@filename)
+		sloti( button("Exit") { destroy() })
 	  end
 	end # endcomponent
 
