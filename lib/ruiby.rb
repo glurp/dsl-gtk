@@ -82,8 +82,8 @@ td   systray(icon,{label=>proc {},...})
 
 TODO
 ---
+ grid()
  list() 
- text_editor() 
  progress_bar() 
  menu()
  
@@ -459,15 +459,26 @@ class Ruiby_gtk < Gtk::Window
       cb.set_shadow_type(SHADOW_IN)
       cb.add(sv)
       cb.show_all
-      args[:real], args[:app], args[:textview] = cb, self, sv
-      # Gtk::CodeBox.new(args).tap do |s|
-        # s.change(&change_proc)
-        # sv.buffer.signal_connect "changed" do
-          # yield s
-        # end if block_given?
-      # end
 	  cb
     end
+	
+	# @edit=slot(text_area(300,100)).text_area
+	# @edit.buffer.text="Hello!"
+	def text_area(w=200,h=100,args={}) # from green_shoes app
+		  tv = Gtk::TextView.new
+		  tv.wrap_mode = TextTag::WRAP_WORD
+		  tv.buffer.text = args[:text].to_s if args[:text]
+		  tv.modify_font(Pango::FontDescription.new(args[:font])) if args[:font]
+		  tv.accepts_tab = true
+
+		  eb = Gtk::ScrolledWindow.new
+		  eb.set_size_request(w,h) 
+		  eb.add(tv)
+		  cb.define_singleton_method(:text_area) { sv }
+
+		  eb.show_all
+		  eb
+    end	
 	############################# Video
 	# from: green shoes plugin
 	# not ready!
