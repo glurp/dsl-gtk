@@ -103,13 +103,18 @@ class Ruiby_gtk < Gtk::Window
 		unless defined?($__mainthread__)
 			$__mainthread__= Thread.current
 			$__mainwindow__=self
+			@is_main_window=true
+		else
+			@is_main_window=false
 		end
         set_title(title)
         set_default_size(w,h)
         signal_connect "destroy" do 
-			self.gtk_exit
+			if @is_main_window
+				self.gtk_exit
+			end
 		end
-        set_window_position Window::POS_CENTER
+        set_window_position Window::POS_CENTER  # default
 		@lcur=[self]
 		@cur=nil
 		begin
@@ -125,9 +130,13 @@ class Ruiby_gtk < Gtk::Window
 		Gtk.main_quit 
 	end
 	def component
+		raise("Abstract: 'def component()' must be overiden in a Ruiby class")
 	end
 	def window_position(x,y)
-		if 		x>=0 && y>=0
+		if x==0 && y==0
+			set_window_position Window::POS_CENTER
+			return
+		elsif 		x>=0 && y>=0
 			gravity= Gdk::Window::GRAVITY_NORTH_WEST
 		elsif 	x<0 && y>=0
 			gravity= Gdk::Window::GRAVITY_NORTH_EAST
@@ -248,14 +257,19 @@ class Ruiby_gtk < Gtk::Window
 	end
 
 	############### Commands
-
+	def attribs(w,options)
+		  w.modify_font(Pango::FontDescription.new(options[:font])) if options[:font]
+		  w
+	end
 	def separator(width=1.0)  sloti(HBox === @lcur.last ? VSeparator.new : HSeparator.new)  end
-	def label(text,option={})
-		if text && text[0,1]=="#"
+	def label(text,options={})
+		l=if text && text[0,1]=="#"
 			Image.new(get_icon(text[1..-1]),IconSize::BUTTON);
 		else
 			Label.new(text);
 		end
+		attribs(l,options)
+		l
 	end
 	def button(text,option={},&blk)
 		if text && text[0,1]=="#"
@@ -265,6 +279,7 @@ class Ruiby_gtk < Gtk::Window
 			b=Button.new(text);
 		end
 		b.signal_connect("clicked",&blk) if blk
+		attribs(b,option)
 		b
 	end 
 	def htoolbar(items,options={})
@@ -304,6 +319,7 @@ class Ruiby_gtk < Gtk::Window
 			w.append_text(text) 
 		end
 		w.set_active(default) if default>=0
+		attribs(w,option)		
 		w
 	end
 
@@ -315,11 +331,14 @@ class Ruiby_gtk < Gtk::Window
 		end
 		b.set_active(value)
 		b.label= value ? text2.to_s : text1.to_s 
+		attribs(b,option)		
 		b
 	end
-	def check_button(text="",value=false)
+	def check_button(text="",value=false,option={})
 		b=CheckButton.new(text)
         	.set_active(value)
+		attribs(b,option)
+		b
 	end
 	def hradio_buttons(ltext=["empty!"],value=-1)
 		flow(false) {
@@ -338,21 +357,29 @@ class Ruiby_gtk < Gtk::Window
 		}
 	end
 	def entry(value,size=10,option={})
-		Entry.new().tap {|e| e.set_text(value ? value.to_s : "") }
+		w=Entry.new().tap {|e| e.set_text(value ? value.to_s : "") }
+		attribs(w,option)		
+		w
 	end
 	def ientry(value,option={})
-		SpinButton.new(option[:min].to_i,option[:max].to_i,option[:by])
+		w=SpinButton.new(option[:min].to_i,option[:max].to_i,option[:by])
 			.set_numeric(true)
 			.set_value(value ? value.to_i : 0) 
+		attribs(w,option)		
+		w
 	end
 	def fentry(value,option={})
-		SpinButton.new(option[:min].to_f,option[:max].to_f,option[:by].to_f)
+		w=SpinButton.new(option[:min].to_f,option[:max].to_f,option[:by].to_f)
 			.set_numeric(true)
 			.set_value(value ? value.to_f : 0.0)
+		attribs(w,option)		
+		w
 	end
 	def islider(value,option={})
-		HScale.new(option[:min].to_i,option[:max].to_i,option[:by])
+		w=HScale.new(option[:min].to_i,option[:max].to_i,option[:by])
 			.set_value(value ? value.to_i : 0)
+		attribs(w,option)		
+		w
 	end
 	def color_choice(color=0xff000000)
 		b,d=nil,nil
@@ -386,6 +413,8 @@ class Ruiby_gtk < Gtk::Window
 		w.signal_connect('button_press_event')   { |w,e| @do = option[:mouse_down].call(w,e)                ; force_update(w) }  if option[:mouse_down]
 		w.signal_connect('button_release_event') { |w,e| option[:mouse_up].call(w,e,@do)   if @do ; @do=nil ; force_update(w) if @do }  if option[:mouse_up]
 		w.signal_connect('motion_notify_event')  { |w,e| @do = option[:mouse_move].call(w,e,@do) if @do     ; force_update(w) if @do }  if option[:mouse_move]
+		w.signal_connect('key_press_event')  { |w,e| option[:key_press].call(w,e) ; force_update(w) }  if option[:key_press]
+		attribs(w,option)				
 		w
 	end
 	def force_update(canvas) canvas.queue_draw unless  canvas.destroyed?  end
@@ -474,11 +503,29 @@ class Ruiby_gtk < Gtk::Window
 		  eb = Gtk::ScrolledWindow.new
 		  eb.set_size_request(w,h) 
 		  eb.add(tv)
-		  cb.define_singleton_method(:text_area) { sv }
+		  eb.define_singleton_method(:text_area) { tv }
 
 		  eb.show_all
 		  eb
     end	
+
+	############################# calendar
+	
+	# calendar(Time.now-24*3600, :selection => proc {|c| } , :changed => proc {|c| }
+	def calendar(time=Time.now,options={})
+		c = Calendar.new
+		c.display_options(Calendar::SHOW_HEADING | Calendar::SHOW_DAY_NAMES |  
+						Calendar::SHOW_WEEK_NUMBERS | Gtk::Calendar::WEEK_START_MONDAY)
+		after(1) { c.signal_connect("day-selected") { |w,e| options[:selection].call(w.day) } } if options[:selection]
+		after(1) { c.signal_connect("month-changed") { |w,e| options[:changed].call(w) } }if options[:changed]
+		calendar_set_time(c,time)
+		c
+	end
+	def calendar_set_time(cal,time=Time.now)
+		cal.select_month(time.month,time.year)
+		cal.select_day(time.day)
+	end
+	
 	############################# Video
 	# from: green shoes plugin
 	# not ready!

@@ -13,21 +13,24 @@ Based on gtk at first, should evolve for support swt (jruby) Forms (IronRuby) Qt
 
 Design
 ======
-Ruby expert will be desapointed : no multiple class, no modules, no meta-programming !
+No multiple class, no modules, no meta-programming !
 I try do make a sample DSL avoiding instance_eval, dynamique methods and so on.
-So, For gtk , Ruiby is one-file only, one class.
+So, For gtk , Ruiby is one-file only, 'almost) one class.
+
 User must use it as :
 
 ```
 class Application < Ruiby_gtk
     def initialize()
         super("application title",350,0)
+		Threader(50)
     end	
 	def component()        
 	  stack do
 		...
 	  end
-	end 
+	  Thread.new { loop { m= queue.enq ; gui_invoke { ..gui code.. } } }
+	end
 	.....your code....
 end
 ```

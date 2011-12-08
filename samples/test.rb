@@ -15,12 +15,13 @@ def component()
 		"undo/defaire"=>nil,
 		"redo/refaire"=>proc { alert("e") },"ee"=>nil
 	))
-    slot(label( <<-EEND
-     This window is demoof Ruiby
-     50 lines for create widgets, but don't do any traitment !
+    slot(label( <<-EEND ,:font=>"Arial 12"))
+     This window is test & demo of Ruiby capacity.
+	 here is missing Threading & video.
 	 ~ 100 LOC
     EEND
-    ))
+	
+    
     separator
     flow {
       @left=stack {
@@ -81,6 +82,7 @@ def component()
           sloti(button("Eeee"))
           sloti(button("#harddisk") { alert("image button!")})
           sloti(label('#cdrom'))
+		  sloti(calendar())
         }
       end
       frame("") do
