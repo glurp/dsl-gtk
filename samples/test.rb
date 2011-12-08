@@ -17,7 +17,7 @@ def component()
 	))
     slot(label( <<-EEND ,:font=>"Arial 12"))
      This window is test & demo of Ruiby capacity.
-	 here is missing Threading & video.
+	 Here is missing Threading (see testth.rb) & video (see video.rb).
 	 ~ 100 LOC
     EEND
 	

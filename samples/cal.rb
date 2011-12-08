@@ -2,7 +2,7 @@ require_relative '../lib/ruiby'
 
 
 class RubyApp < Ruiby_gtk
-    def initialize() super("Calendar",400,300)  end
+    def initialize() super("Calendar",400,10)  end
     def component()  
 		@ed=[]
 		@change=false

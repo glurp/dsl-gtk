@@ -478,7 +478,7 @@ class Ruiby_gtk < Gtk::Window
       sv.buffer.text = (args[:text]||"").to_s
       sv.buffer.language = Gtk::SourceLanguageManager.new.get_language(args[:lang]||'ruby')
       sv.buffer.highlight_syntax = true
-      sv.modify_font(Pango::FontDescription.new(args[:font])) if args[:font]
+      sv.modify_font(  Pango::FontDescription.new(args[:font] || "Courier new 10")) 
 
       cb = ScrolledWindow.new
 	  cb.define_singleton_method(:editor) { sv }
@@ -707,15 +707,13 @@ end
 class Editor < Ruiby_gtk
     def initialize(w,filename)
 		@filename=filename
-        super("Edit #{filename}",350,0)
+        super("Edit #{filename[0..40]}",350,0)
 		transient_for=w
-		destroy_with_parent=false
-		decorated=false
     end	
 	def component()        
 	  stack do
 		@edit=slot(source_editor()).editor
-		@edit.buffer.text=File.read(@filename)
+		@edit.buffer.text=File.exists?(@filename) ? File.read(@filename) : @filename
 		sloti( button("Exit") { destroy() })
 	  end
 	end # endcomponent
