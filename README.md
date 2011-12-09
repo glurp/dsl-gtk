@@ -46,7 +46,7 @@ In developpement :
 * in development :  video
 * waiting : data grid, list, treeview, systray
 
-Hard copy of test.rb execution at :
+Hard copy dispo at :
 http://regisaubarede.posterous.com/
 
 Code:
