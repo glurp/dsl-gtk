@@ -1,6 +1,6 @@
 ###############################################################################################
 #            ruiby.rb :   not a dsl for Ruby/Gui
-#                         Gtk based. Future : Java/xwt and ir/Forms
+#                         Gtk based. Future : Java/swt or Qt (?)
 ###############################################################################################
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 #
@@ -30,22 +30,30 @@ end
 
 Container
 ---------
- flow{ slot(w1) ; slot(w2) }    				# !AUTO slot()
- stack { slot(w) ; flow { slot(w) }}			# !AUTO slot()
+( auto-slot mean widget is automaticly pack to its parrent)
+
+ flow{ slot(w1) ; slot(w2) }    				# AUTO slot()
+ stack { slot(w) ; flow { slot(w) }}			# AUTO slot()
  table(col,row) { 
 	row { cell(w) ; cell(w) }
 	row { cell(flow(false) { ... } } 
  }  # !AUTO slot()
- notebook { page("ee") { } ; page("aa") { } }	# !AUTO slot()
- separator                                      # !AUTO slot()
+ notebook { page("ee") { } ; page("aa") { } }	# AUTO slot()
+ separator                                      # AUTO slot()
  flow(false)   { ... }                          # not sloted
  stack(false)  { ... }                          # not sloted
+ paned { [frame,frame] }
 
 For append a widget to a container : 
  slot(w)		# pack in container, fill+expand
  sloti(w)       # pack no fill/no expand
  containers are automaticly sloted to there parent
-
+ threaded protexted :
+   append_to(w) { }
+   clear_append_to { }
+   append_to_before(w) { }
+   slot_append_before(w) { }
+   
 Widgets
 -------
    button(text/'#'icon,&action) entry(value) ientry(ivalue) fentry(fvalue) islider(ivalue) 
@@ -54,10 +62,13 @@ Widgets
    htoolbar({name=> proc {},... })
    color_choice()
    canvas(w,h,{:event => proc {},...})
-
+   source_editor()
+   text_area()
+   
 dialogs
 --------
  alert() info() error() prompt() ask_color()
+ ask() (boolean)
  ask_file_to_read(dir,filter)
  ask_file_to_write(dir,filter)
  ask_dir()
@@ -72,12 +83,14 @@ Background
 									#in the main thread
 	 gui_invoke_wait { instructions } # block will be evaluate, retrune when it is done
    }
-
+   some basic commands are automaticly gui_invoked if called from non-main-thread
+      log() append_to() clear_appand_to() ...
+	  
 Root window/Graphics environnement
 --------------------------------
+td   window_position(x,y)
 td   get_root_size
-td   set_window_chrome(w,bool)
-td   set_window_position(x,y)
+td   set_window_chrome(w,bool)  ( )
 td   systray(icon,{label=>proc {},...})
 
 TODO
