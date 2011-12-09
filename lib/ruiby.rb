@@ -457,6 +457,21 @@ class Ruiby_gtk < Gtk::Window
 		end 
 		@lcur.last.append_page( stack(false)  { yield }, l )
 	end
+	############################## Panned : 
+	def paned(vertical,size,fragment)
+		paned = vertical ? HPaned.new : VPaned.new
+		slot(paned)
+		@lcur << paned
+		frame1,frame2=*yield()
+		@lcur.pop
+		(frame1.shadow_type = Gtk::SHADOW_IN) rescue nil
+		(frame2.shadow_type = Gtk::SHADOW_IN) rescue nil
+		paned.position=size*fragment
+		vertical ? paned.set_size_request(size, -1) : paned.set_size_request(-1,size)
+		paned.pack1(frame1, true, false)
+		paned.pack2(frame2, false, false)
+		show_all_children(paned)
+	end
 	##################### source editor
 	# from: green shoes plugin
 	# options= :width  :height :on_change :lang :font
