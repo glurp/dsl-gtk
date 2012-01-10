@@ -41,7 +41,8 @@ Status
 In developpement :
 
 * basic widget works (stack/flow/button/label/entry....)
-* container done : vobx, hbox, frame, notebook, pane, table 
+* container done : vbox, hbox, frame, notebook, pane, table 
+* some more complex widget:  scollbox, drawing, code_editor, 
 * threading support ok ( gui_invoke { } )
 * waiting : data grid, list, treeview, systray
 
