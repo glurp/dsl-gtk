@@ -59,7 +59,6 @@ class RubyApp < Ruiby_gtk
 		}
 	end
 end
-
-Gtk.init
-window = RubyApp.new
-Gtk.main
+Ruiby.start do
+    window = RubyApp.new
+end

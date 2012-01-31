@@ -114,11 +114,11 @@ end # endcomponent
     log("append after :",slot_append_after(  button("new after"),@bref)   )
     log("file : " , ask_file_to_read(".","*.rb")  )
     log("file : ", ask_file_to_write(".","*.rb") )
-    log("dir : " , ask_dir()                      )
-    100.times { |i| log("#{i} "*(i+1)) }
+    log("dir : " , ask_dir() )
+    100.times { |i| log("#{i} "+ ("*"*(i+1))) }
   end
 end
 
-Gtk.init
+Ruiby.start do
     window = RubyApp.new
-Gtk.main
+end

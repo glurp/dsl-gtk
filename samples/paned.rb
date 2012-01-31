@@ -8,7 +8,7 @@ require_relative '../lib/ruiby'
 
 class RubyApp < Ruiby_gtk
     def initialize
-        super("Testing Ruiby paned",900,0)
+        super("Testing Ruiby paned & threading",900,0)
 		load(__FILE__)
     end
 	def component()
