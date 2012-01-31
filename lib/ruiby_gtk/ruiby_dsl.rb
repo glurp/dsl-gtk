@@ -1,7 +1,7 @@
 module Ruiby_dsl
 	include ::Gtk
 	include ::Ruiby_default_dialog
-
+ 
 	############################ Slot : H/V Box or Frame
 	def vbox_scrolled(width,height,&b)
 		sw=slot(ScrolledWindow.new())
