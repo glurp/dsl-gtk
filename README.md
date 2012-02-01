@@ -13,18 +13,14 @@ Based on gtk at first, should evolve for support swt (jruby) Forms (IronRuby) Qt
 
 Design
 ======
-No multiple class, no modules, no meta-programming !
 I try do make a sample DSL avoiding instance_eval, dynamique methods and so on.
-So, For gtk , Ruiby is one-file only, (almost) one class.
+DSL is usable via inherit or include
 
-User must use it derivation :
-
+By inherit:
 ```
 class Application < Ruiby_gtk
     def initialize()
         super("application title",350,0)
-		Threader(50)
-	    Thread.new { loop { m= queue.enq ; gui_invoke { ..gui code.. } } }
     end	
 	def component()        
 	  stack do
@@ -32,6 +28,20 @@ class Application < Ruiby_gtk
 	  end
 	end
 	.....your code....
+end
+```
+
+by include:
+```
+class Win < Gtk::Window
+	include Ruiby
+    def initialize()
+        super("application title",350,0)
+		....
+    end	
+	def onclick(ev) 
+		ruiby_component { stack { button "Hello" { }}  }
+	end
 end
 ```
 

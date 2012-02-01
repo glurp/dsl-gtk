@@ -152,7 +152,7 @@ module Ruiby # must be included by a Gtk::Window :notested!
 		begin
 			yield
 		rescue
-			error("COMPONENT() : "+$!.to_s + " :\n     " +  $!.backtrace[0..10].join("\n     "))
+			error("ruiby_component block : "+$!.to_s + " :\n     " +  $!.backtrace[0..10].join("\n     "))
 			exit!
 		end
         show_all
