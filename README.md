@@ -17,7 +17,7 @@ I try do make a sample DSL avoiding instance_eval, dynamique methods and so on.
 DSL is usable via inherit or include
 
 By inherit:
-```
+```ruby
 class Application < Ruiby_gtk
     def initialize()
         super("application title",350,0)
@@ -31,18 +31,31 @@ class Application < Ruiby_gtk
 end
 ```
 
-by include:
-```
+By include:
+```ruby
 class Win < Gtk::Window
 	include Ruiby
-    def initialize()
-        super("application title",350,0)
-		....
+    def initialize(t,w,h)
+        super()
+		add(@vb=VBox.new(false, 2)) 
+		show_all
+		add_a_ruiby_button()
     end	
-	def onclick(ev) 
-		ruiby_component { stack { button "Hello" { }}  }
+	def add_a_ruiby_button() 
+		ruiby_component do
+			append_to(@vb) do 
+				slot(button("Hello Word #{@vb.children.size}") {
+					add_a_ruiby_button() 
+				})
+			end
+		end
 	end
 end
+
+Gtk.init
+Win.new("application title",350,10)
+Gtk.main
+
 ```
 
 
