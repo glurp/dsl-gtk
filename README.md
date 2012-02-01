@@ -17,6 +17,7 @@ I try do make a sample DSL avoiding instance_eval, dynamique methods and so on.
 DSL is usable via inherit or include
 
 By inherit:
+
 ```ruby
 class Application < Ruiby_gtk
     def initialize()
@@ -32,6 +33,7 @@ end
 ```
 
 By include:
+
 ```ruby
 class Win < Gtk::Window
 	include Ruiby
