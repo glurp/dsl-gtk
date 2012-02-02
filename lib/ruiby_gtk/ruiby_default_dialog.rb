@@ -85,3 +85,14 @@ module Ruiby_default_dialog
 	    ret
 	end
 end
+# Direct Static call to common dialog
+#  Message.alerte("ddde",'eee')
+class Message
+	class Embbeded  < ::Gtk::Window
+		include ::Ruiby_default_dialog
+	end
+	def self.alert(*txt) Embbeded.new.alert(*txt) end
+	def self.error(*txt) Embbeded.new.error(*txt) end
+	def self.ask(*txt)   Embbeded.new.ask(*txt)   end
+	def self.prompt(txt,value="")  Embbeded.new.alert(*txt) end
+end

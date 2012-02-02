@@ -43,6 +43,7 @@ require_relative 'ruiby_gtk/ruiby_dsl.rb'
 require_relative 'ruiby_gtk/ruiby_threader.rb'
 require_relative 'ruiby_gtk/windows.rb'
 require_relative 'ruiby_gtk/editor.rb'
+require_relative 'ruiby_gtk/systray.rb'
 
 Dir.glob("#{Ruiby::DIR}/plugins/*.rb").each do |filename| 
   autoload(File.basename(:filename).split(".")[0].downcase.to_s, filename) 

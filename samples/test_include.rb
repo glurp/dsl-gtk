@@ -21,6 +21,7 @@ class Win < Gtk::Window
 	end
 end
 
+Message.alert("CouCou")
 Gtk.init
 Win.new("application title",350,10)
 Gtk.main

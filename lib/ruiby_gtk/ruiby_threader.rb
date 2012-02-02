@@ -15,7 +15,6 @@ module Ruiby_threader
 		GLib::Timeout.add(per) {
 			if @queue.size>0 
 				( ici.instance_eval( &@queue.pop ) rescue log("#{$!} :\n  #{$!.backtrace[0..3].join("\n   ")}") ) while @queue.size>0 
-				show_all
 			end
          true
         }

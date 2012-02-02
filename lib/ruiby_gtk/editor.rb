@@ -1,8 +1,8 @@
 
 class Editor < Ruiby_gtk 
-    def initialize(w,filename)
+    def initialize(w,filename,width=350)
 		@filename=filename
-        super("Edit #{filename[0..40]}",350,0)
+        super("Edit #{filename[0..40]}",width,0)
 		transient_for=w
     end	
 	def component()

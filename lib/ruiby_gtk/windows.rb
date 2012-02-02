@@ -124,6 +124,7 @@ class Ruiby_gtk < Gtk::Window
 	def component
 		raise("Abstract: 'def component()' must be overiden in a Ruiby class")
 	end
+	def position(x,y) window_position(x,y) end
 	def window_position(x,y)
 		if x==0 && y==0
 			set_window_position Window::POS_CENTER
@@ -139,9 +140,12 @@ class Ruiby_gtk < Gtk::Window
 		end
 		move(x.abs,y.abs)
 	end
+	def chrome(on)
+		set_decorated(on)
+	end
 end
 
-module Ruiby # must be included by a Gtk::Window :notested!
+module Ruiby # must be included by a Gtk::Window 
 	include ::Ruiby_dsl
 	include ::Ruiby_threader
 	include ::Ruiby_default_dialog

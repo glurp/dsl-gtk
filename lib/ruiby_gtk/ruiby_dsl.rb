@@ -2,6 +2,39 @@ module Ruiby_dsl
 	include ::Gtk
 	include ::Ruiby_default_dialog
  
+	############################ define style !! WArining: speific to gtk
+	# see http://ruby-gnome2.sourceforge.jp/hiki.cgi?Gtk%3A%3ARC
+	# %GTK_BASEPATH%/share/themes/Metal/gtk-2.0/gtkrc
+	#
+	# style "mstyle"
+	# {
+	# 	GtkWidget::interior_focus = 1
+	# 	GtkButton::default_spacing = { 1, 1, 1, 1 }
+	# 	GtkButton::default_outside_spacing = { 0, 0, 0, 0 }
+	# 	font_name = "lucida"
+	#   bg_pixmap[NORMAL] = 'pixmap.png'
+	# 	bg[NORMAL]      = { 0.80, 0.80, 0.80 }
+	# 	bg[PRELIGHT]    = { 0.80, 0.80, 1.00 }
+	# 	bg[ACTIVE]      = { 0.80, 0.80, 0.80 }
+	# 	bg[SELECTED]    = { 0.60, 0.60, 0.80 }
+	# 	text[SELECTED]  = { 0.00, 0.00, 0.00 }
+	# 	text[ACTIVE]    = { 0.00, 0.00, 0.00 }
+	# }	
+	# class "GtkLabel" style "mstyle"
+	#
+	def def_style(string_style=nil)
+		unless string_style
+			 fn=caller[0].gsub(/.rb$/,".rc")
+			 raise "Style: no ressource (#{fn} not-exist)" if !File.exists?(fn)
+			 string_style=File.read(fn)
+		end
+		begin
+			Gtk::RC.parse_string(string_style)
+			@style_loaded=true
+		rescue Exception => e
+			error "Error loading style : #{e}\n#{string_style}"
+		end
+	end
 	############################ Slot : H/V Box or Frame
 	def vbox_scrolled(width,height,&b)
 		sw=slot(ScrolledWindow.new())
@@ -12,6 +45,16 @@ module Ruiby_dsl
 		sw.add_with_viewport(ret)
 		ret
 	end	
+
+
+	def clickable(methode_name,&b) 
+		eventbox = Gtk::EventBox.new
+		eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
+		ret=cbox(true,eventbox,true,&b) 
+		eventbox.realize
+		eventbox.signal_connect('button_press_event') { |w, e| self.send(methode_name) }
+		ret
+	end
 	def stack(add1=true,&b)    		cbox(true,VBox.new(false, 2),add1,&b) end
 	def flow(add1=true,&b)	   		cbox(true,HBox.new(false, 2),add1,&b) end
 	def frame(t="",add1=true,&b)  	cbox(true,Frame.new(t),add1,&b)       end
@@ -103,8 +146,10 @@ module Ruiby_dsl
  		raise("#{name}(w,r): r=#{parent.inspect} is not a XBox or Frame !") unless parent.respond_to?(:reorder_child)
  		parent
  	end
+	
 
 	def get_current_container() @lcur.last end
+	
 
 	########################### widgets #############################
 	def get_icon(name)
@@ -113,6 +158,8 @@ module Ruiby_dsl
 
 	############### Commands
 	def attribs(w,options)
+		  w.modify_bg(Gtk::STATE_NORMAL,options[:bg]) if options[:bg]
+		  w.modify_fg(Gtk::STATE_NORMAL,options[:fg]) if options[:fg]
 		  w.modify_font(Pango::FontDescription.new(options[:font])) if options[:font]
 		  w
 	end
@@ -124,7 +171,6 @@ module Ruiby_dsl
 			Label.new(text);
 		end
 		attribs(l,options)
-		l
 	end
 	def button(text,option={},&blk)
 		if text && text[0,1]=="#"
@@ -135,7 +181,6 @@ module Ruiby_dsl
 		end
 		b.signal_connect("clicked",&blk) if blk
 		attribs(b,option)
-		b
 	end 
 	def htoolbar(items,options={})
 		b=Toolbar.new
