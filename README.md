@@ -3,7 +3,9 @@ RUIBY
 
 A simple helper for building simple GUI ruby application rapidly.
 
-'simple' mean 'without great look&feel precision' 
+'simple' mean 
+* 'without great look&feel precision' 
+* for little gui application, like autoit, xdialog...
 
 Inspirations from Shoes.
 
@@ -13,15 +15,14 @@ Based on gtk at first, should evolve for support swt (jruby) Forms (IronRuby) Qt
 
 Design
 ======
-I try do make a sample DSL avoiding instance_eval, dynamique methods and so on.
 DSL is usable via inherit or include
 
 By inherit:
 
 ```ruby
 class Application < Ruiby_gtk
-    def initialize()
-        super("application title",350,0)
+    def initialize(t,w,h)
+        super(t,w,h)
     end	
 	def component()        
 	  stack do
@@ -30,9 +31,11 @@ class Application < Ruiby_gtk
 	end
 	.....your code....
 end
+Ruiby.start { Win.new("application title",350,10) }
+
 ```
 
-By include:
+By include, calling ruiby_component() :
 
 ```ruby
 class Win < Gtk::Window
@@ -54,13 +57,15 @@ class Win < Gtk::Window
 	end
 end
 
-Gtk.init
-Win.new("application title",350,10)
-Gtk.main
-
+Ruiby.start { Win.new("application title",350,10) }
 ```
 
+Threading is supported via a Queue :
+* main window poll Queue , messagers are proc to be instance_eval() in the main window context
+* everywere, a thread can invoke invoke_gui {ruiby code}. this send to the main queue the proc,
+ which will be evaluated asynchroniously 
 
+ 
 Status
 ======
 In developpement :
@@ -68,21 +73,19 @@ In developpement :
 * basic widget works (stack/flow/button/label/entry....)
 * container done : vbox, hbox, frame, notebook, pane, table 
 * some more complex widget:  scollbox, drawing, code_editor, 
-* threading support ok ( gui_invoke { } )
-* waiting : data grid, list, treeview, systray
+* threading support ok ( threader(polling) / gui_invoke { } )
+* **waiting** : data grid, list, treeview,
 
-Hard copy dispo at :
-http://regisaubarede.posterous.com/
+Screen copy at : http://regisaubarede.posterous.com/
 
-Code:
-http://github.com/raubarede/Ruiby
+Code: http://github.com/raubarede/Ruiby
 
 License
 =======
 LGPL, CC BY-SA
 
 Exemple 
-======
+=======
 see samples in "./samples" directory
 
 
