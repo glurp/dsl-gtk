@@ -3,7 +3,8 @@ RUIBY
 
 A simple helper for building simple GUI ruby application rapidly.
 
-'simple' mean 
+'simple' mean :
+
 * 'without great look&feel precision' 
 * for little gui application, like autoit, xdialog...
 
