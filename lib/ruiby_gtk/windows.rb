@@ -124,8 +124,7 @@ class Ruiby_gtk < Gtk::Window
 	def component
 		raise("Abstract: 'def component()' must be overiden in a Ruiby class")
 	end
-	def position(x,y) window_position(x,y) end
-	def window_position(x,y)
+	def rposition(x,y)
 		if x==0 && y==0
 			set_window_position Window::POS_CENTER
 			return

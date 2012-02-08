@@ -19,7 +19,7 @@ end
 class RubyApp4 < Ruiby_gtk
 	def component() slot( button("Hello, ") { 
 		w=RubyApp1.new("hx",200,200) 
-		w.window_position(1,1) 
+		w.rposition(1,1) 
 	  })  
 	end
 end
@@ -36,7 +36,7 @@ class RubyApp0 < Ruiby_gtk
 				Editor.new(self,democode)
 			})
 		end
-		window_position(300,300)
+		rposition(300,300)
 	end
 end
 

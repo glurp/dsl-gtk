@@ -35,7 +35,7 @@ class RubyApp < Ruiby_gtk
 			)) 
 			@edit=slot(source_editor(:lang=> "ruby", :font=> "Courier new 12",:on_change=> proc { change })).editor
 			sloti( button("Exit") { exit! })	
-			after(20)   { window_position(3,3) }
+			after(20)   { rposition(-3,3) }
 			anim(500) do
 				if @file && File.exists?(@file) && File.mtime(@file)>@mtime
 					@mtime=File.mtime(@file)
