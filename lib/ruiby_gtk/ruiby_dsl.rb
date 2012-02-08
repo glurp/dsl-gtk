@@ -153,7 +153,18 @@ module Ruiby_dsl
 
 	########################### widgets #############################
 	def get_icon(name)
+		return name if name.index('.') && File.exists?(name)
 		iname=eval("Stock::"+name.upcase) rescue nil
+	end
+	def get_image_from(name)
+		puts name +"..." if name.index('.') && File.exists?(name)
+		return Image.new(name) if name.index('.') && File.exists?(name)
+		iname=eval("Stock::"+name.upcase) rescue nil
+		if iname
+			Image.new(iname,IconSize::BUTTON)
+		else
+			nil
+		end
 	end
 
 	############### Commands
@@ -166,7 +177,7 @@ module Ruiby_dsl
 	def separator(width=1.0)  sloti(HBox === @lcur.last ? VSeparator.new : HSeparator.new)  end
 	def label(text,options={})
 		l=if text && text[0,1]=="#"
-			Image.new(get_icon(text[1..-1]),IconSize::BUTTON);
+			get_image_from(text[1..-1]);
 		else
 			Label.new(text);
 		end
@@ -175,7 +186,7 @@ module Ruiby_dsl
 	def button(text,option={},&blk)
 		if text && text[0,1]=="#"
 			b=Button.new()
-			b.set_image(Image.new(get_icon(text[1..-1]),IconSize::BUTTON))
+			b.set_image(get_image_from(text[1..-1]))
 		else
 			b=Button.new(text);
 		end
