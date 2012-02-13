@@ -44,8 +44,7 @@ class Win < Gtk::Window
     def initialize(t,w,h)
         super()
 		add(@vb=VBox.new(false, 2)) 
-		show_all
-		add_a_ruiby_button()
+		....
     end	
 	def add_a_ruiby_button() 
 		ruiby_component do
