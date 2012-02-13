@@ -42,7 +42,7 @@ module Ruiby_default_dialog
             ::Gtk::MessageDialog::BUTTONS_CLOSE, text)
         md.run
         md.destroy
-    end
+	end
 	def ask_color
 		cdia = ColorSelectionDialog.new("Select color")
 		response=cdia.run
