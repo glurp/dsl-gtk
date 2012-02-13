@@ -38,7 +38,7 @@ end
 ############################ Invoke HMI from anywhere ####################
 
 def gui_invoke(&blk) 
-    if ! defined?($__mainwindow__)
+	if ! defined?($__mainwindow__)
 		puts("\n\ngui_invoke() : initialize() of main windows not done!\n\n") 
 		return
 	end
@@ -54,7 +54,7 @@ def gui_invoke(&blk)
 end
 
 def gui_invoke_wait(&blk) 
-    if ! defined?($__mainwindow__)
+	if ! defined?($__mainwindow__)
 		puts("\n\ngui_invoke_wait() : initialize() of main windows not done!\n\n") 
 		return
 	end
