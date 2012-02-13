@@ -1,12 +1,15 @@
-rem @echo off
+@echo off
 IF DEFINED %1=="" (
 	call giti
 	ruby  -e "a=File.read('VERSION').split('.') ; a[-1]=(a.last.to_i+1).to_s; puts r=a.join('.'); File.open('VERSION','w') {|f| f.write(r)}"
 	git commit -a -m "%1 %2 %3 %4 %5 %6 %7 %8 %9"
 	git push
+	echo call gitc withou args for make/post rubygem
 	goto :eof
 )
 :gem
+rem ==== no args, pgenerate gem and push it to rubygems.org
+
 ruby -e "Dir.glob('Ruiby*.gem').each {|f| File.delete(f) }"
 call gem build Ruiby.gemspec
 call :test_gem
