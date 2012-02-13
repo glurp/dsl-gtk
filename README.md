@@ -12,7 +12,8 @@ Inspirations from Shoes.
 
 Hard codes (gtk) copyed from green_shoes (thank you ashbb :) .
 
-Based on gtk at first, should evolve for support swt (jruby) Forms (IronRuby) Qt...
+Based on gtk at first, 
+Perhaps will be adapte to www/(vaarin or sencha) ...
 
 Design
 ======
@@ -56,7 +57,6 @@ class Win < Gtk::Window
 		end
 	end
 end
-
 Ruiby.start { Win.new("application title",350,10) }
 ```
 
@@ -65,7 +65,31 @@ Threading is supported via a Queue :
 * everywere, a thread can invoke invoke_gui {ruiby code}. this send to the main queue the proc,
  which will be evaluated asynchroniously 
 
- 
+```ruby
+require_relative '../lib/ruiby'
+class App < Ruiby_gtk
+    def initialize
+        super("Testing Ruiby for Threading",150,0)
+		threader(10)
+		Thread.new { run }
+    end
+	def component()        
+	  stack do
+		sloti(label("Hello, this is Thread test !"))
+		stack { @lab=stacki { } }
+	  end
+	end # endcomponent
+	
+	def run
+ 		loop do
+		 	sleep(1)
+			gui_invoke { append_to(@lab) { sloti(label(Time.now.to_f.to_s))  } }
+		end
+	end 
+end
+Ruiby.start { App.new }
+```
+
 Status
 ======
 In developpement :
