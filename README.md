@@ -1,12 +1,12 @@
 RUIBY
 =====
 
-A simple helper for building simple GUI ruby application rapidly.
+A DSL for building simple GUI (gtk) ruby application rapidly.
 
 'simple' mean :
 
 * 'without great look&feel precision' 
-* for little gui application, like autoit, xdialog...
+* for little gui application, like autokey, autoit, xdialog...
 
 Inspirations from Shoes.
 
