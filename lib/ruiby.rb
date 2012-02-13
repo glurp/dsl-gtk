@@ -46,5 +46,5 @@ require_relative 'ruiby_gtk/editor.rb'
 require_relative 'ruiby_gtk/systray.rb'
 
 Dir.glob("#{Ruiby::DIR}/plugins/*.rb").each do |filename| 
-  autoload(File.basename(:filename).split(".")[0].downcase.to_s, filename) 
+  autoload(File.basename(filename).split(".")[0].capitalize.to_sym, filename) 
 end

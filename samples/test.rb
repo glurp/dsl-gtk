@@ -118,6 +118,8 @@ end # endcomponent
     100.times { |i| log("#{i} "+ ("*"*(i+1))) }
   end
 end
+# test autoload plugins
+Exemple.new
 
 Ruiby.start do
     window = RubyApp.new
