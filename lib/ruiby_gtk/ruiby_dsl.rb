@@ -139,8 +139,8 @@ module Ruiby_dsl
 		end
 	end
  	def check_append(name,w,wref)
- 		raise ("#{name}(w,r) : Widget ref not created!") unless wref
- 		raise ("#{name}(w,r) : new Widget not created!") unless w
+ 		raise("#{name}(w,r) : Widget ref not created!") unless wref
+ 		raise("#{name}(w,r) : new Widget not created!") unless w
  		parent=wref.parent
  		raise("#{name}(w,r): r=#{parent.inspect} is not a XBox or Frame !") unless !parent || parent.kind_of?(Container)
  		raise("#{name}(w,r): r=#{parent.inspect} is not a XBox or Frame !") unless parent.respond_to?(:reorder_child)
@@ -157,7 +157,7 @@ module Ruiby_dsl
 		iname=eval("Stock::"+name.upcase) rescue nil
 	end
 	def get_image_from(name)
-		puts name +"..." if name.index('.') && File.exists?(name)
+		puts("#{name}...") if name.index('.') && File.exists?(name)
 		return Image.new(name) if name.index('.') && File.exists?(name)
 		iname=eval("Stock::"+name.upcase) rescue nil
 		if iname
@@ -205,15 +205,15 @@ module Ruiby_dsl
 			end
 			iname=get_icon(name)
 			w=if iname
-				Gtk::ToolButton.new(iname).tap { |b|
-				  b.signal_connect("clicked") { v.call } if v
-			 	  b.set_tooltip_text(tooltip) if tooltip
+				Gtk::ToolButton.new(iname).tap { |but|
+				  but.signal_connect("clicked") { v.call } if v
+			 	  but.set_tooltip_text(tooltip) if tooltip
 			 	}
 			elsif name=~/^sep/i
 				Gtk::SeparatorToolItem.new
 			else
 				puts "=======================\nUnknown icone : #{name}\n====================="
-	   			puts "Icones dispo: "+Stock.constants.map { |i| i.downcase }.join(", ")
+	   			puts "Icones dispo: #{Stock.constants.map { |ii| ii.downcase }.join(", ")}"
 				Gtk::ToolButton.new(Stock::MISSING_IMAGE)
 			end
 			b.insert(i,w)
@@ -257,10 +257,10 @@ module Ruiby_dsl
 			ltext.each_with_index {|t,i|
 			  b=if i==0
 		      	b0=slot(RadioButton.new(t))
-		      else
+			  else
 		      	slot(RadioButton.new(b0,t))
-		      end
-		      if i==value
+			  end
+			  if i==value
 				b.toggled 
 				b.set_active(true) 
 			  end
@@ -321,10 +321,10 @@ module Ruiby_dsl
 			}
 		}  
 		@do=nil
-		w.signal_connect('button_press_event')   { |w,e| @do = option[:mouse_down].call(w,e)                ; force_update(w) }  if option[:mouse_down]
-		w.signal_connect('button_release_event') { |w,e| option[:mouse_up].call(w,e,@do)   if @do ; @do=nil ; force_update(w) if @do }  if option[:mouse_up]
-		w.signal_connect('motion_notify_event')  { |w,e| @do = option[:mouse_move].call(w,e,@do) if @do     ; force_update(w) if @do }  if option[:mouse_move]
-		w.signal_connect('key_press_event')  { |w,e| option[:key_press].call(w,e) ; force_update(w) }  if option[:key_press]
+		w.signal_connect('button_press_event')   { |wi,e| @do = option[:mouse_down].call(wi,e)                ; force_update(wi) }  if option[:mouse_down]
+		w.signal_connect('button_release_event') { |wi,e| option[:mouse_up].call(wi,e,@do)   if @do ; @do=nil ; force_update(wi) if @do }  if option[:mouse_up]
+		w.signal_connect('motion_notify_event')  { |wi,e| @do = option[:mouse_move].call(wi,e,@do) if @do     ; force_update(wi) if @do }  if option[:mouse_move]
+		w.signal_connect('key_press_event')  { |wi,e| option[:key_press].call(wi,e) ; force_update(wi) }  if option[:key_press]
 		attribs(w,option)				
 		w
 	end
@@ -435,8 +435,8 @@ module Ruiby_dsl
 		  eb.define_singleton_method(:text_area) { tv }
 
 		  eb.show_all
-		  eb
-    end	
+		  eb	
+	end	
 
 	############################# calendar
 	
@@ -478,7 +478,7 @@ module Ruiby_dsl
 		end
 		def wid.video() v end
 		wid.video.play
-     end
+	end
 	 
 	###################################### Logs
 
@@ -493,10 +493,10 @@ module Ruiby_dsl
 		if ( loglabel.buffer.text.size>10000)
 		  loglabel.buffer.text=loglabel.buffer.text[-7000..-1].gsub(/^.*\n/m,"......\n\n")
 		end
-    end
+	end
 	def create_log_window() 
 		return(@loglabel) if defined?(@loglabel) && @loglabel && ! @loglabel.destroyed?
-		wdlog = Dialog.new("Logs : #{title}",
+		wdlog = Dialog.new("Logs : #{$0}",
 			nil,
 			0,
 			[ Stock::OK, Dialog::RESPONSE_NONE ])
