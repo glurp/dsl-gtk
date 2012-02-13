@@ -336,6 +336,7 @@ module Ruiby_dsl
 		yield
 		@row+=1
 	end	
+	
 	def  cell(w) 		 @lcur.last.attach(w,@col,@col+1,@row,@row+1) ; @col+=1 end
 	def  cell_hspan(n,w) @lcur.last.attach(w,@col,@col+n,@row,@row+1) ; @col+=n end # :notested!
 	def  cell_vspan(n,w) @lcur.last.attach(w,@col,@col+1,@row,@row+n) ; @col+=1 end # :notested!
@@ -344,6 +345,19 @@ module Ruiby_dsl
 		@lcur.last.attach(w,@col,@col+n,@row,@row+1)
 		@col+=n
 	end
+	
+	def cell_left(w)     w.set_alignment(0.0, 0.5) rescue nil; cell(w) end
+	def cell_right(w)    w.set_alignment(1.0, 0.5)rescue nil ; cell(w) end
+	
+	def cell_hspan_left(n,w)   w.set_alignment(0.0, 0.5)rescue nil ; cell_hspan(n,w) end
+	def cell_hspan_right(n,w)  w.set_alignment(1.0, 0.5)rescue nil ; cell_hspan(n,w) end
+	
+	def cell_top(w)      w.set_alignment(0.5, 0.0)rescue nil ; cell(w) end
+	def cell_bottom(w)   w.set_alignment(0.5, 1.0)rescue nil ; cell(w) end
+
+	def cell_vspan_top(n,w)    w.set_alignment(0.5, 0.0)rescue nil ; cell_vspan(n,w) end
+	def cell_vspan_bottom(n,w) w.set_alignment(0.5, 1.0)rescue nil ; cell_vspan(n,w) end
+	
 	def table(nb_col,nb_row,config={})
 		table = Gtk::Table.new(nb_row,nb_col,false)
 		table.set_column_spacings(config[:set_column_spacings]) if config[:set_column_spacings]

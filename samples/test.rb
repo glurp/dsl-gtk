@@ -26,16 +26,16 @@ def component()
     flow {
       @left=stack {
         frame("") { table(2,10,{set_column_spacings: 3}) do
-          row { cell label  "mode de fontionnement" ; cell(button("set") { alert("?") }) }
-          row { cell label  "vitesse"               ; cell entry("aa")  }
-          row { cell label  "size"                  ; cell ientry(11,{:min=>0,:max=>100,:by=>1})  }
-          row { cell label  "feeling"               ; cell islider(10,{:min=>0,:max=>100,:by=>1})  }
-          row { cell label  "speedy"                ; cell(toggle_button("on","off",false) {|w| w.label=w.active?() ? "Off": "On" })  }
-          row { cell label  "acceleration type"     ; cell hradio_buttons(%w{aa bb cc},1)  }
-          row { cell label  "mode on"               ; cell check_button("",false)  }
-          row { cell label  "mode off"              ; cell check_button("",true)  }
-          row { cell label  "Variable"              ; cell combo({"aaa"=>1,"bbb"=>2,"ccc"=>3},1) }
-          row { cell label  "Couleur"               ; cell color_choice()  }
+          row { cell_right label  "mode de fontionnement" ; cell(button("set") { alert("?") }) }
+          row { cell_right label  "vitesse"               ; cell entry("aa")  }
+          row { cell_right label  "size"                  ; cell ientry(11,{:min=>0,:max=>100,:by=>1})  }
+          row { cell_right label  "feeling"               ; cell islider(10,{:min=>0,:max=>100,:by=>1})  }
+          row { cell_right label  "speedy"                ; cell(toggle_button("on","off",false) {|w| w.label=w.active?() ? "Off": "On" })  }
+          row { cell_left label  "acceleration type"     ; cell hradio_buttons(%w{aa bb cc},1)  }
+          row { cell_left label  "mode on"               ; cell check_button("",false)  }
+          row { cell_left label  "mode off"              ; cell check_button("",true)  }
+          row { cell_left label  "Variable"              ; cell combo({"aaa"=>1,"bbb"=>2,"ccc"=>3},1) }
+          row { cell_left label  "Couleur"               ; cell color_choice()  }
         end }
         frame("Buttons in frame") {
           flow { sloti(button("packed with sloti()") {alert("button packed with sloti()")}) 

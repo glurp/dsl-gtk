@@ -8,11 +8,11 @@ class RubyApp < Ruiby_gtk
 	def component()        
 		stack {
 			frame("") { table(2,10,{set_column_spacings: 3}) do
-			  row { cell label  "c1" ; cell label  "c2" ;  cell label  "c3" ;  cell label  "c4" ;}
-			  row { cell label  "c1" ; cell label  "c2" ;  cell label  "c3" ;  cell label  "c4" ;}
-			  row { cell label  "c1" ; cell_hspan(3,button("hspan 3"))   }
-			  row { cell_vspan(2,button("vspan 2")) ; cell label  "c2" ;  cell label  "c3" ;  cell label  "c4" ;}
-			  row { cell_pass; cell label  "c2" ;  cell_hspan(2,pan("hspan 2")) }
+			  row { cell_left label  "c1" ; cell_left label  "c2" ;  cell label  "c3" ;  cell label  "c4" ;}
+			  row { cell_right label  "c1" ; cell_left label  "c2" ;  cell label  "c3" ;  cell label  "c4" ;}
+			  row { cell_right label  "c1" ; cell_hspan(3,button("hspan 3"))   }
+			  row { cell_vspan_top(2,button("vspan 2")) ; cell label  "c2" ;  cell label  "c3" ;  cell label  "c4" ;}
+			  row { cell_pass; cell label  "c2" ;  cell_hspan_right(2,pan("hspan 2")) }
 			end }
 			slot( button("Exit") { exit! })
 		}
