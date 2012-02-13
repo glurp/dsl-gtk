@@ -6,6 +6,7 @@ IF DEFINED %1=="" (
 	git push
 )
 :gem
+ruby -e "Dir.glob('Ruiby*.gem').each {|f| File.delete(f) }"
 call gem build Ruiby.gemspec
 call :test_gem
 call gem push Ruiby.gemspec
@@ -14,7 +15,7 @@ goto :eof
 :test_gem
 echo "test_gem..."
 cd ..
-gem install Ruiby/Ruiby*.gem
+call gem install Ruiby/Ruiby*.gem
 ruby -e "print File.read('Ruiby/samples/test.rb').gsub(/require_relative.*/,'require 'ruiby')" > RuibyGemTest/test.rb 
 ruby  RuibyGemTest/test.rb
 cd Ruiby 
