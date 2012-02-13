@@ -117,7 +117,7 @@ class Ruiby_gtk < Gtk::Window
 		end
         show_all
 	end
-	def gtk_exit
+	def gtk_exit()
 		(self.at_exit() if self.respond_to?(:at_exit) ) rescue puts $!.to_s
 		Gtk.main_quit 
 	end
