@@ -1,66 +1,24 @@
+=begin
+general definition of DSL. used by Gui_gtk (if ruiby used app by inherit)
+and by Ruiby module (if ruiby used by trait)
+
+Most of this ressource are not thread-safe : use ruiby in the context
+of main thread (thread which invoke Ruiby.start).
+
+Exception : in thread, theses methods are frequently used. so they are thread-protected,
+if they detect a invocation out of main thread, they auto-recall in a gui_invoke block :
+	append_to(cont,&blk)       clear_append_to(cont,&blk) 
+ 	slot_append_before(w,wref) slot_append_after(w,wref)
+	delete(w) 
+	log(txt)
+
+=end
 module Ruiby_dsl
 	include ::Gtk
 	include ::Ruiby_default_dialog
  
-	############################ define style !! WArining: speific to gtk
-	# see http://ruby-gnome2.sourceforge.jp/hiki.cgi?Gtk%3A%3ARC
-	# %GTK_BASEPATH%/share/themes/Metal/gtk-2.0/gtkrc
-	#
-	# style "mstyle"
-	# {
-	# 	GtkWidget::interior_focus = 1
-	# 	GtkButton::default_spacing = { 1, 1, 1, 1 }
-	# 	GtkButton::default_outside_spacing = { 0, 0, 0, 0 }
-	# 	font_name = "lucida"
-	#   bg_pixmap[NORMAL] = 'pixmap.png'
-	# 	bg[NORMAL]      = { 0.80, 0.80, 0.80 }
-	# 	bg[PRELIGHT]    = { 0.80, 0.80, 1.00 }
-	# 	bg[ACTIVE]      = { 0.80, 0.80, 0.80 }
-	# 	bg[SELECTED]    = { 0.60, 0.60, 0.80 }
-	# 	text[SELECTED]  = { 0.00, 0.00, 0.00 }
-	# 	text[ACTIVE]    = { 0.00, 0.00, 0.00 }
-	# }	
-	# class "GtkLabel" style "mstyle"
-	#
-	def def_style(string_style=nil)
-		unless string_style
-			 fn=caller[0].gsub(/.rb$/,".rc")
-			 raise "Style: no ressource (#{fn} not-exist)" if !File.exists?(fn)
-			 string_style=File.read(fn)
-		end
-		begin
-			Gtk::RC.parse_string(string_style)
-			@style_loaded=true
-		rescue Exception => e
-			error "Error loading style : #{e}\n#{string_style}"
-		end
-	end
 	############################ Slot : H/V Box or Frame
-	def vbox_scrolled(width,height,&b)
-		sw=slot(ScrolledWindow.new())
-		sw.set_width_request(width)		if width>0 
-		sw.set_height_request(height)	if height>0
-		sw.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS)
-		ret=stack(false,&b)
-		sw.add_with_viewport(ret)
-		class << sw
-			def scroll_to_top()    vadjustment.set_value( 0 ) end
-			def scroll_to_bottom() vadjustment.set_value( vadjustment.upper - 1) end
-			def scroll_to_left()   hadjustment.set_value( 0 ) end
-			def scroll_to_right()  hadjustment.set_value( hajustement.upper-1 ) end
-		end
-		sw
-	end	
-
-
-	def clickable(methode_name,&b) 
-		eventbox = Gtk::EventBox.new
-		eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
-		ret=cbox(true,eventbox,true,&b) 
-		eventbox.realize
-		eventbox.signal_connect('button_press_event') { |w, e| self.send(methode_name,ret) }
-		ret
-	end
+	
 	def stack(add1=true,&b)    		cbox(true,VBox.new(false, 2),add1,&b) end
 	def flow(add1=true,&b)	   		cbox(true,HBox.new(false, 2),add1,&b) end
 	def frame(t="",add1=true,&b)  	cbox(true,Frame.new(t),add1,&b)       end
@@ -68,6 +26,7 @@ module Ruiby_dsl
 	def flowi(add1=true,&b)	   		cbox(false,HBox.new(false, 2),add1,&b) end
 	def framei(t="",add1=true,&b)  	cbox(false,Frame.new(t),add1,&b)       end
 	
+	# private: generic packer
 	def cbox(expand,box,add1)
 		if add1
 			expand ? @lcur.last.add(box) : @lcur.last.pack_start(box,false,false,3)
@@ -89,6 +48,7 @@ module Ruiby_dsl
 		@lcur.pop
 		show_all_children(cont)
 	end
+	
 	def clear_append_to(cont,&blk) 
 		if $__mainthread__ != Thread.current
 			gui_invoke { clear_append_to(cont,&blk) }
@@ -157,15 +117,16 @@ module Ruiby_dsl
 	def get_current_container() @lcur.last end
 	
 
-	########################### widgets #############################
+	########################### raster images access #############################
 	def get_icon(name)
 		return name if name.index('.') && File.exists?(name)
 		iname=eval("Stock::"+name.upcase) rescue nil
 	end
+	
+	# get a Image from a file or from a Gtk::Stock
 	def get_image_from(name)
-		puts("#{name}...") if name.index('.') && File.exists?(name)
 		return Image.new(name) if name.index('.') && File.exists?(name)
-		iname=eval("Stock::"+name.upcase) rescue nil
+		iname=get_icon(name)
 		if iname
 			Image.new(iname,IconSize::BUTTON)
 		else
@@ -174,6 +135,8 @@ module Ruiby_dsl
 	end
 
 	############### Commands
+
+	# general property automaticly applied for (almost) all widget (eval last argument a creation)
 	def attribs(w,options)
 		  w.modify_bg(Gtk::STATE_NORMAL,options[:bg]) if options[:bg]
 		  w.modify_fg(Gtk::STATE_NORMAL,options[:fg]) if options[:fg]
@@ -181,6 +144,8 @@ module Ruiby_dsl
 		  w
 	end
 	def separator(width=1.0)  sloti(HBox === @lcur.last ? VSeparator.new : HSeparator.new)  end
+
+	# create  label, with text (or image if txt start with a '#')
 	def label(text,options={})
 		l=if text && text[0,1]=="#"
 			get_image_from(text[1..-1]);
@@ -189,6 +154,9 @@ module Ruiby_dsl
 		end
 		attribs(l,options)
 	end
+	
+	# create  button, with text (or image if txt start with a '#')
+	# block argument is evaluate in button click
 	def button(text,option={},&blk)
 		if text && text[0,1]=="#"
 			b=Button.new()
@@ -199,6 +167,8 @@ module Ruiby_dsl
 		b.signal_connect("clicked",&blk) if blk
 		attribs(b,option)
 	end 
+	# horizontal tool-bar of icon button and/or separator
+	# if icon name contain a '/', second last part is  tooltip text
 	def htoolbar(items,options={})
 		b=Toolbar.new
 		b.set_toolbar_style(Toolbar::Style::ICONS)
@@ -229,7 +199,8 @@ module Ruiby_dsl
 	end 
 
 	############### Inputs widgets
-
+	
+	#combo box, decribe  with a Hash choice-text => value-of-choice
 	def combo(choices,default=-1,option={})
 		w=ComboBox.new()
 		choices.each do |text,indice|  
@@ -240,6 +211,7 @@ module Ruiby_dsl
 		w
 	end
 
+	# to state button, with text for each state and a initiale value
 	def toggle_button(text1,text2=nil,value=false,option={})
 		text2 = "- "+text1 unless text2
 		b=ToggleButton.new(text1);
@@ -400,6 +372,8 @@ module Ruiby_dsl
 		@lcur.last.append_page( stack(false)  { yield }, l )
 	end
 	############################## Panned : 
+	# split current frame in 2 panes
+	# block invoked must return a array of 2 box wich will put in the 2 panes
 	def paned(vertical,size,fragment)
 		paned = vertical ? HPaned.new : VPaned.new
 		slot(paned)
@@ -447,7 +421,8 @@ module Ruiby_dsl
       cb.show_all
 	  cb
     end
-	
+
+	# multiline entry
 	# @edit=slot(text_area(300,100)).text_area
 	# @edit.buffer.text="Hello!"
 	def text_area(w=200,h=100,args={}) # from green_shoes app
@@ -467,8 +442,8 @@ module Ruiby_dsl
 	end	
 
 	############################# calendar
-	
-	# calendar(Time.now-24*3600, :selection => proc {|c| } , :changed => proc {|c| }
+    # Month Calendar with callback on motnh/year move and day selection :
+	# calendar(Time.now-24*3600, :selection => proc {|day| } , :changed => proc {|widget| }
 	def calendar(time=Time.now,options={})
 		c = Calendar.new
 		c.display_options(Calendar::SHOW_HEADING | Calendar::SHOW_DAY_NAMES |  
@@ -478,6 +453,7 @@ module Ruiby_dsl
 		calendar_set_time(c,time)
 		c
 	end
+	# change the current selection of a calendar, by Time object
 	def calendar_set_time(cal,time=Time.now)
 		cal.select_month(time.month,time.year)
 		cal.select_day(time.day)
@@ -506,6 +482,38 @@ module Ruiby_dsl
 		end
 		def wid.video() v end
 		wid.video.play
+	end
+	
+	######### Scrollable stack container
+	# create a Scrolled widget with a autobuild stack in it
+	# stack can be populated 
+	def vbox_scrolled(width,height,&b)
+		sw=slot(ScrolledWindow.new())
+		sw.set_width_request(width)		if width>0 
+		sw.set_height_request(height)	if height>0
+		sw.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS)
+		ret= stack(false,&b) if  block_given? 
+		sw.add_with_viewport(ret)
+		class << sw
+			def scroll_to_top()    vadjustment.set_value( 0 ) end
+			def scroll_to_bottom() vadjustment.set_value( vadjustment.upper - 1) end
+			def scroll_to_left()   hadjustment.set_value( 0 ) end
+			def scroll_to_right()  hadjustment.set_value( hajustement.upper-1 ) end
+		end
+		sw
+	end	
+
+	# specific to gtk : some widget like label can't support app event, so they must
+	# be contain in a clockable parent (EventBox)
+	#  clickable(:callback_click_name) { label(" click me! ") }
+	#  def callback_click_name(widget) ... end
+	def clickable(methode_name,&b) 
+		eventbox = Gtk::EventBox.new
+		eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
+		ret=cbox(true,eventbox,true,&b) 
+		eventbox.realize
+		eventbox.signal_connect('button_press_event') { |w, e| self.send(methode_name,ret) }
+		ret
 	end
 	 
 	###################################### Logs
@@ -544,5 +552,38 @@ module Ruiby_dsl
 		@loglabel
 	end
 
+	############################ define style !! Warning: specific to gtk
+	# see http://ruby-gnome2.sourceforge.jp/hiki.cgi?Gtk%3A%3ARC
+	# %GTK_BASEPATH%/share/themes/Metal/gtk-2.0/gtkrc
+	#
+	# style "mstyle"
+	# {
+	# 	GtkWidget::interior_focus = 1
+	# 	GtkButton::default_spacing = { 1, 1, 1, 1 }
+	# 	GtkButton::default_outside_spacing = { 0, 0, 0, 0 }
+	# 	font_name = "lucida"
+	#   bg_pixmap[NORMAL] = 'pixmap.png'
+	# 	bg[NORMAL]      = { 0.80, 0.80, 0.80 }
+	# 	bg[PRELIGHT]    = { 0.80, 0.80, 1.00 }
+	# 	bg[ACTIVE]      = { 0.80, 0.80, 0.80 }
+	# 	bg[SELECTED]    = { 0.60, 0.60, 0.80 }
+	# 	text[SELECTED]  = { 0.00, 0.00, 0.00 }
+	# 	text[ACTIVE]    = { 0.00, 0.00, 0.00 }
+	# }	
+	# class "GtkLabel" style "mstyle"
+	#
+	def def_style(string_style=nil)
+		unless string_style
+			 fn=caller[0].gsub(/.rb$/,".rc")
+			 raise "Style: no ressource (#{fn} not-exist)" if !File.exists?(fn)
+			 string_style=File.read(fn)
+		end
+		begin
+			Gtk::RC.parse_string(string_style)
+			@style_loaded=true
+		rescue Exception => e
+			error "Error loading style : #{e}\n#{string_style}"
+		end
+	end
 	
 end
