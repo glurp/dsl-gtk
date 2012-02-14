@@ -65,13 +65,15 @@ Threading is supported via a Queue :
 * everywere, a thread can invoke invoke_gui {ruiby code}. this send to the main queue the proc,
  which will be evaluated asynchroniously 
 
+instance_eval is avoided in ruiby. He is used only for thread invoker : gui_invoke().
+
 ```ruby
 require_relative '../lib/ruiby'
 class App < Ruiby_gtk
     def initialize
         super("Testing Ruiby for Threading",150,0)
 		threader(10)
-		Thread.new { run }
+		Thread.new { A.new.run }
     end
 	def component()        
 	  stack do
@@ -80,14 +82,22 @@ class App < Ruiby_gtk
 	  end
 	end # endcomponent
 	
+end
+class A
 	def run
  		loop do
-		 	sleep(1)
-			gui_invoke { append_to(@lab) { sloti(label(Time.now.to_f.to_s))  } }
+		 	sleep(1) # thread...
+			there=self 
+			gui_invoke { append_to(@lab) { sloti( 
+					label( there.aaa )  # ! instance_eval on main window
+			)  } }
 		end
 	end 
+	def aaa() Time.now.to_s  end
 end
+
 Ruiby.start { App.new }
+
 ```
 
 Status

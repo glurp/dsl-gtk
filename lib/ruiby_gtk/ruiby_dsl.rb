@@ -43,7 +43,13 @@ module Ruiby_dsl
 		sw.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS)
 		ret=stack(false,&b)
 		sw.add_with_viewport(ret)
-		ret
+		class << sw
+			def scroll_to_top()    vadjustment.set_value( 0 ) end
+			def scroll_to_bottom() vadjustment.set_value( vadjustment.upper - 1) end
+			def scroll_to_left()   hadjustment.set_value( 0 ) end
+			def scroll_to_right()  hadjustment.set_value( hajustement.upper-1 ) end
+		end
+		sw
 	end	
 
 
@@ -52,7 +58,7 @@ module Ruiby_dsl
 		eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
 		ret=cbox(true,eventbox,true,&b) 
 		eventbox.realize
-		eventbox.signal_connect('button_press_event') { |w, e| self.send(methode_name) }
+		eventbox.signal_connect('button_press_event') { |w, e| self.send(methode_name,ret) }
 		ret
 	end
 	def stack(add1=true,&b)    		cbox(true,VBox.new(false, 2),add1,&b) end
@@ -267,9 +273,15 @@ module Ruiby_dsl
 			}
 		}
 	end
-	def entry(value,size=10,option={})
+	def entry(value,size=10,option={},&blk)
 		w=Entry.new().tap {|e| e.set_text(value ? value.to_s : "") }
-		attribs(w,option)		
+		attribs(w,option)	
+		after(1) do
+			w.signal_connect("key-press-event") do |en,e|
+				after(1) { blk.call(w.text) }
+				false
+			end 
+		end if block_given?
 		w
 	end
 	def ientry(value,option={})
@@ -331,8 +343,19 @@ module Ruiby_dsl
 	def force_update(canvas) canvas.queue_draw unless  canvas.destroyed?  end
 
 	############################ table
-	def row()
+	def table(nb_col,nb_row,config={})
+		table = Gtk::Table.new(nb_row,nb_col,false)
+		table.set_column_spacings(config[:set_column_spacings]) if config[:set_column_spacings]
+		slot(table)
+		@lcur << table
+		@row=0
 		@col=0
+		yield
+		@lcur.pop
+	end
+	
+	def row()
+		@col=0 # will be increment by cell..()
 		yield
 		@row+=1
 	end	
@@ -341,11 +364,12 @@ module Ruiby_dsl
 	def  cell_hspan(n,w) @lcur.last.attach(w,@col,@col+n,@row,@row+1) ; @col+=n end # :notested!
 	def  cell_vspan(n,w) @lcur.last.attach(w,@col,@col+1,@row,@row+n) ; @col+=1 end # :notested!
 	def  cell_pass(n=1)  @col+=n end # :notested!
-	def cell_span(n=2,w)
+	def  cell_span(n=2,w)
 		@lcur.last.attach(w,@col,@col+n,@row,@row+1)
 		@col+=n
 	end
 	
+	# set_alignment is not defined for all widget, so rescue..
 	def cell_left(w)     w.set_alignment(0.0, 0.5) rescue nil; cell(w) end
 	def cell_right(w)    w.set_alignment(1.0, 0.5)rescue nil ; cell(w) end
 	
@@ -358,16 +382,6 @@ module Ruiby_dsl
 	def cell_vspan_top(n,w)    w.set_alignment(0.5, 0.0)rescue nil ; cell_vspan(n,w) end
 	def cell_vspan_bottom(n,w) w.set_alignment(0.5, 1.0)rescue nil ; cell_vspan(n,w) end
 	
-	def table(nb_col,nb_row,config={})
-		table = Gtk::Table.new(nb_row,nb_col,false)
-		table.set_column_spacings(config[:set_column_spacings]) if config[:set_column_spacings]
-		slot(table)
-		@lcur << table
-		@row=0
-		@col=0
-		yield
-		@lcur.pop
-	end
 
 	###################################### notebooks
 	def notebook() 
