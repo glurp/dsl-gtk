@@ -515,7 +515,67 @@ module Ruiby_dsl
 		eventbox.signal_connect('button_press_event') { |w, e| self.send(methode_name,ret) }
 		ret
 	end
-	 
+	##################################### List
+	def list(title,w=0,h=0)
+		scrolled_win = Gtk::ScrolledWindow.new
+		scrolled_win.set_policy(Gtk::POLICY_AUTOMATIC,Gtk::POLICY_AUTOMATIC)
+		scrolled_win.set_width_request(w)	if w>0
+		scrolled_win.set_height_request(h)	if h>0
+		model = Gtk::ListStore.new(String)
+		column = Gtk::TreeViewColumn.new(title.to_s,Gtk::CellRendererText.new, {:text => 0})
+		treeview = Gtk::TreeView.new(model)
+		treeview.append_column(column)
+		treeview.selection.set_mode(Gtk::SELECTION_SINGLE)
+		scrolled_win.add_with_viewport(treeview)
+		def scrolled_win.list() children[0].children[0] end
+		def scrolled_win.model() list().model end
+		def scrolled_win.clear() list().model.clear end
+		def scrolled_win.add_item(word)
+			raise("list.add_item() out of main thread!") if $__mainthread__ != Thread.current
+			list().model.append[0]=word  
+		end
+		def scrolled_win.set_data(words)
+			raise("list.set_data() out of main thread!") if $__mainthread__ != Thread.current
+			list().model.clear
+			words.each { |w| list().model.append[0]=word }
+		end
+		def scrolled_win.selection() a=list().selection.selected ; a ? a[0] : nil ; end
+		def scrolled_win.index() list().selection.selected end
+		slot(scrolled_win)
+	end
+
+	def grid(names,w=0,h=0)
+		scrolled_win = Gtk::ScrolledWindow.new
+		scrolled_win.set_policy(Gtk::POLICY_AUTOMATIC,Gtk::POLICY_AUTOMATIC)
+		scrolled_win.set_width_request(w)	if w>0
+		scrolled_win.set_height_request(h)	if h>0
+		
+		model = Gtk::ListStore.new(*([String]*names.size))
+		treeview = Gtk::TreeView.new(model)
+		treeview.selection.set_mode(Gtk::SELECTION_SINGLE)
+		names.each_with_index do  |name,i|
+			treeview.append_column(
+				Gtk::TreeViewColumn.new( name,Gtk::CellRendererText.new,{:text => i} )
+			)
+		end
+		
+		def scrolled_win.grid() children[0].children[0] end
+		def scrolled_win.model() grid().model end
+		def scrolled_win.clear() grid().model.clear() ; end
+		def scrolled_win.add_row(words)
+			l=grid().model.append()
+			words.each_with_index { |w,i| l[i] = w.to_s }
+		end
+		def scrolled_win.set_data(data)	
+			raise("grid.set_data() out of main thread!")if $__mainthread__ != Thread.current
+			clear() ; data.each { |words| add_row(words) }
+		end
+		def scrolled_win.selection() a=grid().selection.selected ; a ? a[0] : nil ; end
+		def scrolled_win.index() grid().selection.selected end
+		
+		scrolled_win.add_with_viewport(treeview)
+		slot(scrolled_win)
+	end
 	###################################### Logs
 
 	def log(*txt)

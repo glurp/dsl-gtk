@@ -102,13 +102,17 @@ Ruiby.start { App.new }
 
 Status
 ======
-In developpement :
+done :
 
-* basic widget works (stack/flow/button/label/entry....)
-* container done : vbox, hbox, frame, notebook, pane, table 
-* some more complex widget:  scollbox, drawing, code_editor, 
+* basics widgets  (button/label/entry....)
+* container :  stack/flow, frame, notebook, pane, table 
+* some more complex widget:  scollbox, drawing, code_editor, caldendar... 
 * threading support ok ( threader(polling) / gui_invoke { } )
-* **waiting** : data grid, list, treeview,
+* grid, list, 
+
+current:
+
+* **waiting** : treeview, video
 
 Screen copy at : http://regisaubarede.posterous.com/
 
