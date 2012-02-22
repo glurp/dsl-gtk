@@ -72,12 +72,30 @@ def component()
       }
       separator
       notebook do
-        page("Page of Notebook") {
-          table(2,2) {
-            row { cell(button("eeee"));cell(button("dddd")) }
-            row { cell(button("eeee"));cell(button("dddd")) }
-          }
+        page("List & grid") {
+			flow {
+				frame("List") {
+					stack {
+						@list=list("Demo",0,100)
+						flow {
+							slot(button("s.content") { alert("Selected= #{@list.selection()}") })
+							slot(button("s.index") { alert("iSelected= #{@list.index()}") })
+						}
+					}
+				}
+				frame("Grid") {
+					stack { stacki {
+						@grid=grid(%w{nom prenom age},100,150)
+						flow {
+							slot(button("s.content") { alert("Selected= #{@grid.selection()}") })
+							slot(button("s.index") { alert("iSelected= #{@grid.index()}") })
+						}
+					} }
+				}
+			}
         }
+		10.times { |i| @list.add_item("Hello #{i}") }
+		@grid.set_data([["a",1,1.0],["b",1,111111.0],["c",2222222222,1.0],["c",2222222222,1.0],["c",2222222222,1.0]])
         page("eee","#home") {
           sloti(button("Eeee"))
           sloti(button("#harddisk") { alert("image button!")})
