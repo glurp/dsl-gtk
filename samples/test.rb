@@ -93,9 +93,9 @@ def component()
 					} }
 				}
 			}
+			10.times { |i| @list.add_item("Hello #{i}") }
+			@grid.set_data((1..30).map { |n| ["e#{n}",n,1.0*n]})
         }
-		10.times { |i| @list.add_item("Hello #{i}") }
-		@grid.set_data([["a",1,1.0],["b",1,111111.0],["c",2222222222,1.0],["c",2222222222,1.0],["c",2222222222,1.0]])
         page("eee","#home") {
           sloti(button("Eeee"))
           sloti(button("#harddisk") { alert("image button!")})
