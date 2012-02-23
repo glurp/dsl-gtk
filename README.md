@@ -15,6 +15,26 @@ Hard codes (gtk) copyed from green_shoes (thank you ashbb :) .
 Based on gtk at first, 
 Perhaps will be adapte to www/(vaarin or sencha) ...
 
+Status
+======
+done :
+
+* basics widgets  (button/label/entry....)
+* container :  stack/flow, frame, notebook, pane, table 
+* some more complex widget:  scollbox, drawing, code_editor, caldendar... 
+* threading support ok ( threader(polling) / gui_invoke { } )
+* grid, list, 
+
+current:
+
+* **waiting** : treeview, video
+
+Screen copy at : http://regisaubarede.posterous.com/
+
+Code: http://github.com/raubarede/Ruiby
+
+Gem : https://rubygems.org/gems/Ruiby
+
 Design
 ======
 DSL is usable via inherit or include
@@ -100,23 +120,6 @@ Ruiby.start { App.new }
 
 ```
 
-Status
-======
-done :
-
-* basics widgets  (button/label/entry....)
-* container :  stack/flow, frame, notebook, pane, table 
-* some more complex widget:  scollbox, drawing, code_editor, caldendar... 
-* threading support ok ( threader(polling) / gui_invoke { } )
-* grid, list, 
-
-current:
-
-* **waiting** : treeview, video
-
-Screen copy at : http://regisaubarede.posterous.com/
-
-Code: http://github.com/raubarede/Ruiby
 
 License
 =======
