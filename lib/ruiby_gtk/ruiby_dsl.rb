@@ -374,6 +374,9 @@ module Ruiby_dsl
 	############################## Panned : 
 	# split current frame in 2 panes
 	# block invoked must return a array of 2 box wich will put in the 2 panes
+	
+	def stack_paned(size,fragment,&blk) paned(false,size,fragment,&blk) end
+	def flow_paned(size,fragment,&blk) paned(true,size,fragment,&blk) end
 	def paned(vertical,size,fragment)
 		paned = vertical ? HPaned.new : VPaned.new
 		slot(paned)

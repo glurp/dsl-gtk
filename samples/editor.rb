@@ -33,7 +33,7 @@ class RubyApp < Ruiby_gtk
 					edit(@file) # embeded source code shower un Ruiby
 				}
 			)) 
-			@edit=slot(source_editor(:lang=> "ruby", :font=> "Courier new 12",:on_change=> proc { change })).editor
+			@edit=sloti(source_editor(:width=>200,:height=>50,:lang=> "ruby", :font=> "Courier new 12",:on_change=> proc { change })).editor
 			sloti( button("Exit") { exit! })	
 			after(20)   { rposition(-3,3) }
 			anim(500) do

@@ -1,7 +1,14 @@
 ################################################################################
-#   utils.rb 
+#   utils.rb
 ################################################################################
+#
+# class File
+#   def self.write(fn,text=nil)				write a string to a textfile
+#   def self.my_find(root,filter,&blk)		recursive find file
+#   def self.my_find_depht(root,filter,&blk)recursive find file files first
+# class Kernel def chrono(text="",div=1)	eval bloc with time mesure
 # module Enumerable : def oinject(obj)
+#
 # class Array
 #   def superjoin(*ldescr) 					join n dimensions array
 #   def join_html_table(css_class="nil")	join 2 dim array in a html table
@@ -10,15 +17,12 @@
 #   def partitionning(part_size)
 # class Hash def join_html_table(css="nil")
 # class Object def join_html_table(css="nil")
-# class File
-#   def self.write(fn,text=nil)				write a string to a textfile
-#   def self.my_find(root,filter,&blk)		recursive find file
-#   def self.my_find_depht(root,filter,&blk)recursive find file files first
-# class Kernel def chrono(text="",div=1)	eval bloc with time mesure
+#
 # module H									module Html builder
 # class Html_builder						class Html builder
 #  def self.do(&b) Html_builder.new.instance_eval(&b).to_html_code end
 #  def css 
+#
 # class Reloader							auto load file which is modified
 #  def self.declare(filename)					calling in each source file
 #  def self.run									calling at end loadings

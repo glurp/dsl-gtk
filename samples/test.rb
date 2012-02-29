@@ -16,10 +16,10 @@ def component()
 		"redo/refaire"=>proc { alert("e") },"ee"=>nil
 	))
     slot(label( <<-EEND ,:font=>"Arial 12"))
-     This window is test & demo of Ruiby capacity.
-	 Here is missing Threading (see testth.rb) & video (see video.rb).
-	 ~ 100 LOC
-    EEND
+     This window is test & demo of Ruiby capacity,
+	 ~ 120 Line of code,
+     (Ruiby version is #{Ruiby::VERSION})
+	EEND
 	
     
     separator
@@ -31,9 +31,9 @@ def component()
           row { cell_right label  "size"                  ; cell ientry(11,{:min=>0,:max=>100,:by=>1})  }
           row { cell_right label  "feeling"               ; cell islider(10,{:min=>0,:max=>100,:by=>1})  }
           row { cell_right label  "speedy"                ; cell(toggle_button("on","off",false) {|w| w.label=w.active?() ? "Off": "On" })  }
-          row { cell_left label  "acceleration type"     ; cell hradio_buttons(%w{aa bb cc},1)  }
-          row { cell_left label  "mode on"               ; cell check_button("",false)  }
-          row { cell_left label  "mode off"              ; cell check_button("",true)  }
+          row { cell       label  "acceleration type"     ; cell hradio_buttons(%w{aa bb cc},1)  }
+          row { cell      label  "mode on"               ; cell check_button("",false)  }
+          row { cell      label  "mode off"              ; cell check_button("",true)  }
           row { cell_left label  "Variable"              ; cell combo({"aaa"=>1,"bbb"=>2,"ccc"=>3},1) }
           row { cell_left label  "Couleur"               ; cell color_choice()  }
         end }
@@ -96,34 +96,43 @@ def component()
 			10.times { |i| @list.add_item("Hello #{i}") }
 			@grid.set_data((1..30).map { |n| ["e#{n}",n,1.0*n]})
         }
-        page("eee","#home") {
-          sloti(button("Eeee"))
-          sloti(button("#harddisk") { alert("image button!")})
-          sloti(label('#cdrom'))
-		  sloti(calendar())
+        page("Calendar","#about") {
+          flowi {
+			sloti(button("#harddisk") { alert("image button!")})
+			sloti(label('#cdrom'))
+		  }
+		  slot(calendar())
+	    }
+        page("Edit","#home") {
+		  @editor=slot(source_editor(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 6",:on_change=> proc { edit_change })).editor
+		  @editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
         }
       end
       frame("") do
-        stack {
-          sloti(label("Test scrolled zone"))
-          separator
-          vbox_scrolled(-1,100) { 
-            100.times { |i| 
-              flow { sloti(button("eeee#{i}"));sloti(button("eeee")) }
-            }
-          }
-          vbox_scrolled(100,100) { 
-            100.times { |i| 
-              flow { sloti(button("eeee#{i}"));sloti(button("eeee"));sloti(button("aaa"*100)) }
-            }
-          }
-        }
+		stack {
+			sloti(label("Test scrolled zone"))
+			separator
+			stack_paned 300,0.5 do [
+			  vbox_scrolled(-1,100) { 
+				100.times { |i| 
+				  flow { sloti(button("eeee#{i}"));sloti(button("eeee")) }
+				}
+			  },
+			  vbox_scrolled(100,100) { 
+				100.times { |i| 
+				  flow { sloti(button("eeee#{i}"));sloti(button("eeee"));sloti(button("aaa"*100)) }
+				}
+			  }] end
+		  }
       end      
     }
     sloti(button("Test Specials Actions...") { p @bref ; do_special_actions() })
     sloti( button("Exit") { exit! })
   end
 end # endcomponent
+  def edit_change()
+	alert("please, do not change my code..")
+  end
 
   def do_special_actions()
     log("Coucou")
