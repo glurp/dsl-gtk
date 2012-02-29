@@ -2,7 +2,7 @@
 IF DEFINED %1=="" (
 	call giti
 	ruby  -e "a=File.read('VERSION').split('.') ; a[-1]=(a.last.to_i+1).to_s; puts r=a.join('.'); File.open('VERSION','w') {|f| f.write(r)}"
-	echo "%1 %2 %3 %4 %5 %6 %7 %8 %9" >> CHANGELOG.txt
+	echo %1 %2 %3 %4 %5 %6 %7 %8 %9 >> CHANGELOG.txt
 	git commit -a -m "*  %1 %2 %3 %4 %5 %6 %7 %8 %9"
 	git push
 	echo
@@ -12,7 +12,9 @@ IF DEFINED %1=="" (
 :gem
 rem ==== no args, pgenerate gem and push it to rubygems.org
 
-ruby  -e "a=File.read('VERSION').split('.').pop ; a[-1]=(a.last.to_i+1).to_s; puts r=(a+%{0}).join('.'); File.open('VERSION','w') {|f| f.write(r)}"
+ruby  -e "a=File.read('VERSION').split('.');a.pop ; a[-1]=(a.last.to_i+1).to_s; puts r=(a+[0]).join('.'); File.open('VERSION','w') {|f| f.puts(r)}"
+cat VERSION >> CHANGELOG.txt
+
 ruby -e "Dir.glob('Ruiby*.gem').each {|f| File.delete(f) }"
 call gem build Ruiby.gemspec
 call :test_gem
