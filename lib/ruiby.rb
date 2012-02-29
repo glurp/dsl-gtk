@@ -30,14 +30,17 @@ module Ruiby
   VERSION = IO.read(File.join(DIR, '../VERSION')).chomp
   GUI='gtk'
   
-  def self.start()
-	Gtk.init
-	yield
-	Gtk.main
+  def self.start(&bloc)
+	server_init {
+		Gtk.init
+		bloc.call
+		Gtk.main
+	}
   end
 end
 
 
+require_relative 'utils.rb'
 require_relative 'ruiby_gtk/ruiby_default_dialog.rb'
 require_relative 'ruiby_gtk/ruiby_dsl.rb'
 require_relative 'ruiby_gtk/ruiby_threader.rb'
