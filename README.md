@@ -19,11 +19,11 @@ Status
 ======
 done :
 
-* basics widgets  (button/label/entry....)
-* container :  stack/flow, frame, notebook, pane, table 
-* some more complex widget:  scollbox, drawing, code_editor, caldendar... 
+* basics widgets  (button/label/entry....) done
+* container :  stack/flow, frame, notebook, pane, table  done
+* some more complex widget:  scollbox, drawing, code_editor, caldendar...  done
 * threading support ok ( threader(polling) / gui_invoke { } )
-* grid, list, 
+* grid, list done
 
 current:
 
