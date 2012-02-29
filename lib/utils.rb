@@ -1,5 +1,5 @@
 ################################################################################
-#   utils.rb : utilitaires divers pour dev ruby
+#   utils.rb 
 ################################################################################
 # module Enumerable : def oinject(obj)
 # class Array
@@ -19,12 +19,10 @@
 # class Html_builder						class Html builder
 #  def self.do(&b) Html_builder.new.instance_eval(&b).to_html_code end
 #  def css 
-# class Reloader
-#  def run
-#  def refresh
-#  def declare(filename)
-#  def checkReloading(filename,last_mtime)
-# def server_init()
+# class Reloader							auto load file which is modified
+#  def self.declare(filename)					calling in each source file
+#  def self.run									calling at end loadings
+# def server_init()							run only one time bloc parameter
 ################################################################################
 require 'socket'
 require 'thread'
