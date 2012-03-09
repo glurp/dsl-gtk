@@ -18,12 +18,17 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
+p RUBY_VERSION
 require 'tmpdir'
 require 'pathname'
 require 'gtk2'
-
-
+if Gtk.check_version(2, 0, 0) =~ /old/i
+	 md=Gtk::MessageDialog.new(nil,Gtk::Dialog::DESTROY_WITH_PARENT,Gtk::MessageDialog::QUESTION, 
+            Gtk::MessageDialog::BUTTONS_YES_NO, "Gtk version invalide!, need 2.0.0 or later")
+	 md.run
+	 md.destroy
+	 exit!
+end
 
 module Ruiby
   DIR = Pathname.new(__FILE__).realpath.dirname.to_s

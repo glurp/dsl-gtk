@@ -28,15 +28,23 @@ module Ruiby_dsl
 	
 	# private: generic packer
 	def cbox(expand,box,add1)
+		autoslot()
 		if add1
 			expand ? @lcur.last.add(box) : @lcur.last.pack_start(box,false,false,3)
 		end
 		@lcur << box
 		yield
+		autoslot()
 		@lcur.pop
 	end
-	def slot(w) @lcur.last.add(w) ; w end
-	def sloti(w) @lcur.last.pack_start(w,false,false,3) ; w end
+	def slot(w)  @current_widget=nil; @lcur.last.add(w) ; w end
+	def sloti(w) @current_widget=nil; @lcur.last.pack_start(w,false,false,3) ; w end
+	
+	def autoslot(w=nil)
+		(p w;slot(@current_widget)) if @current_widget!=nil
+		@current_widget=w 
+	end
+	def raz() @current_widget=nil; end
 	
 	def append_to(cont,&blk) 
 		if $__mainthread__ != Thread.current
@@ -45,6 +53,7 @@ module Ruiby_dsl
 		end
 		@lcur << cont
 		yield rescue puts "#{$!} :\n#{$!.backtrace.join("\n  ")}"
+		autoslot()
 		@lcur.pop
 		show_all_children(cont)
 	end
@@ -57,6 +66,7 @@ module Ruiby_dsl
 		cont.children.each { |w| cont.remove(w) } 
 		@lcur << cont
 		yield rescue puts "#{$!} :\n#{$!.backtrace.join("\n  ")}"
+		autoslot()
 		@lcur.pop
 		show_all_children(cont)
 	end
@@ -141,6 +151,7 @@ module Ruiby_dsl
 		  w.modify_bg(Gtk::STATE_NORMAL,options[:bg]) if options[:bg]
 		  w.modify_fg(Gtk::STATE_NORMAL,options[:fg]) if options[:fg]
 		  w.modify_font(Pango::FontDescription.new(options[:font])) if options[:font]
+		  autoslot(w)
 		  w
 	end
 	def separator(width=1.0)  sloti(HBox === @lcur.last ? VSeparator.new : HSeparator.new)  end
@@ -195,7 +206,7 @@ module Ruiby_dsl
 			b.insert(i,w)
 			i+=1
 	   }
-	   b
+		attribs(b,options)
 	end 
 
 	############### Inputs widgets
@@ -247,14 +258,13 @@ module Ruiby_dsl
 	end
 	def entry(value,size=10,option={},&blk)
 		w=Entry.new().tap {|e| e.set_text(value ? value.to_s : "") }
-		attribs(w,option)	
 		after(1) do
 			w.signal_connect("key-press-event") do |en,e|
 				after(1) { blk.call(w.text) }
 				false
 			end 
 		end if block_given?
-		w
+		attribs(w,option)
 	end
 	def ientry(value,option={})
 		w=SpinButton.new(option[:min].to_i,option[:max].to_i,option[:by])
@@ -290,6 +300,7 @@ module Ruiby_dsl
 		hb
 	end
 	def canvas(width,height,option={})
+		autoslot()
 		w=DrawingArea.new()
 		w.set_size_request(width,height)
 		w.events |= ( ::Gdk::Event::BUTTON_PRESS_MASK | ::Gdk::Event::POINTER_MOTION_MASK | ::Gdk::Event::BUTTON_RELEASE_MASK)
@@ -315,6 +326,7 @@ module Ruiby_dsl
 	def force_update(canvas) canvas.queue_draw unless  canvas.destroyed?  end
 
 	############################ table
+	#warning!! one level only table: you can't put a table un a cell of a table...
 	def table(nb_col,nb_row,config={})
 		table = Gtk::Table.new(nb_row,nb_col,false)
 		table.set_column_spacings(config[:set_column_spacings]) if config[:set_column_spacings]
@@ -327,32 +339,34 @@ module Ruiby_dsl
 	end
 	
 	def row()
+		autoslot()
 		@col=0 # will be increment by cell..()
 		yield
 		@row+=1
 	end	
 	
-	def  cell(w) 		 @lcur.last.attach(w,@col,@col+1,@row,@row+1) ; @col+=1 end
-	def  cell_hspan(n,w) @lcur.last.attach(w,@col,@col+n,@row,@row+1) ; @col+=n end # :notested!
-	def  cell_vspan(n,w) @lcur.last.attach(w,@col,@col+1,@row,@row+n) ; @col+=1 end # :notested!
+	def  cell(w) 		 raz();@lcur.last.attach(w,@col,@col+1,@row,@row+1) ; @col+=1 end
+	def  cell_hspan(n,w) raz();@lcur.last.attach(w,@col,@col+n,@row,@row+1) ; @col+=n end # :notested!
+	def  cell_vspan(n,w) raz();@lcur.last.attach(w,@col,@col+1,@row,@row+n) ; @col+=1 end # :notested!
 	def  cell_pass(n=1)  @col+=n end # :notested!
 	def  cell_span(n=2,w)
+		raz();
 		@lcur.last.attach(w,@col,@col+n,@row,@row+1)
 		@col+=n
 	end
 	
 	# set_alignment is not defined for all widget, so rescue..
-	def cell_left(w)     w.set_alignment(0.0, 0.5) rescue nil; cell(w) end
-	def cell_right(w)    w.set_alignment(1.0, 0.5)rescue nil ; cell(w) end
+	def cell_left(w)     raz();w.set_alignment(0.0, 0.5) rescue nil; cell(w) end
+	def cell_right(w)    raz();w.set_alignment(1.0, 0.5)rescue nil ; cell(w) end
 	
-	def cell_hspan_left(n,w)   w.set_alignment(0.0, 0.5)rescue nil ; cell_hspan(n,w) end
-	def cell_hspan_right(n,w)  w.set_alignment(1.0, 0.5)rescue nil ; cell_hspan(n,w) end
+	def cell_hspan_left(n,w)   raz();w.set_alignment(0.0, 0.5)rescue nil ; cell_hspan(n,w) end
+	def cell_hspan_right(n,w)  raz();w.set_alignment(1.0, 0.5)rescue nil ; cell_hspan(n,w) end
 	
-	def cell_top(w)      w.set_alignment(0.5, 0.0)rescue nil ; cell(w) end
-	def cell_bottom(w)   w.set_alignment(0.5, 1.0)rescue nil ; cell(w) end
+	def cell_top(w)      raz();w.set_alignment(0.5, 0.0)rescue nil ; cell(w) end
+	def cell_bottom(w)   raz();w.set_alignment(0.5, 1.0)rescue nil ; cell(w) end
 
-	def cell_vspan_top(n,w)    w.set_alignment(0.5, 0.0)rescue nil ; cell_vspan(n,w) end
-	def cell_vspan_bottom(n,w) w.set_alignment(0.5, 1.0)rescue nil ; cell_vspan(n,w) end
+	def cell_vspan_top(n,w)    raz();w.set_alignment(0.5, 0.0)rescue nil ; cell_vspan(n,w) end
+	def cell_vspan_bottom(n,w) raz();w.set_alignment(0.5, 1.0)rescue nil ; cell_vspan(n,w) end
 	
 
 	###################################### notebooks
@@ -454,6 +468,7 @@ module Ruiby_dsl
 		after(1) { c.signal_connect("day-selected") { |w,e| options[:selection].call(w.day) } } if options[:selection]
 		after(1) { c.signal_connect("month-changed") { |w,e| options[:changed].call(w) } }if options[:changed]
 		calendar_set_time(c,time)
+		attribs(c,options)
 		c
 	end
 	# change the current selection of a calendar, by Time object

@@ -23,7 +23,7 @@
 #  def self.do(&b) Html_builder.new.instance_eval(&b).to_html_code end
 #  def css 
 #
-# class Reloader							auto load file which is modified
+# class Reloader							auto-load files which is modified
 #  def self.declare(filename)					calling in each source file
 #  def self.run									calling at end loadings
 # def server_init()							run only one time bloc parameter

@@ -108,6 +108,7 @@ class Ruiby_gtk < Gtk::Window
 		end
         set_window_position Window::POS_CENTER  # default, can be modified by window_position(x,y)
 		@lcur=[self]
+		@current_widget=nil
 		@cur=nil
 		begin
 			component  
@@ -151,6 +152,7 @@ module Ruiby # must be included by a Gtk::Window
 	def ruiby_component()
 		init_threader()
 		@lcur=[self]
+		@current_widget=nil
 		@cur=nil
 		begin
 			yield

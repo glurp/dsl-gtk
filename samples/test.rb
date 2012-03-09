@@ -9,13 +9,13 @@ class RubyApp < Ruiby_gtk
     end
 def component()        
   stack do
-    slot(htoolbar(
+    htoolbar(
 		"open/tooltip text on button"=>proc { edit(__FILE__) },
 		"close/fermer le fichier"=>nil,
 		"undo/defaire"=>nil,
 		"redo/refaire"=>proc { alert("e") },"ee"=>nil
-	))
-    slot(label( <<-EEND ,:font=>"Arial 12"))
+	)
+    label( <<-EEND ,:font=>"Arial 12")
      This window is test & demo of Ruiby capacity,
 	 ~ 120 Line of code,
      (Ruiby version is #{Ruiby::VERSION})
@@ -26,8 +26,8 @@ def component()
     flow {
       @left=stack {
         frame("") { table(2,10,{set_column_spacings: 3}) do
-          row { cell_right label  "mode de fontionnement" ; cell(button("set") { alert("?") }) }
-          row { cell_right label  "vitesse"               ; cell entry("aa")  }
+          row { cell_right(label  "mode de fontionnement"); cell(button("set") { alert("?") }) }
+          row { cell_right label  "vitesse"               ; cell(entry("aa"))  }
           row { cell_right label  "size"                  ; cell ientry(11,{:min=>0,:max=>100,:by=>1})  }
           row { cell_right label  "feeling"               ; cell islider(10,{:min=>0,:max=>100,:by=>1})  }
           row { cell_right label  "speedy"                ; cell(toggle_button("on","off",false) {|w| w.label=w.active?() ? "Off": "On" })  }
@@ -35,23 +35,24 @@ def component()
           row { cell      label  "mode on"               ; cell check_button("",false)  }
           row { cell      label  "mode off"              ; cell check_button("",true)  }
           row { cell_left label  "Variable"              ; cell combo({"aaa"=>1,"bbb"=>2,"ccc"=>3},1) }
-          row { cell_left label  "Couleur"               ; cell color_choice()  }
+          row { p 4;cell_left label  "Couleur"               ; cell color_choice()  }
         end }
         frame("Buttons in frame") {
           flow { sloti(button("packed with sloti()") {alert("button packed with sloti()")}) 
-		             @bref=sloti(button("bb")) ;  slot(button("packed with slot()")) ; }
+		         @bref=sloti(button("bb")) ;  button("packed with slot()") ; 
+		  }
         }
         flow do
           stack {
-            slot(button("Couleur") {
+            button("Couleur") {
               #alert("alert !") ; error("error !") ; ask("ask !") ;trace("trace !") ;
               @color=ask_color()
-            })
+            }
             sloti(label('Epaisseur'))
             @epaisseur=sloti(islider(1,{:min=>1,:max=>30,:by=>1}))
           }
           @ldraw=[] ; @color=  ::Gdk::Color.parse("#33EEFF");
-          slot(canvas(100,100,{ 
+          canvas(100,100,{ 
             :expose     => proc { |w,cr|  
               @ldraw.each do |line|
                 next if line.size<3
@@ -67,7 +68,6 @@ def component()
             :mouse_move => proc { |w,e,o| no= [e.x,e.y] ; (@ldraw.last << no) if no[0]!=o[0] || no[1]!=o[1] ; no },
             :mouse_up   => proc { |w,e,o| no= [e.x,e.y] ; (@ldraw.last << no) ; no}
             })
-          )
         end 
       }
       separator
@@ -78,8 +78,8 @@ def component()
 					stack {
 						@list=list("Demo",0,100)
 						flow {
-							slot(button("s.content") { alert("Selected= #{@list.selection()}") })
-							slot(button("s.index") { alert("iSelected= #{@list.index()}") })
+							button("s.content") { alert("Selected= #{@list.selection()}") }
+							button("s.index") { alert("iSelected= #{@list.index()}") }
 						}
 					}
 				}
@@ -87,8 +87,8 @@ def component()
 					stack { stacki {
 						@grid=grid(%w{nom prenom age},100,150)
 						flow {
-							slot(button("s.content") { alert("Selected= #{@grid.selection()}") })
-							slot(button("s.index") { alert("iSelected= #{@grid.index()}") })
+							button("s.content") { alert("Selected= #{@grid.selection()}") }
+							button("s.index") { alert("iSelected= #{@grid.index()}") }
 						}
 					} }
 				}
@@ -101,10 +101,10 @@ def component()
 			sloti(button("#harddisk") { alert("image button!")})
 			sloti(label('#cdrom'))
 		  }
-		  slot(calendar())
+		  calendar()
 	    }
         page("Edit","#home") {
-		  @editor=slot(source_editor(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 6",:on_change=> proc { edit_change })).editor
+		  @editor=source_editor(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 6",:on_change=> proc { edit_change }).editor
 		  @editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
         }
       end
