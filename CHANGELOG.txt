@@ -5,3 +5,5 @@ modify changelog managment
 update readme        
 update readme2        
 automatic slot done if widget is not packed  
+0.6.0
+update mendeleif code in readme     
