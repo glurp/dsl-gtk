@@ -49,7 +49,7 @@ def gui_invoke(&blk)
 			puts("\n\nThreaded invoker not initilized! : please call threader(ms) on window constructor!\n\n") 
 		end
 	else
-		$___mainwindow__.instance_eval( &blk )
+		$__mainwindow__.instance_eval( &blk )
 	end
 end
 
@@ -67,6 +67,6 @@ def gui_invoke_wait(&blk)
 			puts("\n\nThreaded invoker not initilized! : please call threader(ms) on window constructor!\n\n") 
 		end
 	else
-		$___mainwindow__.instance_eval( &blk )
+		$__mainwindow__.instance_eval( &blk )
 	end
 end
