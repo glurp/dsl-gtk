@@ -26,6 +26,7 @@ done :
 * grid, list done
 
 NEW!!
+
 - correction of a big bug in ruiby_invoke
 - ruiby_require : do a 'gem install ...' if gem not here
 - Ruiby.update() : update the gui during calculation
@@ -34,6 +35,7 @@ NEW!!
 
 
 Todo:
+
 - Easy Form : variables binding for entry/list/check-radio button...
 - Dialog sync (cloc the caller until dialogue destroy)
 - treeview
