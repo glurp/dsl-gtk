@@ -25,9 +25,19 @@ done :
 * threading support ok ( threader(polling) / gui_invoke { } )
 * grid, list done
 
-current:
+NEW!!
+- correction of a big bug in ruiby_invoke
+- ruiby_require : do a 'gem install ...' if gem not here
+- Ruiby.update() : update the gui during calculation
+- text_area aimprove api
+- log : convert each message to utf-8
 
-* **waiting** : treeview, video
+
+Todo:
+- Easy Form : variables binding for entry/list/check-radio button...
+- Dialog sync (cloc the caller until dialogue destroy)
+- treeview
+- video
 
 Screen copy at : http://regisaubarede.posterous.com/
 
