@@ -9,15 +9,15 @@ class RubyApp < Ruiby_gtk
     end
 def component()        
   stack do
-    htoolbar(
+    sloti(htoolbar(
 		"open/tooltip text on button"=>proc { edit(__FILE__) },
 		"close/fermer le fichier"=>nil,
 		"undo/defaire"=>nil,
 		"redo/refaire"=>proc { alert("e") },"ee"=>nil
-	)
-    label( <<-EEND ,:font=>"Arial 12")
+	))
+    sloti(label( <<-EEND ,:font=>"Arial 12"))
      This window is test & demo of Ruiby capacity,
-	 ~ 120 Line of code,
+	   ~ 140 Lines of code,
      (Ruiby version is #{Ruiby::VERSION})
 	EEND
 	

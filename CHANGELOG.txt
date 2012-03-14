@@ -12,7 +12,4 @@ update mendeleif code in readme
 ruiby_require Ruiby.update        
 0.8.0
 news         
-news         
-news         
-news         
-news         
+improve slotation in test.rb      
