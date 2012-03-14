@@ -34,7 +34,10 @@ module Ruiby
   DIR = Pathname.new(__FILE__).realpath.dirname.to_s
   VERSION = IO.read(File.join(DIR, '../VERSION')).chomp
   GUI='gtk'
-  
+  # update gui while necessary
+  def self.update() 
+		Gtk.main_iteration while Gtk.events_pending?  
+  end
   def self.start(&bloc)
 	server_init {
 		Gtk.init
@@ -55,4 +58,38 @@ require_relative 'ruiby_gtk/systray.rb'
 
 Dir.glob("#{Ruiby::DIR}/plugins/*.rb").each do |filename| 
   autoload(File.basename(filename).split(".")[0].capitalize.to_sym, filename) 
+end
+
+module Kernel
+	def ruiby_require(*gems)
+		w=Ruiby_dialog.new
+		gems.flatten.each do|gem| 
+			begin
+				require gem
+			rescue LoadError => e
+				rep=w.ask("<em>Loading #{gems.join(', ')}</em>\n\n'#{gem}' package is missing. Can I load it from internet ?")
+				exit! unless rep
+				require 'open3'
+				w.log("gem install  #{gem} --no-ri --no-rdoc")
+				Gtk.main_iteration while Gtk.events_pending?
+				Open3.popen3("gem install  #{gem}") { |si,so,se| 
+					q=Queue.new
+					Thread.new { loop {q.push(so.gets) } rescue nil; q.push(nil)}
+					Thread.new { loop {q.push(se.gets) } rescue nil; q.push(nil)}
+					str=""
+					while str
+						timeout(1) { str=q.pop } rescue nil
+						(w.log(str);str="") if str && str.size>0
+						Ruiby.update
+					end
+				}
+				w.log "done!"
+				Ruiby.update
+				Gem.clear_paths() 
+				require(gem) 
+				w.log("loading '#{gem}' ok!")
+			end		
+		end
+		w.destroy()
+	end
 end

@@ -453,7 +453,11 @@ module Ruiby_dsl
 		  eb.set_size_request(w,h) 
 		  eb.add(tv)
 		  eb.define_singleton_method(:text_area) { tv }
-
+		  class << eb
+			def text=(a)  self.children[0].buffer.text=a end
+			def text()    self.children[0].buffer.text end
+			def append(a) self.children[0].buffer.text+=a.encode("UTF-8") end
+		  end
 		  eb.show_all
 		  eb	
 	end	
@@ -597,12 +601,12 @@ module Ruiby_dsl
 	###################################### Logs
 
 	def log(*txt)
-		if $__mainthread__ != Thread.current
+		if $__mainthread__ && $__mainthread__ != Thread.current
 			gui_invoke { log(*txt) }
 			return
 		end
 		loglabel=create_log_window()
-		loglabel.buffer.text +=  Time.now.to_s+" | " + (txt.join(" "))+"\n" 
+		loglabel.buffer.text +=  Time.now.to_s+" | " + (txt.join(" ").encode("UTF-8"))+"\n" 
 		p loglabel.buffer.text.size
 		if ( loglabel.buffer.text.size>10000)
 		  loglabel.buffer.text=loglabel.buffer.text[-7000..-1].gsub(/^.*\n/m,"......\n\n")

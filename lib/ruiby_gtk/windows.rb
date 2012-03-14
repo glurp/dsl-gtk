@@ -167,4 +167,5 @@ end
 class Ruiby_dialog < Gtk::Window # :notested!
 	include ::Ruiby_dsl
 	include ::Ruiby_default_dialog
+	def intialize() end
 end
