@@ -14,3 +14,4 @@ ruiby_require Ruiby.update
 news         
 news         
 news         
+news         
