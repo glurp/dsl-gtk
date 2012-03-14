@@ -21,6 +21,8 @@ Code: http://github.com/raubarede/Ruiby
 
 Gem : https://rubygems.org/gems/Ruiby
 
+Let me know if Ruiby is useful : mailto:regis.aubarede@gmail.com
+
 Status
 ======
 done :
@@ -36,14 +38,14 @@ NEW!!
 - correction of a big bug in ruiby_invoke
 - ruiby_require : do a 'gem install ...' if gem not here
 - Ruiby.update() : update the gui during calculation
-- text_area aimprove api
+- text_area : improve api
 - log : convert each message to utf-8
 
 
 Todo:
 
 - Easy Form : variables binding for entry/list/check-radio button...
-- Dialog sync (cloc the caller until dialogue destroy)
+- Dialog sync (block the caller until destroy dialogue)
 - treeview
 - video
 
@@ -93,7 +95,7 @@ end
 Ruiby.start { Win.new("application title",350,10) }
 ```
 
-Threading is supported via a Queue :
+Threading is supported via a Queue polled by main-window thread :
 * main window poll Queue , messagers are proc to be instance_eval() in the main window context
 * everywere, a thread can invoke invoke_gui {ruiby code}. this send to the main queue the proc,
  which will be evaluated asynchroniously 
