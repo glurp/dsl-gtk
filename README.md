@@ -15,6 +15,12 @@ Hard codes (gtk) copyed from green_shoes (thank you ashbb :) .
 Based on gtk at first, 
 Perhaps will be adapte to www/(vaarin or sencha) ...
 
+Screen copy at : http://regisaubarede.posterous.com/
+
+Code: http://github.com/raubarede/Ruiby
+
+Gem : https://rubygems.org/gems/Ruiby
+
 Status
 ======
 done :
@@ -41,11 +47,6 @@ Todo:
 - treeview
 - video
 
-Screen copy at : http://regisaubarede.posterous.com/
-
-Code: http://github.com/raubarede/Ruiby
-
-Gem : https://rubygems.org/gems/Ruiby
 
 Design
 ======
