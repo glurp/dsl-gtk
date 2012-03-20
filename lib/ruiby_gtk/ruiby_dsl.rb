@@ -41,7 +41,7 @@ module Ruiby_dsl
 	def sloti(w) @current_widget=nil; @lcur.last.pack_start(w,false,false,3) ; w end
 	
 	def autoslot(w=nil)
-		(p w;slot(@current_widget)) if @current_widget!=nil
+		(slot(@current_widget)) if @current_widget!=nil
 		@current_widget=w 
 	end
 	def raz() @current_widget=nil; end
@@ -60,6 +60,7 @@ module Ruiby_dsl
 	
 	def clear_append_to(cont,&blk) 
 		if $__mainthread__ != Thread.current
+			p "not in main thread"
 			gui_invoke { clear_append_to(cont,&blk) }
 			return
 		end
@@ -368,6 +369,65 @@ module Ruiby_dsl
 	def cell_vspan_top(n,w)    raz();w.set_alignment(0.5, 0.0)rescue nil ; cell_vspan(n,w) end
 	def cell_vspan_bottom(n,w) raz();w.set_alignment(0.5, 1.0)rescue nil ; cell_vspan(n,w) end
 	
+	def propertys(title,hash,options={:edit=>false, :scroll=>[0,0]})
+	 if ! defined?(@prop_index)
+		@prop_index=0
+		@prop_hash={}
+	else
+		@prop_index+=1
+	end
+	prop_current=(@prop_hash[@prop_index]={})
+	value={}
+	 stacki {
+		framei(" #{title} ") {
+			 stack {
+				if options[:scroll] &&  options[:scroll][1]>0
+				 vbox_scrolled(options[:scroll][0],options[:scroll][1]) {
+					 table(2,hash.size) {
+						hash.each { |k,v| row {
+							cell_right(label(" "+k.to_s+" : "))
+							cell_left(options[:edit] ? 
+								(prop_current[k]=entry(v.to_s)) : 
+								label(v.to_s))
+						}}
+					  }
+				  }
+				else
+				 table(2,hash.size) {
+					hash.each { |k,v| row {
+						cell_right(label(" "+k.to_s+" : "))
+						cell_left(options[:edit] ? 
+							(prop_current[k]=entry(v.to_s)) : 
+							label(v.to_s))
+					}}
+				  }
+				end
+				  if options[:edit]
+					  sloti(button("Validation") { 
+							nhash={}
+							prop_current.each {|k,w| 
+								v_old=hash[k]
+								v_new=w.text
+								vbin=case v_old 
+									when String then v_new
+									when Fixnum then v_new.to_i
+									when Float  then v_new.to_f
+									else eval( v_new )
+								end
+								nhash[k]=vbin
+							}
+							if block_given? 
+								yield(nhash)
+							else
+								hash.clear
+								nhash.each { |k,v| hash[k]=v }
+							end
+					  }) 
+				  end
+			  }
+		 }
+	  }	
+	end
 
 	###################################### notebooks
 	def notebook() 

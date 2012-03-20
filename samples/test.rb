@@ -14,7 +14,7 @@ def component()
 		"close/fermer le fichier"=>nil,
 		"undo/defaire"=>nil,
 		"redo/refaire"=>proc { alert("e") },"ee"=>nil
-	))
+	   ))
     sloti(label( <<-EEND ,:font=>"Arial 12"))
      This window is test & demo of Ruiby capacity,
 	   ~ 140 Lines of code,
@@ -99,13 +99,19 @@ def component()
         page("Calendar","#about") {
           flowi {
 			sloti(button("#harddisk") { alert("image button!")})
-			sloti(label('#cdrom'))
+			tt={int: 1,float: 1.0, array: [1,2,3], hash: {a:1, b:2}}
+			propertys("props editable",tt,{edit: true}) { |a| log(a.inspect);log(tt.inspect) }
+			propertys("props show",tt)
 		  }
 		  calendar()
 	    }
         page("Edit","#home") {
 		  @editor=source_editor(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 6",:on_change=> proc { edit_change }).editor
 		  @editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
+        }
+        page("prop","#close") {
+			h={};100.times { |i| h[i]= "aaa#{i+100}" }
+			propertys("very big propertys editable",h,{edit: true,scroll: [100,400]}) { |a| log(a.inspect);log(h.inspect) }
         }
       end
       frame("") do
