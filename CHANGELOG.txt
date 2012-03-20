@@ -14,3 +14,4 @@ ruiby_require Ruiby.update
 news         
 improve slotation in test.rb      
 property show and editor      
+mini edi ruiby       
