@@ -15,3 +15,4 @@ news
 improve slotation in test.rb      
 property show and editor      
 mini edi ruiby       
+icones base64 generator       
