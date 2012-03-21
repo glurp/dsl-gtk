@@ -19,3 +19,5 @@ icones to source/base64 generator
 space() creation
 correct autosloting on seprarator(),table()base64         
 news         
+0.9.0
+sketch memo in tmp dir     

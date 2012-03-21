@@ -21,10 +21,15 @@ module Ruiby_dsl
 	
 	def stack(add1=true,&b)    		cbox(true,VBox.new(false, 2),add1,&b) end
 	def flow(add1=true,&b)	   		cbox(true,HBox.new(false, 2),add1,&b) end
-	def frame(t="",add1=true,&b)  	cbox(true,Frame.new(t),add1,&b)       end
 	def stacki(add1=true,&b)    	cbox(false,VBox.new(false, 2),add1,&b) end
 	def flowi(add1=true,&b)	   		cbox(false,HBox.new(false, 2),add1,&b) end
-	def framei(t="",add1=true,&b)  	cbox(false,Frame.new(t),add1,&b)       end
+
+	def frame(t="",add1=true,&b)  	
+		cbox(true,Frame.new(t),add1) { stack { b.call } } 
+	end
+	def framei(t="",add1=true,&b)
+		cbox(false,Frame.new(t),add1) { stack { b.call } }
+	end
 	
 	# private: generic packer
 	def cbox(expand,box,add1)
@@ -499,6 +504,8 @@ p 1
 
       cb = ScrolledWindow.new
 	  cb.define_singleton_method(:editor) { sv }
+	  cb.define_singleton_method(:text=) { |t| sv.buffer.text=t }
+	  cb.define_singleton_method(:text) {  sv.buffer.text }
 
       cb.set_size_request(args[:width], args[:height])
       cb.set_policy(POLICY_AUTOMATIC, POLICY_AUTOMATIC)

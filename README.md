@@ -27,14 +27,6 @@ Status
 ======
 done :
 
-* basics widgets  (button/label/entry....) done
-* container :  stack/flow, frame, notebook, pane, table  done
-* some more complex widget:  scollbox, drawing, code_editor, caldendar...  done
-* threading support ok ( threader(polling) / gui_invoke { } )
-* grid, list done
-
-NEW!!
-
 - sketchi tools
 - tools for generate file/encoded base64 to ruby source 
 

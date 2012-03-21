@@ -8,7 +8,7 @@ require_relative '../lib/ruiby'
 
 class RubyApp < Ruiby_gtk
     def initialize
-        super("Testing Ruiby editor",900,0)
+        super("Testing Ruiby editor",700,600)
 		load(__FILE__)
     end
 	def component()
@@ -33,7 +33,7 @@ class RubyApp < Ruiby_gtk
 					edit(@file) # embeded source code shower un Ruiby
 				}
 			)) 
-			@edit=sloti(source_editor(:width=>200,:height=>50,:lang=> "ruby", :font=> "Courier new 12",:on_change=> proc { change })).editor
+			@edit=source_editor(:width=>200,:height=>50,:lang=> "ruby", :font=> "Courier new 12",:on_change=> proc { change }).editor
 			sloti( button("Exit") { exit! })	
 			after(20)   { rposition(-3,3) }
 			anim(500) do
@@ -59,7 +59,4 @@ class RubyApp < Ruiby_gtk
 		@edit.buffer.text=File.read(@file)
 	end
 end
-
-Gtk.init
-    window = RubyApp.new
-Gtk.main
+Ruiby.start { window = RubyApp.new }

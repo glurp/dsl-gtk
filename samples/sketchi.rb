@@ -6,12 +6,15 @@
 # encoding: utf-8
 require_relative '../lib/ruiby'
 
-
 class RubyApp < Ruiby_gtk
     def initialize
         super("Skechi",1200,0)
-		@file=""
-		load("new.rb",DATA.read)
+		@filedef=Dir.tmpdir+"/sketchi_default.rb"
+		if File.exists?(@filedef)
+			load(@filedef,nil)
+		else
+			load("new.rb",DATA.read)
+		end
     end
 	def component()
 		stack do
@@ -52,6 +55,7 @@ class RubyApp < Ruiby_gtk
 			@error_log.text="ok." 
 			} }
 		}
+		File.open(@filedef,"w") {|f| f.write(@content)} if @content.size>30
 	rescue Exception => e
 		trace(e)
 	end
@@ -67,7 +71,6 @@ class RubyApp < Ruiby_gtk
 	def load(file,content)
 		if File.exists?(file) && content==nil
 			content=File.read(file)
-			@title.text=@file
 		end
 		return unless content!=nil 
 		@file=file
