@@ -155,8 +155,10 @@ module Ruiby_dsl
 		  autoslot(w)
 		  w
 	end
-	def separator(width=1.0)  sloti(HBox === @lcur.last ? VSeparator.new : HSeparator.new)  end
-
+	def separator(width=1.0)  
+		autoslot()
+		sloti(HBox === @lcur.last ? VSeparator.new : HSeparator.new)  
+	end
 	# create  label, with text (or image if txt start with a '#')
 	def label(text,options={})
 		l=if text && text[0,1]=="#"
@@ -166,6 +168,7 @@ module Ruiby_dsl
 		end
 		attribs(l,options)
 	end
+	def space(n=1) label(([" "*n]*n).join("\n"))  end
 	
 	# create  button, with text (or image if txt start with a '#')
 	# block argument is evaluate in button click
@@ -331,6 +334,7 @@ module Ruiby_dsl
 	def table(nb_col,nb_row,config={})
 		table = Gtk::Table.new(nb_row,nb_col,false)
 		table.set_column_spacings(config[:set_column_spacings]) if config[:set_column_spacings]
+		attribs(table,config)				
 		slot(table)
 		@lcur << table
 		@row=0
