@@ -45,21 +45,18 @@ class RubyApp < Ruiby_gtk
 		end
 	end
 	def execute()
-	begin
 		@content=@edit.buffer.text
-		clear_append_to(@demo) { 
-			begin
-				eval(@content,binding() ,"<script>",1) 
-			rescue Exception => ee
-				trace(ee) 
-			end
+		clear_append_to(@demo) {
+			frame { stack {
+			eval(@content,binding() ,"<script>",1) 
+			@error_log.text="ok." 
+			} }
 		}
-		@error_log.text="ok."
 	rescue Exception => e
 		trace(e)
 	end
-	end
 	def trace(e)
+		@error_log.text="eeeee"
 		@error_log.text=e.to_s + " : \n   "+ e.backtrace[0..3].join("\n   ")
 	end
 	def make_help(ta)

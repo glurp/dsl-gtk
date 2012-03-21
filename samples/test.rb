@@ -109,7 +109,7 @@ def component()
 		  @editor=source_editor(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 6",:on_change=> proc { edit_change }).editor
 		  @editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
         }
-        page("prop","#close") {
+        page("prop","#color_picker") {
 			h={};100.times { |i| h[i]= "aaa#{i+100}" }
 			propertys("very big propertys editable",h,{edit: true,scroll: [100,400]}) { |a| log(a.inspect);log(h.inspect) }
         }

@@ -46,13 +46,18 @@ module Ruiby_dsl
 	end
 	def raz() @current_widget=nil; end
 	
-	def append_to(cont,&blk) 
+	def append_to(cont,&blk)
+p 1	
 		if $__mainthread__ != Thread.current
+		p 2
 			gui_invoke { append_to(cont,&blk) }
+			p 3
 			return
 		end
+		p 4
 		@lcur << cont
-		yield rescue puts "#{$!} :\n#{$!.backtrace.join("\n  ")}"
+		p 5
+		yield 
 		autoslot()
 		@lcur.pop
 		show_all_children(cont)
@@ -66,7 +71,7 @@ module Ruiby_dsl
 		end
 		cont.children.each { |w| cont.remove(w) } 
 		@lcur << cont
-		yield rescue puts "#{$!} :\n#{$!.backtrace.join("\n  ")}"
+		yield 
 		autoslot()
 		@lcur.pop
 		show_all_children(cont)
@@ -500,7 +505,7 @@ module Ruiby_dsl
       cb.set_shadow_type(SHADOW_IN)
       cb.add(sv)
       cb.show_all
-	  cb
+	  attribs(cb,{})	
     end
 
 	# multiline entry

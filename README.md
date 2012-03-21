@@ -35,12 +35,8 @@ done :
 
 NEW!!
 
-- correction of a big bug in ruiby_invoke
-- ruiby_require : do a 'gem install ...' if gem not here
-- Ruiby.update() : update the gui during calculation
-- text_area : improve api
-- log : convert each message to utf-8
-
+- sketchi tools
+- tools for generate file/encoded base64 to ruby source 
 
 Todo:
 
