@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-p RUBY_VERSION
+
 require 'tmpdir'
 require 'pathname'
 require 'gtk2'
@@ -39,16 +39,20 @@ module Ruiby
 		Gtk.main_iteration while Gtk.events_pending?  
   end
   def self.start(&bloc)
-	server_init {
-		Gtk.init
-		bloc.call
-		Gtk.main
-	}
+	return if defined?($__MARKER_IS_RUIBY_INITIALIZED)
+	$__MARKER_IS_RUIBY_INITIALIZED = true
+	$stdout.sync=true 
+	$stderr.sync=true 
+	Thread.abort_on_exception = true  
+	BasicSocket.do_not_reverse_lookup = true if defined?(BasicSocket)
+	trap("INT") { exit!(0) }
+	Gtk.init
+	yield
+	Gtk.main
   end
 end
 
 
-require_relative 'utils.rb'
 require_relative 'ruiby_gtk/ruiby_default_dialog.rb'
 require_relative 'ruiby_gtk/ruiby_dsl.rb'
 require_relative 'ruiby_gtk/ruiby_threader.rb'
