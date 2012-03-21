@@ -11,8 +11,10 @@ update mendeleif code in readme
 0.7.0
 ruiby_require Ruiby.update        
 0.8.0
-news         
+readme news
 improve slotation in test.rb      
 property show and editor      
 mini edi ruiby       
-icones base64 generator       
+icones to source/base64 generator       
+space() creation
+correct autosloting on seprarator(),table()base64         
