@@ -178,6 +178,14 @@ p 1
 		end
 		attribs(l,options)
 	end
+	def image(file,options={})
+		im=if File.exists?(file)
+			Image.new(file)
+		else
+			label ("? "+file)
+		end
+		attribs(im,options)
+	end
 	def space(n=1) label(([" "*n]*n).join("\n"))  end
 	
 	# create  button, with text (or image if txt start with a '#')
