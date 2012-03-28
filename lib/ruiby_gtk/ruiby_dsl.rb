@@ -52,22 +52,25 @@ module Ruiby_dsl
 	def raz() @current_widget=nil; end
 	
 	def append_to(cont,&blk)
-p 1	
 		if $__mainthread__ != Thread.current
-		p 2
 			gui_invoke { append_to(cont,&blk) }
-			p 3
 			return
 		end
-		p 4
 		@lcur << cont
-		p 5
 		yield 
 		autoslot()
 		@lcur.pop
 		show_all_children(cont)
 	end
 	
+	def clear(cont) 
+		if $__mainthread__ != Thread.current
+			p "not in main thread"
+			gui_invoke { clear(cont) }
+			return
+		end
+		cont.children.each { |w| cont.remove(w) } 
+	end
 	def clear_append_to(cont,&blk) 
 		if $__mainthread__ != Thread.current
 			p "not in main thread"
@@ -467,6 +470,37 @@ p 1
 		end 
 		@lcur.last.append_page( stack(false)  { yield }, l )
 	end
+	############################## Accordion
+	def accordion() 
+		@la=nil #only one accordion by window!
+		stack { stacki {
+			yield
+		}}
+		separator
+	end
+	def haccordion() 
+		@la=nil #only one accordion by window!
+		flow { flowi {
+			yield
+		}}
+		separator
+	end
+	def aitem(txt,&blk) 
+		b2=nil
+		b=button(txt) {
+					clear_append_to(@la) {} if @la
+					@la=b2
+					clear_append_to(b2) { 
+						blk.call()
+					}
+		}
+		flow { b2=stacki { } ; space }
+	end
+	
+	def alabel(txt,&blk)
+		pclickable(proc { blk.call() if blk} ) { label(txt) }
+	end
+	
 	############################## Panned : 
 	# split current frame in 2 panes
 	# block invoked must return a array of 2 box wich will put in the 2 panes
@@ -621,6 +655,14 @@ p 1
 		eventbox.signal_connect('button_press_event') { |w, e| self.send(methode_name,ret) }
 		ret
 	end
+	def pclickable(aproc,&b) 
+		eventbox = Gtk::EventBox.new
+		eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
+		ret=cbox(true,eventbox,true,&b) 
+		eventbox.realize
+		eventbox.signal_connect('button_press_event') { |w, e| aproc.call() }
+		ret
+	end
 	##################################### List
 	def list(title,w=0,h=0)
 		scrolled_win = Gtk::ScrolledWindow.new
@@ -691,7 +733,6 @@ p 1
 		end
 		loglabel=create_log_window()
 		loglabel.buffer.text +=  Time.now.to_s+" | " + (txt.join(" ").encode("UTF-8"))+"\n" 
-		p loglabel.buffer.text.size
 		if ( loglabel.buffer.text.size>10000)
 		  loglabel.buffer.text=loglabel.buffer.text[-7000..-1].gsub(/^.*\n/m,"......\n\n")
 		end
