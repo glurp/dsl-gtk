@@ -471,6 +471,8 @@ module Ruiby_dsl
 		@lcur.last.append_page( stack(false)  { yield }, l )
 	end
 	############################## Accordion
+	
+	# accordion { aitem(txt) { alabel(lib) { code }; ...} ... }
 	def accordion() 
 		@la=nil #only one accordion by window!
 		stack { stacki {

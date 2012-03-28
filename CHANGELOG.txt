@@ -24,3 +24,4 @@ sketch memo in tmp dir
 creation image()        
 0.10.0
 accordion creation pclickable       
+accordion creation pclickable       
