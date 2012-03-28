@@ -7,7 +7,7 @@ Thread.abort_on_exception=true
 class RubyAppV < Ruiby_gtk
     def initialize() 
 		super("Testing Ruiby accordion",300,400) 
-		rposition(90,90)
+		rposition(90,100)
 	end	
 
 	def component()        
@@ -29,19 +29,9 @@ class RubyAppV < Ruiby_gtk
 						alabel("beee3") { alert("bee3") }
 				}
 			}
-			label "x"
-		}
-	end 
-end
-class RubyAppH < Ruiby_gtk
-    def initialize() 
-		super("Testing Ruiby accordion",300,400) 
-		rposition(390,100)
-	end	
-
-	def component()        
-		stack {
-			stacki {haccordion {
+			stack {
+				label "x"
+				stacki {haccordion {
 				aitem("entry 1") {
 						alabel("xeee1") { alert("x1") }
 						alabel("xeee2") { alert("x2") }
@@ -58,12 +48,11 @@ class RubyAppH < Ruiby_gtk
 						alabel("beee3") { alert("bee3") }
 				}
 			}}
-			label "x"
+			}				
 		}
 	end 
 end
 
 Ruiby.start do
     window = RubyAppV.new
-    window = RubyAppH.new
 end

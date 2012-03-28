@@ -19,20 +19,20 @@ module Ruiby_dsl
  
 	############################ Slot : H/V Box or Frame
 	
-	def stack(add1=true,&b)    		cbox(true,VBox.new(false, 2),add1,&b) end
-	def flow(add1=true,&b)	   		cbox(true,HBox.new(false, 2),add1,&b) end
-	def stacki(add1=true,&b)    	cbox(false,VBox.new(false, 2),add1,&b) end
-	def flowi(add1=true,&b)	   		cbox(false,HBox.new(false, 2),add1,&b) end
+	def stack(add1=true,&b)    		_cbox(true,VBox.new(false, 2),add1,&b) end
+	def flow(add1=true,&b)	   		_cbox(true,HBox.new(false, 2),add1,&b) end
+	def stacki(add1=true,&b)    	_cbox(false,VBox.new(false, 2),add1,&b) end
+	def flowi(add1=true,&b)	   		_cbox(false,HBox.new(false, 2),add1,&b) end
 
 	def frame(t="",add1=true,&b)  	
-		cbox(true,Frame.new(t),add1) { stack { b.call } } 
+		_cbox(true,Frame.new(t),add1) { stack { b.call } } 
 	end
 	def framei(t="",add1=true,&b)
-		cbox(false,Frame.new(t),add1) { stack { b.call } }
+		_cbox(false,Frame.new(t),add1) { stack { b.call } }
 	end
 	
 	# private: generic packer
-	def cbox(expand,box,add1)
+	def _cbox(expand,box,add1)
 		autoslot()
 		if add1
 			expand ? @lcur.last.add(box) : @lcur.last.pack_start(box,false,false,3)
@@ -93,7 +93,7 @@ module Ruiby_dsl
 			gui_invoke { slot_append_before(w,wref) }
 			return
 		end
- 		parent=check_append("slot_append_before",w,wref)
+ 		parent=_check_append("slot_append_before",w,wref)
  		parent.add(w)
  		parent.children.each_with_index { |child,i| 
 	 		next if child!=wref
@@ -107,7 +107,7 @@ module Ruiby_dsl
 			gui_invoke { slot_append_after(w,wref) }
 			return
 		end
- 		parent=check_append("slot_append_after",w,wref)
+ 		parent=_check_append("slot_append_after",w,wref)
  		parent.add(w)
  		parent.children.each_with_index { |child,i| 
 	 		next if child!=wref
@@ -128,7 +128,7 @@ module Ruiby_dsl
 			w.parent.remove(w) rescue nil
 		end
 	end
- 	def check_append(name,w,wref)
+ 	def _check_append(name,w,wref)
  		raise("#{name}(w,r) : Widget ref not created!") unless wref
  		raise("#{name}(w,r) : new Widget not created!") unless w
  		parent=wref.parent
@@ -474,14 +474,14 @@ module Ruiby_dsl
 	
 	# accordion { aitem(txt) { alabel(lib) { code }; ...} ... }
 	def accordion() 
-		@la=nil #only one accordion by window!
+		@slot_accordion_active=nil #only one accordion active by window!
 		stack { stacki {
 			yield
 		}}
 		separator
 	end
 	def haccordion() 
-		@la=nil #only one accordion by window!
+		@slot_accordion_active=nil #only one accordion active by window!
 		flow { flowi {
 			yield
 		}}
@@ -490,13 +490,13 @@ module Ruiby_dsl
 	def aitem(txt,&blk) 
 		b2=nil
 		b=button(txt) {
-					clear_append_to(@la) {} if @la
-					@la=b2
+					clear_append_to(@slot_accordion_active) {} if @slot_accordion_active
+					@slot_accordion_active=b2
 					clear_append_to(b2) { 
 						blk.call()
 					}
 		}
-		flow { b2=stacki { } ; space }
+		b2=stacki { }
 	end
 	
 	def alabel(txt,&blk)
@@ -507,9 +507,10 @@ module Ruiby_dsl
 	# split current frame in 2 panes
 	# block invoked must return a array of 2 box wich will put in the 2 panes
 	
-	def stack_paned(size,fragment,&blk) paned(false,size,fragment,&blk) end
-	def flow_paned(size,fragment,&blk) paned(true,size,fragment,&blk) end
-	def paned(vertical,size,fragment)
+	def stack_paned(size,fragment,&blk) _paned(false,size,fragment,&blk) end
+	def flow_paned(size,fragment,&blk) _paned(true,size,fragment,&blk) end
+	
+	def _paned(vertical,size,fragment)
 		paned = vertical ? HPaned.new : VPaned.new
 		slot(paned)
 		@lcur << paned
@@ -523,6 +524,7 @@ module Ruiby_dsl
 		paned.pack2(frame2, false, false)
 		show_all_children(paned)
 	end
+	
 	##################### source editor
 	# from: green shoes plugin
 	# options= :width  :height :on_change :lang :font
@@ -603,7 +605,7 @@ module Ruiby_dsl
 	
 	############################# Video
 	# from: green shoes plugin
-	# not ready!
+	# not tested!
 	
 	def video(uri,w=300,h=200)
 		wid=DrawingArea.new()
@@ -652,7 +654,7 @@ module Ruiby_dsl
 	def clickable(methode_name,&b) 
 		eventbox = Gtk::EventBox.new
 		eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
-		ret=cbox(true,eventbox,true,&b) 
+		ret=_cbox(true,eventbox,true,&b) 
 		eventbox.realize
 		eventbox.signal_connect('button_press_event') { |w, e| self.send(methode_name,ret) }
 		ret
@@ -660,7 +662,7 @@ module Ruiby_dsl
 	def pclickable(aproc,&b) 
 		eventbox = Gtk::EventBox.new
 		eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
-		ret=cbox(true,eventbox,true,&b) 
+		ret=_cbox(true,eventbox,true,&b) 
 		eventbox.realize
 		eventbox.signal_connect('button_press_event') { |w, e| aproc.call() }
 		ret
@@ -733,13 +735,13 @@ module Ruiby_dsl
 			gui_invoke { log(*txt) }
 			return
 		end
-		loglabel=create_log_window()
+		loglabel=_create_log_window()
 		loglabel.buffer.text +=  Time.now.to_s+" | " + (txt.join(" ").encode("UTF-8"))+"\n" 
 		if ( loglabel.buffer.text.size>10000)
 		  loglabel.buffer.text=loglabel.buffer.text[-7000..-1].gsub(/^.*\n/m,"......\n\n")
 		end
 	end
-	def create_log_window() 
+	def _create_log_window() 
 		return(@loglabel) if defined?(@loglabel) && @loglabel && ! @loglabel.destroyed?
 		wdlog = Dialog.new("Logs : #{$0}",
 			nil,

@@ -19,8 +19,8 @@ class RubyApp < Ruiby_gtk
 					File.open(@file,"wb") { |f| f.write(content) } if @file && content && content.size>2
 				}
 			)) 
-			paned(false,600,0.7) {
-				[paned(true,900,0.2) do 
+			stack_paned(600,0.7) {
+				[stack_paned(900,0.2) do 
 					[stack {
 						sloti(label("Project"))
 						separator

@@ -29,11 +29,14 @@ Container
  flow(false)   { ... }                          # not sloted
  stack(false)  { ... }                          # not sloted
  paned { [frame,frame] }
+ accordion { item("text") { alabel("c") { action } ; ... } .. }
+ haccordion { item("text") { alabel("c") { action } ; ... } .. }
 
 For append a widget to a container : 
- slot(w)		# pack in container, fill+expand
+ slot(w)		# pack in container, fill+expand, implicit for all widget
  sloti(w)       # pack no fill/no expand
  cell(w)        # pack in : table { row { cell() } } 
+
 Post-component ressources, threaded protected :
    append_to(w) { }
    clear_append_to { }
@@ -42,8 +45,8 @@ Post-component ressources, threaded protected :
    
 Widgets
 -------
-   button(text/'#'icon,&action) entry(value) ientry(ivalue) fentry(fvalue) islider(ivalue) 
-   label(text/'#'icon) combo({name=>value,...},initiale_value)
+   space(n) button(text/'#'icon,&action) entry(value) ientry(ivalue) fentry(fvalue) islider(ivalue) 
+   label(text/'#'icon) image(file) combo({name=>value,...},initiale_value)
    toggle_button(l1,l2,state)  check_button(name,state)  hradio_buttons(lname,value) 
    htoolbar({name=> proc {},... })
    color_choice()
@@ -75,12 +78,6 @@ Background
 
 TODO
 ---
- Root window/Graphics environnement :
-		get_root_size
-		set_window_chrome(w,bool)  ( )
-		systray(icon,{label=>proc {},...})
- grid()
- list() 
  progress_bar() 
  menu()
  variable binding for : entry/ientry/fentry/islider/combo/togle_button/check_button hradio_button
