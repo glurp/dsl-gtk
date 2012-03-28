@@ -42,6 +42,8 @@ class RubyApp < Ruiby_gtk
 				notebook do 
 					page("Error") { @error_log=slot(text_area(600,100,{:font=>"Courier new 10"})) }
 					page("Help") { make_help(slot(text_area(600,100,{:font=>"Courier new 10"}))) }
+					page("API") { make_api(slot(text_area(600,100,{:font=>"Courier new 10"}))) }
+					page("Example") { make_example(slot(text_area(600,100,{:font=>"Courier new 10"}))) }
 				end
 				]
 			}
@@ -63,10 +65,20 @@ class RubyApp < Ruiby_gtk
 		@error_log.text="eeeee"
 		@error_log.text=e.to_s + " : \n   "+ e.backtrace[0..3].join("\n   ")
 	end
-	def make_help(ta)
+	def make_api(ta)
 		src=File.dirname(__FILE__)+"/../lib/ruiby_gtk/ruiby_dsl.rb"
 		content=File.read(src)
-		ta.text=content.split(/\r?\n\s*/).grep(/^def[\s\t]+/).map {|line| line.split(/\)/)[0]+")"}.join("\n")
+		ta.text=content.split(/\r?\n\s*/).grep(/^def[\s\t]+[^_]/).map {|line| line.split(/\)/)[0]+")"}.join("\n")
+	end
+	def make_help(ta)
+		src=File.dirname(__FILE__)+"/../lib/ruiby_gtk/windows.rb"
+		content=File.read(src)
+		ta.text=content.split(/(=begin)|(=end)/)[2]
+	end
+	def make_example(ta)
+		src=File.dirname(__FILE__)+"/test.rb"
+		content=File.read(src)
+		ta.text=content.split(/(def component)|(end # endcomponent)/)[2]
 	end
 	def load(file,content)
 		if File.exists?(file) && content==nil
