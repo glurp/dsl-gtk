@@ -1,13 +1,23 @@
 ﻿#!/usr/bin/ruby
 # encoding: utf-8
+$time_start=Time.now.to_f*1000
+def mlog(text)
+ puts "%8f | %s" % [(Time.now.to_f*1000-$time_start),text.to_s]
+end
+mlog 'before require ruiby'
 require_relative '../lib/ruiby'
+mlog 'after require ruiby'
 
 
 class RubyApp < Ruiby_gtk
     def initialize
+		mlog "befor init"
         super("Testing Ruiby",900,0)
+		mlog 'after init'
+		after(1) { mlog("first update") }
     end
 def component()        
+  mlog 'before Component'
   stack do
     sloti(htoolbar(
 		"open/tooltip text on button"=>proc { edit(__FILE__) },
@@ -105,15 +115,29 @@ def component()
 		  }
 		  calendar()
 	    }
-        page("Edit","#home") {
-		  @editor=source_editor(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 6",:on_change=> proc { edit_change }).editor
-		  @editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
-        }
         page("prop","#color_picker") {
 			h={};100.times { |i| h[i]= "aaa#{i+100}" }
 			propertys("very big propertys editable",h,{edit: true,scroll: [100,400]}) { |a| log(a.inspect);log(h.inspect) }
         }
-      end
+        page("Edit","#home") {
+		  @editor=source_editor(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 8",:on_change=> proc { edit_change }).editor
+		  @editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
+        }
+        page("Accordion") {
+			flow {
+				accordion do
+					("A".."G").each do |cc| 
+						aitem("#{cc} Flip...") do
+								5.times { |i| 
+									alabel("#{cc}e#{i}") { alert("#{cc} x#{i}") }
+								}
+						end
+					end
+				end
+				label "x"
+			}
+		}
+		end
       frame("") do
 		stack {
 			sloti(label("Test scrolled zone"))
@@ -134,6 +158,7 @@ def component()
     }
     sloti(button("Test Specials Actions...") { p @bref ; do_special_actions() })
     sloti( button("Exit") { exit! })
+	mlog 'after Component'
   end
 end # endcomponent
   def edit_change()

@@ -1,27 +1,28 @@
 0.4.4
 create changelog
 0.5.0
-modify changelog managment       
-update readme        
-update readme2        
-automatic slot done if widget is not packed  
+modify changelog managment
+update readme
+update readme2
+automatic slot done if widget is not packed
 0.6.0
-update Mendelaiev code in readme     
+update Mendelaiev code in readme
 bug  3 ___ in __window__
 0.7.0
-ruiby_require Ruiby.update        
+ruiby_require Ruiby.update
 0.8.0
 readme news
-improve slotation in test.rb      
-property show and editor      
-mini edi ruiby       
-icones to source/base64 generator       
+improve slotation in test.rb
+property show and editor
+mini edi ruiby
+icones to source/base64 generator
 space() creation
-correct autosloting on seprarator(),table()base64         
-news         
+correct autosloting on seprarator(),table()base64
+news
 0.9.0
-sketch memo in tmp dir     
-creation image()        
+sketch memo in tmp dir
+creation image()
 0.10.0
-accordion creation pclickable       
-prseudo-private on dsl for sketchi     
+accordion creation pclickable
+pseudo-private on dsl for sketchi
+make accordeon in general test test.rb    
