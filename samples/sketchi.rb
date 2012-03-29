@@ -92,7 +92,7 @@ class RubyApp < Ruiby_gtk
 	end
 end
 
-Ruiby.start { RubyApp.new }
+Ruiby.start_secure { RubyApp.new }
 
 __END__
 stack {

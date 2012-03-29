@@ -50,6 +50,18 @@ module Ruiby
 	yield
 	Gtk.main
   end
+  def self.start_secure(&bloc)
+	return if defined?($__MARKER_IS_RUIBY_INITIALIZED)
+	$__MARKER_IS_RUIBY_INITIALIZED = true
+	$stdout.sync=true 
+	$stderr.sync=true 
+	Thread.abort_on_exception = true  
+	BasicSocket.do_not_reverse_lookup = true if defined?(BasicSocket)
+	trap("INT") { exit!(0) }
+	Gtk.init
+	yield
+	secure_main()	
+  end
 end
 
 

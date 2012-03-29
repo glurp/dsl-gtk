@@ -26,3 +26,4 @@ creation image()
 accordion creation pclickable
 pseudo-private on dsl for sketchi
 make accordeon in general test test.rb    
+secure_main         

@@ -798,3 +798,17 @@ module Ruiby_dsl
 	end
 	
 end
+# run gtk mainloop with trapping gtk/callback error
+# used by sketchi.rb
+def secure_main()
+	begin 
+		Gtk.main 
+		exit!
+	rescue Exception => e
+		if e.to_s=="exit"
+			$__mainwindow__.error("Error, see STDERR in console...")
+		else
+			$__mainwindow__.error("Error GTK : "+e.to_s + " :\n     " +  e.backtrace[0..10].join("\n     "))
+		end
+	end while true
+end
