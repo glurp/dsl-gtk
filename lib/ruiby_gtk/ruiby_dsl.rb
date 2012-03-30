@@ -470,6 +470,44 @@ module Ruiby_dsl
 		end 
 		@lcur.last.append_page( stack(false)  { yield }, l )
 	end
+	
+	############################## Menu
+	
+	#menu_bar {menu("F") {menu_button("a") { } ; menu_separator; menu_checkbutton("b") { |w|} ...}}
+	def menu_bar()
+		@menuBar= MenuBar.new
+		yield
+		sloti(@menuBar)
+		@menuBar=nil
+	end
+	def menu(text)
+		raise("menu(#{text}) without menu_bar {}") unless @menuBar
+		@filem = MenuItem.new(text.to_s)
+		@menuBar.append(@filem)
+		@mmenu = Menu.new()
+		yield
+		@filem.submenu=@mmenu
+		show_all_children(@mmenu)
+		@filem=nil
+		@mmenu=nil
+	end
+	def menu_button(text="?",&blk)
+		raise("menu_button(#{text}) without menu('ee') {}") unless @mmenu
+		item = MenuItem.new(text.to_s)
+		@mmenu.append(item)
+		item.signal_connect("activate") { blk.call(text) }
+	end
+	def menu_checkbutton(text="?",state=false,&blk)
+		raise("menu_button(#{text}) without menu('ee') {}") unless @mmenu
+		item = CheckMenuItem.new(text,false)
+		item.active=state
+		@mmenu.append(item)
+		item.signal_connect("activate") {
+			blk.call(item,text) rescue error($!.to_s)
+		} 
+	end
+	def menu_separator() @mmenu.append( SeparatorMenuItem.new ) end
+	
 	############################## Accordion
 	
 	# accordion { aitem(txt) { alabel(lib) { code }; ...} ... }

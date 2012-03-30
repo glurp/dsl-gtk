@@ -16,6 +16,8 @@ class RubyApp < Ruiby_gtk
 		mlog 'after init'
 		after(1) { mlog("first update") }
     end
+	
+	
 def component()        
   mlog 'before Component'
   stack do
@@ -27,7 +29,7 @@ def component()
 	   ))
     sloti(label( <<-EEND ,:font=>"Arial 12"))
      This window is test & demo of Ruiby capacity,
-	   ~ 140 Lines of code,
+	   ~ 170 Lines of code,
      (Ruiby version is #{Ruiby::VERSION})
 	EEND
 	
@@ -82,6 +84,7 @@ def component()
       }
       separator
       notebook do
+        page("","#home") { label("A Notebook Page with icon as button-title",{font: "Arial 18"}) }
         page("List & grid") {
 			flow {
 				frame("List") {
@@ -106,7 +109,7 @@ def component()
 			10.times { |i| @list.add_item("Hello #{i}") }
 			@grid.set_data((1..30).map { |n| ["e#{n}",n,1.0*n]})
         }
-        page("Calendar","#about") {
+        page("Property Edit.") {
           flowi {
 			sloti(button("#harddisk") { alert("image button!")})
 			tt={int: 1,float: 1.0, array: [1,2,3], hash: {a:1, b:2}}
@@ -115,14 +118,33 @@ def component()
 		  }
 		  calendar()
 	    }
-        page("prop","#color_picker") {
+        page("Big PropEditor") {
 			h={};100.times { |i| h[i]= "aaa#{i+100}" }
 			propertys("very big propertys editable",h,{edit: true,scroll: [100,400]}) { |a| log(a.inspect);log(h.inspect) }
         }
-        page("Edit","#home") {
+        page("Source Editor") {
 		  @editor=source_editor(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 8",:on_change=> proc { edit_change }).editor
 		  @editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
         }
+		page("Menu") {
+			stack {
+				menu_bar {
+					menu("File Example") {
+						menu_button("Open") { alert("o") }
+						menu_button("Close") { alert("i") }
+						menu_separator
+						menu_checkbutton("Lock...") { |w| 
+							w.toggle
+							append_to(@f) { button("ee #{}") }
+						}
+					}
+					menu("Edit Example") {
+						menu_button("Copy") { alert("a") }
+					}
+				} 
+				@f=stacki { }
+			}
+		}
         page("Accordion") {
 			flow {
 				accordion do
@@ -137,25 +159,25 @@ def component()
 				label "x"
 			}
 		}
-		end
-      frame("") do
-		stack {
-			sloti(label("Test scrolled zone"))
-			separator
-			stack_paned 300,0.5 do [
-			  vbox_scrolled(-1,100) { 
-				100.times { |i| 
-				  flow { sloti(button("eeee#{i}"));sloti(button("eeee")) }
-				}
-			  },
-			  vbox_scrolled(100,100) { 
-				100.times { |i| 
-				  flow { sloti(button("eeee#{i}"));sloti(button("eeee"));sloti(button("aaa"*100)) }
-				}
-			  }] end
-		  }
-      end      
-    }
+		page("Pan & Scrolled") do
+			stack {
+				sloti(label("Test scrolled zone"))
+				separator
+				stack_paned 300,0.5 do [
+				  vbox_scrolled(-1,100) { 
+					100.times { |i| 
+					  flow { sloti(button("eeee#{i}"));sloti(button("eeee")) }
+					}
+				  },
+				  vbox_scrolled(100,100) { 
+					100.times { |i| 
+					  flow { sloti(button("eeee#{i}"));sloti(button("eeee"));sloti(button("aaa"*100)) }
+					}
+				  }] end
+			  }
+	    end      
+	  end # end notebook
+    } # end flow
     sloti(button("Test Specials Actions...") { p @bref ; do_special_actions() })
     sloti( button("Exit") { exit! })
 	mlog 'after Component'
