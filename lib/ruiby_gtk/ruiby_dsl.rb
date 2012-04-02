@@ -697,6 +697,7 @@ module Ruiby_dsl
 	# be contain in a clockable parent (EventBox)
 	#  clickable(:callback_click_name) { label(" click me! ") }
 	#  def callback_click_name(widget) ... end
+	# clickable with methone callback by name
 	def clickable(methode_name,&b) 
 		eventbox = Gtk::EventBox.new
 		eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
@@ -705,6 +706,8 @@ module Ruiby_dsl
 		eventbox.signal_connect('button_press_event') { |w, e| self.send(methode_name,ret) }
 		ret
 	end
+	
+	# clickable with callback by closure
 	def pclickable(aproc,&b) 
 		eventbox = Gtk::EventBox.new
 		eventbox.events = Gdk::Event::BUTTON_PRESS_MASK

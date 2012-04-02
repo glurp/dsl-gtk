@@ -32,3 +32,4 @@ creation menu
 0.12.0
 readme: howto install and test     
 set_data on properties editor      
+show exception and stack trace in Messsage.error   

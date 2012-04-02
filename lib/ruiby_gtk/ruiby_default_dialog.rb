@@ -3,7 +3,16 @@ module Ruiby_default_dialog
 	###################################### Alerts
 
 	def alert(*txt) message(MessageDialog::INFO,*txt) end
-	def error(*txt) message(MessageDialog::ERROR,*txt) end
+	def error(*txt) 
+		lt=txt.map { |o| 
+			if Exception===o 
+				o.to_s + " : \n  "+o.backtrace.join("\n  ")
+			else
+				o.to_s
+			end
+		}
+		message(MessageDialog::ERROR,*lt) 
+	end
 	def prompt(txt,value="") 
 		 dialog = Dialog.new("Message",
 			self,
