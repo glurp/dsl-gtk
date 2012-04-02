@@ -40,10 +40,13 @@ Todo:
 Installation
 ============
 Install Ruby 1.9.x ...
+
 Install GTK (windows: http://ftp.gnome.org/pub/GNOME/binaries/win32/glade3/3.6/glade3-3.6.7-with-GTK+.exe)
+```
 > gem install Ruiby
 > ruiby_demo            # check good installation
 > ruiby_skechi          # write and test
+```
 
 Design
 ======
