@@ -185,7 +185,7 @@ module Ruiby_dsl
 		im=if File.exists?(file)
 			Image.new(file)
 		else
-			label ("? "+file)
+			label("? "+file)
 		end
 		attribs(im,options)
 	end
@@ -394,16 +394,19 @@ module Ruiby_dsl
 	def cell_vspan_top(n,w)    raz();w.set_alignment(0.5, 0.0)rescue nil ; cell_vspan(n,w) end
 	def cell_vspan_bottom(n,w) raz();w.set_alignment(0.5, 1.0)rescue nil ; cell_vspan(n,w) end
 	
-	def propertys(title,hash,options={:edit=>false, :scroll=>[0,0]})
-	 if ! defined?(@prop_index)
+	def propertys(title,hash,options={:edit=>false, :scroll=>[0,0]},&b)
+	 properties(title,hash,options,&b)
+	end
+	def properties(title,hash,options={:edit=>false, :scroll=>[0,0]})
+	  if ! defined?(@prop_index)
 		@prop_index=0
 		@prop_hash={}
-	else
+	  else
 		@prop_index+=1
-	end
-	prop_current=(@prop_hash[@prop_index]={})
-	value={}
-	 stacki {
+	  end
+	  prop_current=(@prop_hash[@prop_index]={})
+	  value={}
+	  a=stacki {
 		framei(" #{title} ") {
 			 stack {
 				if options[:scroll] &&  options[:scroll][1]>0
@@ -452,6 +455,11 @@ module Ruiby_dsl
 			  }
 		 }
 	  }	
+	  a.instance_variable_set(:@prop_current,prop_current)
+	  def a.set_data(newh)
+		newh.each { |k,v| @prop_current[k].text=v }
+	  end
+	  a
 	end
 
 	###################################### notebooks
@@ -727,7 +735,7 @@ module Ruiby_dsl
 		def scrolled_win.set_data(words)
 			raise("list.set_data() out of main thread!") if $__mainthread__ != Thread.current
 			list().model.clear
-			words.each { |w| list().model.append[0]=word }
+			words.each { |w| list().model.append[0]=w }
 		end
 		def scrolled_win.selection() a=list().selection.selected ; a ? a[0] : nil ; end
 		def scrolled_win.index() list().selection.selected end

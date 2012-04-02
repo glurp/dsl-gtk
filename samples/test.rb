@@ -4,6 +4,8 @@ $time_start=Time.now.to_f*1000
 def mlog(text)
  puts "%8f | %s" % [(Time.now.to_f*1000-$time_start),text.to_s]
 end
+mlog 'before require gtk2'
+require 'gtk2'
 mlog 'before require ruiby'
 require_relative '../lib/ruiby'
 mlog 'after require ruiby'
@@ -25,7 +27,7 @@ def component()
 		"open/tooltip text on button"=>proc { edit(__FILE__) },
 		"close/fermer le fichier"=>nil,
 		"undo/defaire"=>nil,
-		"redo/refaire"=>proc { alert("e") },"ee"=>nil
+		"redo/refaire"=>proc { alert("e") }
 	   ))
     sloti(label( <<-EEND ,:font=>"Arial 12"))
      This window is test & demo of Ruiby capacity,
@@ -119,7 +121,7 @@ def component()
 		  calendar()
 	    }
         page("Big PropEditor") {
-			h={};100.times { |i| h[i]= "aaa#{i+100}" }
+			h={};70.times { |i| h[i]= "aaa#{i+100}" }
 			propertys("very big propertys editable",h,{edit: true,scroll: [100,400]}) { |a| log(a.inspect);log(h.inspect) }
         }
         page("Source Editor") {
@@ -165,12 +167,12 @@ def component()
 				separator
 				stack_paned 300,0.5 do [
 				  vbox_scrolled(-1,100) { 
-					100.times { |i| 
+					30.times { |i| 
 					  flow { sloti(button("eeee#{i}"));sloti(button("eeee")) }
 					}
 				  },
 				  vbox_scrolled(100,100) { 
-					100.times { |i| 
+					30.times { |i| 
 					  flow { sloti(button("eeee#{i}"));sloti(button("eeee"));sloti(button("aaa"*100)) }
 					}
 				  }] end
