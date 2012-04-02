@@ -1,0 +1,7 @@
+#!/usr/bin/ruby
+#####################################################
+#  run Ruiby/samples/test.rb
+#######################################################
+require 'Ruiby'
+Dir.chdir(File.join(Ruiby::DIR,"..","samples"))
+load 'test.rb'
