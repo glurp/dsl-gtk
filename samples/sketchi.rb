@@ -43,7 +43,7 @@ class RubyApp < Ruiby_gtk
 					page("Error") { @error_log=slot(text_area(600,100,{:font=>"Courier new 10"})) }
 					page("Help") { make_help(slot(text_area(600,100,{:font=>"Courier new 10"}))) }
 					page("API") { make_api(slot(text_area(600,100,{:font=>"Courier new 10"}))) }
-					page("Example") { make_example(slot(text_area(600,100,{:font=>"Courier new 10"}))) }
+					page("Example") { make_example(slot(source_editor(:width=>600,:height=>100,:lang=> "ruby", :font=> "Courier new 10"))) }
 				end
 				]
 			}

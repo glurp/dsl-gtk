@@ -33,3 +33,4 @@ creation menu
 howto install and test      
 howto install and test      
 howto install and test      
+readme: howto install and test     
