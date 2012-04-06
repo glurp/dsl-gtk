@@ -174,13 +174,17 @@ module Ruiby_dsl
 	end
 	# create  label, with text (or image if txt start with a '#')
 	def label(text,options={})
+		l=_label(text,options)
+		attribs(l,options)
+	end
+	def _label(text,options={})
 		l=if text && text[0,1]=="#"
 			get_image_from(text[1..-1]);
 		else
 			Label.new(text);
 		end
-		attribs(l,options)
 	end
+	
 	def image(file,options={})
 		im=if File.exists?(file)
 			Image.new(file)
@@ -546,7 +550,8 @@ module Ruiby_dsl
 	end
 	
 	def alabel(txt,&blk)
-		pclickable(proc { blk.call() if blk} ) { label(txt) }
+		l=nil
+		pclickable(proc { blk.call(l) if blk} ) { l=label(txt) }
 	end
 	
 	############################## Panned : 

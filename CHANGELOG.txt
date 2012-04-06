@@ -33,3 +33,4 @@ creation menu
 readme: howto install and test     
 set_data on properties editor      
 show exception and stack trace in Messsage.error   
+alabel as clickable label      
