@@ -1,4 +1,4 @@
-
+# create a diaog which cntain end little editor
 class Editor < Ruiby_gtk 
     def initialize(w,filename,width=350)
 		@filename=filename

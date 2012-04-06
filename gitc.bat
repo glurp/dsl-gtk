@@ -18,7 +18,9 @@ cat VERSION >> CHANGELOG.txt
 ruby -e "Dir.glob('Ruiby*.gem').each {|f| File.delete(f) }"
 call gem build Ruiby.gemspec
 call :test_gem
+echo Push gem to gemcutter...
 call gem push Ruiby*.gem
+echo gem yank -v 0.XX.0 Ruiby  (?)
 goto :eof
 
 :test_gem

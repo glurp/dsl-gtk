@@ -2,7 +2,9 @@ module Ruiby_default_dialog
 	include ::Gtk
 	###################################### Alerts
 
+	# modal popup with text (as html one!)
 	def alert(*txt) message(MessageDialog::INFO,*txt) end
+	# modal popup with text and/or ruby Exception.
 	def error(*txt) 
 		lt=txt.map { |o| 
 			if Exception===o 
@@ -13,6 +15,7 @@ module Ruiby_default_dialog
 		}
 		message(MessageDialog::ERROR,*lt) 
 	end
+	# show a modal dialogue, asking question, active bloc closure with text response
 	def prompt(txt,value="") 
 		 dialog = Dialog.new("Message",
 			self,
@@ -33,6 +36,7 @@ module Ruiby_default_dialog
 	end
 
 
+	# show a modal dialogue, asking yes/no question, ruturn boolean response
 	def ask(*txt) 
 		text=txt.join(" ")
         md = MessageDialog.new(self,
@@ -52,6 +56,7 @@ module Ruiby_default_dialog
         md.run
         md.destroy
 	end
+	# dialog asking a color
 	def ask_color
 		cdia = ColorSelectionDialog.new("Select color")
 		response=cdia.run
@@ -65,6 +70,7 @@ module Ruiby_default_dialog
 	end
 
 	########## File Edit
+	# dialog showing code editor
 	def edit(filename)
 		Editor.new(self,filename)
 	end
@@ -94,8 +100,9 @@ module Ruiby_default_dialog
 	    ret
 	end
 end
+
 # Direct Static call to common dialog
-#  Message.alerte("ddde",'eee')
+#  Message.alert("ddde",'eee')
 class Message
 	class Embbeded  < ::Gtk::Window
 		include ::Ruiby_default_dialog
