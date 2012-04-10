@@ -22,6 +22,7 @@
 require 'tmpdir'
 require 'pathname'
 require 'gtk2'
+
 if Gtk.check_version(2, 0, 0) =~ /old/i
 	 md=Gtk::MessageDialog.new(nil,Gtk::Dialog::DESTROY_WITH_PARENT,Gtk::MessageDialog::QUESTION, 
             Gtk::MessageDialog::BUTTONS_YES_NO, "Gtk version invalide!, need 2.0.0 or later")
@@ -29,15 +30,18 @@ if Gtk.check_version(2, 0, 0) =~ /old/i
 	 md.destroy
 	 exit!
 end
+require 'gtksourceview2'
 
 module Ruiby
   DIR = Pathname.new(__FILE__).realpath.dirname.to_s
   VERSION = IO.read(File.join(DIR, '../VERSION')).chomp
   GUI='gtk'
+  
   # update gui while necessary
   def self.update() 
 		Gtk.main_iteration while Gtk.events_pending?  
   end
+  # start ruiby, one shot (reloading of source can be done)
   def self.start(&bloc)
 	return if defined?($__MARKER_IS_RUIBY_INITIALIZED)
 	$__MARKER_IS_RUIBY_INITIALIZED = true
@@ -50,6 +54,8 @@ module Ruiby
 	yield
 	Gtk.main
   end
+  # start ruiby, one shot (reloading of source can be done)
+  # Gtk Exception are trapped, so process should not exited by ruiby fault!
   def self.start_secure(&bloc)
 	return if defined?($__MARKER_IS_RUIBY_INITIALIZED)
 	$__MARKER_IS_RUIBY_INITIALIZED = true
@@ -77,6 +83,9 @@ Dir.glob("#{Ruiby::DIR}/plugins/*.rb").each do |filename|
 end
 
 module Kernel
+	# do a gem require, anf if faile, try to load the gem from internet.
+	# asking  permission is done for each gem. the output of 'gem install'
+	# id show in ruiby log window
 	def ruiby_require(*gems)
 		w=Ruiby_dialog.new
 		gems.flatten.each do|gem| 
