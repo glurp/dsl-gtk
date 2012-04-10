@@ -672,7 +672,6 @@ module Ruiby_dsl
 	# @edit=slot(source_editor()).editor
 	# @edit.buffer.text=File.read(@filename)
     def source_editor(args={}) # from green_shoes plugin
-      require 'gtksourceview2'
 
       args[:width]  = 400 unless args[:width]
       args[:height] = 300 unless args[:height]
@@ -959,7 +958,7 @@ module Ruiby_dsl
 	
 end
 # run gtk mainloop with trapping gtk/callback error
-# used by sketchi.rb
+# used by sketchi.rb, not good
 def secure_main()
 	begin 
 		Gtk.main 
