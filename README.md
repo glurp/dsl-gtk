@@ -39,11 +39,21 @@ Todo:
 
 Installation
 ============
-
+1) system
 Install Ruby 1.9.x ...
 
-Install GTK (windows: http://ftp.gnome.org/pub/GNOME/binaries/win32/glade3/3.6/glade3-3.6.7-with-GTK+.exe
-or install Inkscape/Dia ...)
+Install GTK 
+	linux: should be there... or install full 
+	windows:
+	   http://downloads.sourceforge.net/project/gtk-win/   ==>> gtk2-runtime-2.24.8-2011-12-03-ash.exe
+	   or
+	   http://ftp.gnome.org/pub/GNOME/binaries/win32/glade3/3.6/glade3-3.6.7-with-GTK+.exe
+Install gtksourview2 : 
+	linux: libgtksourceview2.0-dev
+	windows: is in gtk2-runtime
+
+
+2) ruby	env
 
 ```
 > gem install Ruiby
