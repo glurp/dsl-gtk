@@ -56,6 +56,7 @@ Install gtksourview2 :
 2) ruby	env
 
 ```
+> gem install gtksourceview2
 > gem install Ruiby
 > ruiby_demo            # check good installation
 > ruiby_skechi          # write and test
