@@ -40,14 +40,16 @@ Todo:
 Installation
 ============
 1) system
+
 Install Ruby 1.9.x ...
 
-Install GTK 
-	linux: should be there... or install full 
-	windows:
+Install GTK2 :
+
+*	linux: should be in the box... or install gtk2 (dev version)
+
+*	windows:
 	   http://downloads.sourceforge.net/project/gtk-win/   ==>> gtk2-runtime-2.24.8-2011-12-03-ash.exe
-	   or
-	   http://ftp.gnome.org/pub/GNOME/binaries/win32/glade3/3.6/glade3-3.6.7-with-GTK+.exe
+
 Install gtksourview2 : 
 	linux: libgtksourceview2.0-dev
 	windows: is in gtk2-runtime
@@ -56,7 +58,6 @@ Install gtksourview2 :
 2) ruby	env
 
 ```
-> gem install gtksourceview2
 > gem install Ruiby
 > ruiby_demo            # check good installation
 > ruiby_skechi          # write and test
