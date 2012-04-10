@@ -10,8 +10,9 @@ module Ruiby_threader
 			@is_main_window=false
 		end
 	end
-	# must be created by application, active the tread engine for caller window.
-	# last caller is the winner!
+	# must be created by application (in initialize, afeter super), active the tread engine for 
+	# caller window.
+	# if several windows, last created is the winner : gtk_invoke will throw to last treaded() window!
 	def threader(per)
 		@queue=Queue.new
 		$__queue__=@queue
@@ -25,8 +26,8 @@ module Ruiby_threader
 	end
 	
 	# shot peridicly a  bloc parameter
-	# not threading: the bloc is evauated by gtk mainloop iin main thread context
-	# return handle of animation. can be stoped by delete(hanim)
+	# no threading: the bloc is evaluated by gtk mainloop in main thread context
+	# return handle of animation. can be stoped by delete(anim)
   	def anim(n,&blk) 
 		GLib::Timeout.add(n) { 
 			blk.call rescue log("#{$!} :\n  #{$!.backtrace[0..3].join("\n   ")}") 
@@ -34,6 +35,7 @@ module Ruiby_threader
 		}
 	end
 	# as anim, but one shot, after some millisecs
+	# no threading: the bloc is evaluated by gtk mainloop in main thread context
   	def after(n,&blk) 
 		GLib::Timeout.add(n) { 
 			blk.call rescue log("#{$!} :\n  #{$!.backtrace[0..3].join("\n   ")}") 
@@ -44,8 +46,8 @@ end
 
 ############################ Invoke HMI from anywhere ####################
 
-# ift hreader() is done by almost one window,  
-# evaluate (instance_eval) the bloc closure in the context of this window
+# if threader() is done by almost one window,  
+# evaluate (instance_eval) the bloc  in the context of this window
 # async: bloc will be evaluate after the return!
 def gui_invoke(&blk) 
 	if ! defined?($__mainwindow__)
@@ -63,8 +65,8 @@ def gui_invoke(&blk)
 	end
 end
 
-# ift hreader() is done by almost one window,  
-# evaluate (instance_eval) the bloc closure in the context of this window
+# if threader() is done by almost one window,  
+# evaluate (instance_eval) the bloc  in the context of this window
 # sync: bloc will be evaluate before  the return. Warining! : imlementation is stupid
 def gui_invoke_wait(&blk) 
 	if ! defined?($__mainwindow__)

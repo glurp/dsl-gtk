@@ -15,7 +15,7 @@ module Ruiby_default_dialog
 		}
 		message(MessageDialog::ERROR,*lt) 
 	end
-	# show a modal dialogue, asking question, active bloc closure with text response
+	# show a modal dialogu, asking question, active bloc closure with text response
 	def prompt(txt,value="") 
 		 dialog = Dialog.new("Message",
 			self,
@@ -36,7 +36,7 @@ module Ruiby_default_dialog
 	end
 
 
-	# show a modal dialogue, asking yes/no question, ruturn boolean response
+	# show a modal dialogu, asking yes/no question, retuurn boolean response
 	def ask(*txt) 
 		text=txt.join(" ")
         md = MessageDialog.new(self,
@@ -46,6 +46,8 @@ module Ruiby_default_dialog
 		md.destroy
 		return( rep==-8 )
 	end
+	
+	# a warning alert
 	def trace(*txt) message(MessageDialog::WARNING,*txt) end
 
 	def message(style,*txt)
@@ -70,12 +72,13 @@ module Ruiby_default_dialog
 	end
 
 	########## File Edit
+	
 	# dialog showing code editor
 	def edit(filename)
 		Editor.new(self,filename)
 	end
 	
-	########## File dialog <<== Green Shoes!
+	########## File dialog
 
 	def ask_file_to_read(dir,filter)
 		dialog_chooser("Open File (#{filter}) ...", Gtk::FileChooser::ACTION_OPEN, Gtk::Stock::OPEN)
@@ -101,7 +104,7 @@ module Ruiby_default_dialog
 	end
 end
 
-# Direct Static call to common dialog
+#  To be use for direct  call (blocing) of common dialog :
 #  Message.alert("ddde",'eee')
 class Message
 	class Embbeded  < ::Gtk::Window
