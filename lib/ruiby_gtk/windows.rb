@@ -100,7 +100,7 @@ class Ruiby_gtk < Gtk::Window
         set_default_size(w,h)
         signal_connect "destroy" do 
 			if @is_main_window
-				self.gtk_exit
+				self.main_quit
 			end
 		end
         set_window_position Window::POS_CENTER  # default, can be modified by window_position(x,y)
@@ -115,13 +115,15 @@ class Ruiby_gtk < Gtk::Window
 		end
         show_all
 	end
-	def gtk_exit()
+	def ruiby_exit()
 		(self.at_exit() if self.respond_to?(:at_exit) ) rescue puts $!.to_s
 		Gtk.main_quit 
 	end
 	def component
 		raise("Abstract: 'def component()' must be overiden in a Ruiby class")
 	end
+	# change positiojn of window in the desktop. relative position works only in *nix
+	# system.
 	def rposition(x,y)
 		if x==0 && y==0
 			set_window_position Window::POS_CENTER
@@ -137,15 +139,22 @@ class Ruiby_gtk < Gtk::Window
 		end
 		move(x.abs,y.abs)
 	end
+	# show or supress the window system decoration
 	def chrome(on)
 		set_decorated(on)
 	end
 end
 
-module Ruiby # must be included by a Gtk::Window 
+# can be included by a gtk windows, for mementary use ruiby.
+# do an include, and then call ruiby_componnent with bloc for use ruiby dsl
+module Ruiby  
 	include ::Ruiby_dsl
 	include ::Ruiby_threader
 	include ::Ruiby_default_dialog
+	
+	#  ruiby_component() must be call one shot for a window, 
+	# it initialise ruiby.
+	# then append_to(),append_before()...  can be use fore dsl usage
 	def ruiby_component()
 		init_threader()
 		@lcur=[self]
@@ -161,7 +170,7 @@ module Ruiby # must be included by a Gtk::Window
 	end
 end
 
-class Ruiby_dialog < Gtk::Window # :notested!
+class Ruiby_dialog < Gtk::Window 
 	include ::Ruiby_dsl
 	include ::Ruiby_default_dialog
 	def intialize() end
