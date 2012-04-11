@@ -1,3 +1,4 @@
+    Rakefile._ : ok
     lib/ruiby._ : back
     lib/ruiby_gtk/editor._ : ok
     lib/ruiby._ : ok
