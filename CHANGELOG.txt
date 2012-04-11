@@ -1,3 +1,7 @@
+    lib/ruiby_gtk/editor._ : ok
+    lib/ruiby._ : ok
+    lib/ruiby._ : try
+    gitc._ : try
 0.4.4
 create changelog
 0.5.0
