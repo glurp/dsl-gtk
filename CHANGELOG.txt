@@ -1,3 +1,4 @@
+    Rakefile._ : new
     lib/ruiby._ : ok3
     Rakefile._ : ok3
     lib/ruiby._ : ok2
