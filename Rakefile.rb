@@ -25,7 +25,7 @@ rule '._' => '.rb' do |src|
 	  puts "Abort!" 	if comment=~/^a(b(o(r(t)?)?)?)?$/
 	  exit! 			if comment=~/^a(b(o(r(t)?)?)?)?$/
 	  sh "git commit #{src.source} -m \"#{comment.strip}\"" rescue 1
-	  push_changelog("    #{src} : #{comment}")
+	  push_changelog("    #{src.source} : #{comment}")
 	  $changed=true
   end
   touch src.name
