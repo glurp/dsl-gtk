@@ -48,8 +48,9 @@ SRC = FileList['**/*.rb']
 
 rule '._' => '.rb' do |src|
   puts "\n\ncomment for #{src.source} : "
-  comment=$stdin.gets.chomp
+  comment=$stdin.gets
   if comment && comment.size>0
+	  comment.chomp!
 	  puts "Abort!" 	if comment=~/^a(b(o(r(t)?)?)?)?$/
 	  exit! 			if comment=~/^a(b(o(r(t)?)?)?)?$/
 	  unless File.exists?(src.name)
@@ -141,7 +142,7 @@ task :test do
  ruby  nname
  cd NAME
  puts "\n\nOk for diffusion ?"
- rep=$stdout.gets
+ rep=$stdin.gets
  raise("aborted!") unless rep && rep !~ /^y|o|d/
 end
 
