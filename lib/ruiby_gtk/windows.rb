@@ -100,7 +100,7 @@ class Ruiby_gtk < Gtk::Window
         set_default_size(w,h)
         signal_connect "destroy" do 
 			if @is_main_window
-				self.main_quit
+				Gtk.main_quit
 			end
 		end
         set_window_position Window::POS_CENTER  # default, can be modified by window_position(x,y)
