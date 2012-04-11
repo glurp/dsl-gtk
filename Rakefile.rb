@@ -7,7 +7,7 @@ def push_changelog(line)
   File.open('CHANGELOG.txt','w') {|f| f.write(b.join("\n")) }
 end
 def change_version()
-  a=File.read('VERSION').strip.split('.') 
+  a=File.read('VERSION').strip.split('.')[0..2]
   yield(a)
   version=a.join('.') 
   File.open('VERSION','w') {|f| f.write(version) }
