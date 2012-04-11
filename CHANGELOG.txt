@@ -1,3 +1,4 @@
+    Rakefile.rb : win32 detection
     xxxx.rb : new test
     Rakefile.rb : git add 
     Rakefile.rb : git add
