@@ -44,6 +44,8 @@ file "commit._" =>  COM
 
 desc "job before xommitement"
 task :pre_commit do
+puts RUBY_PLATFORM
+	sh "cls" if RUBY_PLATFORM =~ /(win32)|(mingw)/i 
 	puts <<EEND
 
 
