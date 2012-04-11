@@ -1,3 +1,4 @@
+    Rakefile.rb : c
     Rakefile.rb : test gem
     Rakefile.rb : win32 detection
     Rakefile.rb : git add
