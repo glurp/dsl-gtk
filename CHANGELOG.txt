@@ -1,3 +1,5 @@
+    Rakefile.rb : x
+0.18.0 : 2012-04-11 20:40:07 +0200
     Rakefile.rb : test
     Rakefile.rb : test gem
     Rakefile.rb : win32 detection
