@@ -101,7 +101,7 @@ task :test do
  nname="#{NAME}Test/test.rb"
  content=File.read("#{NAME}/samples/test.rb").gsub(/^\s*require_relative/,"require")
  File.open(nname,"w") { |f| f.write(content) }
- p FileList['#{NAME}/#{NAME}*.gem'][-1]
+ p FileList['#{NAME}/*.gem']
  sh "gem install #{FileList['#{NAME}/#{NAME}*.gem'][-1]}"
  ruby  nname
  cd NAME
