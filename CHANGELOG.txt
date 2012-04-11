@@ -1,3 +1,4 @@
+    Rakefile.rb : s
     Rakefile.rb : gem builder
 	update code example from test.rb     
 	correct main_quit        
