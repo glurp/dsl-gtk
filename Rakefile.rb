@@ -47,20 +47,44 @@ task :pre_commit do
 --------------------------------------------------------------------
                  Commmit & push #{NAME}
 --------------------------------------------------------------------
+EEND
 	
 	sh "giti"
 	$changed=false
-EEND
 end
 
 desc "job after local commit done: push to git repo"
 task :post_commit do
-  raise "no changed!" unless $changed
-  $version=change_version { |a| a[-1]=(a.last.to_i+1) }  
-  sh "git commit VERSION -m update"
-  sh "git commit CHANGELOG.txt -m update"
-  sh "git push"
+  if $changed
+	  $version=change_version { |a| a[-1]=(a.last.to_i+1) }  
+	  sh "git commit VERSION -m update"
+	  sh "git commit CHANGELOG.txt -m update"
+	  sh "git push"
+  else
+	puts "no change!"
+  end
 end
 desc "commit local and then distant repo"
 task :commit => [:pre_commit,"commit._",:post_commit]
+
+
+desc "make a gem and push it to gemcutter"
+task :gem => :commit do
+	$version=change_version { |a| 
+			a[-2]=(a[-2].to_i+1) 
+			a[-1]=0 
+	}  
+	puts "New version ==>> #{$version}"
+	l=FileList("*.gem")
+	l.each { |fn| rm dn }
+	gem_name="#{NAME}-#{$version}.gem"
+	push_changelog  "  #{$version} : #{Time.now}"
+	sh "gem build #{NAME}.gemspec"
+	sh "gem push #{gem_name}"
+	l.each { |fn|
+      ov=fn.split('-')[1].gsub('.gem',"")
+	  sh "gem yank -v #{ov} #{NAME}"
+	}
+end
+
 
