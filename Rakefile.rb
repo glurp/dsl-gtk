@@ -1,10 +1,38 @@
-NAME="Ruiby"
+#################################################################
+#  Rakefile : git commit/add *.rb, git push, test & gem push
+#################################################################
+#
+# Usage:
+#	> rake commit  # commit in local directory and push to repository
+#   > rake gem	   # commit and make gem (and test it) and push to gemcutter !
+#
+#################################################################
+#  Requirments :
+#		auto-commit only .rb files
+#		on application for test : samples/test.rb
+#		tested only on windows !
+#		version : X.Y.Z X: 
+#           X   : to be hand-modified 
+#           Y.Z : increment Y/0 to Z for each gem generation
+#           Z   : increment on each (one or more) file commit(s)
+#
+#  to be better:
+#     it create a ._ file (empty)  for each ruby file. Should 
+#     be done in a cached directory....
+#
+#     Perhaps should use git status output
+#################################################################
+
+# gem name is name of current directory
+
+NAME= Dir.pwd.gsub(File.dirname(Dir.pwd)+'/',"")
+
 Rake.application.options.trace = false
 
 def push_changelog(line)
   b=File.read('CHANGELOG.txt').split(/\r?\n/) 
   b.unshift(line)
-  File.open('CHANGELOG.txt','w') {|f| f.write(b.join("\n")) }
+  File.open('CHANGELOG.txt','w') {|f| f.write(b[0..500].join("\n")) }
 end
 def change_version()
   a=File.read('VERSION').strip.split('.')[0..2]
@@ -42,7 +70,7 @@ end
 desc "general dependency"
 file "commit._" =>  COM
 
-desc "job before xommitement"
+desc "job before commit"
 task :pre_commit do
 puts RUBY_PLATFORM
 	sh "cls" if RUBY_PLATFORM =~ /(win32)|(mingw)/i 
@@ -66,7 +94,6 @@ task :post_commit do
 	  sh "git commit CHANGELOG.txt -m update"
 	  sh "git push"
 	  puts "\n\nNew version is #{$version}\n"
-	  Rake::Task["test"].execute
   else
 	puts "no change!"
   end
@@ -77,6 +104,13 @@ task :commit => [:pre_commit,"commit._",:post_commit]
 
 desc "make a gem and push it to gemcutter"
 task :gem => :commit do
+	puts <<EEND
+
+
+--------------------------------------------------------------------
+       make gem, test it, and push gem #{NAME} to gemcutter
+--------------------------------------------------------------------
+EEND
 	$version=change_version { |a| 
 			a[-2]=(a[-2].to_i+1) 
 			a[-1]=0 
@@ -87,7 +121,7 @@ task :gem => :commit do
 	gem_name="#{NAME}-#{$version}.gem"
 	push_changelog  "#{$version} : #{Time.now}"
 	sh "gem build #{NAME}.gemspec"
-	Rake::Task["test"].execute
+	Rake::Task["test"].execute		if File.exists?("samples/test.rb")
 	sh "gem push #{gem_name}"
 	l.each { |fn|
       ov=fn.split('-')[1].gsub('.gem',"")
@@ -95,6 +129,7 @@ task :gem => :commit do
 	}
 end
 
+desc "test the current version of the framework by installing the gem and run a test programme"
 task :test do
  cd ".."
  mkdir "#{NAME}Test" unless File.exists?("#{NAME}Test")
@@ -105,6 +140,9 @@ task :test do
  sh "gem install #{FileList["#{NAME}/#{NAME}*.gem"][-1]}"
  ruby  nname
  cd NAME
+ puts "\n\nOk for diffusion ?"
+ rep=$stdout.gets
+ raise("aborted!") unless rep && rep !~ /^y|o|d/
 end
 
 
