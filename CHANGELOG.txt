@@ -1,3 +1,4 @@
+    Rakefile.rb : w
     Rakefile.rb : c
     Rakefile.rb : q
     Rakefile.rb : c
