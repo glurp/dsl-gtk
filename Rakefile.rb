@@ -80,7 +80,7 @@ task :gem => :commit do
 	$version=change_version { |a| 
 			a[-2]=(a[-2].to_i+1) 
 			a[-1]=0 
-	}  
+	}   
 	puts "New version ==>> #{$version}"
 	l=FileList['*.gem']
 	l.each { |fn| rm fn }
@@ -101,8 +101,10 @@ task :test do
  nname="#{NAME}Test/test.rb"
  content=File.read("#{NAME}/samples/test.rb").gsub(/^\s*require_relative/,"require")
  File.open(nname,"w") { |f| f.write(content) }
+ p FileList['#{NAME}/#{NAME}*.gem'][-1]
  sh "gem install #{FileList['#{NAME}/#{NAME}*.gem'][-1]}"
  ruby  nname
+ cd NAME
 end
 
 
