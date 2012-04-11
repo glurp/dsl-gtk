@@ -75,10 +75,10 @@ task :gem => :commit do
 			a[-1]=0 
 	}  
 	puts "New version ==>> #{$version}"
-	l=FileList("*.gem")
+	l=FileList['*.gem']
 	l.each { |fn| rm dn }
 	gem_name="#{NAME}-#{$version}.gem"
-	push_changelog  "  #{$version} : #{Time.now}"
+	push_changelog  "#{$version} : #{Time.now}"
 	sh "gem build #{NAME}.gemspec"
 	sh "gem push #{gem_name}"
 	l.each { |fn|
