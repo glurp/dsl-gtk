@@ -63,6 +63,7 @@ task :post_commit do
 	  sh "git commit VERSION -m update"
 	  sh "git commit CHANGELOG.txt -m update"
 	  sh "git push"
+	  puts "\n\nNew version is #{$version}\n"
   else
 	puts "no change!"
   end
