@@ -66,6 +66,7 @@ task :post_commit do
 	  sh "git commit CHANGELOG.txt -m update"
 	  sh "git push"
 	  puts "\n\nNew version is #{$version}\n"
+	  Rake::Task["test"].execute
   else
 	puts "no change!"
   end
@@ -86,11 +87,23 @@ task :gem => :commit do
 	gem_name="#{NAME}-#{$version}.gem"
 	push_changelog  "#{$version} : #{Time.now}"
 	sh "gem build #{NAME}.gemspec"
+	Rake::Task["test"].execute
 	sh "gem push #{gem_name}"
 	l.each { |fn|
       ov=fn.split('-')[1].gsub('.gem',"")
 	  sh "gem yank -v #{ov} #{NAME}"
 	}
 end
+
+task :test do
+ cd ".."
+ mkdir "#{NAME}Test"
+ nname="#{NAME}Test/test.rb"
+ content=File.read("#{NAME}/samples/test.rb").gsub(/^\s*require_relative/,"require")
+ File.open(nname,"w") { |f| f.write(content) }
+ sh "gem install #{FileList['#{NAME}/#{NAME}*.gem'][-1]}"
+ ruby  nname
+end
+
 
 
