@@ -97,7 +97,7 @@ end
 
 task :test do
  cd ".."
- mkdir "#{NAME}Test"
+ mkdir "#{NAME}Test" unless File.exists?("#{NAME}Test")
  nname="#{NAME}Test/test.rb"
  content=File.read("#{NAME}/samples/test.rb").gsub(/^\s*require_relative/,"require")
  File.open(nname,"w") { |f| f.write(content) }
