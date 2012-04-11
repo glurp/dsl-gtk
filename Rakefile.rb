@@ -24,6 +24,9 @@ rule '._' => '.rb' do |src|
   if comment && comment.size>0
 	  puts "Abort!" 	if comment=~/^a(b(o(r(t)?)?)?)?$/
 	  exit! 			if comment=~/^a(b(o(r(t)?)?)?)?$/
+	  unless File.exists?(src.name)
+		sh "git add #{src.source}"
+	  end
 	  sh "git commit #{src.source} -m \"#{comment.strip}\"" rescue 1
 	  push_changelog("    #{src.source} : #{comment}")
 	  $changed=true
@@ -76,7 +79,7 @@ task :gem => :commit do
 	}  
 	puts "New version ==>> #{$version}"
 	l=FileList['*.gem']
-	l.each { |fn| rm dn }
+	l.each { |fn| rm fn }
 	gem_name="#{NAME}-#{$version}.gem"
 	push_changelog  "#{$version} : #{Time.now}"
 	sh "gem build #{NAME}.gemspec"
