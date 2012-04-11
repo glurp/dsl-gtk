@@ -1,49 +1,40 @@
-    Rakefile._ : new
-    lib/ruiby._ : ok3
-    Rakefile._ : ok3
-    lib/ruiby._ : ok2
-    Rakefile._ : ok
-    lib/ruiby._ : back
-    lib/ruiby_gtk/editor._ : ok
-    lib/ruiby._ : ok
-    lib/ruiby._ : try
-    gitc._ : try
-0.4.4
-create changelog
-0.5.0
-modify changelog managment
-update readme
-update readme2
-automatic slot done if widget is not packed
-0.6.0
-update Mendelaiev code in readme
-bug  3 ___ in __window__
-0.7.0
-ruiby_require Ruiby.update
-0.8.0
-readme news
-improve slotation in test.rb
-property show and editor
-mini edi ruiby
-icones to source/base64 generator
-space() creation
-correct autosloting on seprarator(),table()base64
-news
-0.9.0
-sketch memo in tmp dir
-creation image()
-0.10.0
-accordion creation pclickable
-pseudo-private on dsl for sketchi
-make accordeon in general test test.rb    
-secure_main         
-0.12.0
-readme: howto install and test     
-set_data on properties editor      
-show exception and stack trace in Messsage.error   
-alabel as clickable label      
+    Rakefile.rb : gem builder
+	update code example from test.rb     
+	correct main_quit        
+	remove utils.rb        
+	big crunch auto documentation V1     
 0.13.0
-big crunch auto documentation V1     
-remove utils.rb        
-correct main_quit        
-update code example from test.rb     
+	alabel as clickable label      
+	show exception and stack trace in Messsage.error   
+	set_data on properties editor      
+	readme: howto install and test     
+0.12.0
+	secure_main         
+	make accordeon in general test test.rb    
+	pseudo-private on dsl for sketchi
+	accordion creation pclickable
+0.10.0
+	creation image()
+	sketch memo in tmp dir
+0.9.0
+	news
+	correct autosloting on seprarator(),table()base64
+	space() creation
+	icones to source/base64 generator
+	mini edi ruiby
+	property show and editor
+	improve slotation in test.rb
+	readme news
+0.8.0
+	ruiby_require Ruiby.update
+0.7.0
+	bug  3 ___ in __window__
+	update Mendelaiev code in readme
+0.6.0
+	automatic slot done if widget is not packed
+	update readme2
+	update readme
+	modify changelog managment
+0.5.0
+	create changelog
+0.4.4
