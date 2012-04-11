@@ -1,11 +1,9 @@
+    Rakefile.rb : test gem
     Rakefile.rb : win32 detection
-    xxxx.rb : new test
-    Rakefile.rb : git add 
     Rakefile.rb : git add
 0.17.0 : 2012-04-11 19:30:46 +0200
-0.16.0 : 2012-04-11 19:29:39 +0200
     Rakefile.rb : gem builder
-    Rakefile.rb : process commit foreach file modified
+    Rakefile.rb : commit foreach file modified
     Rakefile.rb : creation
 	update code example from test.rb     
 	correct main_quit        
