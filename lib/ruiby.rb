@@ -68,15 +68,14 @@ module Ruiby
 	yield
 	secure_main()	
   end
+  
   # Direct acces to Ruiby DSL
   # config can contain :title, :width, :height
   # Warning ! bloc use used for create a inner method, don't define sub methods :
   # def action() puts "CouCou..." end
   # Ruib.app {
-  #    stack { button("test") { action() } }
+  #    stack do button("test") { action() } end
   # }
-  #
-  #
   def self.app(config={},&blk)
 		$blk=blk
 		klass = Class.new Ruiby_gtk do
