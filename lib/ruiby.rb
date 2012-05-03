@@ -68,6 +68,17 @@ module Ruiby
 	yield
 	secure_main()	
   end
+  def self.app(config={},&blk)
+		$blk=blk
+		klass = Class.new Ruiby_gtk do
+			def initialize(title,w,h)
+				super
+				threader(10)
+			end
+		end
+		klass.send(:define_method,:component,&blk)
+		start_secure { klass.new(config[:title] || "",config[:width] ||600,config[:height] ||600) }
+  end
 end
 
 
