@@ -1,13 +1,10 @@
 require_relative '../lib/ruiby'
-
 Ruiby.app do
 	stack do
 		ARGV.each { |fn| 
-			if File.exist?(fn) 
-				label("#"+fn) 
-			else
-				label("unknown file '#{fn}'") 
-			end
+			label File.exist?(fn) ? 
+				"#"+fn : 
+				"Oups !! unknown file '#{fn}'" 
 		}
 	end
 end
