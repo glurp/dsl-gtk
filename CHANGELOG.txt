@@ -1,3 +1,7 @@
+    samples/images.rb : creation demo Ruiby.app
+    Rakefile.rb : 
+    lib/ruiby.rb : add Ruiby.app for micro-application
+0.19.0 : 2012-04-11 20:41:50 +0200
     Rakefile.rb : x
 0.18.0 : 2012-04-11 20:40:07 +0200
     Rakefile.rb : test
