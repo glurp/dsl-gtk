@@ -110,7 +110,7 @@ Ruiby.start { Win.new("application title",350,10) }
 
 And, for very little application :
 
-```ruby
+```ruby 
 require  'Ruiby'
 Ruiby.app do
 	stack do
