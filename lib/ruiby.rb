@@ -68,6 +68,15 @@ module Ruiby
 	yield
 	secure_main()	
   end
+  # Direct acces to Ruiby DSL
+  # config can contain :title, :width, :height
+  # Warning ! bloc use used for create a inner method, don't define sub methods :
+  # def action() puts "CouCou..." end
+  # Ruib.app {
+  #    stack { button("test") { action() } }
+  # }
+  #
+  #
   def self.app(config={},&blk)
 		$blk=blk
 		klass = Class.new Ruiby_gtk do
@@ -94,7 +103,7 @@ Dir.glob("#{Ruiby::DIR}/plugins/*.rb").each do |filename|
 end
 
 module Kernel
-	# do a gem require, anf if faile, try to load the gem from internet.
+	# do a gem require, anf if fail, try to load the gem from internet.
 	# asking  permission is done for each gem. the output of 'gem install'
 	# id show in ruiby log window
 	def ruiby_require(*gems)
