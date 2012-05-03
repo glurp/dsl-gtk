@@ -1,3 +1,4 @@
+    samples/images.rb : simpler
     samples/images.rb : creation demo Ruiby.app
     Rakefile.rb : 
     lib/ruiby.rb : add Ruiby.app for micro-application
