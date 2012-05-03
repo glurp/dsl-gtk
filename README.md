@@ -108,6 +108,17 @@ end
 Ruiby.start { Win.new("application title",350,10) }
 ```
 
+And, for very little application :
+
+```ruby
+require  'Ruiby'
+Ruiby.app do
+	stack do
+		. . . 
+	end
+end
+```
+
 Threading is supported via a Queue polled by main-window thread :
 * main window poll Queue , messagers are proc to be instance_eval() in the main window context
 * everywere, a thread can invoke invoke_gui {ruiby code}. this send to the main queue the proc,
