@@ -105,6 +105,7 @@ class Ruiby_gtk < Gtk::Window
 		end
         set_window_position Window::POS_CENTER  # default, can be modified by window_position(x,y)
 		@lcur=[self]
+		@ltable=[]
 		@current_widget=nil
 		@cur=nil
 		begin
@@ -113,7 +114,11 @@ class Ruiby_gtk < Gtk::Window
 			error("COMPONENT() : "+$!.to_s + " :\n     " +  $!.backtrace[0..10].join("\n     "))
 			exit!
 		end
-        show_all
+        begin
+			show_all 
+		rescue
+			puts "Error in show_all : illegal state of some widget? "+ $!.to_s
+		end
 	end
 	def ruiby_exit()
 		(self.at_exit() if self.respond_to?(:at_exit) ) rescue puts $!.to_s
@@ -158,6 +163,7 @@ module Ruiby
 	def ruiby_component()
 		init_threader()
 		@lcur=[self]
+		@ltable=[]
 		@current_widget=nil
 		@cur=nil
 		begin
