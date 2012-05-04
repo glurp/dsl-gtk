@@ -1,3 +1,6 @@
+    samples/images.rb : properties of images
+    lib/ruiby_gtk/windows.rb : recursive table
+    lib/ruiby_gtk/ruiby_dsl.rb : recursive table, get_config() creation
     lib/ruiby.rb : Comments on Ruiby.app
     lib/ruiby.rb : Comment on Ruiby.app
 0.20.0 : 2012-05-03 21:33:35 +0200
