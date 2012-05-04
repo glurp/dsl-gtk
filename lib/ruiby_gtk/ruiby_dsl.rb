@@ -27,7 +27,15 @@ module Ruiby_dsl
 	def stacki(add1=true,&b)    	_cbox(false,VBox.new(false, 2),add1,&b) end
 	# container : horizontal box, take only neceqssary space 
 	def flowi(add1=true,&b)	   		_cbox(false,HBox.new(false, 2),add1,&b) end
-
+	
+	# box { } for cell table (?) ; like stack(false) { }
+	def box() 
+		box=VBox.new(false, 2)
+		@lcur << box
+		yield
+		autoslot()
+		@lcur.pop
+	end
 	# a box with border and texte title, take all space
 	def frame(t="",add1=true,&b)  	
 		_cbox(true,Frame.new(t),add1) { stack { b.call } } 
@@ -160,6 +168,16 @@ module Ruiby_dsl
 
 	def get_current_container() @lcur.last end
 	
+	EXL_REGEXP=/#{(Gtk::Widget.methods+%w{_ destroy clear realize map hide action unparent}).join("|")}/
+	def get_config(w)
+		return({"nil"=>""}) unless w		
+		w.methods.reject{|e| e[EXL_REGEXP]}.inject({"class"=>w.class.to_s}) { |h,meth| 
+			next(h) if w.method(meth).arity!=0
+			data=(w.send(meth) rescue nil)
+			h[meth]=data.inspect.gsub(/^#/,'')[0..32]  if data 
+			h
+		}
+	end
 
 	########################### raster images access #############################
 	def get_icon(name)
@@ -417,32 +435,29 @@ module Ruiby_dsl
 		attribs(table,config)				
 		slot(table)
 		@lcur << table
-		@row=0
-		@col=0
+		@ltable << { :row => 0, :col => 0}
 		yield
+		@ltable.pop
 		@lcur.pop
 	end
     # create a row. must be defined in a table closure	
 	# can only contain cell(s) call
 	def row()
 		autoslot()
-		@col=0 # will be increment by cell..()
+		@ltable.last[:col]=0 # will be increment by cell..()
 		yield
-		@row+=1
+		@ltable.last[:row]+=1
 	end	
 	# a cell in a row/table. take all space, centered
-	def  cell(w) 		 raz();@lcur.last.attach(w,@col,@col+1,@row,@row+1) ; @col+=1 end
+	def  cell(w) 	cell_hspan(1,w)	  end
 	# a cell in a row/table. take space of n cells, horizontaly
-	def  cell_hspan(n,w) raz();@lcur.last.attach(w,@col,@col+n,@row,@row+1) ; @col+=n end 
+	def  cell_hspan(n,w) raz();@lcur.last.attach(w,@ltable.last[:col],@ltable.last[:col]+n,@ltable.last[:row],@ltable.last[:row]+1) ; @ltable.last[:col]+=n end 
 	# a cell in a row/table. take space of n cells, vericaly
-	def  cell_vspan(n,w) raz();@lcur.last.attach(w,@col,@col+1,@row,@row+n) ; @col+=1 end 
-	def  cell_pass(n=1)  @col+=n end # :notested!
+	def  cell_vspan(n,w) raz();@lcur.last.attach(w,@ltable.last[:col],@ltable.last[:col]+1,@ltable.last[:row],@ltable.last[:row]+n) ; @ltable.last[:col]+=1 end 
+	# keep empty n cell consecutive on current row
+	def  cell_pass(n=1)  @ltable.last[:col]+=n end
 	# a cell in a row/table. take space of n cells, horizontaly
-	def  cell_span(n=2,w)
-		raz();
-		@lcur.last.attach(w,@col,@col+n,@row,@row+1)
-		@col+=n
-	end
+	def  cell_span(n=2,w) cell_hspan(n,w) end
 	
 	# create a cell in a row/table, left justified
 	def cell_left(w)     raz();w.set_alignment(0.0, 0.5) rescue nil; cell(w) end
@@ -462,14 +477,14 @@ module Ruiby_dsl
 	def cell_vspan_top(n,w)    raz();w.set_alignment(0.5, 0.0)rescue nil ; cell_vspan(n,w) end
 	def cell_vspan_bottom(n,w) raz();w.set_alignment(0.5, 1.0)rescue nil ; cell_vspan(n,w) end
 	
-	# create a property shower/editor : veritcal liste of label/entry representing the ruby Hash content
-	# Option: use :edit => true for chow value in text entrey, and a validate button
+	# deprecated
 	def propertys(title,hash,options={:edit=>false, :scroll=>[0,0]},&b)
 	 properties(title,hash,options,&b)
 	end
 	
-	# create a property shower/editor : veritcal liste of label/entry representing the ruby Hash content
-	# Option: use :edit => true for chow value in text entrey, and a validate button
+	# create a property shower/editor : vertical liste of label/entry representing the ruby Hash content
+	# Edition: Option: use :edit => true for show value in text entry, and a validate button, 
+	# on button action, yield of bloc parameter is done with modified Hash as argument
 	# widget define set_data()methods for changing current value
 	def properties(title,hash,options={:edit=>false, :scroll=>[0,0]})
 	  if ! defined?(@prop_index)
@@ -481,7 +496,7 @@ module Ruiby_dsl
 	  prop_current=(@prop_hash[@prop_index]={})
 	  value={}
 	  a=stacki {
-		framei(" #{title} ") {
+		framei(title.to_s) {
 			 stack {
 				if options[:scroll] &&  options[:scroll][1]>0
 				 vbox_scrolled(options[:scroll][0],options[:scroll][1]) {
