@@ -1,3 +1,5 @@
+0.22.4
+    Rakefile.rb : best changelog managment
     samples/dsl.rb : creation
     Rakefile.rb : mask markers files
     samples/test.rb : test get_config and recursive table
