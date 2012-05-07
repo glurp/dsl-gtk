@@ -1,3 +1,4 @@
+    samples/dsl.rb : creation
     Rakefile.rb : mask markers files
     samples/test.rb : test get_config and recursive table
 0.22.0 : 2012-05-04 20:57:11 +0200
