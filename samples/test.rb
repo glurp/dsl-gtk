@@ -143,6 +143,12 @@ end
 				properties("props editable",tt,{edit: true}) { |a| log(a.inspect);log(tt.inspect) }
 				properties("props show",tt)
 		    }
+			flow {
+				fn=File.dirname(__FILE__)+"/media/face_crying.png"
+				w=label( "#"+fn ) 
+				properties("pixbuf",get_config(w.pixbuf))  
+				properties("widget",get_config(w),{:scroll => [300,100]})			
+			}
 			calendar()
 		when 1
 			h={};70.times { |i| h[i]= "aaa#{i+100}" }
