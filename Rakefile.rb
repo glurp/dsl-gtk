@@ -9,7 +9,7 @@
 #################################################################
 #  Requirments :
 #		auto-commit only .rb files
-#		on application for test : samples/test.rb
+#		one application for test : samples/test.rb
 #		tested only on windows !
 #		version : X.Y.Z X: 
 #           X   : to be hand-modified 
@@ -17,8 +17,8 @@
 #           Z   : increment on each (one or more) file commit(s)
 #
 #  to be better:
-#     it create a ._ file (empty)  for each ruby file. Should 
-#     be done in a cached directory....
+#     it create a ._ file (empty)  for each ruby file. 
+#     is be done in a cached directory : marker
 #
 #     Perhaps should use git status output
 #################################################################
@@ -34,6 +34,13 @@ def push_changelog(line)
   b.unshift(line)
   File.open('CHANGELOG.txt','w') {|f| f.write(b[0..500].join("\n")) }
 end
+def changelog_push_currrent_versions(unshift)
+  version=File.read('VERSION').strip
+  b=File.read('CHANGELOG.txt').split(/\r?\n/) 
+  unshift ? b.unshift(version)  :  b.shift
+  File.open('CHANGELOG.txt','w') {|f| f.write(b.join("\n")) }
+end
+
 def change_version()
   a=File.read('VERSION').strip.split('.')[0..2]
   yield(a)
@@ -77,7 +84,7 @@ end
 desc "job before commit"
 task :pre_commit do
 puts RUBY_PLATFORM
-	#sh "cls" if RUBY_PLATFORM =~ /(win32)|(mingw)/i 
+	sh "cls" if RUBY_PLATFORM =~ /(win32)|(mingw)/i 
 	puts <<EEND
 
 
@@ -86,7 +93,7 @@ puts RUBY_PLATFORM
 --------------------------------------------------------------------
 EEND
 	
-	#sh "giti"
+	sh "giti"
 	$changed=false
 end
 
@@ -94,10 +101,12 @@ desc "job after local commit done: push to git repo"
 task :post_commit do
   if $changed
 	  $version=change_version { |a| a[-1]=(a.last.to_i+1) }  
+	  changelog_push_currrent_versions true
 	  sh "git commit VERSION -m update"
 	  sh "git commit CHANGELOG.txt -m update"
 	  sh "git push"
 	  puts "\n\nNew version is #{$version}\n"
+	  changelog_push_currrent_versions false
   else
 	puts "no change!"
   end
