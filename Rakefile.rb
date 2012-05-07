@@ -46,13 +46,23 @@ end
 ######################## Comment each file modified ######################
 SRC = FileList['**/*.rb']
 
-rule '._' => '.rb' do |src|
+COM=SRC.map do |src| 
+  base=src.split('.').tap {|o| o.pop}.join('.')
+  mfile= "marker/#{base}._"
+  #puts "file #{mfile} =>  #{src} ; echo #{mfile} " 
+  file mfile     =>    src  ; mfile
+end
+
+desc "general dependency"
+file "commit._" =>  COM
+
+
+rule /^marker\/.*\._$/ => [proc {|arg| arg.sub(%r{^marker\/(.*)\._$}, '\1.rb')}] do |src|
   puts "\n\ncomment for #{src.source} : "
   comment=$stdin.gets
-  if comment && comment.size>0
+  if comment && comment.chomp.size>0
 	  comment.chomp!
-	  puts "Abort!" 	if comment=~/^a(b(o(r(t)?)?)?)?$/
-	  exit! 			if comment=~/^a(b(o(r(t)?)?)?)?$/
+	  (puts "Abort!";exit!) 	if comment=~/^a(b(o(r(t)?)?)?)?$/
 	  unless File.exists?(src.name)
 		sh "git add #{src.source}"
 	  end
@@ -63,18 +73,11 @@ rule '._' => '.rb' do |src|
   touch src.name
 end
 
-COM=SRC.map do |src| 
-  base=src.split('.').tap {|o| o.pop}.join('.')
-  file "#{base}._" =>  src ; "#{base}._" 
-end
-
-desc "general dependency"
-file "commit._" =>  COM
 
 desc "job before commit"
 task :pre_commit do
 puts RUBY_PLATFORM
-	sh "cls" if RUBY_PLATFORM =~ /(win32)|(mingw)/i 
+	#sh "cls" if RUBY_PLATFORM =~ /(win32)|(mingw)/i 
 	puts <<EEND
 
 
@@ -83,7 +86,7 @@ puts RUBY_PLATFORM
 --------------------------------------------------------------------
 EEND
 	
-	sh "giti"
+	#sh "giti"
 	$changed=false
 end
 
@@ -137,13 +140,12 @@ task :test do
  nname="#{NAME}Test/test.rb"
  content=File.read("#{NAME}/samples/test.rb").gsub(/^\s*require_relative/,"require").gsub('../lib/','')
  File.open(nname,"w") { |f| f.write(content) }
- p FileList["#{NAME}/*.gem"]
  sh "gem install #{FileList["#{NAME}/#{NAME}*.gem"][-1]}"
  ruby  nname
  cd NAME
  puts "\n\nOk for diffusion ?"
  rep=$stdin.gets
- raise("aborted!") unless rep && rep !~ /^y|o|d/
+ raise("aborted!") unless rep && rep =~ /^y|o|d/
 end
 
 
