@@ -1,5 +1,7 @@
-0.22.4
-    Rakefile.rb : best changelog managment
+0.22.5
+    samples/test.rb : add get_config test
+    lib/ruiby_gtk/ruiby_dsl.rb : correction get_config with Gtk::Oject.poperties()
+    Rakefile.rb : best changelog management
     samples/dsl.rb : creation
     Rakefile.rb : mask markers files
     samples/test.rb : test get_config and recursive table
