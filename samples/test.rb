@@ -143,7 +143,7 @@ end
 				properties("props show",tt)
 		    }
 			flow {
-				fn=Ruiby::DIR+"/samples/media/face_crying.png"
+				fn=File.join(Ruiby::DIR,"../samples/media/face_smile_big.png")
 				w=label( "#"+fn ) 
 				properties("pixbuf",get_config(w.pixbuf))  
 				properties("widget",get_config(w),{:scroll => [300,100]})			
