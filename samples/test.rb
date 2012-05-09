@@ -31,7 +31,6 @@ def component()
 	   ))
     sloti(label( <<-EEND ,:font=>"Arial 12"))
      This window is test & demo of Ruiby capacity,
-	   ~ 180 Lines of code,
      Ruiby version is #{Ruiby::VERSION}, Gtk version is #{Gtk::VERSION.join(".")}
 	EEND
     separator
@@ -134,7 +133,7 @@ end
 			10.times { |i| @list.add_item("Hello #{i}") }
 			@grid.set_data((1..30).map { |n| ["e#{n}",n,1.0*n]})
 	end
-	def test_properties(no)
+	def test_properties(no)  
 		case no 
 	     when 0
 			flowi {
