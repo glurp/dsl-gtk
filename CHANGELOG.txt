@@ -1,4 +1,6 @@
-0.23.1
+0.24.1
+    samples/test.rb : *.png
+0.24.0 : 2012-05-09 15:39:25 +0200
     samples/test.rb : png in Ruiby::DIR
 0.23.0 : 2012-05-09 15:30:12 +0200
     samples/test.rb : add get_config test
