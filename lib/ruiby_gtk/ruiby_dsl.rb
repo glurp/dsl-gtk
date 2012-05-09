@@ -168,11 +168,9 @@ module Ruiby_dsl
 
 	def get_current_container() @lcur.last end
 	
-	EXL_REGEXP=/#{(Gtk::Widget.methods+%w{_ destroy clear realize map hide action unparent}).join("|")}/
 	def get_config(w)
-		return({"nil"=>""}) unless w		
-		w.methods.reject{|e| e[EXL_REGEXP]}.inject({"class"=>w.class.to_s}) { |h,meth| 
-			next(h) if w.method(meth).arity!=0
+		return({"nil"=>""}) unless w && w.class.respond_to?("properties")
+		w.class.properties().inject({"class"=>w.class.to_s}) { |h,meth| 
 			data=(w.send(meth) rescue nil)
 			h[meth]=data.inspect.gsub(/^#/,'')[0..32]  if data 
 			h
