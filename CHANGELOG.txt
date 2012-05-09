@@ -1,4 +1,6 @@
-0.22.5
+0.23.1
+    samples/test.rb : png in Ruiby::DIR
+0.23.0 : 2012-05-09 15:30:12 +0200
     samples/test.rb : add get_config test
     lib/ruiby_gtk/ruiby_dsl.rb : correction get_config with Gtk::Oject.poperties()
     Rakefile.rb : best changelog management
