@@ -289,6 +289,8 @@ module Ruiby_dsl
 	end
 
 	# to state button, with text for each state and a initiale value
+	# value can be read by w.active?
+	# no (yet) collback on state change ...
 	def toggle_button(text1,text2=nil,value=false,option={})
 		text2 = "- "+text1 unless text2
 		b=ToggleButton.new(text1);
@@ -373,29 +375,35 @@ module Ruiby_dsl
 	end
 	# create a slider
 	# option must define :min :max :by for spin button
-	def islider(value,option={})
+	# if bloc is given, it with be call on each change, with new value as parameter
+	def islider(value,option={},&b)
 		w=HScale.new(option[:min].to_i,option[:max].to_i,option[:by])
 			.set_value(value ? value.to_i : 0)
 		attribs(w,option)		
+		w.signal_connect(:value_changed) { || b.call(w.value) } if block_given?
 		w
 	end
+	
 	# create a button wich will show a dialog for color choice
-	def color_choice(color=0xff000000)
+	# if bloc is given, it with be call on each change, with new color value as parameter
+	def color_choice(text=nil,options={},&cb)
 		b,d=nil,nil
-		hb=flow(false) { b = slot(button("Color?...")) ; d=slot(DrawingArea.new) }					
-		#b.modify_bg(Gtk::STATE_NORMAL,color)
+		hb=flow(false) { b = slot(button(text.to_s||"Color?...")) ; d=slot(DrawingArea.new) }					
 		b.signal_connect("clicked") {
 		  c=ask_color
 		  if c
 			d.modify_bg(Gtk::STATE_NORMAL,c)
 			b.modify_bg(Gtk::STATE_NORMAL,c)
+			cb.call(c) if block_given?
 		  end
 		}
+		attribs(hb,options)		
 		hb
 	end
 	# create a drawing area, for pixel draw
 	# option can define closure :mouse_down :mouse_up :mouse_move
 	# for interactive actions
+	# see samples/draw.rb for a little vector editor...
 	def canvas(width,height,option={})
 		autoslot()
 		w=DrawingArea.new()
@@ -411,13 +419,16 @@ module Ruiby_dsl
 	        	cr.paint
 				option[:expose].call(w1,cr) if option[:expose]
 			}
-		}  
+		}
 		@do=nil
 		w.signal_connect('button_press_event')   { |wi,e| @do = option[:mouse_down].call(wi,e)                ; force_update(wi) }  if option[:mouse_down]
 		w.signal_connect('button_release_event') { |wi,e| option[:mouse_up].call(wi,e,@do)   if @do ; @do=nil ; force_update(wi) if @do }  if option[:mouse_up]
 		w.signal_connect('motion_notify_event')  { |wi,e| @do = option[:mouse_move].call(wi,e,@do) if @do     ; force_update(wi) if @do }  if option[:mouse_move]
 		w.signal_connect('key_press_event')  { |wi,e| option[:key_press].call(wi,e) ; force_update(wi) }  if option[:key_press]
-		attribs(w,option)				
+		attribs(w,option)	
+		def	w.redraw() 
+			self.queue_draw_area(0,0,1000,1000)
+		end
 		w
 	end
 	# update a canvas
@@ -748,7 +759,7 @@ module Ruiby_dsl
 		after(1) { c.signal_connect("month-changed") { |w,e| options[:changed].call(w) } }if options[:changed]
 		calendar_set_time(c,time)
 		attribs(c,options)
-		c
+	
 	end
 	
 	# change the current selection of a calendar, by Time object
