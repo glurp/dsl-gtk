@@ -1,28 +1,23 @@
-0.24.1
-    samples/test.rb : *.png
-0.24.0 : 2012-05-09 15:39:25 +0200
-    samples/test.rb : png in Ruiby::DIR
-0.23.0 : 2012-05-09 15:30:12 +0200
+0.25.1
+    samples/draw.rb : drawing editor and vectored widget, in building
+    lib/ruiby_gtk/ruiby_dsl.rb : callback on slider, color chooser
+0.25.0 : 2012-05-09 15:48:39 +0200
     samples/test.rb : add get_config test
-    lib/ruiby_gtk/ruiby_dsl.rb : correction get_config with Gtk::Oject.poperties()
+    lib/ruiby_gtk/ruiby_dsl.rb : correction get_config() with w.class.properties()
     Rakefile.rb : best changelog management
     samples/dsl.rb : creation
     Rakefile.rb : mask markers files
     samples/test.rb : test get_config and recursive table
 0.22.0 : 2012-05-04 20:57:11 +0200
-0.21.0 : 2012-05-04 20:56:02 +0200
     samples/images.rb : properties of images
     lib/ruiby_gtk/windows.rb : recursive table
     lib/ruiby_gtk/ruiby_dsl.rb : recursive table, get_config() creation
     lib/ruiby.rb : Comments on Ruiby.app
     lib/ruiby.rb : Comment on Ruiby.app
-0.20.0 : 2012-05-03 21:33:35 +0200
     samples/images.rb : simpler
     samples/images.rb : creation demo Ruiby.app
     Rakefile.rb : 
     lib/ruiby.rb : add Ruiby.app for micro-application
-0.19.0 : 2012-04-11 20:41:50 +0200
-    Rakefile.rb : x
 0.18.0 : 2012-04-11 20:40:07 +0200
     Rakefile.rb : test
     Rakefile.rb : test gem
