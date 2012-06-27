@@ -1,5 +1,27 @@
 require_relative '../lib/ruiby'
 
+############################### Complete ruiby dsl for vector widget
+module  Ruiby_dsl
+	def vector(w,h,options={})	
+		win=nil
+		stack {
+			win=Vector::VCanvas.new(self,w,h,options)
+			slot(win.widget)
+		}
+		win
+	end	
+	def editable_vector(w,h,options={})	
+		win=nil
+		stack {
+			win=Vector::VCanvas_editable.new(self,w,h,options)
+			slot(win.widget)
+		}
+		win
+	end
+end
+
+############################## define basic vector widget (not editable)
+#                              end each vector type
 module Vector
 	class VCanvas
 		def initialize(win,w,h,options)
@@ -44,23 +66,25 @@ module Vector
 	class VElem
 		def initialize() @lpoints=[];@style={} end
 		def lpoints() @lpoints end
+		def lpoints=(l) @lpoints=l end
 		def set_style(s) @style=s.clone	end
 		def draw(w,ctx)
 			return if @lpoints.size==0
 			define_style(ctx)
 			render(ctx)
 		end
+		def render() raise('abstract') end
 		def define_style(ctx)
 			ctx.set_line_width(@style[:stroke_width]) if @style[:stroke_width]
 			ctx.set_source_rgba(@style[:stroke_color][0], @style[:stroke_color][1], @style[:stroke_color][2], 1) if @style[:stroke_color]
 		end
-		def render() raise('abstract') end
 		def clone_empty() self.class.new() end
 		def rotate(x0,y0,r) 
 			a=Math::PI*(r/180.0)
 			@lpoints.map! { |(x,y)| [x0+(x-x0)*Math.cos(a)+(y-y0)*Math.sin(a),y0-(x-x0)*Math.sin(a)+(y-y0)*Math.cos(a)] }
 		end
-		def scale(x0,y0,rx,ry) 
+		def scale(x0,y0,rx,ry=nil) 
+			ry=rx unless ry
 			@lpoints.map! { |(x,y)| [x0+(x-x0)*rx,y0+(y-y0)*ry] }
 		end
 	end
@@ -75,33 +99,21 @@ module Vector
 		def render(ctx)
 			ctx.move_to(*@lpoints[0])
 			@lpoints[1..-1].each {|px|  ctx.line_to(*px) } 
-			ctx.fill
+			if @lpoints.size>2
+				ctx.fill
+			else
+				ctx.stroke
+			end
 		end
 	end
 	class Oval		< VElem	; end
 	class Image		< VElem ; end
 end
 
-module  Ruiby_dsl
-	def vector(w,h,options={})	
-		win=nil
-		stack {
-			win=Vector::VCanvas.new(self,w,h,options)
-			slot(win.widget)
-		}
-		win
-	end	
-	def edit_vector(w,h,options={})	
-		win=nil
-		stack {
-			win=Vector::VCanvas_editable.new(self,w,h,options)
-			slot(win.widget)
-		}
-		win
-	end
-end
 
-############################# Vector canvas editable ##########################
+#####################################################################
+#                        Vector canvas editable                     #
+#####################################################################
 module Vector
 	class VCanvas_editable < VCanvas
 		def initialize(win,w,h,options)
@@ -150,12 +162,50 @@ module Vector
 			@current.set_style(@cstyle)
 			@mode=:cpoly
 		end
+		def mode_create_rect()
+			complete_edition()
+			@current=Polygone.new
+			@lpoints=[]
+			@current.set_style(@cstyle)
+			@mode=:crect
+		end
 		def mode_modify()
 			complete_edition()
 		end
 		def cpoly_mdown(e) @current.lpoints << [e.x,e.y]    end
-		def cpoly_mmove(e) @current.lpoints.last[0]=e.x;@current.lpoints.last[1]=e.y ; redraw(e) end
+		def cpoly_mmove(e) 
+			if @current.lpoints.size==1
+			 @current.lpoints << [e.x,e.y]
+			else
+			 @current.lpoints.last[0]=e.x;@current.lpoints.last[1]=e.y 
+			end
+			redraw(e) 
+		end
 		def cpoly_mup(e)   @current.lpoints.last[0]=e.x;@current.lpoints.last[1]=e.y ; redraw(e) end
+
+		def crect_mdown(e) 
+			if @lpoints.size==0
+				@lpoints << [e.x,e.y]  
+			end
+		end
+		def crect_mmove(e) 
+			if @lpoints.size==1
+				@lpoints << [e.x,e.y]  
+			else
+				@lpoints.last[0]=e.x;@lpoints.last[1]=e.y 
+			end
+			@current.lpoints=[
+					@lpoints[0],
+					[@lpoints[1][0],@lpoints[0][1]],
+					@lpoints[1],
+					[@lpoints[0][0],@lpoints[1][1]]
+			]
+			redraw(e) 
+		end
+		def crect_mup(e) 
+			mode_create_rect() 
+			redraw(e) 
+		end
 		
 		
 	end
@@ -181,13 +231,15 @@ class Application < Ruiby_gtk
 			flow do
 				stack { stacki do
 				  button("end"){ @win.end_create_current()}
+				  separator
 				  button("pl") { @win.mode_create_polyline() ; @labl.text="Create Polyline"}
 				  button("po") { @win.mode_create_polygone() ; @labl.text="Create Polygone"}
+				  button("rec") { @win.mode_create_rect()    ; @labl.text="Create rectangle"}
 				  button("ov") { @win.mode_create_oval() 	 ; @labl.text="Create oval"}
 				  button("im") { @win.mode_create_image() 	 ; @labl.text="Create image"}
 				end}
 				
-				@win=edit_vector(700,700)
+				@win=editable_vector(700,700)
 				
 				stack {space;stacki do
 					button("cut");button("copy");button("past");button("c.style")
