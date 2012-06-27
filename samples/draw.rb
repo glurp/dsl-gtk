@@ -238,7 +238,7 @@ class Application < Ruiby_gtk
 				  button("ov") { @win.mode_create_oval() 	 ; @labl.text="Create oval"}
 				  button("im") { @win.mode_create_image() 	 ; @labl.text="Create image"}
 				end}
-				
+				 
 				@win=editable_vector(700,700)
 				
 				stack {space;stacki do
