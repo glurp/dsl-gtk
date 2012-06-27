@@ -21,7 +21,7 @@ Code: http://github.com/raubarede/Ruiby
 
 Gem : https://rubygems.org/gems/Ruiby
 
-List: ruiby@librelist.com
+List: ruiby@librelist.com http://librelist.com/browser/ruiby/
 
 Status
 ======
