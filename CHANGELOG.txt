@@ -1,3 +1,5 @@
+0.27.2
+    samples/draw.rb : create rectangle type vector, animation for testing rotate and scale
 0.27.0 : 2012-06-28 00:33:15 +0200
 0.26.0 : 2012-06-28 00:31:56 +0200
     samples/draw.rb : drawing editor and vectored widget, in building
