@@ -194,7 +194,7 @@ module Vector
 		def render(ctx)
 			return if @lpoints.size<4
 			x= (@lpoints[0][0]+@lpoints[2][0])/2.0
-			y= (@lpoints[0][1]+@lpoints[1][1])/2.0
+			y= (@lpoints[0][1]+@lpoints[2][1])/2.0
 			r= ((@lpoints[2][0]-@lpoints[0][0])/2.0).abs
 			ctx.arc(x,y, r, 0, Math::PI*2)
 		end
@@ -401,7 +401,6 @@ module Vector
 		def selection_vector(lv)
 			@layers[0]=[]
 			@lasso=nil
-			p lv
 			lv.each { |v| v.lpoints.each { |(x,y)| make_mark(x,y) } }
 		end
 		
@@ -477,25 +476,27 @@ class Application < Ruiby_gtk
 			
 			####################### Bottom zone : styles interaction
 			flow do
-			  @labl=label("left...")
-			  space  
+			  @labl=label("Left label...")
 			  flow {
 				color_choice("bg") { |c| @bgcolor=c ; define_style}
 				color_choice("fg") { |c| @fgcolor=c ; define_style}
+				label("Width :")
 				islider(1,{:min=>1,:max=>30,:by=>1}) { |v| 
 					@stroke_width=v.to_i
 					define_style
 				}
+				label("Rotate :")
 				islider(0,{:min=>0,:max=>180,:by=>1}) { |v| 
 					@win.rotate(400,400,v.to_i)
 				}
+				label("Scale :")
 				islider(0,{:min=>-10,:max=>10,:by=>1}) { |v| 
 					@win.scale(400,400,(v.to_i+10)/5.0,(v.to_i+10)/5.0)
 				}
+				label("Animation :")
 				@t=toggle_button("#play","#stop",false)
 			  }
-			  space
-			  @labr=label("rigtht...")
+			  @labr=label("rigtht label...")
 			end
 			button("reload") { load(__FILE__,0) rescue p $! }
 		end
