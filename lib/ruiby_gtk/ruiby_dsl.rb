@@ -185,7 +185,11 @@ module Ruiby_dsl
 	
 	# get a Image widget from a file or from a Gtk::Stock
 	def get_image_from(name)
-		return Image.new(name) if name.index('.') && File.exists?(name)
+		if name.index('.') 
+			return Image.new(name) if File.exists?(name)
+			return _sub_image(name) if name.index("[")
+			alert("unknown icone #{name}")
+		end
 		iname=get_icon(name)
 		if iname
 			Image.new(iname,IconSize::BUTTON)
@@ -193,7 +197,20 @@ module Ruiby_dsl
 			nil
 		end
 	end
-
+	def _sub_image(name)
+		filename,px,py,bidon,dim=name.split(/\[|,|(\]x)/)
+		if filename && px && py && bidon && dim
+			dim=dim.to_i
+			@cach_pix={} unless defined?(@cach_pix)
+			@cach_pix[name]=Gdk::Pixbuf.new(filename) unless @cach_pix[name]
+			x0= dim*px.to_i
+			y0= dim*py.to_i
+			epix= Gdk::Pixbuf.new(@cach_pix[name],x0,y0,dim,dim)
+			Image.new(epix)
+		else
+			alert("bad syntax in #{name} : dddd.png[1,0]x32")
+		end
+	end
 	############### Commands
 
 	# general property automaticly applied for (almost) all widget (eval last argument a creation)
