@@ -22,8 +22,8 @@ module Ruiby_default_dialog
 			Dialog::DESTROY_WITH_PARENT,
 			[ Stock::OK, Dialog::RESPONSE_NONE ])
 
-		label=label(txt)
-		entry=entry(value.to_s)
+		label=Label.new(txt)
+		entry=Entry.new().tap {|e| e.set_text(value) }
 		dialog.vbox.add(label)
 		dialog.vbox.add(entry)
 
@@ -36,7 +36,7 @@ module Ruiby_default_dialog
 	end
 
 
-	# show a modal dialogu, asking yes/no question, retuurn boolean response
+	# show a modal dialog, asking yes/no question, return boolean response
 	def ask(*txt) 
 		text=txt.join(" ")
         md = MessageDialog.new(self,
