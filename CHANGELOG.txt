@@ -1,4 +1,3 @@
-0.27.3
     samples/draw.rb : creation text,image, selection part 1
     lib/ruiby_gtk/ruiby_dsl.rb : can define a image from a fraction of e raster file
     lib/ruiby_gtk/ruiby_default_dialog.rb : prompt revisited

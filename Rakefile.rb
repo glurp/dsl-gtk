@@ -34,10 +34,13 @@ def push_changelog(line)
   b.unshift(line)
   File.open('CHANGELOG.txt','w') {|f| f.write(b[0..500].join("\n")) }
 end
-def changelog_push_currrent_versions(unshift)
+def changelog_push_currrent_versions()
   version=File.read('VERSION').strip
   b=File.read('CHANGELOG.txt').split(/\r?\n/) 
-  unshift ? b.unshift(version)  :  b.shift
+  b.unshift(version)  
+  File.open('CHANGELOG.txt','w') {|f| f.write(b.join("\n")) }
+  yield rescue p $!.to_s
+  b.shift  
   File.open('CHANGELOG.txt','w') {|f| f.write(b.join("\n")) }
 end
 
@@ -101,12 +104,12 @@ desc "job after local commit done: push to git repo"
 task :post_commit do
   if $changed
 	  $version=change_version { |a| a[-1]=(a.last.to_i+1) }  
-	  changelog_push_currrent_versions true
-	  sh "git commit VERSION -m update"
-	  sh "git commit CHANGELOG.txt -m update"
-	  sh "git push"
-	  puts "\n\nNew version is #{$version}\n"
-	  changelog_push_currrent_versions false
+      sh "git commit VERSION -m update"
+	  changelog_push_currrent_versions {
+		  sh "git commit CHANGELOG.txt -m update"
+		  sh "git push"
+		  puts "\n\nNew version is #{$version}\n"
+	  } 
   else
 	puts "no change!"
   end
@@ -121,7 +124,7 @@ task :gem => :commit do
 
 
 --------------------------------------------------------------------
-       make gem, test it, and push gem #{NAME} to gemcutter
+       make gem, test it localy, and push gem #{NAME} to gemcutter
 --------------------------------------------------------------------
 EEND
 	$version=change_version { |a| 

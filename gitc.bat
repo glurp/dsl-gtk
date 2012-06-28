@@ -3,7 +3,7 @@ IF DEFINED %1=="" (
 	call giti
 	ruby  -e "a=File.read('VERSION').split('.') ; a[-1]=(a.last.to_i+1).to_s; puts r=a.join('.'); File.open('VERSION','w') {|f| f.write(r)}"
 	echo %1 %2 %3 %4 %5 %6 %7 %8 %9 >> CHANGELOG.txt
-	git commit -a -m "*  %1 %2 %3 %4 %5 %6 %7 %8 %9"
+	git commit -a -m "%1 %2 %3 %4 %5 %6 %7 %8 %9"
 	git push
 	echo
 	echo call gitc.bat without args for make/post rubygem
