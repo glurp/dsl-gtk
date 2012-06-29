@@ -199,16 +199,18 @@ module Ruiby_dsl
 	end
 	def _sub_image(name)
 		filename,px,py,bidon,dim=name.split(/\[|,|(\]x)/)
-		if filename && px && py && bidon && dim
+		if filename && px && py && bidon && dim && File.exist?(filename)
 			dim=dim.to_i
 			@cach_pix={} unless defined?(@cach_pix)
-			@cach_pix[name]=Gdk::Pixbuf.new(filename) unless @cach_pix[name]
+			p filename unless @cach_pix[filename]
+			@cach_pix[filename]=Gdk::Pixbuf.new(filename) unless @cach_pix[filename]
 			x0= dim*px.to_i
 			y0= dim*py.to_i
-			epix= Gdk::Pixbuf.new(@cach_pix[name],x0,y0,dim,dim)
+			#p [x0,y0,"/",@cach_pix[filename].width,@cach_pix[filename].height]
+			epix= Gdk::Pixbuf.new(@cach_pix[filename],x0,y0,dim,dim)
 			Image.new(epix)
 		else
-			alert("bad syntax in #{name} : dddd.png[1,0]x32")
+			alert("bad syntax in #{name} : \n   should be dddd.png[nocol,norow]x32")
 		end
 	end
 	############### Commands
@@ -258,7 +260,7 @@ module Ruiby_dsl
 		else
 			b=Button.new(text);
 		end
-		b.signal_connect("clicked",&blk) if blk
+		b.signal_connect("clicked") { |e| blk.call(e) } if blk
 		attribs(b,option)
 	end 
 	# horizontal tool-bar of icon button and/or separator
@@ -374,19 +376,28 @@ module Ruiby_dsl
 	end
 	# create a integer text entry for keyboed input
 	# option must define :min :max :by for spin button
-	def ientry(value,option={})
+	def ientry(value,option={},&blk)
 		w=SpinButton.new(option[:min].to_i,option[:max].to_i,option[:by])
-			.set_numeric(true)
-			.set_value(value ? value.to_i : 0) 
+		w.set_numeric(true)
+		w.set_value(value ? value.to_i : 0)
+		
+		w.signal_connect("value-changed") do |en|
+			after(1) { blk.call(w.value) }
+			false
+		end if block_given?
 		attribs(w,option)		
 		w
 	end
 	# create a integer text entry for keyboed input
 	# option must define :min :max :by for spin button
-	def fentry(value,option={})
+	def fentry(value,option={},&blk)
 		w=SpinButton.new(option[:min].to_f,option[:max].to_f,option[:by].to_f)
-			.set_numeric(true)
-			.set_value(value ? value.to_f : 0.0)
+		w.set_numeric(true)
+		w.set_value(value ? value.to_f : 0.0)
+		w.signal_connect("value-changed") do |en|
+			after(1) { blk.call(w.value) }
+			false
+		end if block_given?
 		attribs(w,option)		
 		w
 	end
@@ -434,14 +445,23 @@ module Ruiby_dsl
 	        	cr.set_line_width(2)
 	        	cr.set_source_rgba(1,1,1,1)
 	        	cr.paint
-				option[:expose].call(w1,cr) if option[:expose]
+				if option[:expose]
+					begin
+						option[:expose].call(w1,cr) 
+					rescue Exception => e
+					 bloc=option[:expose]
+					 option.delete(:expose)
+					 after(1) { error(e) }
+					 after(3000) {  puts "reset expose bloc" ;option[:expose] = bloc }
+					end  
+				end
 			}
 		}
 		@do=nil
-		w.signal_connect('button_press_event')   { |wi,e| @do = option[:mouse_down].call(wi,e)                ; force_update(wi) }  if option[:mouse_down]
-		w.signal_connect('button_release_event') { |wi,e| option[:mouse_up].call(wi,e,@do)   if @do ; @do=nil ; force_update(wi) if @do }  if option[:mouse_up]
-		w.signal_connect('motion_notify_event')  { |wi,e| @do = option[:mouse_move].call(wi,e,@do) if @do     ; force_update(wi) if @do }  if option[:mouse_move]
-		w.signal_connect('key_press_event')  { |wi,e| option[:key_press].call(wi,e) ; force_update(wi) }  if option[:key_press]
+		w.signal_connect('button_press_event')   { |wi,e| @do = option[:mouse_down].call(wi,e)  rescue error($!)              ; force_update(wi) }  if option[:mouse_down]
+		w.signal_connect('button_release_event') { |wi,e| (option[:mouse_up].call(wi,e,@do)  rescue error($!)) if @do ; @do=nil ; force_update(wi) if @do }  if option[:mouse_up]
+		w.signal_connect('motion_notify_event')  { |wi,e| (@do = option[:mouse_move].call(wi,e,@do) rescue error($!)) if @do     ; force_update(wi) if @do }  if option[:mouse_move]
+		w.signal_connect('key_press_event')  { |wi,e| (option[:key_press].call(wi,e) rescue error($!)) ; force_update(wi) }  if option[:key_press]
 		attribs(w,option)	
 		def	w.redraw() 
 			self.queue_draw_area(0,0,1000,1000)
