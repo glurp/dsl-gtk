@@ -749,7 +749,7 @@ class Application < Ruiby_gtk
 		fclear()
 		fn=ask_file_to_read(".","*.rdr")
 		if fn
-			(@win.load_from_rdr(fn);@filename=fn)  rescue errors($!)
+			(@win.load_from_rdr(fn);@filename=fn)  rescue error($!)
 		end
 	end
 	def fsave() 
