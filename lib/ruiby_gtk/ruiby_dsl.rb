@@ -1,4 +1,5 @@
 =begin
+=begin
 general definition of DSL. used by Gui_gtk (if ruiby used app by inherit)
 and by Ruiby module (if ruiby used by trait)
 
@@ -202,7 +203,6 @@ module Ruiby_dsl
 		if filename && px && py && bidon && dim && File.exist?(filename)
 			dim=dim.to_i
 			@cach_pix={} unless defined?(@cach_pix)
-			p filename unless @cach_pix[filename]
 			@cach_pix[filename]=Gdk::Pixbuf.new(filename) unless @cach_pix[filename]
 			x0= dim*px.to_i
 			y0= dim*py.to_i
