@@ -1,3 +1,6 @@
+0.27.4
+    samples/draw.rb : slection, save (marshal), export svg
+    lib/ruiby_gtk/ruiby_dsl.rb : callback on islider, ientry ...
     samples/draw.rb : creation text,image, selection part 1
     lib/ruiby_gtk/ruiby_dsl.rb : can define a image from a fraction of e raster file
     lib/ruiby_gtk/ruiby_default_dialog.rb : prompt revisited
