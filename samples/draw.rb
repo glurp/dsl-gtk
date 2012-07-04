@@ -35,6 +35,7 @@ module Vector
 			end
 		end 
 		def values() [@x0,@y0,@x1,@y1] end
+		def pvalues() [[@x0,@y0],[@x1,@y0],[@x1,@y1],[@x0,@y1]] end
 		def add_lpoints(l) l.each { |(x,y)| add_point(x,y) } ; self end
 		def <<(a,b=nil,c=nil,d=nil)
 			if b==nil
@@ -247,6 +248,54 @@ EEND
 			end
 			ctx.set_source_rgba(@style[:stroke_color][0], @style[:stroke_color][1], @style[:stroke_color][2], 1) if @style[:stroke_color]
 			ctx.stroke
+		end
+	end
+	class Group < VElem
+		def initialize(l) @lvector=l.dup end
+		def set_lvector(l)  @lvector=l.dup end
+		def get_lvector()   @lvector.dup end
+		def bbox()
+			@lvector.inject(Bbox.new){ |bb,p| p.append_to_bbox(bb) }
+		end
+		def append_to_bbox(box)
+			@lvector.inject(bbox) { |bb,p| p.append_to_bbox(bb) };
+		end
+		def vclone()
+			Group.new(@lvector.map { |v| v.vclone })
+		end
+		def to_svg(out)
+			out << "  <g>\n"
+			@lvector.each{|v| v.to_svg(out)}
+			out << "  </g>\n"
+		end
+	
+		def lpoints() bbox().pvalues end
+		def lpoints=(l) end
+		def set_style(s) 	end
+		def get_style(s) {}	end
+		def draw(w,ctx)
+			return if @lvector.size==0
+			@lvector.each{|v| v.draw(w,ctx)} 
+		end
+		
+		def render(ctx)  end		
+		def rotate(x0,y0,r) @lvector.each{|v| v.rotate(ctx)} ; self end
+		def deplace(dx,dy) @lvector.each{|v| v.deplace(dx,dy)} ; self end
+		def scale(x0,y0,rx,ry=nil) @lvector.each{|v| v.scale(x0,y0,rx,ry)} ; self end
+		def distance(x0,y0) 
+			return(2_999_999_999) if @lvector.size==0
+			@lvector.map{|v| v.distance(x0,y0)}.sort[0] 
+		end 
+		def cover_bbox?(x0,y0,x1,y1)
+			return(false) if @lvector.size==0
+			@lvector.any?{|v| v.cover_bbox?(x0,y0,x1,y1) }
+		end
+		def into_bbox?(x0,y0,x1,y1)
+			return(false) if @lvector.size==0
+			@lvector.any?{|v| v.into_bbox?(x0,y0,x1,y1) }
+		end
+		def hoover_point?(x,y)
+			distance(x,y)<10
 		end
 	end
 	
@@ -521,6 +570,7 @@ module Vector
 		################################################################
 		#    Selection : mode, select voctor(s), interact with them
 		################################################################		
+		def has_selection?() (@select && @select[:list] && @select[:list].size>0)	end
 		def mode_selection()
 			complete_edition()
 			@current=nil
@@ -534,8 +584,11 @@ module Vector
 			@layers[0]=[]
 			@lasso=nil
 			@select[:list]= []
-			lv.each { |v| 
-				v.lpoints.each_with_index { |(x,y),i| make_mark(v,i,x,y) } 
+			lv.each { |v|
+				if v.lpoints.size>0
+					v.lpoints.each_with_index { |(x,y),i| make_mark(v,i,x,y) } 
+				else
+				end
 				@select[:list] << v
 			}
 			mode=:select
@@ -554,7 +607,7 @@ module Vector
 			r
 		end
 		def cut()
-			return unless @select[:list]
+			return unless  has_selection?()
 			@corbeill=[]
 			l=@select[:list]
 			mode_selection()
@@ -567,7 +620,7 @@ module Vector
 			redraw
 		end
 		def copy()
-			return unless @select[:list]  
+			return unless  has_selection?()
 			@corbeill=[]
 			@select[:list].each { |sel| 
 				@corbeill += @layers[1].select { |v| v==sel }
@@ -582,12 +635,60 @@ module Vector
 			redraw
 		end
 		def copystyle() 
+			return  unless has_selection?()
 			copy()
-			@cstyle=@select[:list][0].get_style() if @select[:list] && @select[:list].size>0
+			@cstyle=@select[:list][0].get_style()
 		end
 		def edit() 
 			str=to_svg("")
 			$app.edit(str)
+		end
+		def sel_top()      
+			return  unless has_selection?()
+			@select[:list].each { |v| @layers[1].delete(v) }
+			@layers[1].push(*@select[:list]) 
+			selection_vector(@select[:list])
+			redraw
+		end
+		def sel_bottom()   
+			return  unless has_selection?()
+			@select[:list].each { |v| @layers[1].delete(v) }
+			@layers[1]= @select[:list] + @layers[1] 
+			selection_vector(@select[:list].dup)
+			redraw
+		end
+		def sel_group()
+			return  unless has_selection?()
+			@select[:list].each { |v| 
+				@layers[1].delete(v) 
+			}
+			g=Group.new(@select[:list])
+			@layers[1].push(g)
+			selection_vector([g])
+			redraw
+		end
+		def sel_ungroup()  
+			return  unless has_selection?()
+			return unless @select[:list].size==1 &&  @select[:list][0].is_a?(Group)
+			v=@select[:list][0]
+			lv=v.get_lvector
+			@layers[1].delete(v) 
+			lv.reverse.each { |v| @layers[1].unshift(v)}
+			selection_vector(lv)
+			redraw
+		end
+		def sel_align(direction,sens)
+			return  unless has_selection?()
+			lv=@select[:list]
+			bx0,by0,bx1,by1=Group.new(lv).bbox.values
+			lv.each { |v| 
+				x0,y0,x1,y1=v.bbox().values				
+				v.deplace(direction==0? (sens==0 ? (bx0-x0):(bx1-x1)):0,
+						  direction==1? (sens==1 ? (by0-y0):(by1-y1)):0
+				)
+			}
+			selection_vector(lv)
+			redraw
 		end
 		
 		################################## Mouse Interaction for Selection
