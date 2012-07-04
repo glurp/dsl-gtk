@@ -260,7 +260,7 @@ module Ruiby_dsl
 		else
 			b=Button.new(text);
 		end
-		b.signal_connect("clicked") { |e| blk.call(e) } if blk
+		b.signal_connect("clicked") { |e| blk.call(e) rescue error($!) } if blk
 		attribs(b,option)
 	end 
 	# horizontal tool-bar of icon button and/or separator
