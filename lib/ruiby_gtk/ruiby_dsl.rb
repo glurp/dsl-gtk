@@ -278,7 +278,7 @@ module Ruiby_dsl
 			iname=get_icon(name)
 			w=if iname
 				Gtk::ToolButton.new(iname).tap { |but|
-				  but.signal_connect("clicked") { v.call } if v
+				  but.signal_connect("clicked") { v.call rescue error($!) } if v
 			 	  but.set_tooltip_text(tooltip) if tooltip
 			 	}
 			elsif name=~/^sep/i
@@ -368,7 +368,7 @@ module Ruiby_dsl
 		w=Entry.new().tap {|e| e.set_text(value ? value.to_s : "") }
 		after(1) do
 			w.signal_connect("key-press-event") do |en,e|
-				after(1) { blk.call(w.text) }
+				after(1) { blk.call(w.text) rescue error($!) }
 				false
 			end 
 		end if block_given?
@@ -395,7 +395,7 @@ module Ruiby_dsl
 		w.set_numeric(true)
 		w.set_value(value ? value.to_f : 0.0)
 		w.signal_connect("value-changed") do |en|
-			after(1) { blk.call(w.value) }
+			after(1) { blk.call(w.value) rescue error($!)  }
 			false
 		end if block_given?
 		attribs(w,option)		
@@ -408,7 +408,7 @@ module Ruiby_dsl
 		w=HScale.new(option[:min].to_i,option[:max].to_i,option[:by])
 			.set_value(value ? value.to_i : 0)
 		attribs(w,option)		
-		w.signal_connect(:value_changed) { || b.call(w.value) } if block_given?
+		w.signal_connect(:value_changed) { || b.call(w.value)  rescue error($!) } if block_given?
 		w
 	end
 	
@@ -647,7 +647,7 @@ module Ruiby_dsl
 		raise("menu_button(#{text}) without menu('ee') {}") unless @mmenu
 		item = MenuItem.new(text.to_s)
 		@mmenu.append(item)
-		item.signal_connect("activate") { blk.call(text) }
+		item.signal_connect("activate") { blk.call(text)  rescue error($!) }
 	end
 	
 	# create an checkbox  entry in a menu
@@ -792,8 +792,8 @@ module Ruiby_dsl
 		c = Calendar.new
 		c.display_options(Calendar::SHOW_HEADING | Calendar::SHOW_DAY_NAMES |  
 						Calendar::SHOW_WEEK_NUMBERS | Gtk::Calendar::WEEK_START_MONDAY)
-		after(1) { c.signal_connect("day-selected") { |w,e| options[:selection].call(w.day) } } if options[:selection]
-		after(1) { c.signal_connect("month-changed") { |w,e| options[:changed].call(w) } }if options[:changed]
+		after(1) { c.signal_connect("day-selected") { |w,e| options[:selection].call(w.day)  rescue error($!) } } if options[:selection]
+		after(1) { c.signal_connect("month-changed") { |w,e| options[:changed].call(w)  rescue error($!) } }if options[:changed]
 		calendar_set_time(c,time)
 		attribs(c,options)
 	
@@ -859,7 +859,7 @@ module Ruiby_dsl
 		eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
 		ret=_cbox(true,eventbox,true,&b) 
 		eventbox.realize
-		eventbox.signal_connect('button_press_event') { |w, e| self.send(methode_name,ret) }
+		eventbox.signal_connect('button_press_event') { |w, e| self.send(methode_name,ret)  rescue error($!) }
 		ret
 	end
 	
@@ -870,7 +870,7 @@ module Ruiby_dsl
 		eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
 		ret=_cbox(true,eventbox,true,&b) 
 		eventbox.realize
-		eventbox.signal_connect('button_press_event') { |w, e| aproc.call() }
+		eventbox.signal_connect('button_press_event') { |w, e| aproc.call()  rescue error($!)  }
 		ret
 	end
 	
