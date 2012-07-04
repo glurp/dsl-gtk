@@ -106,7 +106,7 @@ EEND
 			File.open(name,"wb") { |f| Marshal.dump(@layers[1],f) } 
 		end
 		def load_from_rdr(name)
-			File.open(name,"r") { |f| @layers[1]=Marshal.load(f) }	
+			File.open(name,"rb") { |f| @layers[1]=Marshal.load(f) }	
 		end
 		def bbox() 
 			@layers[1].inject(Bbox.new) {  |bb,v| v.append_to_bbox(bb) } 
@@ -847,9 +847,9 @@ class Application < Ruiby_gtk
 	def rstatus(text) @labr.text=text.to_s end
 	
 	def fopen() 
-		fclear()
 		fn=ask_file_to_read(".","*.rdr")
 		if fn
+			fclear()
 			(@win.load_from_rdr(fn);@filename=fn)  rescue error($!)
 		end
 	end
