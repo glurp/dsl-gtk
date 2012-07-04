@@ -1,4 +1,6 @@
-0.29.4
+0.30.1
+    samples/draw.rb : export to svg
+0.30.0 : 2012-07-04 19:30:10 +0200
     lib/ruiby_gtk/ruiby_dsl.rb : rescue callback error with a dialogue for all actions
     samples/draw.rb : icones for selection actions
     lib/ruiby_gtk/ruiby_dsl.rb : trap exception on callbacks(1)
