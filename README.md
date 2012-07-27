@@ -25,7 +25,7 @@ List: http://librelist.com/browser/ruiby/
 
 Status
 ======
-done :
+Done :
 
 - sketchi tools
 - tools for generate file/encoded base64 to ruby source 
@@ -45,14 +45,18 @@ Install Ruby 1.9.x ...
 
 Install GTK2 :
 
-*	linux: should be in the box... or install gtk2 (dev version)
+*	linux: should be in the box... or install gtk2 and gtksourceview (dev version) :
+
+(debian example)
+```
+> sudo apt-get install build-essential libgtk2.0-dev
+> sudo apt-get install  gtksourceview
+> sudo apt-get install  gtksourceview2.0
+```
 
 *	windows:
 	   http://downloads.sourceforge.net/project/gtk-win/   ==>> gtk2-runtime-2.24.8-2011-12-03-ash.exe
 
-Install gtksourview2 : 
-	linux: libgtksourceview2.0-dev
-	windows: is in gtk2-runtime
 
 
 2) ruby	env
@@ -62,6 +66,17 @@ Install gtksourview2 :
 > ruiby_demo            # check good installation
 > ruiby_skechi          # write and test
 ```
+
+2) correct a bug on unix*
+
+(debian example)
+```
+> cd /var/lib/gems/1.9.1/gems/Ruiby-0.30.0
+> sudo cp Ruiby.rb  ruiby.rb
+```
+
+Whe must correct the capitalization of Ruiby...
+
 
 Design
 ======
