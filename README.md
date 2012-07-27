@@ -71,7 +71,7 @@ Install GTK2 :
 
 (debian example)
 ```
-> cd /var/lib/gems/1.9.1/gems/Ruiby-0.30.0
+> cd /var/lib/gems/1.9.1/gems/Ruiby-0.XXX.0/lib
 > sudo cp Ruiby.rb  ruiby.rb
 ```
 
