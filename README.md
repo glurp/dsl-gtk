@@ -49,32 +49,25 @@ Install GTK2 :
 
 (debian example)
 ```
-> sudo apt-get install build-essential libgtk2.0-dev
-> sudo apt-get install  gtksourceview
-> sudo apt-get install  gtksourceview2.0
+> sudo apt-get install build-essential
+> sudo apt-get install libgtk2.0-dev 
+> sudo apt-get install gtksourceview2.0
 ```
 
 *	windows:
-	   http://downloads.sourceforge.net/project/gtk-win/   ==>> gtk2-runtime-2.24.8-2011-12-03-ash.exe
+> http://downloads.sourceforge.net/project/gtk-win/   
+>        ==>> gtk2-runtime-2.24.8-2011-12-03-ash.exe
 
 
-
-2) ruby	env
+2) install Ruiby
 
 ```
 > gem install Ruiby
 > ruiby_demo            # check good installation
-> ruiby_skechi          # write and test
+> ruiby_skechi          # write and test ruiby code
 ```
 
-2) correct a bug on unix*
-
-(debian example)
-```
-> cd /var/lib/gems/1.9.1/gems/Ruiby-0.XXX.0/lib
-> sudo cp ruiby.rb  Ruiby.rb
-```
-
+NOTA
 Whe must correct the capitalization of Ruiby...
 
 
