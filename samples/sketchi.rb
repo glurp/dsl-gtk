@@ -13,7 +13,7 @@ class RubyApp < Ruiby_gtk
 		if File.exists?(@filedef)
 			load(@filedef,nil)
 		else
-			load("new.rb",<-EEND)
+			load("new.rb",<<-EEND)
 			stack {
 				propertys("data",{int: 1,float: 1.0, array: [1,2,3], hash: {a:1, b:2}},{edit: true})  { |aa| alert aa }
 				button("button 1")
