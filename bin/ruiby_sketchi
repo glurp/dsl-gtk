@@ -2,6 +2,6 @@
 #####################################################
 #  run Ruiby/samples/test.rb
 #######################################################
-require 'Ruiby'
+require 'ruiby'
 Dir.chdir(File.join(Ruiby::DIR,"..","samples"))
-load 'sketchi.rb'
+load 'sketchi.rb',true

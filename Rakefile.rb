@@ -80,7 +80,7 @@ rule /^marker\/.*\._$/ => [proc {|arg| arg.sub(%r{^marker\/(.*)\._$}, '\1.rb')}]
 	  push_changelog("    #{src.source} : #{comment}")
 	  $changed=true
   end
-  touch src.name
+  touch src.name rescue nil
 end
 
 
@@ -96,7 +96,7 @@ puts RUBY_PLATFORM
 --------------------------------------------------------------------
 EEND
 	
-	sh "giti"
+	#sh "giti"
 	$changed=false
 end
 
