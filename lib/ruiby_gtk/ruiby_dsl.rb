@@ -780,6 +780,7 @@ module Ruiby_dsl
 			def text()    self.children[0].buffer.text end
 			def append(a) self.children[0].buffer.text+=a.encode("UTF-8") end
 		  end
+		  eb.children[0].buffer.text=(args[:text]||"")
 		  eb.show_all
 		  eb	
 	end	
