@@ -341,7 +341,6 @@ module Ruiby_dsl
 		b=ToggleButton.new(text1);
 		b.signal_connect("toggled") do |w,e| 
 			w.label= w.active?() ? text2.to_s : text1.to_s 
-			(option[:action].call rescue error($!) ) if option[:action] 
 			( blk.call(w.active?()) rescue error($!) ) if blk
 		end
 		b.set_active(value)
