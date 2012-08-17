@@ -41,6 +41,21 @@ module Ruiby
   def self.update() 
 		Gtk.main_iteration while Gtk.events_pending?  
   end
+  ########### Local storage : save/retreive hash to a /tmp/script-name.storage
+  def self.stock_put(name,value)
+	db="#{Dir.tmpdir}/#{$0}.storage"
+	data={}
+    (File.open(db,"r") { |f| data=Marshal.load(f) } if File.exists?(db)) rescue nil
+	data[name]=value
+    File.open(db,"w") { |f| Marshal.dump(data,f) }
+  end
+  def self.stock_get(name)
+	db="#{Dir.tmpdir}/#{$0}.storage"
+	data={}
+    (File.open(db,"r") { |f| data=Marshal.load(f) } if File.exists?(db) )rescue nil
+	data[name] || ""
+  end
+  
   # start ruiby, one shot (reloading of source can be done)
   def self.start(&bloc)
 	return if defined?($__MARKER_IS_RUIBY_INITIALIZED)
