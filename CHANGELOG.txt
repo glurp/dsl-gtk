@@ -1,3 +1,5 @@
+0.35.2
+    lib/ruiby.rb : local storage
     lib/ruiby_gtk/ruiby_dsl.rb : init textarea
 0.33.0 : 2012-07-30 00:40:28 +0200
     samples/sketchi.rb : suppress DATA section
