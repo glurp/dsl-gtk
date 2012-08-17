@@ -66,7 +66,7 @@ end
 			  row { cell_right label  "vitesse"               ; cell(entry("aa"))  }
 			  row { cell_right label  "size"                  ; cell ientry(11,{:min=>0,:max=>100,:by=>1})  }
 			  row { cell_right label  "feeling"               ; cell islider(10,{:min=>0,:max=>100,:by=>1})  }
-			  row { cell_right label  "speedy"                ; cell(toggle_button("on","off",false) {|w| w.label=w.active?() ? "Off": "On" })  }
+			  row { cell_right label  "speedy"                ; cell(toggle_button("on","off",false) {|ok| alert ok ? "Off": "On" })  }
 			  row { cell       label  "acceleration type"     ; cell hradio_buttons(%w{aa bb cc},1)  }
 			  row { cell      label  "mode on"               ; cell check_button("",false)  }
 			  row { cell      label  "mode off"              ; cell check_button("",true)  }
