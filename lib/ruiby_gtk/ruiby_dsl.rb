@@ -243,7 +243,10 @@ module Ruiby_dsl
 	# create a icon with a raster file 
 	def image(file,options={})
 		im=if File.exists?(file)
-			Image.new(file)
+			pix=Gdk::Pixbuf.new(file) 
+			pix=pix.scale(options[:width],options[:height],Gdk::Pixbuf::INTERP_BILINEAR) if options[:width] && options[:height]
+			pix=pix.scale(options[:size],options[:size],Gdk::Pixbuf::INTERP_BILINEAR)  if options[:size] 
+			Image.new(pix)
 		else
 			label("? "+file)
 		end
