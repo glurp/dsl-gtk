@@ -1,7 +1,5 @@
 =begin
-=begin
-general definition of DSL. used by Gui_gtk (if ruiby used app by inherit)
-and by Ruiby module (if ruiby used by trait)
+general definition of Ruiby DSL. 
 
 Most of this ressource are not thread-safe : use ruiby in the context
 of main thread (thread which invoke Ruiby.start).
@@ -20,16 +18,16 @@ module Ruiby_dsl
  
 	############################ Slot : H/V Box or Frame
 	
-	# container : vertical box, take all space available
+	# container : vertical box, take all space available, sloted in parent ny default
 	def stack(add1=true,&b)    		_cbox(true,VBox.new(false, 2),add1,&b) end
-	# container : horizontal box, take all space available
+	# container : horizontal box, take all space available, sloted in parent
 	def flow(add1=true,&b)	   		_cbox(true,HBox.new(false, 2),add1,&b) end
-	# container : vertical box, take only neceqssary space 
+	# container : vertical box, take only necessary space , sloted in parent
 	def stacki(add1=true,&b)    	_cbox(false,VBox.new(false, 2),add1,&b) end
-	# container : horizontal box, take only neceqssary space 
+	# container : horizontal box, take only necessary space , sloted in parent
 	def flowi(add1=true,&b)	   		_cbox(false,HBox.new(false, 2),add1,&b) end
 	
-	# box { } for cell table (?) ; like stack(false) { }
+	# box { } used for container which manage the widget (as stack(false) {} ) 
 	def box() 
 		box=VBox.new(false, 2)
 		@lcur << box
@@ -57,20 +55,29 @@ module Ruiby_dsl
 		autoslot()
 		@lcur.pop
 	end
+	
 	# pack widget in parameter, share space with prother widget
-	# this is the default: all widthet will be sloted if they are not slotied
+	# this is the default: all widget will be sloted if they are not slotied
+	# this is done by attribs(w) which is call after construction of almost all widget
 	def slot(w)  @current_widget=nil; @lcur.last.add(w) ; w end
-	# pack widet n parameter, take oly necessary space
+	# pack widet in parameter, take only necessary space
 	def sloti(w) @current_widget=nil; @lcur.last.pack_start(w,false,false,3) ; w end
 	
+	# slot() precedently created widget if not sloted.
+	# this is done by attribs(w) which is call after construction of almost all widget
 	def autoslot(w=nil)
 		(slot(@current_widget)) if @current_widget!=nil
 		@current_widget=w 
 	end
+	# forget precedent wdget oconstructed
 	def raz() @current_widget=nil; end
 
 	# append the result of bloc parameter to a contener (stack or flow)
-	# thread protexted
+	# thread protected
+	# Usage : 
+	#	 @stack= stack {}
+	#    . . . . 
+	#    append_to(@stack) { button("Hello") }
 	def append_to(cont,&blk)
 		if $__mainthread__ != Thread.current
 			gui_invoke { append_to(cont,&blk) }
@@ -83,7 +90,7 @@ module Ruiby_dsl
 		show_all_children(cont)
 	end
 	
-	# clear a contener (stack or flow)
+	# clear a containet (stack or flow)
 	# thread protected
 	def clear(cont) 
 		if $__mainthread__ != Thread.current
@@ -93,7 +100,8 @@ module Ruiby_dsl
 		end
 		cont.children.each { |w| cont.remove(w) } 
 	end
-	# clear a container (stack or flow) and append the result of bloc parameter to a contener
+	# clear a container (stack or flow) and append the result of bloc parameter to this
+	# container
 	# thread protected
 	def clear_append_to(cont,&blk) 
 		if $__mainthread__ != Thread.current
@@ -112,7 +120,7 @@ module Ruiby_dsl
 		return unless c
 		c.each { |f|   show_all_children(f) if  f.respond_to?(:children) ; f.show() } ; c.show
 	end
-	# append the widget w before anotherone (wref)
+	# append the widget w before another one wref
 	# thread protected
  	def slot_append_before(w,wref)
 		if $__mainthread__ != Thread.current
@@ -128,7 +136,7 @@ module Ruiby_dsl
  		}
  		w
  	end
-	# append the widget w after anotherone (wref)
+	# append the widget w after anotherone wref)
 	# thread protected
  	def slot_append_after(w,wref)
 		if $__mainthread__ != Thread.current
@@ -168,7 +176,8 @@ module Ruiby_dsl
 	
 
 	def get_current_container() @lcur.last end
-	
+
+	# get a Hash aff all properties of a gtk widget
 	def get_config(w)
 		return({"nil"=>""}) unless w && w.class.respond_to?("properties")
 		w.class.properties().inject({"class"=>w.class.to_s}) { |h,meth| 
@@ -179,12 +188,18 @@ module Ruiby_dsl
 	end
 
 	########################### raster images access #############################
+	
 	def get_icon(name)
 		return name if name.index('.') && File.exists?(name)
 		iname=eval("Stock::"+name.upcase) rescue nil
 	end
 	
 	# get a Image widget from a file or from a Gtk::Stock
+	# image can be a filename or a predefined icon in GTK::Stock
+	# for file image, whe can specify a sub image (sqared) :
+	#     filename.png[NoCol , NoRow]xSize
+	#     filename.png[2,2]x32 : extract a icon of 32x32 pixel size from third column/second line
+	#    see samples/draw.rb
 	def get_image_from(name)
 		if name.index('.') 
 			return Image.new(name) if File.exists?(name)
@@ -217,17 +232,19 @@ module Ruiby_dsl
 
 	# general property automaticly applied for (almost) all widget (eval last argument a creation)
 	def attribs(w,options)
-		  w.modify_bg(Gtk::STATE_NORMAL,options[:bg]) if options[:bg]
-		  w.modify_fg(Gtk::STATE_NORMAL,options[:fg]) if options[:fg]
+		  w.modify_bg(Gtk::STATE_NORMAL,options[:bg]) if options[:bg] # not work on window
+		  w.modify_fg(Gtk::STATE_NORMAL,options[:fg]) if options[:fg] # not work on window
 		  w.modify_font(Pango::FontDescription.new(options[:font])) if options[:font]
-		  autoslot(w)
+		  autoslot(w)  # slot() precedent widget if existe, and declare this one as the precedent
 		  w
 	end
-	# create a bar (vertical or horizontal according to stack/flow current contener) 
+	
+	# create a bar (vertical or horizontal according to stack/flow current container) 
 	def separator(width=1.0)  
 		autoslot()
 		sloti(HBox === @lcur.last ? VSeparator.new : HSeparator.new)  
 	end
+	
 	# create  label, with text (or image if txt start with a '#')
 	def label(text,options={})
 		l=_label(text,options)
@@ -240,7 +257,9 @@ module Ruiby_dsl
 			Label.new(text);
 		end
 	end
+	
 	# create a icon with a raster file 
+	# option can specify a new size : :width and :height, or :size  (square image)
 	def image(file,options={})
 		im=if File.exists?(file)
 			pix=Gdk::Pixbuf.new(file) 
@@ -252,10 +271,11 @@ module Ruiby_dsl
 		end
 		attribs(im,options)
 	end
+	# create a one-character size space, (or n character x n line space)
 	def space(n=1) label(([" "*n]*n).join("\n"))  end
 	
 	# create  button, with text (or image if txt start with a '#')
-	# block argument is evaluate in button click
+	# block argument is evaluate at button click
 	def button(text,option={},&blk)
 		if text && text[0,1]=="#"
 			b=Button.new()
@@ -266,8 +286,11 @@ module Ruiby_dsl
 		b.signal_connect("clicked") { |e| blk.call(e) rescue error($!) } if blk
 		attribs(b,option)
 	end 
-	# horizontal tool-bar of icon button and/or separator
-	# if icon name contain a '/', second last part is  tooltip text
+	
+	# horizontal toolbar of icon button and/or separator
+	# if icon name contain a '/', second last is  tooltip text
+	# Usage: 
+	#   htoolbar(["text/tooltip", proc { },"separator" => "", ....]
 	def htoolbar(items,options={})
 		b=Toolbar.new
 		b.set_toolbar_style(Toolbar::Style::ICONS)
@@ -312,12 +335,14 @@ module Ruiby_dsl
 
 	# to state button, with text for each state and a initiale value
 	# value can be read by w.active?
-	# no (yet) collback on state change ...
-	def toggle_button(text1,text2=nil,value=false,option={})
+	# callback on state change with new value as argument
+	def toggle_button(text1,text2=nil,value=false,option={},&blk)
 		text2 = "- "+text1 unless text2
 		b=ToggleButton.new(text1);
 		b.signal_connect("toggled") do |w,e| 
 			w.label= w.active?() ? text2.to_s : text1.to_s 
+			(option[:action].call rescue error($!) ) if option[:action] 
+			( blk.call(w.active?()) rescue error($!) ) if blk
 		end
 		b.set_active(value)
 		b.label= value ? text2.to_s : text1.to_s 
@@ -325,6 +350,8 @@ module Ruiby_dsl
 		b
 	end
 	# create a checked button
+	# no callback
+	# state can be read by cb.active?
 	def check_button(text="",value=false,option={})
 		b=CheckButton.new(text)
         	.set_active(value)
@@ -367,6 +394,7 @@ module Ruiby_dsl
 		}
 	end
 	# create a text entry for keyboed input
+	# if block defined, it while be trigger on ech of (character) change of the entry
 	def entry(value,size=10,option={},&blk)
 		w=Entry.new().tap {|e| e.set_text(value ? value.to_s : "") }
 		after(1) do
@@ -391,6 +419,7 @@ module Ruiby_dsl
 		attribs(w,option)		
 		w
 	end
+	
 	# create a integer text entry for keyboed input
 	# option must define :min :max :by for spin button
 	def fentry(value,option={},&blk)
@@ -404,8 +433,10 @@ module Ruiby_dsl
 		attribs(w,option)		
 		w
 	end
+	
 	# create a slider
 	# option must define :min :max :by for spin button
+	# current value can be read by w.value
 	# if bloc is given, it with be call on each change, with new value as parameter
 	def islider(value,option={},&b)
 		w=HScale.new(option[:min].to_i,option[:max].to_i,option[:by])
@@ -434,6 +465,7 @@ module Ruiby_dsl
 	# create a drawing area, for pixel draw
 	# option can define closure :mouse_down :mouse_up :mouse_move
 	# for interactive actions
+	# see tst.rb fo little example
 	# see samples/draw.rb for a little vector editor...
 	def canvas(width,height,option={})
 		autoslot()
@@ -475,9 +507,8 @@ module Ruiby_dsl
 	def force_update(canvas) canvas.queue_draw unless  canvas.destroyed?  end
 
 	############################ table
-	# create a container for table-doisposed widgets. this is not a grid!
-	# table(r,c) { row { cell ; .. } ; ... }
-	# warning!! one level only table: you can't put a table un a cell of a table...
+	# create a container for table-disposed widgets. this is not a grid!
+	# table(r,c) { row { cell(w) ; .. } ; ... }
 	def table(nb_col,nb_row,config={})
 		table = Gtk::Table.new(nb_row,nb_col,false)
 		table.set_column_spacings(config[:set_column_spacings]) if config[:set_column_spacings]
@@ -526,7 +557,7 @@ module Ruiby_dsl
 	def cell_vspan_top(n,w)    raz();w.set_alignment(0.5, 0.0)rescue nil ; cell_vspan(n,w) end
 	def cell_vspan_bottom(n,w) raz();w.set_alignment(0.5, 1.0)rescue nil ; cell_vspan(n,w) end
 	
-	# deprecated
+	# deprecated: see properties
 	def propertys(title,hash,options={:edit=>false, :scroll=>[0,0]},&b)
 	 properties(title,hash,options,&b)
 	end
@@ -602,7 +633,7 @@ module Ruiby_dsl
 
 	###################################### notebooks
 	
-	# create a otebook widget. it must contain page() wigget
+	# create a notebook widget. it must contain page() wigget
 	# notebook { page("first") { ... } ; ... }
 	def notebook() 
 		nb = Notebook.new()
@@ -611,7 +642,7 @@ module Ruiby_dsl
 		yield
 		@lcur.pop
 	end
-	# a page widget. o,ly for notebook container.
+	# a page widget. only for notebook container.
 	# button can be text or icone (if startin by '#', as label)
 	def page(title,icon=nil)
 		if icon && icon[0,1]=="#" 
@@ -624,7 +655,7 @@ module Ruiby_dsl
 	
 	############################## Menu
     # create a application menu. must contain menu() {} :
-	#menu_bar {menu("F") {menu_button("a") { } ; menu_separator; menu_checkbutton("b") { |w|} ...}}
+	# menu_bar {menu("F") {menu_button("a") { } ; menu_separator; menu_checkbutton("b") { |w|} ...}}
 	def menu_bar()
 		@menuBar= MenuBar.new
 		yield
@@ -668,6 +699,7 @@ module Ruiby_dsl
 	############################## Accordion
 	
 	# create a accordion menu. 	
+	# must contain aitem() which must containe alabel() :
 	# accordion { aitem(txt) { alabel(lib) { code }; ...} ... }
 	def accordion() 
 		@slot_accordion_active=nil #only one accordion active by window!
@@ -705,11 +737,14 @@ module Ruiby_dsl
 	
 	############################## Panned : 
 	# split current frame in 2 panes
+	# create a container which can cntaine 2 widget, separated by movable bar
 	# block invoked must return a array of 2 box wich will put in the 2 panes
-
-	# create a contanair which can cntaine 2 widget, separated by movable bar
 	# vertivaly disposed
 	def stack_paned(size,fragment,&blk) _paned(false,size,fragment,&blk) end
+
+	# split current frame in 2 panes
+	# create a container which can cntaine 2 widget, separated by movable bar
+	# block invoked must return a array of 2 box wich will put in the 2 panes
 	# horizonaly disposed
 	def flow_paned(size,fragment,&blk) _paned(true,size,fragment,&blk) end
 	
@@ -733,7 +768,7 @@ module Ruiby_dsl
 	# a source_editor witget : text as showed in fixed font, colorized (default: ruby syntaxe)
 	# from: green shoes plugin
 	# options= :width  :height :on_change :lang :font
-	# @edit=slot(source_editor()).editor
+	# @edit=source_editor().editor
 	# @edit.buffer.text=File.read(@filename)
     def source_editor(args={}) # from green_shoes plugin
 
@@ -765,7 +800,7 @@ module Ruiby_dsl
     end
 
 	# multiline entry
-	# @edit=slot(text_area(300,100)).text_area
+	# @edit=text_area(300,100).text_area
 	# @edit.buffer.text="Hello!"
 	def text_area(w=200,h=100,args={}) # from green_shoes app
 		  tv = Gtk::TextView.new
@@ -853,8 +888,8 @@ module Ruiby_dsl
 		sw
 	end	
 
-	# specific to gtk : some widget like label can't support app event, so they must
-	# be contain in a clockable parent (EventBox)
+	# specific to gtk : some widget like label can't support click event, so they must
+	# be contained in a clockable parent (EventBox)
 	#  clickable(:callback_click_name) { label(" click me! ") }
 	#  def callback_click_name(widget) ... end
 	# clickable with methone callback by name
@@ -880,7 +915,7 @@ module Ruiby_dsl
 	
 	##################################### List
 	
-	# create a verticale liste of data, with scerollbar if necessary
+	# create a verticale liste of data, with scrollbar if necessary
 	# define methods: 
 	#   list() : get (gtk)list widget embeded
 	#   model() : get (gtk) model of the list widget
@@ -916,7 +951,7 @@ module Ruiby_dsl
 		slot(scrolled_win)
 	end
 
-	# create a grid ofdata (as liste, but mmulticolonne)
+	# create a grid of data (as list, but mmulticolonne)
 	# use set_data() to but a 2 dimension array of text
 	# same methods as list widget
 	def grid(names,w=0,h=0)
@@ -1024,6 +1059,7 @@ module Ruiby_dsl
 end
 # run gtk mainloop with trapping gtk/callback error
 # used by sketchi.rb, not good
+# see Ruiby.secure_main { }
 def secure_main()
 	begin 
 		Gtk.main 
