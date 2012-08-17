@@ -1,4 +1,7 @@
-0.36.1
+0.37.1
+    samples/test.rb : check button test
+    lib/ruiby_gtk/ruiby_dsl.rb : callback on check button
+0.37.0 : 2012-08-18 01:42:08 +0200
     lib/ruiby_gtk/ruiby_dsl.rb : comment
 0.36.0 : 2012-08-18 00:11:32 +0200
     samples/tilesviewer.rb : show tiles raster from osm web mapping
