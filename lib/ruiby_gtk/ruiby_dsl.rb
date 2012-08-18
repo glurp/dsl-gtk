@@ -6,10 +6,10 @@ of main thread (thread which invoke Ruiby.start).
 
 Exception : in thread, theses methods are frequently used. so they are thread-protected,
 if they detect a invocation out of main thread, they auto-recall in a gui_invoke block :
-	append_to(cont,&blk)       clear_append_to(cont,&blk) 
- 	slot_append_before(w,wref) slot_append_after(w,wref)
-	delete(w) 
-	log(txt)
+    append_to(cont,&blk)       clear_append_to(cont,&blk)
+    slot_append_before(w,wref) slot_append_after(w,wref)
+    delete(w) 
+    log(txt)
 
 =end
 module Ruiby_dsl
