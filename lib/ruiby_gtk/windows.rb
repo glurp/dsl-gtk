@@ -2,15 +2,8 @@
 #            windows.rb : main ruiby windows  
 ###############################################################################################
 
-=begin
-basic usage :
-class Application < Ruiby_gtk
-	def component
-		stack do
-			...
-		end
-	end
-end
+if false
+str = <<EEND
 
 Container
 ---------
@@ -84,7 +77,8 @@ TODO
  for all : options={} ==> color/font/pading/halign/valign/fg/bg
  SWT,Qt...
 
-=end
+EEND
+end
 ###############################################################################################
 
 
@@ -127,7 +121,8 @@ class Ruiby_gtk < Gtk::Window
 	def component
 		raise("Abstract: 'def component()' must be overiden in a Ruiby class")
 	end
-	# change positiojn of window in the desktop. relative position works only in *nix
+
+	# change position of window in the desktop. relative position works only in *nix
 	# system.
 	def rposition(x,y)
 		if x==0 && y==0
@@ -157,7 +152,7 @@ module Ruiby
 	include ::Ruiby_threader
 	include ::Ruiby_default_dialog
 	
-	#  ruiby_component() must be call one shot for a window, 
+	# ruiby_component() must be call one shot for a window, 
 	# it initialise ruiby.
 	# then append_to(),append_before()...  can be use fore dsl usage
 	def ruiby_component()
