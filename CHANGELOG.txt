@@ -1,3 +1,6 @@
+0.37.2
+    lib/ruiby_gtk/windows.rb : comment for yard bug
+    lib/ruiby_gtk/ruiby_dsl.rb : comment for yard
 0.37.1
     samples/test.rb : check button test
     lib/ruiby_gtk/ruiby_dsl.rb : callback on check button
