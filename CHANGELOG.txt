@@ -1,4 +1,7 @@
-0.37.1
+0.38.1
+    samples/tilesviewer.rb : center  map tiles
+    lib/ruiby_gtk/ruiby_dsl.rb : center and relative container
+0.38.0 : 2012-08-18 01:49:14 +0200
     samples/test.rb : check button test
     lib/ruiby_gtk/ruiby_dsl.rb : callback on check button
 0.37.0 : 2012-08-18 01:42:08 +0200
