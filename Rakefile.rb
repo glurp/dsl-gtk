@@ -80,7 +80,7 @@ rule /^marker\/.*\._$/ => [proc {|arg| arg.sub(%r{^marker\/(.*)\._$}, '\1.rb')}]
 	  push_changelog("    #{src.source} : #{comment}")
 	  $changed=true
   end
-  touch src.name rescue nil
+  touch src.name rescue (mkdir_p File.dirname(src.name);  touch src.name )
 end
 
 
