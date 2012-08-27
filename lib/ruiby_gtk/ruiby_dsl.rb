@@ -35,6 +35,31 @@ module Ruiby_dsl
 		autoslot()
 		@lcur.pop
 	end
+	# center { }  container which center his content (auto-sloted)
+	def center() 
+		autoslot()
+		valign = Gtk::Alignment.new(0.5, 0.5, 0.5, 0.5)
+		@lcur.last.pack_start(valign,false,false,0)
+		vbox=VBox.new(false, 0)
+		valign.add(vbox)
+		@lcur << vbox
+		yield
+		autoslot()
+		@lcur.pop
+	end
+	# relative(px,py) { }  container which relative (0.0..1.0) position his content (auto-sloted)
+	def relative() 
+		autoslot()
+		valign = Gtk::Alignment.new(px,py, 0,0)
+		@lcur.last.pack_start(valign,true,true,0)
+		vbox=VBox.new(false, 0)
+		valign.add(vbox)
+		@lcur << vbox
+		yield
+		autoslot()
+		@lcur.pop
+	end
+	
 	# a box with border and texte title, take all space
 	def frame(t="",add1=true,&b)  	
 		_cbox(true,Frame.new(t),add1) { stack { b.call } } 
