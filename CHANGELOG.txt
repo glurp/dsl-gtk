@@ -1,4 +1,9 @@
-0.38.2
+0.38.3
+    samples/tilesviewer.rb : autoresize
+    samples/test.rb : test grid anf form dialog
+    samples/dialogs.rb : test grid and form dialog
+    lib/ruiby_gtk/ruiby_dsl.rb : grid methods
+    lib/ruiby_gtk/editor.rb : grid dialog and form dialog
     lib/ruiby_gtk/ruiby_dsl.rb : center and relative container
     samples/tilesviewer.rb : center  map tiles
     lib/ruiby_gtk/ruiby_dsl.rb : center and relative container
