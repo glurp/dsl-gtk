@@ -15,6 +15,28 @@ if ARGV.size<3
 	exit(0)
 end
 
+module Ruiby_dsl
+	def radians(degrees) (Math::PI * degrees) / 180.0 end
+	def degrees(radians) (radians * 180.0) / Math::PI end
+	def tile_nums_2_lonlat(xtile, ytile, zoom)
+	  factor = 2.0 ** (zoom)
+	  lon = ((xtile * 360) / factor) - 180.0
+	  lat = Math.atan(Math.sinh(Math::PI * (1 - 2 * ytile / factor)))
+	  return  [lon,degrees(lat),zoom]
+	end
+
+	def img(filename,size)
+	  onclick=proc {|w,e| 
+		z,x,y=filename.split(/[\/.]/)[-4..-2].map(&:to_i)
+		lon,lat,z=tile_nums_2_lonlat(x,y,z)
+		lon1,lat1,z=tile_nums_2_lonlat(x+1,y+1,z)
+		w.children[0].hide
+		alert("#{filename.split("/")[-4..-1].join("/")}\n #{lon} / #{lat}\n #{lon1} / #{lat1}") 
+		w.children[0].show
+	  }
+	  box  { pclickable(onclick) { image( filename,{:size=>size}) } }
+	end
+end
 
 Ruiby.app(:width=> 800, :height=>800, :title=> "Tiles on #{ARGV[0]}") do
 	dir="#{ARGV[0]}/#{ARGV[1]}".gsub('\\','/')
@@ -42,11 +64,19 @@ Ruiby.app(:width=> 800, :height=>800, :title=> "Tiles on #{ARGV[0]}") do
 		  thy[y]=1
 		}
 	}
-	puts "go tiles draw..."
+	
 	minx,maxx= tab.keys.minmax
 	miny,maxy= thy.keys.minmax
-	vbox_scrolled(800,800) do 
-		center {frame { table((maxx-minx),(maxy-miny)) do
+	nbtx,nbty=[maxx-minx,maxy-miny]
+	$SZ= [800/[nbtx,nbty].max, 2].max
+	#alert "nbx=%d nby=%d SZ=%d h=%d w=%d" % [nbtx,nbty,$SZ,nbtx*$SZ,nbty*$SZ]
+	puts "go tiles draw, size=#{$SZ} ..."
+	sx=(nbty+1)*$SZ
+	sy=(nbtx+1)*$SZ
+	
+	set_default_size(sx,sy)	
+	vbox_scrolled(sx,sy) do 
+		frame { table((maxy-miny),(maxx-minx)) do
 			(minx..maxx).each { |x|
 				next if (x % diff)!=0
 				p x
@@ -55,13 +85,13 @@ Ruiby.app(:width=> 800, :height=>800, :title=> "Tiles on #{ARGV[0]}") do
 				      (miny..maxy).each { |y|  
 						next if (y % diff)!=0
 						filename="#{diz}/#{y/diff}/#{x/diff}.png"
-					    cell( File.exists?(filename) ? image( filename,{:size=>24})  : label("") ) 
+					    cell( File.exists?(filename) ? img(filename,$SZ*diff)  : label("?") ) 
 				      }
 					else
-					   cell(label(" "))
+					 label("?")
 					end
 				}
 			 }
-		end } }
+		end } 
 	end
 end
