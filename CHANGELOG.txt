@@ -1,4 +1,6 @@
-0.38.3
+0.39.1
+    samples/dialogs.rb : big data
+0.39.0 : 2012-09-13 19:57:34 +0200
     samples/tilesviewer.rb : autoresize
     samples/test.rb : test grid anf form dialog
     samples/dialogs.rb : test grid and form dialog
