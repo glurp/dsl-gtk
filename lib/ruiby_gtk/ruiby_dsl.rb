@@ -38,16 +38,15 @@ module Ruiby_dsl
 	# center { }  container which center his content (auto-sloted)
 	def center() 
 		autoslot()
-		valign = Gtk::Alignment.new(0.5, 0.5, 0.5, 0.5)
+		valign = Gtk::Alignment.new(0,0,0,0)
 		@lcur.last.pack_start(valign,false,false,0)
-		vbox=VBox.new(false, 0)
+		vbox=VBox.new(true, 0)
 		valign.add(vbox)
 		@lcur << vbox
 		yield
 		autoslot()
 		@lcur.pop
 	end
-	# relative(px,py) { }  container which relative (0.0..1.0) position his content (auto-sloted)
 	def relative() 
 		autoslot()
 		valign = Gtk::Alignment.new(px,py, 0,0)
@@ -625,18 +624,7 @@ module Ruiby_dsl
 				end
 				  if options[:edit]
 					  sloti(button("Validation") { 
-							nhash={}
-							prop_current.each {|k,w| 
-								v_old=hash[k]
-								v_new=w.text
-								vbin=case v_old 
-									when String then v_new
-									when Fixnum then v_new.to_i
-									when Float  then v_new.to_f
-									else eval( v_new )
-								end
-								nhash[k]=vbin
-							}
+							nhash=a.get_data()
 							if block_given? 
 								yield(nhash)
 							else
@@ -649,8 +637,23 @@ module Ruiby_dsl
 		 }
 	  }	
 	  a.instance_variable_set(:@prop_current,prop_current)	  
+	  a.instance_variable_set(:@hash_initial,hash)	  
 	  def a.set_data(newh)
-		newh.each { |k,v| @prop_current[k].text=v }
+		newh.each { |k,v| @prop_current[k].text=v.to_s }
+	  end
+	  def a.get_data()
+		@prop_current.inject({}) {|nhash,(k,w)| 
+			v_old=@hash_initial[k]
+			v_new=w.text
+			vbin=case v_old 
+				when String then v_new
+				when Fixnum then v_new.to_i
+				when Float  then v_new.to_f
+				else eval( v_new )
+			end
+			nhash[k]=vbin
+			nhash
+		}
 	  end
 	  a
 	end
@@ -933,7 +936,7 @@ module Ruiby_dsl
 		eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
 		ret=_cbox(true,eventbox,true,&b) 
 		eventbox.realize
-		eventbox.signal_connect('button_press_event') { |w, e| aproc.call()  rescue error($!)  }
+		eventbox.signal_connect('button_press_event') { |w, e| aproc.call(w,e)  rescue error($!)  }
 		ret
 	end
 	
@@ -976,7 +979,7 @@ module Ruiby_dsl
 	end
 
 	# create a grid of data (as list, but mmulticolonne)
-	# use set_data() to but a 2 dimension array of text
+	# use set_data() to put a 2 dimensions array of text
 	# same methods as list widget
 	def grid(names,w=0,h=0)
 		scrolled_win = Gtk::ScrolledWindow.new
@@ -995,14 +998,19 @@ module Ruiby_dsl
 		
 		def scrolled_win.grid() children[0].children[0] end
 		def scrolled_win.model() grid().model end
-		def scrolled_win.clear() grid().model.clear() ; end
 		def scrolled_win.add_row(words)
 			l=grid().model.append()
 			words.each_with_index { |w,i| l[i] = w.to_s }
 		end
+		$ici=self
+		def scrolled_win.get_data()	
+			raise("grid.get_data() out of main thread!")if $__mainthread__ != Thread.current
+			@ruiby_data
+		end
 		def scrolled_win.set_data(data)	
+			@ruiby_data=data
 			raise("grid.set_data() out of main thread!")if $__mainthread__ != Thread.current
-			clear() ; data.each { |words| add_row(words) }
+			grid().model.clear() ; data.each { |words| add_row(words) }
 		end
 		def scrolled_win.selection() a=grid().selection.selected ; a ? a[0] : nil ; end
 		def scrolled_win.index() grid().selection.selected end
