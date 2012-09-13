@@ -152,7 +152,47 @@ end
 		when 1
 			h={};70.times { |i| h[i]= "aaa#{i+100}" }
 			properties("very big propertys editable",h,{edit: true,scroll: [100,400]}) { |a| log(a.inspect);log(h.inspect) }
+			button("dialog grid & form") {
+				test_crud()
+			}
 		end
+	end
+	def test_crud()
+		$gheader=%w{id first-name last-name age}
+		$gdata=[%w{regis aubarede 12},%w{siger ederabu 21},%w{baraque aubama 12},%w{ruiby ruby 1}]
+		i=-1; $gdata.map! { |l| i+=1; [i]+l }
+		a=PopupTable.new("title of dialog",400,200,
+			$gheader,
+			$gdata,
+			{
+			  "Delete" => proc {|line| 
+					$gdata.select! { |l| l[0] !=line[0] || l[1] !=line[1]} 
+					a.update($gdata)
+			  },
+			  "Duplicate" => proc {|line| 
+					nline=line.clone
+					nline[0]=$gdata.size
+					$gdata << nline
+					a.update($gdata)
+			  },
+			  "Create" => proc {|line| 
+					nline=line.clone.map {|v| ""}
+					nline[0]=$gdata.size
+					$gdata << nline
+					a.update($gdata)
+			  },
+			  "Edit" => proc {|line| 
+				data={} ;line.zip($gheader) { |v,k| data[k]=v }
+				PopupForm.new("Edit #{line[1]}",0,0,data,{				
+					"Rename" => proc {|w,cdata|  cdata['first-name']+="+" ; w.set_data(cdata)},
+					"button-orrient" => "h"
+				}) do |h|
+					$gdata.map! { |l| l[0] ==h.values[0] ?  h.values : l} 
+					a.update($gdata)
+				end
+			  },
+			}
+		) { |data| alert data.map { |k| k.join ', '}.join("\n")  }
 	end
 	def test_menu
 			stack {
@@ -170,7 +210,7 @@ end
 						menu_button("Copy") { alert("a") }
 					}
 				} 
-				@f=stacki { }
+				@f=stacki { }				
 			}
 	end
 	def test_accordion()
