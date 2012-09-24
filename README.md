@@ -29,6 +29,7 @@ Done :
 
 - sketchi tools
 - tools for generate file/encoded base64 to ruby source 
+- ruiby command: one liner execution
 
 Todo:
 
