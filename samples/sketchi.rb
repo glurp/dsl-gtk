@@ -82,7 +82,7 @@ class RubyApp < Ruiby_gtk
 	def make_help(ta)
 		src=File.dirname(__FILE__)+"/../lib/ruiby_gtk/windows.rb"
 		content=File.read(src)
-		ta.text=content.split(/(=begin)|(=end)/)[2]
+		ta.text=content.split(/(<<EENDX)|(EENDX)/)[2]
 	end
 	def make_example(ta)
 		src=File.dirname(__FILE__)+"/test.rb"
