@@ -274,6 +274,7 @@ module Ruiby_dsl
 		l=_label(text,options)
 		attribs(l,options)
 	end
+	def labeli(text,options={}) sloti(label(text,options)) end 
 	def _label(text,options={})
 		l=if text && text[0,1]=="#"
 			get_image_from(text[1..-1]);
@@ -310,6 +311,7 @@ module Ruiby_dsl
 		b.signal_connect("clicked") { |e| blk.call(e) rescue error($!) } if blk
 		attribs(b,option)
 	end 
+	def buttoni(text,option={},&blk) sloti(button(text,option,&blk)) end 
 	
 	# horizontal toolbar of icon button and/or separator
 	# if icon name contain a '/', second last is  tooltip text
@@ -456,7 +458,15 @@ module Ruiby_dsl
 		attribs(w,option)		
 		w
 	end
-	
+	def field(tlabel,width,value,option={},&blk)
+		e=nil
+		flow {
+			l=label(tlabel+ " : ")
+			l.width_chars=width+3
+			e=entry(value,option,&blk)
+		}
+		e
+	end
 	# create a slider
 	# option must define :min :max :by for spin button
 	# current value can be read by w.value
