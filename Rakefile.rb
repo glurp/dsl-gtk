@@ -86,15 +86,15 @@ end
 
 desc "job before commit"
 task :pre_commit do
-puts RUBY_PLATFORM
-	sh "cls" if RUBY_PLATFORM =~ /(win32)|(mingw)/i 
-	puts <<EEND
+	puts RUBY_PLATFORM
+	#sh "cls" if RUBY_PLATFORM =~ /(win32)|(mingw)/i 
+	puts <<EEND2
 
 
 --------------------------------------------------------------------
-                 Commmit & push #{NAME}
+                 Commmit and push #{NAME}
 --------------------------------------------------------------------
-EEND
+EEND2
 	
 	#sh "giti"
 	$changed=false
