@@ -18,11 +18,13 @@
 #
 ############################################################################
 require 'ruiby'
-if ARGS.size==0 || ARGS[0]=~ /^-h/i
- puts"Usage: >ruiby -width 300 -height 200  -title boot  button(# Wait #) { system(~reboot~)}
+
+if ARGV.size==0 || ARGV[0]=~ /^-+h/i
+ puts "Usage: >ruiby -width 300 -height 200  -title boot  button(# Wait #) { system(~reboot~)}"
+ exit!(0)
 end
 
-opt={width: 0,height: 0, title: Time.now.to_s}
+opt={width: 0,height: 0, title: 'Ruiby '+Time.now.to_s}
 opt[ARGV.shift[1..-1].to_sym]=ARGV.shift while ARGV[0] && ARGV[0]=~ /^-/
 opt=opt.each.inject({}) { |h,(k,v)| h[k]= (v=~ /^[0-9]+$/) ? v.to_i : v ; h}
 #p opt
