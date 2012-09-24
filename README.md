@@ -131,8 +131,10 @@ And, for very very little application :
 
 ```ruby 
 
-> ruiby -width 100  l=list(~sfff~);l.set_data Dir.glob(~*~) ; button(~Selected~) \
-             { puts l.selection ; exit!(0) } ; button(~Annul~) { exit!(1) }
+> ruiby -width 100  -height 300 -title "Please, select a file" \
+             l=list(~sfff~);l.set_data Dir.glob(~*~) ;  \
+             buttoni(~Selected~) { puts l.selection ; exit!(0) } ;\
+			 buttoni(~Annul~) { exit!(1) }
 
 ```
 
