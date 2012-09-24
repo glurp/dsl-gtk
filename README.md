@@ -130,8 +130,10 @@ end
 And, for very very little application :
 
 ```ruby 
-> ruiby -width 100  l=list(~sfff~);l.set_data Dir.glob(~*~) ; button(~Selected~) { puts l.selection ; exit!(0) } ; button(~Annul~) { exit!(1) }
-end
+
+> ruiby -width 100  l=list(~sfff~);l.set_data Dir.glob(~*~) ; button(~Selected~) \
+             { puts l.selection ; exit!(0) } ; button(~Annul~) { exit!(1) }
+
 ```
 
 
