@@ -15,11 +15,14 @@
 # Exemple:
 #    > ruiby   "button('CouCou') { exit! } ; button('show') { edit 'ruiby' }"
 #    > ruiby -width 300 -height 200   chrome(false); button(\' Wait \') { exit! } 
-#
+#    > ruby bin/ruiby  -height 400 -width 200 \
+#			l=list(~Samples~);l.set_data Dir.glob(~sa*/*.rb~) ;\
+#			buttoni(~Selected~) { system(~ruby ~+l.selection)  } ;\
+#		 	buttoni(~Annul~) { exit!(1) }
 ############################################################################
-require 'ruiby'
+require_relative '../lib/ruiby'
 
-if ARGV.size==0 || ARGV[0]=~ /^-+h/i
+if ARGV.size==0 || ARGV[0]=~ /^-+help/i
  puts "Usage: >ruiby -width 300 -height 200  -title boot  button(# Wait #) { system(~reboot~)}"
  exit!(0)
 end
