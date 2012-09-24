@@ -1,4 +1,8 @@
-0.39.1
+0.39.2
+    samples/testth.rb : differed threading
+    samples/sketchi.rb : moif help extractor
+    Rakefile.rb : diff
+    lib/ruiby_gtk/windows.rb : what
     samples/dialogs.rb : big data
 0.39.0 : 2012-09-13 19:57:34 +0200
     samples/tilesviewer.rb : autoresize
