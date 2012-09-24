@@ -19,6 +19,7 @@
 #			l=list(~Samples~);l.set_data Dir.glob(~sa*/*.rb~) ;\
 #			buttoni(~Selected~) { system(~ruby ~+l.selection)  } ;\
 #		 	buttoni(~Annul~) { exit!(1) }
+#	> ruiby   field(~aaaa~,10,11);field(~bb~,10,22);field(~cccc~,10,33);button(~ok~) { exit!(0) }
 ############################################################################
 require_relative '../lib/ruiby'
 
