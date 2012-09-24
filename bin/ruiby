@@ -1,0 +1,19 @@
+#!/usr/bin/ruby
+#####################################################
+# Exemple:
+#    > ruiby   "button('CouCou') { exit! } ; button('show') { edit 'ruiby' }"
+#    > ruiby -width 300 -height 200 -title "Hello Word"  chrome(false); button(\' Wait \') { exit! } 
+#######################################################
+require 'ruiby'
+
+opt={width: 0,height: 0, title: Time.now.to_s}
+opt[ARGV.shift[1..-1].to_sym]=ARGV.shift while ARGV[0] && ARGV[0]=~ /^-/
+opt=opt.each.inject({}) { |h,(k,v)| h[k]= (v=~ /^[0-9]+$/) ? v.to_i : v ; h}
+#p opt
+
+code=<<EEND
+Ruiby.app(opt)do stack do #{ARGV.join(" ").gsub('#',"'")} ; end ; end
+EEND
+
+#puts code 
+eval(code)
