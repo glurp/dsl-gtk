@@ -32,6 +32,7 @@ class RubyApp < Ruiby_gtk
 	
 	def run1
 		@ss=0
+		sleep 20
  		loop {
 		 	sleep(0.05)
 			gui_invoke_wait { @ss=@lab.children.size }
@@ -44,6 +45,7 @@ class RubyApp < Ruiby_gtk
 	end 
 	def run2
 		ii=0
+		sleep 20
  		loop {
 			Open3.popen3("ping 10.177.235.1") { |si,so,se| 
 				while str=(so.gets || se.gets)
