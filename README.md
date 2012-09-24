@@ -132,9 +132,10 @@ And, for very very little application :
 ```ruby 
 
 > ruiby -width 100  -height 300 -title "Please, select a file" \
-             l=list(~sfff~);l.set_data Dir.glob(~*~) ;  \
+             l=list(~Files :~);l.set_data Dir.glob(~*~) ;  \
              buttoni(~Selected~) { puts l.selection ; exit!(0) } ;\
 			 buttoni(~Annul~) { exit!(1) }
+> ruiby   fields([%w{a b},%w{b c},%w{c d}]) { "|a,b,c|" p [a,b,c] if a; exit!(a ?0:1) }
 
 ```
 
