@@ -1,4 +1,5 @@
-0.40.1
+0.40.2
+    lib/ruiby_gtk/ruiby_dsl.rb : buttoni
     lib/ruiby_gtk/ruiby_dsl.rb : buttoni and labeli, for ruiby.sh
 0.40.0 : 2012-09-24 21:14:00 +0200
     samples/testth.rb : differed threading
