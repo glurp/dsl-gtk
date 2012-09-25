@@ -467,6 +467,16 @@ module Ruiby_dsl
 		}
 		e
 	end
+	def fields(alabel,option={},&blk)   
+		size=alabel.map {|t| t[0].size}.max
+		stack {
+			le=alabel.map { |(label,value)| field(label,size,value) }
+			if block_given?
+					button("Validation") { blk.call(*le.map {|t| t.text}) }
+					button("Annulation") { blk.call(*le.map {|t| nil}) }
+			end
+		}
+	end
 	# create a slider
 	# option must define :min :max :by for spin button
 	# current value can be read by w.value
