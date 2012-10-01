@@ -161,4 +161,12 @@ task :test do
 end
 
 
+task :travis do
+ puts "Starting travis test..."
+ cmd="bundle exec rspec spec/test_all.rb"
+ system("export DISPLAY=:99.0 && #{cmd}")
+ #system(cmd)
+ raise "rspec failed!" unless $?.exitstatus == 0
+end
+
 

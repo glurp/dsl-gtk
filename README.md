@@ -1,5 +1,5 @@
-RUIBY
-=====
+# Ruiby [![Build Status](https://secure.travis-ci.org/raubarede/Ruiby.png?branch=master)](http://travis-ci.org/raubarede/Ruiby)
+
 
 A DSL for building simple GUI (gtk) ruby application rapidly.
 

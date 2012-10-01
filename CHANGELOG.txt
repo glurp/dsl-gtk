@@ -1,4 +1,4 @@
-0.40.2
+0.41.0 : 2012-09-25 19:18:21 +0200
     lib/ruiby_gtk/ruiby_dsl.rb : buttoni
     lib/ruiby_gtk/ruiby_dsl.rb : buttoni and labeli, for ruiby.sh
 0.40.0 : 2012-09-24 21:14:00 +0200
