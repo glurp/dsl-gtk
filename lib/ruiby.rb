@@ -30,7 +30,7 @@ if Gtk.check_version(2, 0, 0) =~ /old/i
 	 md.destroy
 	 exit!
 end
-require 'gtksourceview2'
+#require 'gtksourceview2'
 
 module Ruiby
   DIR = Pathname.new(__FILE__).realpath.dirname.to_s

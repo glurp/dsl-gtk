@@ -818,7 +818,7 @@ module Ruiby_dsl
 	# @edit=source_editor().editor
 	# @edit.buffer.text=File.read(@filename)
     def source_editor(args={}) # from green_shoes plugin
-
+	  require 'gtksourceview2'
       args[:width]  = 400 unless args[:width]
       args[:height] = 300 unless args[:height]
   	  change_proc = proc { }
