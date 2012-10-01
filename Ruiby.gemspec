@@ -21,7 +21,6 @@ EEND
   
   dependencies = [
     [:runtime,     "gtk2",  "~> 1.1.0"],  
-    [:runtime,     "gtksourceview2",  "~> 1.0.3"]
 	]
 #   [:runtime,     "gstreamer",  "~> 1.0.0"],
 
