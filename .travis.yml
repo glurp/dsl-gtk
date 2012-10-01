@@ -3,6 +3,6 @@ rvm:
   - 1.9.3
 before_script:
   - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
+  - "sh -e /etc/init.d/xvfb -extension RANDR start"
   - sleep 3
 script: "rake travis"
