@@ -1,3 +1,13 @@
+0.41.1
+    spec/test_thread.rb : creation
+    spec/test_table.rb : creation
+    spec/test_notepad.rb : creation
+    spec/test_layout.rb : creation
+    spec/test_dialogs.rb : creation
+    spec/test_basics_widget.rb : creation
+    spec/test_all.rb : creation
+    spec/rspec_helper.rb : creation
+    Rakefile.rb : travis
 0.41.0 : 2012-09-25 19:18:21 +0200
     lib/ruiby_gtk/ruiby_dsl.rb : buttoni
     lib/ruiby_gtk/ruiby_dsl.rb : buttoni and labeli, for ruiby.sh
