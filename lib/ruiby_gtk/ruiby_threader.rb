@@ -27,12 +27,18 @@ module Ruiby_threader
 	
 	# shot peridicly a  bloc parameter
 	# no threading: the bloc is evaluated by gtk mainloop in main thread context
-	# return handle of animation. can be stoped by delete(anim)
-  	def anim(n,&blk) 
-		GLib::Timeout.add(n) { 
-			blk.call rescue log("#{$!} :\n  #{$!.backtrace[0..3].join("\n   ")}") 
-			true 
-		}
+	# return handle of animation. can be stoped by delete(anim) // NOT WORK!, return a Numeric...
+  	def anim(n,&blk)
+		@hTimer||={}
+		px=0
+		px=GLib::Timeout.add(n) do
+			blk.call rescue log("#{$!} :\n  #{$!.backtrace[0..3].join("\n   ")}")
+			ret=@hTimer[px] 
+			@hTimer.delete(px) unless ret
+			ret
+		end
+		@hTimer[px]=true
+		px
 	end
 	# as anim, but one shot, after some millisecs
 	# no threading: the bloc is evaluated by gtk mainloop in main thread context
