@@ -1,4 +1,8 @@
-0.42.1
+0.43.1
+    samples/netprog.rb : threading netstat
+    lib/ruiby_gtk/ruiby_threader.rb : anim() an after correction for delete
+    lib/ruiby_gtk/ruiby_dsl.rb : delete(timer) correction
+0.43.0 : 2012-10-02 16:08:53 +0200
     samples/netprog.rb : correction run by bin
 0.42.0 : 2012-10-02 15:51:37 +0200
     samples/netprog.rb : creation, for windows only
