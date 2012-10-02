@@ -1,0 +1,10 @@
+#!/usr/bin/ruby
+#####################################################
+# net prg shoe (netstat join tasklist) in a window
+# windows only !
+#####################################################
+raise("for windows only !") unless RUBY_PLATFORM =~ /in.*32/
+
+require_relative '../lib/ruiby'
+Dir.chdir(File.join(Ruiby::DIR,"..","samples"))
+load 'netprog.rb',false

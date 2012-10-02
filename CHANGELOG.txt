@@ -1,4 +1,4 @@
-0.41.2
+0.42.0 : 2012-10-02 15:51:37 +0200
     samples/netprog.rb : creation, for windows only
     lib/ruiby_gtk/ruiby_dsl.rb : nothing
     lib/ruiby.rb : sleeping and return, for test

@@ -7,25 +7,27 @@ require_relative '../lib/ruiby'
 $fi=ARGV[0] || "LISTENING"
 $filtre=Regexp.new($fi)
 
-def make_list_process()
-	hpid={}
-	%x{tasklist}.split(/\r?\n/).each { |line| 
-	  ll=line.chomp.split(/\s+/) 
-	  next if ll.length<5
-	  prog,pid,x,y,*l=ll
-	  hpid[pid]= [prog,l.join(" ")]
-	}
-	hpid
-end
-def net_to_table(filtre)
-    hpid=make_list_process()
-    ret=[]
-	%x{netstat -ano}.split(/^/).each { |line|
-	 proto,src,dst,flag,pid=line.chomp.strip.split(/\s+/)  
-	 prog,s = hpid[pid]||["?","?"]
-	 ret << [flag,src,dst,prog,pid.to_i,s] if [flag,src,dst,prog,pid,s].inspect =~  filtre	 
-	}
-	ret.sort { |a,b| a[4]<=>b[4]}
+class Ruiby_gtk
+	def make_list_process()
+		hpid={}
+		%x{tasklist}.split(/\r?\n/).each { |line| 
+		  ll=line.chomp.split(/\s+/) 
+		  next if ll.length<5
+		  prog,pid,x,y,*l=ll
+		  hpid[pid]= [prog,l.join(" ")]
+		}
+		hpid
+	end
+	def net_to_table(filtre)
+		hpid=make_list_process()
+		ret=[]
+		%x{netstat -ano}.split(/^/).each { |line|
+		 proto,src,dst,flag,pid=line.chomp.strip.split(/\s+/)  
+		 prog,s = hpid[pid]||["?","?"]
+		 ret << [flag,src,dst,prog,pid.to_i,s] if [flag,src,dst,prog,pid,s].inspect =~  filtre	 
+		}
+		ret.sort { |a,b| a[4]<=>b[4]}
+	end
 end
 
 Ruiby.app(:width => 0, :height => 0, :title => "NetProg #{$fi}") do
