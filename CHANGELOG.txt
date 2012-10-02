@@ -1,3 +1,5 @@
+0.42.1
+    samples/netprog.rb : correction run by bin
 0.42.0 : 2012-10-02 15:51:37 +0200
     samples/netprog.rb : creation, for windows only
     lib/ruiby_gtk/ruiby_dsl.rb : nothing
