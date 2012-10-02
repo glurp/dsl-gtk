@@ -1,3 +1,7 @@
+0.41.2
+    samples/netprog.rb : creation, for windows only
+    lib/ruiby_gtk/ruiby_dsl.rb : nothing
+    lib/ruiby.rb : sleeping and return, for test
     spec/test_thread.rb : creation
     spec/test_table.rb : creation
     spec/test_notepad.rb : creation
