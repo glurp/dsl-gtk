@@ -183,10 +183,12 @@ module Ruiby_dsl
 			gui_invoke { delete(w) }
 			return
 		end
-		if  GLib::Timeout === w
+		if  Numeric === w && @hTimer[w]
+			@hTimer[w]=false
+		elsif  GLib::Timeout === w
 			w.destroy
 		else
-			w.parent.remove(w) rescue nil
+			w.parent.remove(w) rescue error($!)
 		end
 	end
  	def _check_append(name,w,wref)
