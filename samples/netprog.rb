@@ -40,13 +40,21 @@ Ruiby.app(:width => 0, :height => 0, :title => "NetProg #{$fi}") do
 			button("Filter") { prompt("Filter ?",$fi) { |value| $fi=value;$filtre=Regexp.new($fi) } }
 			button("Periode") { 
 				prompt("periode (ms) ?",@periode.to_s) { |value| 
-					delete(@a)
+					delete(@ann)
 					@periode=[1000,20000,value.to_i].sort[1]
-					@a=anim(@periode) { @grid.set_data(net_to_table($filtre)) unless @active.active? }
+					@ann=anim(@periode) { 
+						Thread.new {
+							d=net_to_table($filtre) ; gui_invoke { @grid.set_data(d) } 
+						} unless @active.active? 
+					} 
 				}
 			}
 			@active=check_button("Freese",false) 
 		end
 	end
-	@a=anim(@periode) { @grid.set_data(net_to_table($filtre)) unless @active.active? }
+	@ann=anim(@periode) { 
+		Thread.new {
+			d=net_to_table($filtre) ; gui_invoke { @grid.set_data(d) } 
+		} unless @active.active? 
+	} 
 end
