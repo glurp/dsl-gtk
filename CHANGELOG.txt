@@ -1,4 +1,3 @@
-0.44.1
     spec/test_layout.rb : complete
     spec/test_composites.rb : creation tests for tapble,notebook,scrollable...
     spec/test_basics_widget.rb : complete
