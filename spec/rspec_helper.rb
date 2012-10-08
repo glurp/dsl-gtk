@@ -1,6 +1,8 @@
 
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 require 'ruiby'
+require 'timeout'
+$here=File.dirname(__FILE__)
 
 class TestRuibyWindows < Ruiby_gtk
 	def initialize(t,w,h)
@@ -12,7 +14,7 @@ class TestRuibyWindows < Ruiby_gtk
 		@top=stack do end
 	end
 	def sleeping(ms,text=nil)
-		log("Sleep #{ms} millisecondes for : " +text) if text
+		log("Sleep #{ms} millisecondes for : " +text) if text && ms>1999
 		nb=ms/50
 		while nb>0
 			Ruiby.update
@@ -28,5 +30,13 @@ end
 
 def make_window
 	w=TestRuibyWindows.new("RSpec",300,400)
+	Ruiby.update
 	w
+end
+def destroy_window(win,sleep=0)
+	win.sleeping(sleep) if sleep>0
+	Ruiby.update
+    Ruiby.destroy_log	
+	win.destroy 
+	Ruiby.update
 end
