@@ -224,7 +224,7 @@ module Ruiby_dsl
 	# image can be a filename or a predefined icon in GTK::Stock
 	# for file image, whe can specify a sub image (sqared) :
 	#     filename.png[NoCol , NoRow]xSize
-	#     filename.png[2,2]x32 : extract a icon of 32x32 pixel size from third column/second line
+	#     filename.png[3,2]x32 : extract a icon of 32x32 pixel size from third column/second line
 	#    see samples/draw.rb
 	def get_image_from(name)
 		if name.index('.') 
@@ -690,6 +690,7 @@ module Ruiby_dsl
 		@lcur << nb
 		yield
 		@lcur.pop
+		nb
 	end
 	# a page widget. only for notebook container.
 	# button can be text or icone (if startin by '#', as label)
@@ -707,9 +708,11 @@ module Ruiby_dsl
 	# menu_bar {menu("F") {menu_button("a") { } ; menu_separator; menu_checkbutton("b") { |w|} ...}}
 	def menu_bar()
 		@menuBar= MenuBar.new
+		ret=@menuBar
 		yield
 		sloti(@menuBar)
 		@menuBar=nil
+		ret
 	end
 	
 	# a vertial drop-down menu, only for menu_bar container
@@ -752,10 +755,11 @@ module Ruiby_dsl
 	# accordion { aitem(txt) { alabel(lib) { code }; ...} ... }
 	def accordion() 
 		@slot_accordion_active=nil #only one accordion active by window!
-		stack { stacki {
+		w=stack { stacki {
 			yield
 		}}
 		separator
+		w
 	end
 	# create a hoizontral accordion menu. 	
 	def haccordion() 
@@ -876,6 +880,9 @@ module Ruiby_dsl
 
     # Month Calendar with callback on month/year move and day selection :
 	# calendar(Time.now-24*3600, :selection => proc {|day| } , :changed => proc {|widget| }
+	# calendar respond to
+	# *	set_time(time)  : toto and select the day of tume object
+	# *	get_time()		: return time of selected day
 	def calendar(time=Time.now,options={})
 		c = Calendar.new
 		c.display_options(Calendar::SHOW_HEADING | Calendar::SHOW_DAY_NAMES |  
@@ -883,11 +890,21 @@ module Ruiby_dsl
 		after(1) { c.signal_connect("day-selected") { |w,e| options[:selection].call(w.day)  rescue error($!) } } if options[:selection]
 		after(1) { c.signal_connect("month-changed") { |w,e| options[:changed].call(w)  rescue error($!) } }if options[:changed]
 		calendar_set_time(c,time)
+		class << c
+			def set_time(time)
+				select_month(time.month,time.year)
+				select_day(time.day)
+			end
+			def get_time()
+				year, month, day= *date() 
+				Time.local(year, month, day) 
+			end
+		end
 		attribs(c,options)
 	
 	end
 	
-	# change the current selection of a calendar, by Time object
+	# deprecated : change the current selection of a calendar, by Time object
 	def calendar_set_time(cal,time=Time.now)
 		cal.select_month(time.month,time.year)
 		cal.select_day(time.day)
@@ -921,6 +938,8 @@ module Ruiby_dsl
 	
 	# create a Scrolled widget with a autobuild stack in it
 	# stack can be populated 
+	# respond to : scrooo_to_top; scroll_to_bottom,
+	def scrolled(width,height,&b)  vbox_scrolled(width,height,&b) end
 	def vbox_scrolled(width,height,&b)
 		sw=slot(ScrolledWindow.new())
 		sw.set_width_request(width)		if width>0 
@@ -929,12 +948,12 @@ module Ruiby_dsl
 		ret= stack(false,&b) if  block_given? 
 		sw.add_with_viewport(ret)
 		class << sw
-			def scroll_to_top()    vadjustment.set_value( 0 ) end
-			def scroll_to_bottom() vadjustment.set_value( vadjustment.upper - 1) end
-			def scroll_to_left()   hadjustment.set_value( 0 ) end
-			def scroll_to_right()  hadjustment.set_value( hajustement.upper-1 ) end
+			def scroll_to_top()    vadjustment.set_value( 0 ) 					; vadjustment.value_changed ; end
+			def scroll_to_bottom() vadjustment.set_value( vadjustment.upper - 100); vadjustment.value_changed ; end
+			#def scroll_to_left()   hadjustment.set_value( 0 ) end
+			#def scroll_to_right()  hadjustment.set_value( hadjustment.upper-1 ) end
 		end
-		sw
+		attribs(sw,{})
 	end	
 
 	# specific to gtk : some widget like label can't support click event, so they must
@@ -1060,7 +1079,7 @@ module Ruiby_dsl
 			nil,
 			0,
 			[ Stock::OK, Dialog::RESPONSE_NONE ])
-
+		Ruiby.set_last_log_window(wdlog)
 		logBuffer = TextBuffer.new
 		@loglabel=TextView.new(logBuffer)
 		sw=ScrolledWindow.new()
