@@ -102,6 +102,14 @@ module Ruiby
 		klass.send(:define_method,:component,&blk)
 		start_secure { klass.new(config[:title] || "",config[:width] ||600,config[:height] ||600) }
   end
+  def self.set_last_log_window(win)
+	@last_log=win
+  end
+  def self.destroy_log()
+	return unless @last_log  && ! @last_log.destroyed?
+	@last_log.destroy() rescue nil
+	@last_log=nil
+  end
 end
 
 
