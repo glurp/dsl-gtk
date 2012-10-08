@@ -6,11 +6,7 @@ describe Ruiby do
 	Ruiby.update
  end
  after(:each) do
-	Ruiby.update
-	sleep(0.05)
-	Ruiby.update
-	@win.destroy 
-	Ruiby.update
+	destroy_window(@win)
  end
  it "check rspec work :)" do
 	Hash.new.size.should eq(0)
