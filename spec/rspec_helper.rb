@@ -15,10 +15,10 @@ class TestRuibyWindows < Ruiby_gtk
 	end
 	def sleeping(ms,text=nil)
 		log("Sleep #{ms} millisecondes for : " +text) if text && ms>1999
-		nb=ms/50
+		nb=ms/20
 		while nb>0
 			Ruiby.update
-			sleep(0.050)
+			sleep(0.02)
 			nb-=1
 		end
 		Ruiby.update
@@ -35,6 +35,7 @@ def make_window
 end
 def destroy_window(win,sleep=0)
 	win.sleeping(sleep) if sleep>0
+	win.sleeping(250)
 	Ruiby.update
     Ruiby.destroy_log	
 	win.destroy 
