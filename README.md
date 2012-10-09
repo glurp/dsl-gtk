@@ -1,4 +1,4 @@
-# Ruiby [![Build Status](https://secure.travis-ci.org/raubarede/Ruiby.png?branch=master)](http://travis-ci.org/raubarede/Ruiby)
+# Ruiby [![Build Status](https://secure.travis-ci.org/raubarede/Ruiby.png?branch=master)](http://travis-ci.org/raubarede/Ruiby) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/raubarede/Ruiby)
 
 
 A DSL for building simple GUI (gtk) ruby application rapidly.
@@ -30,6 +30,7 @@ Done :
 - sketchi tools
 - tools for generate file/encoded base64 to ruby source 
 - ruiby command: one liner execution
+- rspec test : 3/4 done, travis-ci integration one, codeclimate done
 
 Todo:
 
@@ -72,7 +73,7 @@ NOTA
 Whe must correct the capitalization of Ruiby...
 
 
-Design
+Usage
 ======
 DSL is usable via inherit or include
 
@@ -107,9 +108,9 @@ class Win < Gtk::Window
 	def add_a_ruiby_button() 
 		ruiby_component do
 			append_to(@vb) do 
-				slot(button("Hello Word #{@vb.children.size}") {
+				button("Hello Word #{@vb.children.size}") {
 					add_a_ruiby_button() 
-				})
+				}
 			end
 		end
 	end
