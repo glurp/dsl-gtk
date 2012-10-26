@@ -4,7 +4,6 @@
 #
 # Usage:
 #	> rake commit  # commit in local directory and push to repository
-#	> rake commit2 # in dev with git status
 #   > rake gem	   # commit and make gem (and test it) and push to gemcutter !
 #
 #################################################################
@@ -55,34 +54,7 @@ end
 
 
 ######################## Comment each file modified ######################
-SRC = FileList['**/*.rb']+FileList['bin/*']+FileList['samples/media/*']
 
-COM=SRC.map do |src| 
-  base=src.split('.').tap {|o| o.pop}.join('.')
-  mfile= "marker/#{base}._"
-  #puts "file #{mfile} =>  #{src} ; echo #{mfile} " 
-  file mfile     =>    src  ; mfile
-end
-
-desc "general dependency"
-file "commit._" =>  COM
-
-
-rule /^marker\/.*\._$/ => [proc {|arg| arg.sub(%r{^marker\/(.*)\._$}, '\1.rb')}] do |src|
-  puts "\n\ncomment for #{src.source} : "
-  comment=$stdin.gets
-  if comment && comment.chomp.size>0
-	  comment.chomp!
-	  (puts "Abort!";exit!) 	if comment=~/^a(b(o(r(t)?)?)?)?$/
-	  unless File.exists?(src.name)
-		sh "git add #{src.source}"
-	  end
-	  sh "git commit #{src.source} -m \"#{comment.strip}\"" rescue 1
-	  push_changelog("    #{src.source} : #{comment}")
-	  $changed=true
-  end
-  touch src.name rescue (mkdir_p File.dirname(src.name);  touch src.name )
-end
 
 desc "commit file changed and created"
 task :commit_status do
@@ -145,9 +117,9 @@ task :post_commit do
 	puts "no change!"
   end
 end
+
 desc "commit local and then distant repo"
-task :commit => [:pre_commit,"commit._",:post_commit]
-task :commit2 => [:pre_commit,"commit_status",:post_commit]
+task :commit => [:pre_commit,"commit_status",:post_commit]
 
 
 desc "make a gem and push it to gemcutter"
