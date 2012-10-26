@@ -10,16 +10,23 @@ module Ruiby_threader
 			@is_main_window=false
 		end
 	end
-	# must be created by application (in initialize, afeter super), active the tread engine for 
+	# must be created by application (in initialize, after super), active the tread engine for 
 	# caller window.
 	# if several windows, last created is the winner : gtk_invoke will throw to last treaded() window!
 	def threader(per)
+		return unless $__mainwindow__==self
 		@queue=Queue.new
 		$__queue__=@queue
 		ici=self
 		GLib::Timeout.add(per) {
-			if @queue.size>0 
-				( ici.instance_eval( &@queue.pop ) rescue log("#{$!} :\n  #{$!.backtrace[0..3].join("\n   ")}") ) while @queue.size>0 
+			while @queue.size>0 
+			     mess= @queue.pop
+				 if Array===mess
+				    win,mess=*mess
+				 else
+					win=ici
+				 end
+				 win.instance_eval { mess.call } rescue log("#{$!} :\n  #{$!.backtrace[0..3].join("\n   ")}") 
 			end
          true
         }
@@ -68,6 +75,22 @@ def gui_invoke(&blk)
 		end
 	else
 		$__mainwindow__.instance_eval( &blk )
+	end
+end
+def gui_invoke_in_window(w,&blk) 
+	if ! defined?($__mainwindow__)
+		puts("\n\ngui_invoke() : initialize() of main windows not done!\n\n") 
+		return
+	end
+	if $__mainthread__ != Thread.current
+		if defined?($__queue__)
+			p "pushed"
+			$__queue__.push( [w,blk] ) 
+		else
+			puts("\n\nThreaded invoker not initilized! : please call threader(ms) on window constructor!\n\n") 
+		end
+	else
+		w.instance_eval( &blk )
 	end
 end
 
