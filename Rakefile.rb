@@ -4,6 +4,7 @@
 #
 # Usage:
 #	> rake commit  # commit in local directory and push to repository
+#	> rake commit2 # in dev with git status
 #   > rake gem	   # commit and make gem (and test it) and push to gemcutter !
 #
 #################################################################
@@ -54,7 +55,7 @@ end
 
 
 ######################## Comment each file modified ######################
-SRC = FileList['**/*.rb']
+SRC = FileList['**/*.rb']+FileList['bin/*']+FileList['samples/media/*']
 
 COM=SRC.map do |src| 
   base=src.split('.').tap {|o| o.pop}.join('.')
