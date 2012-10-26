@@ -1,4 +1,8 @@
-0.46.1
+0.47.1
+    samples/monitoring.rb : creation
+    Rakefile.rb : commit2
+    lib/ruiby_gtk/ruiby_threader.rb : p traces
+0.47.0 : 2012-10-26 19:57:42 +0200
     samples/monitoring.rb : systray and thread and fugitive dialog with hthread tes
     lib/ruiby_gtk/windows.rb : on_destroy creation
     lib/ruiby_gtk/ruiby_threader.rb : qui_invoke_in_window creation
