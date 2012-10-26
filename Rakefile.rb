@@ -84,11 +84,41 @@ rule /^marker\/.*\._$/ => [proc {|arg| arg.sub(%r{^marker\/(.*)\._$}, '\1.rb')}]
   touch src.name rescue (mkdir_p File.dirname(src.name);  touch src.name )
 end
 
+desc "commit file changed and created"
+task :commit_status do
+  `git status -s`.split(/\r?\n/).each do |line|
+	words=line.split(/\s+/)
+	case line
+		when /^ M /
+			filename=words[2]
+			print("Comment for change in #{filename} : ")
+			comment=$stdin.gets
+			if comment && comment.chomp.size>0
+				  comment.chomp!
+				  (puts "Abort!";exit!) 	if comment=~/^a(b(o(r(t)?)?)?)?$/
+				  sh "git commit #{filename} -m \"#{comment.strip}\"" rescue 1
+				  push_changelog("    #{File.basename(filename)} : #{comment}")
+				  $changed=true
+			end
+		when /^\?\?/
+			filename=words[1]
+			print("Comment for new file in #{filename} : ")
+			comment=$stdin.gets.chomp
+		    (puts "Abort!";exit!) 	if comment=~/^a(b(o(r(t)?)?)?)?$/
+			if comment =~ /^y|o/i
+				sh "git add #{src.source}"
+				sh "git commit #{filename} -m \"creation\"" rescue 1
+				$changed=true
+			end
+	end
+  end
+end
+
 
 desc "job before commit"
 task :pre_commit do
 	puts RUBY_PLATFORM
-	#sh "cls" if RUBY_PLATFORM =~ /(win32)|(mingw)/i 
+	sh "cls" if RUBY_PLATFORM =~ /(win32)|(mingw)/i 
 	puts <<EEND2
 
 
@@ -117,6 +147,7 @@ task :post_commit do
 end
 desc "commit local and then distant repo"
 task :commit => [:pre_commit,"commit._",:post_commit]
+task :commit2 => [:pre_commit,"commit_status",:post_commit]
 
 
 desc "make a gem and push it to gemcutter"
