@@ -98,11 +98,12 @@ end
 #	) { |hvalues| hvalues }
 
 class PopupForm < Ruiby_gtk
-    def initialize(title,width=350,height=600,data={},options={},&bloc)
+    def initialize(title,width=350,height=600,data={},options={},opt={},&bloc)
 		@bloc= bloc 
 		@data=data
 		@options=options
-		@options["button-orrient"] ||= "h"
+		@popt=opt
+		@options["button-direction"] ||= "h"
 		@title=title
         super(title[0..50],width,height)
     end	
@@ -112,8 +113,8 @@ class PopupForm < Ruiby_gtk
 	def component()
 	  stack do
 		label(@title)
-		@form=properties("",@data,{edit: true}) { |a| @bloc.call(a) if @bloc }
-		case @options["button-orrient"] 
+		@form=properties("",@data,@popt) { |a| @bloc.call(a) if @bloc }
+		case @options["button-direction"] 
 			when /^h/i then flowi  { button_list }
 			when /^v/i then stacki { button_list }
 		end
