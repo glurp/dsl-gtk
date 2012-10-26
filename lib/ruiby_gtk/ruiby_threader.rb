@@ -26,7 +26,7 @@ module Ruiby_threader
 				 else
 					win=ici
 				 end
-				 win.instance_eval { mess.call } rescue log("#{$!} :\n  #{$!.backtrace[0..3].join("\n   ")}") 
+				 win.instance_eval(&mess) rescue log("#{$!} :\n  #{$!.backtrace[0..3].join("\n   ")}") 
 			end
          true
         }
@@ -84,7 +84,6 @@ def gui_invoke_in_window(w,&blk)
 	end
 	if $__mainthread__ != Thread.current
 		if defined?($__queue__)
-			p "pushed"
 			$__queue__.push( [w,blk] ) 
 		else
 			puts("\n\nThreaded invoker not initilized! : please call threader(ms) on window constructor!\n\n") 
