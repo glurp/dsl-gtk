@@ -1,6 +1,10 @@
 #####################################################################################
 #          W I N  M O N I T O R / ruby-Ruiby-gtk  tools for watching home servers
 #####################################################################################
+if RUBY_PLATFORM != "i386-mingw32"
+ puts "Oups!, #{$0} is For windows only !"
+ exit(0)
+end
 require_relative '../lib/ruiby' 
 require 'open-uri' 
 require 'win32ole' # for wmi : process list
@@ -213,10 +217,8 @@ class NetStat < Ruiby_gtk
 		end		
 		@ann=anim(@periode) { 
 			Thread.new {
-				p 0
 				d=net_to_table($filtre) 
-				p 1
-				gui_invoke_in_window(self) { p 2; @grid.set_data(d) }  if @ann && !@active.active?
+				gui_invoke_in_window(self) { @grid.set_data(d) }  if @ann && !@active.active?
 			} 
 		} 
 		on_destroy  { ann,@ann=@ann,nil; delete(ann)  }
