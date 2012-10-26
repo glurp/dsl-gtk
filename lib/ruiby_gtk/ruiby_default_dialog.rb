@@ -26,6 +26,7 @@ module Ruiby_default_dialog
 		entry=Entry.new().tap {|e| e.set_text(value) }
 		dialog.vbox.add(label)
 		dialog.vbox.add(entry)
+		dialog.set_window_position(Window::POS_CENTER)
 
 		dialog.signal_connect('response') do |w,e|
 			rep=true
@@ -42,6 +43,7 @@ module Ruiby_default_dialog
         md = MessageDialog.new(self,
             Dialog::DESTROY_WITH_PARENT,  Gtk::MessageDialog::QUESTION, 
             MessageDialog::BUTTONS_YES_NO, text)
+		md.set_window_position(Window::POS_CENTER)
 		rep=md.run
 		md.destroy
 		return( rep==-8 )
@@ -55,12 +57,14 @@ module Ruiby_default_dialog
         md = MessageDialog.new(self,
             Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::QUESTION, 
             ::Gtk::MessageDialog::BUTTONS_CLOSE, text)
+		md.set_window_position(Window::POS_CENTER)
         md.run
         md.destroy
 	end
 	# dialog asking a color
 	def ask_color
 		cdia = ColorSelectionDialog.new("Select color")
+		cdia.set_window_position(Window::POS_CENTER)
 		response=cdia.run
 		color=nil
         if response == Gtk::Dialog::RESPONSE_OK
@@ -98,6 +102,7 @@ module Ruiby_default_dialog
 	      [Gtk::Stock::CANCEL, Gtk::Dialog::RESPONSE_CANCEL],
 	      [button, Gtk::Dialog::RESPONSE_ACCEPT]
 	    )
+		dialog.set_window_position(Window::POS_CENTER)
 	    ret = ( dialog.run == Gtk::Dialog::RESPONSE_ACCEPT ? dialog.filename : nil rescue false)
 	    dialog.destroy
 	    ret
