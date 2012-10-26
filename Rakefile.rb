@@ -33,8 +33,7 @@
 #
 #################################################################
 
-# gem name is name of current directory
-
+FIGNORES=%w{VERSION CHANGELOG.txt .gitignore}
 NAME= Dir.pwd.gsub(File.dirname(Dir.pwd)+'/',"")
 
 Rake.application.options.trace = false
@@ -74,6 +73,7 @@ task :commit_status do
 	case line
 		when /^ M /
 			filename=words[2]
+			next if FIGNORES.include?(filename)
 			print("Comment for change in #{filename} : ")
 			comment=$stdin.gets
 			if comment && comment.chomp.size>0
@@ -85,6 +85,7 @@ task :commit_status do
 			end
 		when /^\?\?/
 			filename=words[1]
+			next if FIGNORES.include?(filename)
 			print("Comment for new file in #{filename} : ")
 			comment=$stdin.gets.chomp
 		    (puts "Abort!";exit!) 	if comment=~/^a(b(o(r(t)?)?)?)?$/
