@@ -1,35 +1,37 @@
 #################################################################
-#  Rakefile : git commit/add *.rb, git push, test & gem push
+#  Rakefile : git commit/add ; git push, test/spec & gem push
 #################################################################
 #
 # Usage:
 #	> rake commit  # commit in local directory and push to repository
 #	> rake gem	   # make gem,and test it, and push it to gemcutter
+#	> rake travis  # travis CI run commands
 #
 #################################################################
 #  Requirements :
-#		auto-commit only .rb files
-#		tested only on windows !
 #		version : X.Y.Z  
 #           X	: to be hand-modified 
 #           Y	: incremented at each 'rake gem'
 #           Z	: increment on each file 'rake commit'
-#
-# CHANGELOG.txt is updated with each comment/version change
-# VERSION is updated in each commit (Z part) and each gem build (Y part) 
-#
+#		auto commit all changed file, sking comment for each
+#		log all commment in CHANGELOG?Txt file
+#		increment VERSION content with version numbering rule
+# 		so CHANGELOG.txt is updated with each comment/version change
+# 		so VERSION is updated in each commit (Z part) and each gem build (Y part) 
+#		
 # commit:
 # 	Use 'git status' output for each new/modified file,
 #   with asking some comment
-#   (no add/commit of comment is empty)~
+#   (no add/commit of comment is empty)
 #
 # gem:
-#   execute rspec id specs exists,
-#   make a gem, install it, execute samples/test.rb in it,
-#   ask to operator if execution is ok and if ok: 
+#   execute rspec if specs exists,
+#   make a gem, install it, execute samples/test.rb in it, if exist
+#   ask to operator if execution is ok and : 
 #      increment version
-#      updadate change log
+#      update change log/version
 #      do a 'gem push' and a 'gem yanked'
+#	   make a coffe
 #
 #################################################################
 
@@ -85,12 +87,11 @@ task :commit_status do
 			end
 		when /^\?\?/
 			filename=words[1]
-			next if FIGNORES.include?(filename)
 			print("Comment for new file in #{filename} : ")
 			comment=$stdin.gets.chomp
 		    (puts "Abort!";exit!) 	if comment=~/^a(b(o(r(t)?)?)?)?$/
 			if comment =~ /^y|o/i
-				sh "git add #{src.source}"
+				sh "git add #{filename}"
 				sh "git commit #{filename} -m \"creation\"" rescue 1
 				$changed=true
 			end
@@ -181,19 +182,24 @@ task :test do
  if File.exists("spec/test_all.rb")
 	system("rspec spec/test_all.rb")
  end
- cd ".."
- mkdir "#{NAME}Test" unless File.exists?("#{NAME}Test")
- nname="#{NAME}Test/test.rb"
- content=File.read("#{NAME}/samples/test.rb").gsub(/^\s*require_relative/,"require").gsub('../lib/','')
- File.open(nname,"w") { |f| f.write(content) }
- sh "gem install #{FileList["#{NAME}/#{NAME}*.gem"][-1]}"
- ruby  nname
- cd NAME
- print "\n\nOk for diffusion ? "
- rep=$stdin.gets
- raise("aborted!") unless rep && rep =~ /^y|o|d/
+ if File.exists("samples/test.rb")
+	 cd ".."
+	 mkdir "#{NAME}Test" unless File.exists?("#{NAME}Test")
+	 nname="#{NAME}Test/test.rb"
+	 content=File.read("#{NAME}/samples/test.rb").gsub(/^\s*require_relative/,"require").gsub('../lib/','')
+	 File.open(nname,"w") { |f| f.write(content) }
+	 sh "gem install #{FileList["#{NAME}/#{NAME}*.gem"][-1]}"
+	 ruby  nname
+	 cd NAME
+	 print "\n\nOk for diffusion ? "
+	 rep=$stdin.gets
+	 raise("aborted!") unless rep && rep =~ /^y|o|d/
+ end
 end
 
+#############################################################
+#  travis command 
+#############################################################
 
 task :travis do
  puts "Starting travis test..."
