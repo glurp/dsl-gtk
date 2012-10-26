@@ -23,7 +23,7 @@ def test_dialogues()
 			data={} ;line.zip($gheader) { |v,k| data[k]=v }
 			PopupForm.new("Edit #{line[1]}",0,0,data,{				
 				"Rename" => proc {|w,cdata|  cdata['first-name']+="+" ; w.set_data(cdata)},
-				"button-orrient" => "h"
+				"button-direction" => "h"
 			}) do |h|
 			    vh=h.values
 				$gdata.map! { |l| l[0] ==vh[0] ?  vh : l} 
