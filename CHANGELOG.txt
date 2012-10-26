@@ -1,3 +1,9 @@
+0.45.1
+    spec/rspec_helper.rb : nop
+    samples/dialogs.rb : nop
+    lib/ruiby_gtk/ruiby_default_dialog.rb : center windows
+    lib/ruiby_gtk/editor.rb : corect PopupGird and PopupForm
+0.45.0 : 2012-10-09 19:26:30 +0200
     spec/test_layout.rb : complete
     spec/test_composites.rb : creation tests for tapble,notebook,scrollable...
     spec/test_basics_widget.rb : complete
