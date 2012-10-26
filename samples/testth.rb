@@ -32,9 +32,9 @@ class RubyApp < Ruiby_gtk
 	
 	def run1
 		@ss=0
-		sleep 20
+		sleep 2
  		loop {
-		 	sleep(0.05)
+		 	sleep(0.2)
 			gui_invoke_wait { @ss=@lab.children.size }
 			if @ss<20
 			  gui_invoke { append_to(@lab) { sloti(label(Time.now.to_f.to_s))  } }
@@ -45,7 +45,7 @@ class RubyApp < Ruiby_gtk
 	end 
 	def run2
 		ii=0
-		sleep 20
+		sleep 30
  		loop {
 			Open3.popen3("ping 10.177.235.1") { |si,so,se| 
 				while str=(so.gets || se.gets)
