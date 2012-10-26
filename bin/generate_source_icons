@@ -34,8 +34,9 @@ str+=<<'EEND'
 def get_icon_filename(name)
   raise("icon '#{name}' unknown in #{$icons.keys}") unless $icons[name]
   fname=File.join(Dir.tmpdir,name+".png")
+  content=$icons[name].unpack('m')[0]
   puts "#{name} ==> #{fname} / #{$icons[name].size}" if $DEBUG
-  File.open(fname,"wb") { |f| f.write($icons[name].unpack('m')) } unless File.exists?(fname)
+  File.open(fname,"wb") { |f| f.write(content) } unless File.exists?(fname) && File.size(fname)==content.size
   fname
 end
 def get_icon_data(name)
