@@ -1,4 +1,8 @@
-0.45.1
+0.46.1
+    samples/monitoring.rb : systray and thread and fugitive dialog with hthread tes
+    lib/ruiby_gtk/windows.rb : on_destroy creation
+    lib/ruiby_gtk/ruiby_threader.rb : qui_invoke_in_window creation
+0.46.0 : 2012-10-26 16:23:05 +0200
     spec/rspec_helper.rb : nop
     samples/dialogs.rb : nop
     lib/ruiby_gtk/ruiby_default_dialog.rb : center windows
