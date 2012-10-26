@@ -114,6 +114,9 @@ class Ruiby_gtk < Gtk::Window
 			puts "Error in show_all : illegal state of some widget? "+ $!.to_s
 		end
 	end
+	def on_destroy(&blk) 
+        signal_connect("destroy") { blk.call }
+	end
 	def ruiby_exit()
 		(self.at_exit() if self.respond_to?(:at_exit) ) rescue puts $!.to_s
 		Gtk.main_quit 
