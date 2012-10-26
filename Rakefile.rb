@@ -4,23 +4,33 @@
 #
 # Usage:
 #	> rake commit  # commit in local directory and push to repository
-#   > rake gem	   # commit and make gem (and test it) and push to gemcutter !
+#	> rake gem	   # make gem,and test it, and push it to gemcutter
 #
 #################################################################
-#  Requirments :
+#  Requirements :
 #		auto-commit only .rb files
-#		one application for test : samples/test.rb
 #		tested only on windows !
-#		version : X.Y.Z X: 
-#           X   : to be hand-modified 
-#           Y.Z : increment Y/0 to Z for each gem generation
-#           Z   : increment on each (one or more) file commit(s)
+#		version : X.Y.Z  
+#           X	: to be hand-modified 
+#           Y	: incremented at each 'rake gem'
+#           Z	: increment on each file 'rake commit'
 #
-#  to be better:
-#     it create a ._ file (empty)  for each ruby file. 
-#     is be done in a cached directory : marker
+# CHANGELOG.txt is updated with each comment/version change
+# VERSION is updated in each commit (Z part) and each gem build (Y part) 
 #
-#     Perhaps should use git status output
+# commit:
+# 	Use 'git status' output for each new/modified file,
+#   with asking some comment
+#   (no add/commit of comment is empty)~
+#
+# gem:
+#   execute rspec id specs exists,
+#   make a gem, install it, execute samples/test.rb in it,
+#   ask to operator if execution is ok and if ok: 
+#      increment version
+#      updadate change log
+#      do a 'gem push' and a 'gem yanked'
+#
 #################################################################
 
 # gem name is name of current directory
@@ -52,8 +62,9 @@ def change_version()
   version
 end
 
-
-######################## Comment each file modified ######################
+#############################################################
+#               Comment each file add/modified 	           ##
+#############################################################
 
 
 desc "commit file changed and created"
@@ -87,9 +98,12 @@ task :commit_status do
 end
 
 
+#############################################################
+#  before commit
+#############################################################
+
 desc "job before commit"
 task :pre_commit do
-	puts RUBY_PLATFORM
 	sh "cls" if RUBY_PLATFORM =~ /(win32)|(mingw)/i 
 	puts <<EEND2
 
@@ -103,6 +117,9 @@ EEND2
 	$changed=false
 end
 
+#############################################################
+#  after commit
+#############################################################
 desc "job after local commit done: push to git repo"
 task :post_commit do
   if $changed
@@ -118,10 +135,16 @@ task :post_commit do
   end
 end
 
+#############################################################
+#   commit
+#############################################################
 desc "commit local and then distant repo"
 task :commit => [:pre_commit,"commit_status",:post_commit]
 
 
+#############################################################
+#  gem build & push
+#############################################################
 desc "make a gem and push it to gemcutter"
 task :gem => :commit do
 	puts <<EEND
@@ -148,9 +171,15 @@ EEND
 	  sh "gem yank -v #{ov} #{NAME}"
 	}
 end
+#############################################################
+#  execute tests 
+#############################################################
 
 desc "test the current version of the framework by installing the gem and run a test programme"
 task :test do
+ if File.exists("spec/test_all.rb")
+	system("rspec spec/test_all.rb")
+ end
  cd ".."
  mkdir "#{NAME}Test" unless File.exists?("#{NAME}Test")
  nname="#{NAME}Test/test.rb"
@@ -159,7 +188,7 @@ task :test do
  sh "gem install #{FileList["#{NAME}/#{NAME}*.gem"][-1]}"
  ruby  nname
  cd NAME
- puts "\n\nOk for diffusion ?"
+ print "\n\nOk for diffusion ? "
  rep=$stdin.gets
  raise("aborted!") unless rep && rep =~ /^y|o|d/
 end
