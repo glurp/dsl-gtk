@@ -1,4 +1,7 @@
-0.49.1
+0.50.1
+    test.rb : popup test
+    ruiby_dsl.rb : popup creation
+0.50.0 : 2012-11-05 19:06:43 +0100
     Rakefile.rb : debug
 0.49.0 : 2012-11-05 19:05:45 +0100
     test_layout.rb : complete
