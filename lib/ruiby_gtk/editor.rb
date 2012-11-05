@@ -38,6 +38,7 @@ end
 #
 
 class PopupTable < Ruiby_gtk 
+	attr_reader :mgrid
     def initialize(title,width=350,height=600,captions=[["oups"]],data=[["no data"]],options={},&bloc)
 		@bloc=bloc
 		@captions=captions
@@ -57,6 +58,7 @@ class PopupTable < Ruiby_gtk
 			@grid=grid(@captions,100,150)
 			stacki { space;button_list;space } if @options["button-orrient"] =~ /^r/i
 		}
+		@mgrid=@grid
 		@grid.set_data(@data)	
 		flowi { button_list } if @options["button-orrient"] =~ /^h/i
 		stacki { button_list } if @options["button-orrient"] =~ /^v/i
