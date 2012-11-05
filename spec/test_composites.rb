@@ -177,4 +177,45 @@ describe Ruiby do
 		@win.sleeping(100,"Verify scolled")
 		w.should be_a_kind_of(Gtk::Label) 
  end
+ it "create clickable" do
+		w=nil
+		class << @win
+			def selection() end
+		end
+		@win.create { stack {
+		   clickable(:selection) { w=label(" please clik me ") }
+		} }		
+end
+ it "create a htoolbar" do
+		w=nil
+		@win.create { 
+			stack {   
+				w=htoolbar(
+					"open/test" => proc { },
+					"sep" => "",
+					"redo/test" => proc { }
+				) 
+			} 
+		}
+		w.should be_a_kind_of(Gtk::Toolbar)
+ end
+ it "create a list" do
+		w=nil
+		@win.create { stack {    
+			w=list("a",200,100)
+		} }
+		w.set_data(%w{a b c d e f g h})
+		w.should be_a_kind_of( Gtk::ScrolledWindow )
+		w.selection.should == nil
+ end
+ it "create a accordion menu" do
+		w=nil
+		@win.create { stack {    
+			 accordion { 
+				aitem("A") { alabel("e") { };alabel("b") { } }  
+				aitem("B") { alabel("z") { };alabel("e") { } } 
+			 }
+		} }
+ end
+ 
 end
