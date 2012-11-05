@@ -120,6 +120,13 @@ describe Ruiby do
 		@win.delete(ici3)
 		ici.children.size.should eq(0)
 	 end
+	 it "get_config" do
+		ici=nil; ici2=nil;ici3=nil;
+		@win.create { ici=stack {} }
+		@win.append_to(ici) { ici2=@win.button("e") }
+		@win.get_config(ici).should be_a_kind_of(Hash)
+		@win.get_config(ici).size.should > 1
+	 end
  end
  
 end
