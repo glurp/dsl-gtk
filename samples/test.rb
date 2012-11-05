@@ -91,7 +91,7 @@ end
 				@epaisseur=sloti(islider(1,{:min=>1,:max=>30,:by=>1}))
 			  }
 			  @ldraw=[] ; @color=  ::Gdk::Color.parse("#33EEFF");
-			  canvas(100,100,{ 
+			  cv=canvas(100,100,{ 
 				:expose     => proc { |w,cr|  
 				  @ldraw.each do |line|
 					next if line.size<3
@@ -107,6 +107,13 @@ end
 				:mouse_move => proc { |w,e,o| no= [e.x,e.y] ; (@ldraw.last << no) if no[0]!=o[0] || no[1]!=o[1] ; no },
 				:mouse_up   => proc { |w,e,o| no= [e.x,e.y] ; (@ldraw.last << no) ; no}
 				})
+				popup {
+					pp_item("copy") 	{ alert 1 }
+					pp_item("cut") 		{ alert 2 }
+					pp_item("past")		{ alert 3 }
+					pp_item("duplicate"){ alert 4 }
+				}
+
 			end 
 	 end
 	 def test_list_grid()
