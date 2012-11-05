@@ -1,7 +1,10 @@
-require 'simplecov'
-SimpleCov.start
+#
+# do a rcov if test is rennung from gem base directory
+#
+( require 'simplecov' ; SimpleCov.start ) if File.exists?("spec")
 
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
+
 require 'ruiby'
 require 'timeout'
 $here=File.dirname(__FILE__)
