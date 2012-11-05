@@ -94,6 +94,7 @@ class Ruiby_gtk < Gtk::Window
         set_default_size(w,h)
         signal_connect "destroy" do 
 			if @is_main_window
+				@is_main_window=false
 				Gtk.main_quit
 			end
 		end
