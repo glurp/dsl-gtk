@@ -179,10 +179,10 @@ end
 
 desc "test the current version of the framework by installing the gem and run a test programme"
 task :test do
- if File.exists("spec/test_all.rb")
+ if File.exists?("spec/test_all.rb")
 	system("rspec spec/test_all.rb")
  end
- if File.exists("samples/test.rb")
+ if File.exists?("samples/test.rb")
 	 cd ".."
 	 mkdir "#{NAME}Test" unless File.exists?("#{NAME}Test")
 	 nname="#{NAME}Test/test.rb"
