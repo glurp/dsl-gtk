@@ -79,6 +79,12 @@ describe Ruiby do
 		@win.sleeping(100,"Verify fentry")
 		w.should be_a_kind_of(Gtk::SpinButton)
  end
+  it "create a image from file" do
+		w=nil
+		@win.create { stack {   w=image("../samples/media/angel.png") } }
+		w.should be_a_kind_of(Gtk::Label)
+ end
+
  it "create fields" do
 		w=nil
 		@win.create { stack {   w=fields("aa"=>0,"bb"=>1)  } }
@@ -97,12 +103,43 @@ describe Ruiby do
 		w=nil
 		@win.create { stack {   w=islider(22,min: 0, max: 100,by: 1) { |v|p v} } }
 		@win.sleeping(100,"Verify islider")
-		 w.should be_a_kind_of(Gtk::HScale)
+		w.should be_a_kind_of(Gtk::HScale)
  end
-  it "create a canvas" do
+ it "create a canvas" do
 		w=nil
 		@win.create { stack {   w=canvas(100,100) } }
-		 w.should be_a_kind_of(Gtk::DrawingArea)
+		w.should be_a_kind_of(Gtk::DrawingArea)
  end
-
+ it "create a combo box" do
+		w=nil
+		@win.create { stack {    
+			w=combo("a"=> 1,"b"=>2)
+		} }
+		w.should be_a_kind_of(Gtk::ComboBox)
+ end
+ it "create radio buttons" do
+		w=nil
+		@win.create { stack {    
+		 w=hradio_buttons(%w{a b c d e f},2)
+		 vradio_buttons(%w{a b c d e f},2)
+		} }
+		w.children[0].should be_a_kind_of(Gtk::RadioButton)
+ end
+ it "create toggle button" do
+		w=nil
+		@win.create { stack {    
+			w=toggle_button("on","off",value=false) { }
+		} }
+		w.should be_a_kind_of(Gtk::ToggleButton)
+ end
+ it "create text area" do
+		w=nil
+		@win.create { stack {    
+			w=text_area(100,100,{:text=> "ddd",:font=>"Courier 10"})
+		} }
+		w.children[0].should be_a_kind_of(Gtk::TextView)
+		content=%w{a b c d e f}.join("\n")
+		w.text=content
+		w.text.size.should ==  content.size
+ end
 end
