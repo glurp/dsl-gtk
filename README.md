@@ -27,17 +27,13 @@ Status
 ======
 Done :
 
-- sketchi tools
-- tools for generate file/encoded base64 to ruby source 
 - ruiby command: one liner execution
-- rspec test : 3/4 done, travis-ci integration one, codeclimate done
+- rspec test : 380% DSL done, travis-ci integration done, codeclimate done
 
-Todo:
+Todo for pass to 1.0 :
 
 - Easy Form : variables binding for entry/list/check-radio button...
-- Dialog sync (block the caller until destroy dialogue)
 - treeview
-- video
 
 Installation
 ============
@@ -47,7 +43,7 @@ Install Ruby 1.9.x ...
 
 Install GTK2 :
 
-*	linux: should be in the box... or install gtk2 and gtksourceview (dev version) :
+*	linux: should be in the box... or install gtk2 and gtksourceview2 (dev version) :
 
 (debian example)
 ```
@@ -70,12 +66,12 @@ Install GTK2 :
 ```
 
 NOTA
-Whe must correct the capitalization of Ruiby...
+We must correct the capitalization of Ruiby...
 
 
 Usage
 ======
-DSL is usable via inherit or include
+DSL is usable via inherit, include, Ruiby.app block, or one-liner command.
 
 By inherit:
 
@@ -128,18 +124,21 @@ Ruiby.app do
 	end
 end
 ```
-And, for very very little application :
+And, for very very little application ('~' are replaced by guillemet):
 
 ```ruby 
 
+> ruiby   button(~Continue ? ~) "{  exit!(0) }"
+> ruiby   fields([%w{a b},%w{b c},%w{c d}]) { "|a,b,c|" p [a,b,c] if a; exit!(a ?0:1) }
 > ruiby -width 100  -height 300 -title "Please, select a file" \
              l=list(~Files :~);l.set_data Dir.glob(~*~) ;  \
              buttoni(~Selected~) { puts l.selection ; exit!(0) } ;\
 			 buttoni(~Annul~) { exit!(1) }
-> ruiby   fields([%w{a b},%w{b c},%w{c d}]) { "|a,b,c|" p [a,b,c] if a; exit!(a ?0:1) }
 
 ```
 
+Threading
+=========
 
 Threading is supported via a Queue polled by main-window thread :
 * main window poll Queue , messagers are proc to be instance_eval() in the main window context
