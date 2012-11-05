@@ -1,4 +1,14 @@
-0.48.5
+0.48.6
+    test_layout.rb : complete
+    test_dialogs.rb : creation
+    test_composites.rb : list, htoolbar
+    test_basics_widget.rb : complete
+    test_all.rb : test_dialogs appended
+    rspec_helper.rb : rcov if global run
+    windows.rb : corrections for tests
+    ruiby_dsl.rb : corrections for tests
+    editor.rb : mgrid field for test
+    README.md : test coverage
     Rakefile.rb : comments
     Rakefile.rb : list of ignored file
     Rakefile.rb : u
