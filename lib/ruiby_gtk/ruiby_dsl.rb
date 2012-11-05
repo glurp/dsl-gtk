@@ -28,6 +28,7 @@ module Ruiby_dsl
 	def flowi(add1=true,&b)	   		_cbox(false,HBox.new(false, 2),add1,&b) end
 	
 	# box { } used for container which manage the widget (as stack(false) {} ) 
+	# use it for cell in table : table { row { cell(box { });... };... }
 	def box() 
 		box=VBox.new(false, 2)
 		@lcur << box
@@ -692,6 +693,30 @@ module Ruiby_dsl
 		@lcur.last.append_page( stack(false)  { yield }, l )
 	end
 	
+	############################## Popup
+	# popup { pp_item("text") { } ; ... }
+	def popup(w=nil)
+		w ||= @lcur.last() 
+		ppmenu = Gtk::Menu.new
+		@lcur << ppmenu 
+		yield
+		@lcur.pop
+		ppmenu.show_all		
+		w.add_events(Gdk::Event::BUTTON_PRESS_MASK)
+		w.signal_connect("button_press_event") do |widget, event|
+			ppmenu.popup(nil, nil, event.button, event.time) if (event.button == 3)
+		end
+		ppmenu
+	end
+	def pp_item(text,&blk)
+		item = Gtk::MenuItem.new(text)
+		item.signal_connect('activate') { |w| blk.call() }
+		@lcur.last.append(item)
+	end
+	def pp_separator()
+		item = Gtk::SeparatorMenuItem.new()
+		@lcur.last.append(item)
+	end
 	############################## Menu
     # create a application menu. must contain menu() {} :
 	# menu_bar {menu("F") {menu_button("a") { } ; menu_separator; menu_checkbutton("b") { |w|} ...}}
@@ -807,7 +832,7 @@ module Ruiby_dsl
 	
 	##################### source editor
 	
-	# a source_editor witget : text as showed in fixed font, colorized (default: ruby syntaxe)
+	# a source_editor widget : text as showed in fixed font, colorized (default: ruby syntaxe)
 	# from: green shoes plugin
 	# options= :width  :height :on_change :lang :font
 	# @edit=source_editor().editor
