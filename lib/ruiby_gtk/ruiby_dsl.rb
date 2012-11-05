@@ -47,17 +47,6 @@ module Ruiby_dsl
 		autoslot()
 		@lcur.pop
 	end
-	def relative() 
-		autoslot()
-		valign = Gtk::Alignment.new(px,py, 0,0)
-		@lcur.last.pack_start(valign,true,true,0)
-		vbox=VBox.new(false, 0)
-		valign.add(vbox)
-		@lcur << vbox
-		yield
-		autoslot()
-		@lcur.pop
-	end
 	
 	# a box with border and texte title, take all space
 	def frame(t="",add1=true,&b)  	
