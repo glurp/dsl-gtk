@@ -1,5 +1,8 @@
 ﻿#!/usr/bin/ruby
 # encoding: utf-8
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
+
 $time_start=Time.now.to_f*1000
 def mlog(text)
  puts "%8f | %s" % [(Time.now.to_f*1000-$time_start).to_i,text.to_s]

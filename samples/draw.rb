@@ -1,3 +1,8 @@
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
+
+puts "Not terminted !!!!!"
+
 require_relative '../lib/ruiby'
 
 ############################### Complete ruiby dsl for vector widget

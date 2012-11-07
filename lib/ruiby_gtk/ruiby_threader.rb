@@ -1,3 +1,6 @@
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
+
 module Ruiby_threader
 	# implictly called by Ruiby window creator
 	# initialize multi thread engine

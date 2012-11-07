@@ -1,3 +1,6 @@
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
+
 ####################################################################################
 #   tilesviewer.rb : show Map type OSM raster tiles 
 ####################################################################################

@@ -1,3 +1,6 @@
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
+
 # show all raster file which names are in  ARGV
 # First example of a Ruiby.app
 require_relative '../lib/ruiby'

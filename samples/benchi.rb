@@ -1,3 +1,6 @@
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
+
 ####################################################################################################
 #
 #   Benchi.rb : Mesure duration of a (short) traitment

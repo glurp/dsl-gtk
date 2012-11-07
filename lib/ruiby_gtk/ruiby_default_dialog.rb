@@ -1,3 +1,6 @@
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
+
 module Ruiby_default_dialog
 	include ::Gtk
 	###################################### Alerts

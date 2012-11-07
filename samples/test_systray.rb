@@ -1,3 +1,5 @@
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
 #####################################################################################
 #          test_systray.rb : tst systray & style
 #####################################################################################

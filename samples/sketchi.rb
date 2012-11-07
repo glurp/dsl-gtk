@@ -1,4 +1,7 @@
 #!/usr/bin/ruby
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
+
 #####################################################################
 #  sketchi.rb : edit/test component() methods
 #               not an IDE....

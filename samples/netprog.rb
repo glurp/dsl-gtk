@@ -1,3 +1,6 @@
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
+
 ################################################################################
 # select * from netstat join tasklist where *.to_s like '%1%'    ;)
 ################################################################################

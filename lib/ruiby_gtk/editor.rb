@@ -1,3 +1,6 @@
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
+
 # create a diaog which contain a little editor
 # text is colorize for ruby lang
 class Editor < Ruiby_gtk 

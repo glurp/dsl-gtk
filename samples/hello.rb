@@ -1,4 +1,6 @@
 require_relative '../lib/ruiby'
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
 
 
 class RubyApp1 < Ruiby_gtk

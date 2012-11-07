@@ -1,4 +1,7 @@
 #!/usr/bin/ruby
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
+
 #####################################################################
 #  panned.rb : IDE ruiby :) test paned h/v
 #####################################################################

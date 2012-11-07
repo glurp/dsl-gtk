@@ -1,3 +1,6 @@
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
+
 #!/usr/bin/ruby
 # encoding: utf-8
 require_relative '../lib/ruiby'

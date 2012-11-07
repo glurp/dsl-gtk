@@ -28,7 +28,7 @@ class RubyApp < Ruiby_gtk
 				end
 			}
 			@wdata= slot(text_area(400,100,:text=>"Hello\n"))
-			buttoni("exit") { exit!(1) }
+			buttoni("exit") { destroy(self) }
 		}
 		threader(10)
 	end
