@@ -27,8 +27,8 @@ Status
 ======
 Done :
 
-- ruiby command: one liner execution
-- rspec test : 380% DSL done, travis-ci integration done, codeclimate done
+- ruiby system command: one-line execution on shell
+- rspec test : 80% DSL done, travis-ci integration done, codeclimate done
 
 Todo for pass to 1.0 :
 
