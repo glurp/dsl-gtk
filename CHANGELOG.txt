@@ -1,3 +1,5 @@
+0.50.3
+    Rakefile.rb : check licenses data on each source file
     test.rb : popup test
     ruiby_dsl.rb : popup creation
 0.50.0 : 2012-11-05 19:06:43 +0100
