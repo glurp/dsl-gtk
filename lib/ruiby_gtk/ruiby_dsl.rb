@@ -781,10 +781,11 @@ module Ruiby_dsl
 	# create a hoizontral accordion menu. 	
 	def haccordion() 
 		@slot_accordion_active=nil #only one accordion active by window!
-		flow { flowi {
+		w=flow { flowi {
 			yield
 		}}
 		separator
+		w
 	end
 	#  a button menu in accordion
 	def aitem(txt,&blk) 
