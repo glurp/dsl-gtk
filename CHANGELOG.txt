@@ -1,4 +1,4 @@
-0.50.3
+0.50.4
     Rakefile.rb : check licenses data on each source file
     test.rb : popup test
     ruiby_dsl.rb : popup creation
