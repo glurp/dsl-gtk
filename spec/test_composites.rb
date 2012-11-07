@@ -1,3 +1,5 @@
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
 require_relative 'rspec_helper.rb'
 
 describe Ruiby do
@@ -60,6 +62,15 @@ describe Ruiby do
 		t=w.children.first.children.first.children.first.children.first
 		t.should be_a_kind_of(Gtk::Table)
  end
+  it "create properties shower whith scroll" do
+		w=nil
+		data={a: 2, b: 4, c: 6}
+		@win.create { stack {   
+			w=properties("Title",data,{scroll: [200,200],edit: true})
+		} } 
+		@win.sleeping(100)
+		w.should be_a_kind_of(Gtk::VBox)
+ end
   it "create properties editor" do
 		w=nil
 		data={a: 2, b: 4, c: 6}
@@ -68,9 +79,6 @@ describe Ruiby do
 		} } 
 		@win.sleeping(100)
 		w.should be_a_kind_of(Gtk::VBox)
-		t=w.children.first.children.first.children.first
-		t.children.first.should be_a_kind_of(Gtk::Table)
-		t.children.size.should eq(2)
  end
   it "set/get data in properties editor" do
 		w=nil
@@ -126,6 +134,17 @@ describe Ruiby do
 		} }
 		@win.sleeping(100,"Verify accordion")
 		w.should be_a_kind_of(Gtk::VBox)
+ end
+  it "create a h accordion" do
+		w=nil
+		@win.create { stack {
+		   w=haccordion {
+				aitem("aaa") { alabel("eee") ;  alabel("eee") ; alabel("eee") ;}
+				aitem("bbb") { l=alabel("alert...") { alert("ok") }}
+				aitem("ccc") { alabel("eee")}
+		   }
+		} }
+		w.should be_a_kind_of(Gtk::HBox)
  end
   it "create panneds" do
 		w=nil
@@ -216,6 +235,17 @@ end
 				aitem("B") { alabel("z") { };alabel("e") { } } 
 			 }
 		} }
+ end
+ it "create a popup menu" do
+		w=nil
+		@win.create { stack {    
+			 popup {  
+				10.times { |i| pp_item("Text 1 #{i}") { } }
+				pp_separator
+				10.times { |i| pp_item("Text 2 #{i}") { } }
+			 }
+		} }
+		@win.sleeping(40,"Verify scolled")
  end
  
 end
