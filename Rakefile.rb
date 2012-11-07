@@ -65,11 +65,11 @@ def change_version()
   version
 end
 def verification_file(fn)
-	p fn
+	return unless File.extname(fn)==".rb"
 	content=File.read(fn)[0..600]
-	p content
 	unless content =~ /BY-SA/ && content =~ /LGPL/
-		raise "\nFile #{fn} seem not contain licenses data (LGPL/BY-SA)\n"		
+		puts "\nFile #{fn} seem not contain licenses data (LGPL/BY-SA)\n"		
+		exit(0)
 	end
 end
 #############################################################
@@ -87,12 +87,10 @@ task :commit_status do
 			next if FIGNORES.include?(filename)
 			print("Comment for change in #{filename} : ")
 			comment=$stdin.gets
-			if comment && comment.chomp.size>0 && File.extname(filename)==".rb"
-				verification_file(filename)
-			end
 			if comment && comment.chomp.size>0
 				  comment.chomp!
 				  (puts "Abort!";exit!) 	if comment=~/^a(b(o(r(t)?)?)?)?$/
+				  verification_file(filename)
 				  sh "git commit #{filename} -m \"#{comment.strip}\"" rescue 1
 				  push_changelog("    #{File.basename(filename)} : #{comment}")
 				  $changed=true
@@ -103,6 +101,7 @@ task :commit_status do
 			comment=$stdin.gets.chomp
 		    (puts "Abort!";exit!) 	if comment=~/^a(b(o(r(t)?)?)?)?$/
 			if comment =~ /^y|o/i
+				verification_file(filename)
 				sh "git add #{filename}"
 				sh "git commit #{filename} -m \"creation\"" rescue 1
 				$changed=true
