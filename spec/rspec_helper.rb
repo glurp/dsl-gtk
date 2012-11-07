@@ -1,3 +1,5 @@
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
 #
 # do a rcov if test is rennung from gem base directory
 #
@@ -40,8 +42,7 @@ def make_window
 end
 def destroy_window(win,sleep=0)
 	win.sleeping(sleep) if sleep>0
-	win.sleeping(250)
-	Ruiby.update
+	win.sleeping(15)
     Ruiby.destroy_log	
 	win.destroy 
 	Ruiby.update
