@@ -1,3 +1,5 @@
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
 require_relative 'rspec_helper.rb'
 
 describe Ruiby do
@@ -60,6 +62,16 @@ describe Ruiby do
 		w.each { |x| x.pixbuf.should be_a_kind_of Gdk::Pixbuf}
 		w[1..-1].each { |x| x.pixbuf.width.should eq(22)}
 		
+ end
+ it "create a image with scale " do
+		w=[];
+		@win.create { stack {  
+			w << image("#{$here}/draw.png",{width: 100, height: 200})  
+			w << image("#{$here}/draw.png",{size: 200})  
+		} } 
+		@win.sleeping(100,"Verify images")
+		w.each { |x| x.should be_a_kind_of(Gtk::Image) }
+		w.each { |x| x.pixbuf.should be_a_kind_of Gdk::Pixbuf}		
  end
  it "create a entry" do
 		w=nil
@@ -128,9 +140,24 @@ describe Ruiby do
  it "create toggle button" do
 		w=nil
 		@win.create { stack {    
-			w=toggle_button("on","off",value=false) { }
+			w=toggle_button("on","off",false) { }
 		} }
 		w.should be_a_kind_of(Gtk::ToggleButton)
+ end
+ it "create check button" do
+		w=nil
+		@win.create { stack {    
+			w=check_button("check button 1",false) 
+			w=check_button("check button 2",true) 
+		} }
+		w.should be_a_kind_of(Gtk::CheckButton)
+ end
+ it "create color choice button" do
+		w=nil
+		@win.create { stack {    
+			w=color_choice("texte") { } 
+		} }
+		w.should be_a_kind_of(Gtk::HBox)
  end
  it "create text area" do
 		w=nil
