@@ -37,11 +37,20 @@ module Ruiby
   VERSION = IO.read(File.join(DIR, '../VERSION')).chomp
   GUI='gtk'
   
-  # update gui while necessary
+  # Update gui while event is pending
+  # to be use if current algorithme is long and user want see gui update
+  # log long list of message to screen...
+  #
   def self.update() 
 		Gtk.main_iteration while Gtk.events_pending?  
   end
-  ########### Local storage : save/retreive hash to a /tmp/script-name.storage
+  ###########################################################
+  #                S t o r a g e 
+  ###########################################################
+  
+  # persistent stock a value associated to a name
+  # dictionary is serialised (Marshalling) to a default file
+  # file is /tmp/$0.storage
   def self.stock_put(name,value)
 	db="#{Dir.tmpdir}/#{$0}.storage"
 	data={}
@@ -49,14 +58,28 @@ module Ruiby
 	data[name]=value
     File.open(db,"w") { |f| Marshal.dump(data,f) }
   end
+  # read a value associated to a name from persistant storage
   def self.stock_get(name)
 	db="#{Dir.tmpdir}/#{$0}.storage"
 	data={}
     (File.open(db,"r") { |f| data=Marshal.load(f) } if File.exists?(db) )rescue nil
 	data[name] || ""
   end
+  # clear persistant strorage
+  def self.stock_reset()
+	db="#{Dir.tmpdir}/#{$0}.storage"
+	File.delete(db) if File.exists(db)
+  end
+  ###########################################################
+  #                start Ruiby application
+  ###########################################################
   
-  # start ruiby, one shot (reloading of source can be done)
+  # start ruiby.
+  # Usage: Ruiby.start { Win.new() }
+  # One shot :reloading of source can be done, block wjile not be evaluated
+  #
+  # Thread.abort_on_exception, BasicSocket.do_not_reverse_lookup, 
+  # trap('INT') are settings
   def self.start(&bloc)
 	return if defined?($__MARKER_IS_RUIBY_INITIALIZED)
 	$__MARKER_IS_RUIBY_INITIALIZED = true
@@ -69,7 +92,9 @@ module Ruiby
 	yield
 	Gtk.main
   end
-  # start ruiby, one shot (reloading of source can be done)
+  
+  # Start ruiby with a main loop which trap all error :
+  # A Exception in a callback will not kill the process.
   # Gtk Exception are trapped, so process should not exited by ruiby fault!
   def self.start_secure(&bloc)
 	return if defined?($__MARKER_IS_RUIBY_INITIALIZED)
@@ -134,7 +159,7 @@ module Kernel
 			begin
 				require gem
 			rescue LoadError => e
-				rep=w.ask("<em>Loading #{gems.join(', ')}</em>\n\n'#{gem}' package is missing. Can I load it from internet ?")
+				rep=w.ask("Loading #{gems.join(', ')}\n\n'#{gem}' package is missing. Can I load it from internet ?")
 				exit! unless rep
 				require 'open3'
 				w.log("gem install  #{gem} --no-ri --no-rdoc")
