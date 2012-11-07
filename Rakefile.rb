@@ -1,3 +1,5 @@
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
 #################################################################
 #  Rakefile : git commit/add ; git push, test/spec & gem push
 #################################################################
