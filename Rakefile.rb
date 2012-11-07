@@ -64,7 +64,12 @@ def change_version()
   File.open('VERSION','w') {|f| f.write(version) }
   version
 end
-
+def verification_file(fn)
+	content=File.read(fn)[0..600]
+	unless content =~ /BY-SA/ && content =~ /LGPL/
+		raise "\nFile #{fn} seem not contain licenses data (LGPL/BY-SA)\n"		
+	end
+end
 #############################################################
 #               Comment each file add/modified 	           ##
 #############################################################
@@ -80,6 +85,9 @@ task :commit_status do
 			next if FIGNORES.include?(filename)
 			print("Comment for change in #{filename} : ")
 			comment=$stdin.gets
+			if comment && comment.chomp.size>0 && File.extname(filename)==".rb"
+				verification_file(filename)
+			end
 			if comment && comment.chomp.size>0
 				  comment.chomp!
 				  (puts "Abort!";exit!) 	if comment=~/^a(b(o(r(t)?)?)?)?$/
