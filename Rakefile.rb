@@ -85,6 +85,7 @@ task :commit_status do
 		when /^ M /
 			filename=words[2]
 			next if FIGNORES.include?(filename)
+			system("git","diff",filename)
 			print("Comment for change in #{filename} : ")
 			comment=$stdin.gets
 			if comment && comment.chomp.size>0
