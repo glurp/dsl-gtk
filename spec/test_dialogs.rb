@@ -1,3 +1,5 @@
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
 require_relative 'rspec_helper.rb'
 
 describe Ruiby do
