@@ -1,12 +1,15 @@
-0.50.5
+0.50.6
+    test_layout.rb : licenses
+    test_dialogs.rb : licenses
+    test_composites.rb : properties test
+    test_basics_widget.rb : image tests
+    rspec_helper.rb : destroy
+    ruiby_dsl.rb : haccordeon return value
+    Rakefile.rb : show diff
     README.md : rspec stae
     Rakefile.rb :  verification licenses sources files
-    Rakefile.rb : test
-    Rakefile.rb : check licenses data on each source file
     test.rb : popup test
     ruiby_dsl.rb : popup creation
-0.50.0 : 2012-11-05 19:06:43 +0100
-    Rakefile.rb : debug
 0.49.0 : 2012-11-05 19:05:45 +0100
     test_layout.rb : complete
     test_dialogs.rb : creation
@@ -18,17 +21,13 @@
     ruiby_dsl.rb : corrections for tests
     editor.rb : mgrid field for test
     README.md : test coverage
-    Rakefile.rb : comments
     Rakefile.rb : list of ignored file
-    Rakefile.rb : u
     Rakefile.rb : commit with git-status data
     generate_source_icons : debug
     Rakefile.rb : commit2
     Gemfile : creation
     testth.rb : thread
 0.48.0 : 2012-10-26 20:41:00 +0200
-    samples/monitoring.rb : creation
-    Rakefile.rb : commit2
     lib/ruiby_gtk/ruiby_threader.rb : p traces
 0.47.0 : 2012-10-26 19:57:42 +0200
     samples/monitoring.rb : systray and thread and fugitive dialog with hthread tes
