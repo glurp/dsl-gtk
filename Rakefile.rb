@@ -65,7 +65,9 @@ def change_version()
   version
 end
 def verification_file(fn)
+	p fn
 	content=File.read(fn)[0..600]
+	p content
 	unless content =~ /BY-SA/ && content =~ /LGPL/
 		raise "\nFile #{fn} seem not contain licenses data (LGPL/BY-SA)\n"		
 	end
