@@ -1,4 +1,5 @@
-0.50.9
+0.50.10
+    ruiby_dsl.rb : image size correction
     ruiby_dsl.rb : size, width, height options for all widget
     ruiby_default_dialog.rb : ask_dir_to_write and ask_dir_to read creation
     test_thread.rb : gui_invoke test
