@@ -292,6 +292,7 @@ module Ruiby_dsl
 		else
 			label("? "+file)
 		end
+		options.delete(:size)
 		attribs(im,options)
 	end
 	# create a one-character size space, (or n character x n line space)
