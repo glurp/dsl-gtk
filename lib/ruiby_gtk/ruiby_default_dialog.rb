@@ -88,13 +88,20 @@ module Ruiby_default_dialog
 	########## File dialog
 
 	def ask_file_to_read(dir,filter)
-		dialog_chooser("Open File (#{filter}) ...", Gtk::FileChooser::ACTION_OPEN, Gtk::Stock::OPEN)
+		dialog_chooser("Choose File (#{filter}) ...", Gtk::FileChooser::ACTION_OPEN, Gtk::Stock::OPEN)
 	end
 	def ask_file_to_write(dir,filter)
 	 dialog_chooser("Save File (#{filter}) ...", Gtk::FileChooser::ACTION_SAVE, Gtk::Stock::SAVE)
 	end
-	def ask_dir()
-		dialog_chooser("Save Folder...", Gtk::FileChooser::ACTION_CREATE_FOLDER, Gtk::Stock::SAVE)
+	def ask_dir_to_read(initial_dir=nil)
+		dialog_chooser("Select existing Folder ...", Gtk::FileChooser::ACTION_SELECT_FOLDER , Gtk::Stock::OPEN) {|d| 
+			d.filename=initial_dir if initial_dir && File.exists?(initial_dir)
+		}
+	end
+	def ask_dir_to_write(initial_dir=nil)
+		dialog_chooser("Select Folder or create one ...", Gtk::FileChooser::ACTION_SELECT_FOLDER | Gtk::FileChooser::ACTION_CREATE_FOLDER  , Gtk::Stock::OPEN) {|d|
+			d.filename=initial_dir if initial_dir 
+		}
 	end
 	def dialog_chooser(title, action, button)
 	    dialog = Gtk::FileChooserDialog.new(
@@ -106,9 +113,10 @@ module Ruiby_default_dialog
 	      [button, Gtk::Dialog::RESPONSE_ACCEPT]
 	    )
 		dialog.set_window_position(Window::POS_CENTER)
-	    ret = ( dialog.run == Gtk::Dialog::RESPONSE_ACCEPT ? dialog.filename : nil rescue false)
+		yield(dialog) if block_given?
+	    ret = ( dialog.run == Gtk::Dialog::RESPONSE_ACCEPT ? dialog.filename : nil )rescue false
 	    dialog.destroy
-	    ret
+	    ret ? ret.gsub('\\','/') : ""
 	end
 end
 
