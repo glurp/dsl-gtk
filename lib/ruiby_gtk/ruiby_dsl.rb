@@ -251,6 +251,9 @@ module Ruiby_dsl
 
 	# general property automaticly applied for (almost) all widget (eval last argument a creation)
 	def attribs(w,options)
+		  w.set_size_request(*options[:size]) if options[:size]	
+		  w.width_request=(options[:width]) if options[:width]
+		  w.height_request=(options[:height]) if options[:height]
 		  w.modify_bg(Gtk::STATE_NORMAL,options[:bg]) if options[:bg] # not work on window
 		  w.modify_fg(Gtk::STATE_NORMAL,options[:fg]) if options[:fg] # not work on window
 		  w.modify_font(Pango::FontDescription.new(options[:font])) if options[:font]
@@ -329,13 +332,18 @@ module Ruiby_dsl
 			 	  but.set_tooltip_text(tooltip) if tooltip
 			 	}
 			elsif name=~/^sep/i
-				Gtk::SeparatorToolItem.new
+				Gtk::SeparatorToolItem.new				
+			elsif name=~/^right-(.*)/i
+				Gtk::ToolButton.new(get_icon($1)).tap { |but|
+				  but.signal_connect("clicked") { v.call rescue error($!) } if v
+			 	  but.set_tooltip_text(tooltip) if tooltip
+			 	}
 			else
 				puts "=======================\nUnknown icone : #{name}\n====================="
 	   			puts "Icones dispo: #{Stock.constants.map { |ii| ii.downcase }.join(", ")}"
 				Gtk::ToolButton.new(Stock::MISSING_IMAGE)
 			end
-			b.insert(i,w)
+			b.insert(i,w) if w
 			i+=1
 	   }
 		attribs(b,options)
