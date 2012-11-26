@@ -52,7 +52,7 @@ module Ruiby
   # dictionary is serialised (Marshalling) to a default file
   # file is /tmp/$0.storage
   def self.stock_put(name,value)
-	db="#{Dir.tmpdir}/#{$0}.storage"
+	db="#{Dir.tmpdir}/#{File.basename($0)}.storage"
 	data={}
     (File.open(db,"r") { |f| data=Marshal.load(f) } if File.exists?(db)) rescue nil
 	data[name]=value
@@ -60,14 +60,14 @@ module Ruiby
   end
   # read a value associated to a name from persistant storage
   def self.stock_get(name)
-	db="#{Dir.tmpdir}/#{$0}.storage"
+	db="#{Dir.tmpdir}/#{File.basename($0)}.storage"
 	data={}
     (File.open(db,"r") { |f| data=Marshal.load(f) } if File.exists?(db) )rescue nil
 	data[name] || ""
   end
   # clear persistant strorage
   def self.stock_reset()
-	db="#{Dir.tmpdir}/#{$0}.storage"
+	db="#{Dir.tmpdir}/#{File.basename($0)}.storage"
 	File.delete(db) if File.exists(db)
   end
   ###########################################################
