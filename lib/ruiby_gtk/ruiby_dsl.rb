@@ -559,13 +559,13 @@ module Ruiby_dsl
 	def table(nb_col,nb_row,config={})
 		table = Gtk::Table.new(nb_row,nb_col,false)
 		table.set_column_spacings(config[:set_column_spacings]) if config[:set_column_spacings]
-		attribs(table,config)				
-		slot(table)
+		#sloti(table)
 		@lcur << table
 		@ltable << { :row => 0, :col => 0}
 		yield
 		@ltable.pop
 		@lcur.pop
+		attribs(table,config)
 	end
     # create a row. must be defined in a table closure	
 	# can only contain cell(s) call
@@ -1043,6 +1043,7 @@ module Ruiby_dsl
 		end
 		def scrolled_win.selection() a=list().selection.selected ; a ? a[0] : nil ; end
 		def scrolled_win.index() list().selection.selected end
+		autoslot(nil)
 		slot(scrolled_win)
 	end
 
