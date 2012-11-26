@@ -1,4 +1,6 @@
-0.51.1
+0.52.1
+    ruiby_dsl.rb : slot table widget
+0.52.0 : 2012-11-26 13:26:43 +0100
     ruiby.rb : correction stock_put/get basename
 0.51.0 : 2012-11-24 00:50:28 +0100
     ruiby_dsl.rb : image size correction
