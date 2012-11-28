@@ -46,6 +46,7 @@ def component()
       notebook do
         page("","#home") { label("A Notebook Page with icon as button-title",{font: "Arial 18"}) }
         page("List & grid") { test_list_grid }
+        page("Explorer") { test_treeview }
         page("Property Edit.") { test_properties(0) }
         page("Big PropEditor") { test_properties(1) }
         page("Source Editor") {
@@ -118,6 +119,23 @@ end
 				}
 
 			end 
+	 end
+	 def test_treeview()
+		stack do
+			tr=tree_grid(%w{month name prename 0age ?male})
+			tr.set_data({
+				janvier: {
+					s1:["aaa","bbb",22,true],
+					s2:["aaa","bbb",33,false],
+					s3:["aaa","bbb",111,true],
+					s4:["aaa","bbb",0xFFFF,true],
+				},
+				fevrier: {
+					s1:["aaa","bbb",22,true],
+					s2:["aaa","bbb",33,false],
+				},
+			})
+		end
 	 end
 	 def test_list_grid()
 			flow {
