@@ -8,32 +8,34 @@ A DSL for building simple GUI (gtk) ruby application rapidly.
 * 'without great look&feel precision' 
 * for little gui application, like autokey, autoit, xdialog...
 
-Inspirations from Shoes.
-
-Hard codes (gtk) copyed from green_shoes (thank you ashbb :) .
-
 Based on gtk at first, 
 Perhaps will be adapte to www/(vaarin or sencha) ...
 
+If your application become bigger and bigger: 
+
+* use gtk directly (ruiy coexists with gtk code, it is only DSL ressource)
+* or use stop with ruiy and go to glade/visualruby
+
+
+Resources
+==========
 Screen copy at : http://regisaubarede.posterous.com/
 
 Code: http://github.com/raubarede/Ruiby
 
 Gem : https://rubygems.org/gems/Ruiby
 
-List: http://librelist.com/browser/ruiby/
 
 Status
 ======
 Done :
 
-- ruiby system command: one-line execution on shell
 - rspec test : 80% DSL done, travis-ci integration done, codeclimate done
+- treeview almost done...
 
 Todo for pass to 1.0 :
 
 - Easy Form : variables binding for entry/list/check-radio button...
-- treeview
 
 Installation
 ============
