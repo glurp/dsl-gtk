@@ -1,4 +1,7 @@
-0.52.1
+0.52.2
+    test.rb : tree_grid test
+    ruiby_dsl.rb : tree_grid creation
+    README.md : treeview
     ruiby_dsl.rb : slot table widget
 0.52.0 : 2012-11-26 13:26:43 +0100
     ruiby.rb : correction stock_put/get basename
