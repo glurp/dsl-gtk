@@ -1047,9 +1047,10 @@ module Ruiby_dsl
 		slot(scrolled_win)
 	end
 
-	# create a grid of data (as list, but mmulticolonne)
+	# create a grid of data (as list, but multicolumn)
 	# use set_data() to put a 2 dimensions array of text
 	# same methods as list widget
+	# all columnes are String type
 	def grid(names,w=0,h=0)
 		scrolled_win = Gtk::ScrolledWindow.new
 		scrolled_win.set_policy(Gtk::POLICY_AUTOMATIC,Gtk::POLICY_AUTOMATIC)
@@ -1085,8 +1086,95 @@ module Ruiby_dsl
 		def scrolled_win.index() grid().selection.selected end
 		
 		scrolled_win.add_with_viewport(treeview)
+		autoslot(nil)
 		slot(scrolled_win)
 	end
+	
+	# create a tree view of data (as grid, but first column is a tree)
+	# use set_data() to put a  Hash of data
+	# same methods as grid widget
+	# a columns Class are distinges by column name :
+	#   raster image if name start with  a '#'
+	#   checkbutton  if name start with  a '?'
+	#   Integer      if name start with  a '0'
+	#   String 		else
+	def tree_grid(names,w=0,h=0,options={})
+		scrolled_win = Gtk::ScrolledWindow.new
+		scrolled_win.set_policy(Gtk::POLICY_AUTOMATIC,Gtk::POLICY_AUTOMATIC)
+		scrolled_win.set_width_request(w)	if w>0
+		scrolled_win.set_height_request(h)	if h>0
+		scrolled_win.shadow_type = Gtk::SHADOW_ETCHED_IN
+		
+		types=names.map do |name|
+		 case name[0,1]
+			when "#" then Pixmap
+			when "?" then TrueClass
+			when "0".."9" then Integer
+			else String
+		 end
+		end
+		model = Gtk::TreeStore.new(*types)
+		
+		treeview = Gtk::TreeView.new(model)
+		treeview.selection.set_mode(Gtk::SELECTION_SINGLE)
+		names.each_with_index do  |name,i|
+			renderer= if types[i]==TrueClass then Gtk::CellRendererToggle.new().tap { |r| r.signal_connect('toggled') { } }
+				elsif types[i]==Numeric then Gtk::CellRendererText.new
+				else Gtk::CellRendererText.new
+			end
+			treeview.append_column(
+				Gtk::TreeViewColumn.new( name.gsub(/^[#?0-9]/,""),renderer,{:text => i} )
+			)
+		end
+		
+		#------------- Build singleton
+		
+		def scrolled_win.init(types) @types=types end
+		scrolled_win.init(types)
+		def scrolled_win.tree() children[0].children[0] end
+		def scrolled_win.model() tree().model end
+		$ici=self
+		def scrolled_win.get_data()	
+			raise("tree.get_data() out of main thread!")if $__mainthread__ != Thread.current
+			@ruiby_data
+		end
+		def scrolled_win.set_data(hdata,parent=nil,first=true)	
+			raise("tree.set_data() out of main thread!")if $__mainthread__ != Thread.current
+			if parent==nil && first
+				@ruiby_data=hdata
+				model.clear()
+			end
+			hdata.each do |k,v|
+				case v
+					when Array 
+						set_row([k.to_s]+v,parent)
+					when Hash 
+						p=model.append(parent)
+						p[0] =k.to_s
+						set_data(v,p,false)
+				end
+			end
+		end
+		def scrolled_win.set_row(data,parent=nil)
+			puts "treeview: raw data size nok : #{data.size}/#{data.inspect}" if data.size!=@types.size
+			i=0
+			c=self.model.append(parent)
+			data.zip(@types) do |item,clazz|
+				c[i]=if clazz==TrueClass then (item ? true : false)
+					elsif clazz==Integer then item.to_i
+					else item.to_s
+				end
+				i+=1
+			end
+		end
+		def scrolled_win.selection() a=tree().selection.selected ; a ? a[0] : nil ; end
+		def scrolled_win.index() tree().selection.selected end
+		
+		scrolled_win.add_with_viewport(treeview)
+		autoslot(nil)
+		slot(scrolled_win)
+	end
+	
 	###################################### Logs
 
 	# put a line of message text in log dialog (create and show the log dialog if not exist)
