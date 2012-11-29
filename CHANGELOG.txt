@@ -1,4 +1,5 @@
-0.52.2
+0.52.3
+    ruiby_dsl.rb : tree_grid with image
     test.rb : tree_grid test
     ruiby_dsl.rb : tree_grid creation
     README.md : treeview
