@@ -210,7 +210,10 @@ module Ruiby_dsl
 	
 	def get_icon(name)
 		return name if name.index('.') && File.exists?(name)
-		iname=eval("Stock::"+name.upcase) rescue nil
+		iname=eval("Gtk::Stock::"+name.upcase) rescue nil
+	end
+	def get_stockicon_pixbuf(name)
+		Image.new(eval("Gtk::Stock::"+name.upcase),IconSize::BUTTON).pixbuf
 	end
 	
 	# get a Image widget from a file or from a Gtk::Stock
@@ -233,20 +236,28 @@ module Ruiby_dsl
 		end
 	end
 	def _sub_image(name)
+		Image.new(get_pixbuf(name))
+	end
+	def get_pixbuf(name)
+		@cach_pix={} unless defined?(@cach_pix)
 		filename,px,py,bidon,dim=name.split(/\[|,|(\]x)/)
 		if filename && px && py && bidon && dim && File.exist?(filename)
 			dim=dim.to_i
-			@cach_pix={} unless defined?(@cach_pix)
 			@cach_pix[filename]=Gdk::Pixbuf.new(filename) unless @cach_pix[filename]
 			x0= dim*px.to_i
 			y0= dim*py.to_i
 			#p [x0,y0,"/",@cach_pix[filename].width,@cach_pix[filename].height]
-			epix= Gdk::Pixbuf.new(@cach_pix[filename],x0,y0,dim,dim)
-			Image.new(epix)
+			Gdk::Pixbuf.new(@cach_pix[filename],x0,y0,dim,dim)
+		elsif File.exists?(name)
+			@cach_pix[name]=Gdk::Pixbuf.new(name) unless @cach_pix[name]
+			@cach_pix[name]
+		elsif ! name.index(".")
+			get_stockicon_pixbuf(name)
 		else
-			alert("bad syntax in #{name} : \n   should be dddd.png[nocol,norow]x32")
+			raise("file #{name} not exist");
 		end
 	end
+	
 	############### Commands
 
 	# general property automaticly applied for (almost) all widget (eval last argument a creation)
@@ -1107,7 +1118,7 @@ module Ruiby_dsl
 		
 		types=names.map do |name|
 		 case name[0,1]
-			when "#" then Pixmap
+			when "#" then Gdk::Pixbuf
 			when "?" then TrueClass
 			when "0".."9" then Integer
 			else String
@@ -1118,12 +1129,15 @@ module Ruiby_dsl
 		treeview = Gtk::TreeView.new(model)
 		treeview.selection.set_mode(Gtk::SELECTION_SINGLE)
 		names.each_with_index do  |name,i|
-			renderer= if types[i]==TrueClass then Gtk::CellRendererToggle.new().tap { |r| r.signal_connect('toggled') { } }
-				elsif types[i]==Numeric then Gtk::CellRendererText.new
-				else Gtk::CellRendererText.new
-			end
+			renderer,symb= *(
+				if    types[i]==TrueClass then	 [Gtk::CellRendererToggle.new().tap { |r| r.signal_connect('toggled') { } },:win]
+				elsif types[i]==Gdk::Pixbuf then [Gtk::CellRendererPixbuf.new,:active]
+				elsif types[i]==Numeric then	 [Gtk::CellRendererText.new,:text]
+				else 							 [Gtk::CellRendererText.new,:text]
+				end
+			)
 			treeview.append_column(
-				Gtk::TreeViewColumn.new( name.gsub(/^[#?0-9]/,""),renderer,{:text => i} )
+				Gtk::TreeViewColumn.new( name.gsub(/^[#?0-9]/,""),renderer,{symb => i} )
 			)
 		end
 		
@@ -1161,6 +1175,7 @@ module Ruiby_dsl
 			c=self.model.append(parent)
 			data.zip(@types) do |item,clazz|
 				c[i]=if clazz==TrueClass then (item ? true : false)
+					elsif clazz==Gdk::Pixbuf then $ici.get_pixbuf(item.to_s).tap {|a| p [item,clazz,a]}
 					elsif clazz==Integer then item.to_i
 					else item.to_s
 				end
