@@ -151,8 +151,8 @@ class Ruiby_gtk < Gtk::Window
 	end
 end
 
-# can be included by a gtk windows, for mementary use ruiby.
-# do an include, and then call ruiby_componnent with bloc for use ruiby dsl
+# can be included by a gtk windows, for  use ruiby.
+# do an include, and then call ruiby_component() with bloc for use ruiby dsl
 module Ruiby  
 	include ::Ruiby_dsl
 	include ::Ruiby_threader
