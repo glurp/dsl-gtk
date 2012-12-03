@@ -45,8 +45,9 @@ def component()
 	separator
       notebook do
         page("","#home") { label("A Notebook Page with icon as button-title",{font: "Arial 18"}) }
-        page("List & grid") { test_list_grid }
+        page("List & grid") { test_list_grid }		
         page("Explorer") { test_treeview }
+		page("expander & dialog") { test_dialog }
         page("Property Edit.") { test_properties(0) }
         page("Big PropEditor") { test_properties(1) }
         page("Source Editor") {
@@ -135,6 +136,26 @@ end
 					s2:["aaa","bbb",33,false],
 				},
 			})
+		end
+	 end
+	 def test_dialog()
+		stack do
+			sloti(button_expand("Test button_expand()") {
+				stack { 5.times { |a| button("a#{a}",{font: "arial 8"}) } }
+			})
+			buttoni("dailog...") {
+				rep=dialog("modal window...") {
+					label("eee")  
+					list("aa",100,100)
+				}
+				alert("Response was "+rep.to_s)
+			}
+			buttoni("dailog async...") {
+				dialog_async("modal window...",{response: proc {|a| alert(a);true}}) {
+					label("eee") 
+					list("aa",100,100)
+				}
+			}	 
 		end
 	 end
 	 def test_list_grid()
