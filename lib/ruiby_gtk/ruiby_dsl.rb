@@ -1190,6 +1190,67 @@ module Ruiby_dsl
 		slot(scrolled_win)
 	end
 	
+	# TODO: test!
+	def button_expand(text,initiale_state=false,options={},&b) 
+		expander = Gtk::Expander.new(text)
+		expander.expanded = initiale_state
+		frame=box(&b)
+		expander.add(frame)
+		attribs(expander,options)
+	end
+	######################## Dialog ##################
+	
+	# dialog_async("title",:response=> bloc {|dia,e| }) {
+	#   flow { button("dd") ... }
+	# }
+	# Dialog content is build with bloc parameter.
+	# Action on Ok/Nok/delete button make a call to :response bloc.
+	# dialog is destoy if return value of :response is true
+	#
+	def dialog_async(title,config,&b) 
+		dialog = Dialog.new("Message",
+			self,
+			Dialog::DESTROY_WITH_PARENT,
+			[Gtk::Stock::OK, Gtk::Dialog::RESPONSE_ACCEPT],
+            [Gtk::Stock::CANCEL, Gtk::Dialog::RESPONSE_REJECT])
+
+		dialog.set_window_position(Window::POS_CENTER)
+		
+		@lcur << dialog.vbox
+		hbox=stack { yield }
+		@lcur.pop
+
+		dialog.signal_connect('response') do |w,e|
+			rep=config[:response].call(dialog,e)
+			dialog.destroy if rep
+		end
+		dialog.show_all	
+	end
+	# dialog_sync("title") {
+	#   flow { button("dd") ... }
+	# }
+	# Dialog contents is build with bloc parameter.
+	# call is bloced until action on Ok/Nok/delete button 
+	# return true if dialog quit is done by action on OK button
+	
+	def dialog(title="") 
+		dialog = Dialog.new(title,
+			self,
+			Dialog::DESTROY_WITH_PARENT,
+			[Gtk::Stock::OK, Gtk::Dialog::RESPONSE_ACCEPT],
+            [Gtk::Stock::CANCEL, Gtk::Dialog::RESPONSE_REJECT])
+			
+		@lcur << dialog.vbox
+		hbox=stack { yield }
+		@lcur.pop
+		
+		dialog.set_window_position(Window::POS_CENTER)
+		dialog.show_all	
+		rep=dialog.run
+		dialog.destroy
+		rep
+	end
+
 	###################################### Logs
 
 	# put a line of message text in log dialog (create and show the log dialog if not exist)
