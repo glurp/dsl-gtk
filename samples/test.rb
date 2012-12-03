@@ -4,8 +4,11 @@
 # LGPL
 
 $time_start=Time.now.to_f*1000
+$mlog=[]
 def mlog(text)
- puts "%8f | %s" % [(Time.now.to_f*1000-$time_start).to_i,text.to_s]
+ delta=(Time.now.to_f*1000-$time_start).to_i
+ $mlog << [delta,text]
+ puts "%8f | %s" % [delta,text.to_s]
 end
 mlog 'before require gtk2'
 require 'gtk2'
@@ -59,9 +62,10 @@ def component()
 		page("Pan & Scrolled") { test_pan_scroll}
 	  end # end notebook
     } # end flow
-    sloti(button("Test Specials Actions...") { p @bref ; do_special_actions() })
-    sloti( button("Exit") { exit! })
+    sloti(button("Test dialogs...") { do_special_actions() })
+    sloti( button("Exit") { ruiby_exit })
 	mlog 'after Component'
+	#after(100) { do_timeline }
   end
 end
 
@@ -294,22 +298,63 @@ end
 			  }
 	end
 	
-# endcomponent
  
   def edit_change()
 	alert("please, do not change my code..")
   end
 
   def do_special_actions()
-    log("Coucou")
-    prompt("test prompt()!\nveuillezz saisir un text de lonqueur \n plus grande que trois") { |reponse| reponse && reponse.size>3 }
-    log("append before :",slot_append_before( button("new before") ,@bref) )
-    log("append after :",slot_append_after(  button("new after"),@bref)   )
-    log("file : " , ask_file_to_read(".","*.rb")  )
-    log("file : ", ask_file_to_write(".","*.rb") )
-    log("dir : " , ask_dir() )
     100.times { |i| log("#{i} "+ ("*"*(i+1))) }
+	dialog("Dialog tests") {
+		stack {
+			labeli "  alert, prompt, file chosser and log  "
+			c={width: 200,height: 40,font: "Arial old 12"}
+			log("")
+			button("alert", c)         { alert("alert is ok?") }
+			button("ask", c)           { log ask("alert is ok?") }
+			button("prompt", c)        { log prompt("test prompt()!\nveuillezz saisir un text de lonqueur \n plus grande que trois") { |reponse| reponse && reponse.size>3 }}
+			button("file Exist",c)     { log ask_file_to_read(".","*.rb") }
+			button("file new/Exist",c) { log ask_file_to_write(".","*.rb") }
+			button("Dir existant",c)   { log ask_dir_to_read(".") }
+			button("Dir new/Exist",c)  { log ask_dir_to_write(".") }
+			button("Timeline",c)  { do_timeline() }
+		}
+	}
   end
+  def do_timeline()
+	dialog("ruiby/gtk startup timestamps") do
+		lline=[[10  ,180]]
+		ltext=[]
+		xmin, xmax= $mlog.first[0], $mlog.last[0]
+		a,b,ot = (400.0-20)/(xmax-xmin) , 10.0 , 0
+		$mlog.each_with_index {|(time,text),i|
+			pos=a*time+b
+			h=50+i*15
+			lline << [pos,180] ;lline << [pos,h] ;lline << [pos,180]
+			ltext << [[pos+5,h],text+ "(#{time-ot} ms)"]
+			ot=time
+		}
+		
+		labeli("Total time : #{xmax} milliseconds")
+		canvas(500,200,{ 
+				:expose     => proc { |w,cr|  
+					color=::Gdk::Color.parse("#774433")
+					ep=2
+					pt0,*poly=*lline
+					cr.set_line_width(ep)
+					cr.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
+					cr.move_to(*pt0)
+					poly.each {|px| cr.line_to(*px) } 
+					cr.stroke  
+					ltext.each { |(pos,text)| 
+						cr.move_to(*pos)
+						cr.show_text(text) 
+					}
+				}
+		});          
+	end
+  end
+# endcomponent
 end
 # test autoload plugins
 Exemple.new
