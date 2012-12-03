@@ -94,12 +94,18 @@ module Ruiby_default_dialog
 	 dialog_chooser("Save File (#{filter}) ...", Gtk::FileChooser::ACTION_SAVE, Gtk::Stock::SAVE)
 	end
 	def ask_dir_to_read(initial_dir=nil)
-		dialog_chooser("Select existing Folder ...", Gtk::FileChooser::ACTION_SELECT_FOLDER , Gtk::Stock::OPEN) {|d| 
+		dialog_chooser(
+				"Select existing Folder ...",
+				Gtk::FileChooser::ACTION_SELECT_FOLDER,
+				Gtk::Stock::OPEN) {|d| 
 			d.filename=initial_dir if initial_dir && File.exists?(initial_dir)
 		}
 	end
 	def ask_dir_to_write(initial_dir=nil)
-		dialog_chooser("Select Folder or create one ...", Gtk::FileChooser::ACTION_SELECT_FOLDER | Gtk::FileChooser::ACTION_CREATE_FOLDER  , Gtk::Stock::OPEN) {|d|
+		dialog_chooser(
+			"Select Folder or create one ...", 
+			Gtk::FileChooser::ACTION_SELECT_FOLDER ,
+			Gtk::Stock::OPEN) {|d|
 			d.filename=initial_dir if initial_dir 
 		}
 	end
