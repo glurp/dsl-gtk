@@ -1037,6 +1037,12 @@ module Ruiby_dsl
 		model = Gtk::ListStore.new(String)
 		column = Gtk::TreeViewColumn.new(title.to_s,Gtk::CellRendererText.new, {:text => 0})
 		treeview = Gtk::TreeView.new(model)
+		if block_given?
+			treeview.signal_connect("row-activated") do |view, path, column|
+			  iter = view.model.get_iter(path)
+			  yield iter[0]
+			end		
+		end
 		treeview.append_column(column)
 		treeview.selection.set_mode(Gtk::SELECTION_SINGLE)
 		scrolled_win.add_with_viewport(treeview)
@@ -1075,6 +1081,12 @@ module Ruiby_dsl
 			treeview.append_column(
 				Gtk::TreeViewColumn.new( name,Gtk::CellRendererText.new,{:text => i} )
 			)
+		end
+		if block_given?
+			treeview.signal_connect("row-activated") do |view, path, column|
+			  iter = view.model.get_iter(path)
+			  yield(names.size.times.map { |i| iter[i] })
+			end		
 		end
 		
 		def scrolled_win.grid() children[0].children[0] end
