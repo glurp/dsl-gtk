@@ -1,4 +1,5 @@
-0.52.5
+0.52.6
+    ruiby_dsl.rb : closure on list and grid: called on selection
     test.rb : draw a timeline of application intialize
     ruiby_default_dialog.rb : ask_dir_to_write() correction
     test.rb : test button_expand and dialog
