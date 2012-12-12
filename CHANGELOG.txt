@@ -1,4 +1,7 @@
-0.52.7
+0.52.8
+    make_doc.rb : footer
+    ruiby_dsl.rb : privates
+    doc.html : footer
     README.md : autodoc maker
     sketchi.rb : hemp and api improve
     windows.rb : supress obsolete doc
