@@ -80,12 +80,25 @@ class RubyApp < Ruiby_gtk
 	def make_api(ta)
 		src=File.dirname(__FILE__)+"/../lib/ruiby_gtk/ruiby_dsl.rb"
 		content=File.read(src)
-		ta.text=content.split(/\r?\n\s*/).grep(/^def[\s\t]+[^_]/).map {|line| line.split(/\)/)[0]+")"}.join("\n")
+		ta.text=content.split(/\r?\n\s*/).grep(/^def[\s\t]+[^_]/).map {|line| (line.split(/\)/)[0]+")").gsub(/\s*def\s/,"")}.sort.join("\n")
 	end
 	def make_help(ta)
-		src=File.dirname(__FILE__)+"/../lib/ruiby_gtk/windows.rb"
+		src=File.dirname(__FILE__)+"/../lib/ruiby_gtk/ruiby_dsl.rb"
 		content=File.read(src)
-		ta.text=content.split(/(<<EENDX)|(EENDX)/)[2]
+		comment=""
+		hdoc=content.split(/\r?\n\s*/).inject({}) {|h,line|
+			ret=nil
+			if a=/^def[\s\t]+([^_].*)/.match(line)
+				name=a[1].split('(')[0]
+				ret="#{a[1].split(')')[0]+")"} :\n\n#{comment.gsub('#',"")}\n#{'-'*50}\n"
+				comment=""
+			elsif a=/^\s*#\s*(.*)/.match(line)
+				comment+="   "+a[1]+"\n"
+			end
+			h[name]=ret if ret
+			h
+		}
+		ta.text=hdoc.keys.sort.map {|k| hdoc[k]}.join("\n")
 	end
 	def make_example(ta)
 		src=File.dirname(__FILE__)+"/test.rb"
