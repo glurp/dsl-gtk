@@ -32,6 +32,7 @@ Done :
 
 - rspec test : 80% DSL done, travis-ci integration done, codeclimate done
 - treeview almost done...
+- autodoc for dsl: make_dpc in place of rdoc
 
 Todo for pass to 1.0 :
 
