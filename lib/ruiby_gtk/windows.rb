@@ -4,87 +4,6 @@
 #            windows.rb : main ruiby windows  
 ###############################################################################################
 
-if false
-str = <<EENDX
-
-Container
----------
- auto-slot mean widget is automaticly pack to its parrent,
- if widget is not auto-sloting : call slot(x) or sloti(w) or cell(w) for pack it
- generaly, containers are auto-sloted 
-
- flow{ slot(w1) ; slot(w2) }    				# AUTO slot()
- stack { slot(w) ; flow { slot(w) }}			# AUTO slot()
- table(col,row) { 
-	row { cell(w) ; cell(w) }
-	row { cell(flow(false) { ... } } 
- }  # !AUTO slot()
- notebook { page("ee") { } ; page("aa") { } }	# AUTO slot()
- separator                                      # AUTO slot()
- flow(false)   { ... }                          # not sloted
- stack(false)  { ... }                          # not sloted
- paned { [frame,frame] }
- accordion { item("text") { alabel("c") { action } ; ... } .. }
- haccordion { item("text") { alabel("c") { action } ; ... } .. }
-
-For append a widget to a container : 
- slot(w)		# pack in container, fill+expand, implicit for all widget
- sloti(w)       # pack no fill/no expand
- cell(w)        # pack in : table { row { cell() } } 
-
-Post-component ressources, threaded protected :
-   append_to(w) { }
-   clear_append_to { }
-   append_to_before(w) { }
-   slot_append_before(w) { }
-   
-Widgets
--------
-   space(n) button(text/'#'icon,&action) entry(value) ientry(ivalue) fentry(fvalue) islider(ivalue) 
-   label(text/'#'icon) image(file) combo({name=>value,...},initiale_value)
-   toggle_button(l1,l2,state)  check_button(name,state)  hradio_buttons(lname,value) 
-   htoolbar({name=> proc {},... })
-   color_choice()
-   canvas(w,h,{:event => proc {},...})
-   source_editor()
-   text_area()
-   
-dialogs
---------
- alert() info() error() prompt() ask_color()
- ask() (boolean)
- ask_file_to_read(dir,filter)
- ask_file_to_write(dir,filter)
- ask_dir()
- 
-Background
-----------
-   @a=anim(milliseconds) { instructions }
-   delete(@a)
-   threader(periode-pooling-queue) # at initialize(), declare multithread engine
-   Thread.new {
-	 gui_invoke { instructions }	# block will be evaluate (instance_eval on main windows object) 
-									#in the main thread
-	 gui_invoke_wait { instructions } # block will be evaluate, retrune when it is done
-   }
-   some basic commands are automaticly gui_invoked if called from non-main-thread
-      log() append_to() clear_appand_to() ...
-	  
-
-TODO
----
- progress_bar() 
- menu()
- variable binding for : entry/ientry/fentry/islider/combo/togle_button/check_button hradio_button
- for all : options={} ==> color/font/pading/halign/valign/fg/bg
- SWT,Qt...
-
-EENDX
-end
-###############################################################################################
-
-
-
 class Ruiby_gtk < Gtk::Window
 	include ::Ruiby_dsl
 	include ::Ruiby_threader
@@ -146,7 +65,7 @@ class Ruiby_gtk < Gtk::Window
 		move(x.abs,y.abs)
 	end
 	# show or supress the window system decoration
-	def chrome(on)
+	def chrome(on=false)
 		set_decorated(on)
 	end
 end
