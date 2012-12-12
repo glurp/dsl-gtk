@@ -1,4 +1,9 @@
-0.52.6
+0.52.7
+    README.md : autodoc maker
+    sketchi.rb : hemp and api improve
+    windows.rb : supress obsolete doc
+    ruiby_dsl.rb : autodoc
+    ruiby.rb : chrome window command
     ruiby_dsl.rb : closure on list and grid: called on selection
     test.rb : draw a timeline of application intialize
     ruiby_default_dialog.rb : ask_dir_to_write() correction
