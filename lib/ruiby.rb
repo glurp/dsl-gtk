@@ -20,6 +20,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 # d
 require 'tmpdir'
+require 'thread'
 require 'pathname'
 require 'gtk2'
 
@@ -111,8 +112,8 @@ module Ruiby
   
   # Direct acces to Ruiby DSL
   # config can contain :title, :width, :height
-  # Warning ! bloc use used for create a inner method, don't define sub methods :
-  # def action() puts "CouCou..." end
+  # Warning ! bolc is invoked vy instance_eval on window
+  # def action() puts "Hello..." end
   # Ruib.app {
   #    stack do button("test") { action() } end
   # }
@@ -125,7 +126,11 @@ module Ruiby
 			end
 		end
 		klass.send(:define_method,:component,&blk)
-		start_secure { klass.new(config[:title] || "",config[:width] ||600,config[:height] ||600) }
+		klass.send(:chrome,config[:chrome]) if config.has_key?(:chrome)
+		start_secure { 
+			w=klass.new(config[:title] || "",config[:width] ||600,config[:height] ||600) 
+		    w.send(:chrome,config[:chrome]) if config[:chrome]
+		}
   end
   def self.set_last_log_window(win)
 	@last_log=win
@@ -150,7 +155,7 @@ Dir.glob("#{Ruiby::DIR}/plugins/*.rb").each do |filename|
 end
 
 module Kernel
-	# do a gem require, anf if fail, try to load the gem from internet.
+	# do a gem require, anfd if fail, try to load the gem from internet.
 	# asking  permission is done for each gem. the output of 'gem install'
 	# id show in ruiby log window
 	def ruiby_require(*gems)
@@ -161,18 +166,20 @@ module Kernel
 			rescue LoadError => e
 				rep=w.ask("Loading #{gems.join(', ')}\n\n'#{gem}' package is missing. Can I load it from internet ?")
 				exit! unless rep
+				Ruiby.update
 				require 'open3'
 				w.log("gem install  #{gem} --no-ri --no-rdoc")
-				Gtk.main_iteration while Gtk.events_pending?
-				Open3.popen3("gem install  #{gem}") { |si,so,se| 
+				Ruiby.update
+				Open3.popen3("gem install  #{gem} --no-ri --no-rdoc") { |si,so,se| 
 					q=Queue.new
-					Thread.new { loop {q.push(so.gets) } rescue nil; q.push(nil)}
-					Thread.new { loop {q.push(se.gets) } rescue nil; q.push(nil)}
+					Thread.new { loop {q.push(so.gets) } rescue p $!; q.push(nil)}
+					Thread.new { loop {q.push(se.gets) } rescue p $!; q.push(nil)}
 					str=""
 					while str
-						timeout(1) { str=q.pop } rescue nil
+						timeout(1) { str=q.pop } rescue p $!
 						(w.log(str);str="") if str && str.size>0
-						Ruiby.update
+						w.log Time.now
+						Ruiby.update						
 					end
 				}
 				w.log "done!"
@@ -180,8 +187,10 @@ module Kernel
 				Gem.clear_paths() 
 				require(gem) 
 				w.log("loading '#{gem}' ok!")
+				Ruiby.update
 			end		
 		end
 		w.destroy()
+		Ruiby.update
 	end
 end
