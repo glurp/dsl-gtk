@@ -21,7 +21,7 @@ module Ruiby_dsl
  
 	############################ Slot : H/V Box or Frame
 	
-	def nocodeeeeeeeeeee() end
+	def _nocodeeeeeeeeeee() end
 	
 	# container : vertical box, take all space available, sloted in parent ny default
 	def stack(add1=true,&b)    		_cbox(true,VBox.new(false, 2),add1,&b) end
