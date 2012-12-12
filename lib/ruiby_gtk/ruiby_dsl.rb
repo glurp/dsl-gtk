@@ -21,6 +21,8 @@ module Ruiby_dsl
  
 	############################ Slot : H/V Box or Frame
 	
+	def nocodeeeeeeeeeee() end
+	
 	# container : vertical box, take all space available, sloted in parent ny default
 	def stack(add1=true,&b)    		_cbox(true,VBox.new(false, 2),add1,&b) end
 	# container : horizontal box, take all space available, sloted in parent
@@ -268,7 +270,7 @@ module Ruiby_dsl
 		  w.modify_bg(Gtk::STATE_NORMAL,options[:bg]) if options[:bg] # not work on window
 		  w.modify_fg(Gtk::STATE_NORMAL,options[:fg]) if options[:fg] # not work on window
 		  w.modify_font(Pango::FontDescription.new(options[:font])) if options[:font]
-		  autoslot(w)  # slot() precedent widget if existe, and declare this one as the precedent
+		  autoslot(w)  # slot() precedent widget if existe and not already sloted, and declare this one as the precedent
 		  w
 	end
 	
@@ -905,9 +907,9 @@ module Ruiby_dsl
 		  eb.add(tv)
 		  eb.define_singleton_method(:text_area) { tv }
 		  class << eb
-			def text=(a)  self.children[0].buffer.text=a end
+			def text=(a)  self.children[0].buffer.text=a.to_s end
 			def text()    self.children[0].buffer.text end
-			def append(a) self.children[0].buffer.text+=a.encode("UTF-8") end
+			def append(a) self.children[0].buffer.text+=a.to_s.encode("UTF-8") end
 		  end
 		  eb.children[0].buffer.text=(args[:text]||"")
 		  eb.show_all
@@ -1117,10 +1119,10 @@ module Ruiby_dsl
 	# use set_data() to put a  Hash of data
 	# same methods as grid widget
 	# a columns Class are distinges by column name :
-	#   raster image if name start with  a '#'
-	#   checkbutton  if name start with  a '?'
-	#   Integer      if name start with  a '0'
-	#   String 		else
+	# <li>  raster image if name start with  a '#'
+	# <li>  checkbutton  if name start with  a '?'
+	# <li>  Integer      if name start with  a '0'
+	# <li>  String 		else
 	def tree_grid(names,w=0,h=0,options={})
 		scrolled_win = Gtk::ScrolledWindow.new
 		scrolled_win.set_policy(Gtk::POLICY_AUTOMATIC,Gtk::POLICY_AUTOMATIC)
