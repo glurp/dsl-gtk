@@ -27,7 +27,7 @@ class Ruiby_gtk < Gtk::Window
 		begin
 			component  
 		rescue
-			error("COMPONENT() : "+$!.to_s + " :\n     " +  $!.backtrace[0..10].join("\n     "))
+			error("Error COMPONENT() : ",$!)
 			exit!
 		end
         begin
