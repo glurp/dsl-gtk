@@ -1,4 +1,9 @@
-0.52.8
+0.53.1
+    test.rb : gtk3 test
+    windows.rb : error panel
+    ruiby_dsl.rb : gtk3 compatibility
+    ruiby_default_dialog.rb : error dialog; error on stdout to
+0.53.0 : 2012-12-12 21:45:21 +0100
     make_doc.rb : footer
     ruiby_dsl.rb : privates
     doc.html : footer
