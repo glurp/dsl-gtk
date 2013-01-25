@@ -357,7 +357,11 @@ module Ruiby_dsl
 	   			puts "Icones dispo: #{Stock.constants.map { |ii| ii.downcase }.join(", ")}"
 				Gtk::ToolButton.new(Stock::MISSING_IMAGE)
 			end
-			b.insert(i,w) if w
+			if Gtk.check_version?(3, 0, 0)
+				b.insert(w,i) if w
+			else
+				b.insert(i,w) if w
+			end
 			i+=1
 	   }
 		attribs(b,options)
@@ -367,7 +371,11 @@ module Ruiby_dsl
 	
 	#combo box, decribe  with a Hash choice-text => value-of-choice
 	def combo(choices,default=-1,option={})
-		w=ComboBox.new()
+		if Gtk.check_version?(3, 0, 0)
+			w=ComboBoxText.new()
+		else
+			w=ComboBox.new()
+		end
 		choices.each do |text,indice|  
 			w.append_text(text) 
 		end
@@ -864,7 +872,7 @@ module Ruiby_dsl
 	# @edit=source_editor().editor
 	# @edit.buffer.text=File.read(@filename)
     def source_editor(args={}) # from green_shoes plugin
-	  require 'gtksourceview2'
+	  require (Gtk.check_version?(3, 0, 0) ?  'gtksourceview3'  : 'gtksourceview2')
       args[:width]  = 400 unless args[:width]
       args[:height] = 300 unless args[:height]
   	  change_proc = proc { }
