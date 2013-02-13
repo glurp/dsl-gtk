@@ -1,7 +1,6 @@
-    test.rb : gtk3 test
-    windows.rb : error panel
-    ruiby_dsl.rb : gtk3 compatibility
-    ruiby_default_dialog.rb : error dialog; error on stdout to
+0.54.1
+    ruiby_dsl.rb : separator in properties editor
+0.54.0 : 2013-02-13 18:47:08 +0100
 0.53.0 : 2012-12-12 21:45:21 +0100
     make_doc.rb : footer
     ruiby_dsl.rb : privates
