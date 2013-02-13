@@ -22,7 +22,7 @@
 require 'tmpdir'
 require 'thread'
 require 'pathname'
-require 'gtk2'
+require 'gtk2' if ! defined?(Gtk)
 
 if Gtk.check_version(2, 0, 0) =~ /old/i
 	 md=Gtk::MessageDialog.new(nil,Gtk::Dialog::DESTROY_WITH_PARENT,Gtk::MessageDialog::QUESTION, 
@@ -69,7 +69,7 @@ module Ruiby
   # clear persistant strorage
   def self.stock_reset()
 	db="#{Dir.tmpdir}/#{File.basename($0)}.storage"
-	File.delete(db) if File.exists(db)
+	File.delete(db) if File.exists?(db)
   end
   ###########################################################
   #                start Ruiby application

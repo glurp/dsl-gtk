@@ -357,11 +357,7 @@ module Ruiby_dsl
 	   			puts "Icones dispo: #{Stock.constants.map { |ii| ii.downcase }.join(", ")}"
 				Gtk::ToolButton.new(Stock::MISSING_IMAGE)
 			end
-			if Gtk.check_version?(3, 0, 0)
-				b.insert(w,i) if w
-			else
-				b.insert(i,w) if w
-			end
+			b.insert(i,w) if w
 			i+=1
 	   }
 		attribs(b,options)
@@ -371,11 +367,7 @@ module Ruiby_dsl
 	
 	#combo box, decribe  with a Hash choice-text => value-of-choice
 	def combo(choices,default=-1,option={})
-		if Gtk.check_version?(3, 0, 0)
-			w=ComboBoxText.new()
-		else
-			w=ComboBox.new()
-		end
+		w=ComboBox.new()
 		choices.each do |text,indice|  
 			w.append_text(text) 
 		end
@@ -643,7 +635,7 @@ module Ruiby_dsl
 	  end
 	  prop_current=(@prop_hash[@prop_index]={})
 	  value={}
-	  a=stacki {
+	  widget=stacki {
 		framei(title.to_s) {
 			 stack {
 				if options[:scroll] &&  options[:scroll][1]>0
@@ -669,7 +661,7 @@ module Ruiby_dsl
 				end
 				  if options[:edit]
 					  sloti(button("Validation") { 
-							nhash=a.get_data()
+							nhash=widget.get_data()
 							if block_given? 
 								yield(nhash)
 							else
@@ -681,12 +673,12 @@ module Ruiby_dsl
 			  }
 		 }
 	  }	
-	  a.instance_variable_set(:@prop_current,prop_current)	  
-	  a.instance_variable_set(:@hash_initial,hash)	  
-	  def a.set_data(newh)
+	  widget.instance_variable_set(:@prop_current,prop_current)	  
+	  widget.instance_variable_set(:@hash_initial,hash)	  
+	  def widget.set_data(newh)
 		newh.each { |k,v| @prop_current[k].text=v.to_s }
 	  end
-	  def a.get_data()
+	  def widget.get_data()
 		@prop_current.inject({}) {|nhash,(k,w)| 
 			v_old=@hash_initial[k]
 			v_new=w.text
@@ -694,13 +686,13 @@ module Ruiby_dsl
 				when String then v_new
 				when Fixnum then v_new.to_i
 				when Float  then v_new.to_f
-				else eval( v_new )
+				else eval( v_new ) rescue v_new.ro_s
 			end
 			nhash[k]=vbin
 			nhash
 		}
 	  end
-	  a
+	  widget
 	end
 
 	###################################### notebooks
@@ -872,7 +864,7 @@ module Ruiby_dsl
 	# @edit=source_editor().editor
 	# @edit.buffer.text=File.read(@filename)
     def source_editor(args={}) # from green_shoes plugin
-	  require (Gtk.check_version?(3, 0, 0) ?  'gtksourceview3'  : 'gtksourceview2')
+	  require 'gtksourceview2'
       args[:width]  = 400 unless args[:width]
       args[:height] = 300 unless args[:height]
   	  change_proc = proc { }
@@ -1283,7 +1275,7 @@ module Ruiby_dsl
 		end
 		loglabel=_create_log_window()
 		loglabel.buffer.text +=  Time.now.to_s+" | " + (txt.join(" ").encode("UTF-8"))+"\n" 
-		if ( loglabel.buffer.text.size>10000)
+		if ( loglabel.buffer.text.size>1000*1000)
 		  loglabel.buffer.text=loglabel.buffer.text[-7000..-1].gsub(/^.*\n/m,"......\n\n")
 		end
 	end

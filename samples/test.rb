@@ -8,26 +8,26 @@ $mlog=[]
 def mlog(text)
  delta=(Time.now.to_f*1000-$time_start).to_i
  $mlog << [delta,text]
- puts "%8f | %s" % [delta,text.to_s]
+ puts "%8d | %s" % [delta,text.to_s]
 end
-mlog 'require gtk2 ...'
+mlog 'before require gtk2'
 require 'gtk2'
-mlog 'require ruiby ...'
+mlog 'before require ruiby'
 require_relative '../lib/ruiby'
-mlog 'end loading ruiby'
+mlog 'after require ruiby'
 
 
 class RubyApp < Ruiby_gtk
     def initialize
-		mlog "before win gtk init"
+		mlog "befor init"
         super("Testing Ruiby",900,0)
-		mlog 'after win gtk init'
+		mlog 'after init'
 		after(1) { mlog("first update") }
     end
 	
 	
-def component()  
-  mlog 'compo'+'nent()'
+def component()        
+  mlog 'before Component'
   stack do
     sloti(htoolbar(
 		"open/tooltip text on button"=>proc { edit(__FILE__) },
@@ -54,10 +54,8 @@ def component()
         page("Property Edit.") { test_properties(0) }
         page("Big PropEditor") { test_properties(1) }
         page("Source Editor") {
-		  if ! Gtk.check_version?(3, 0, 0)
-			@editor=source_editor(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 8",:on_change=> proc { edit_change }).editor
-			@editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
-		  end
+		  @editor=source_editor(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 8",:on_change=> proc { edit_change }).editor
+		  @editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
         }
 		page("Menu") { test_menu }
         page("Accordion") { test_accordion }
@@ -66,7 +64,7 @@ def component()
     } # end flow
     sloti(button("Test dialogs...") { do_special_actions() })
     sloti( button("Exit") { ruiby_exit })
-	mlog 'end compo'+'nent()'
+	mlog 'after Component'
 	#after(100) { do_timeline }
   end
 end
@@ -102,30 +100,29 @@ end
 				@epaisseur=sloti(islider(1,{:min=>1,:max=>30,:by=>1}))
 			  }
 			  @ldraw=[] ; @color=  ::Gdk::Color.parse("#33EEFF");
-			  if Gtk.check_version?(2, 0, 0)
-				  cv=canvas(100,100,{ 
-					:expose     => proc { |w,cr|  
-					  @ldraw.each do |line|
-						next if line.size<3
-						color,ep,pt0,*poly=*line
-						cr.set_line_width(ep)
-						cr.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
-						cr.move_to(*pt0)
-						poly.each {|px|    cr.line_to(*px) } 
-						cr.stroke  
-					end
-					},          
-					:mouse_down => proc { |w,e|   no= [e.x,e.y] ;  @ldraw << [@color,@epaisseur.value,no] ;  no    },
-					:mouse_move => proc { |w,e,o| no= [e.x,e.y] ; (@ldraw.last << no) if no[0]!=o[0] || no[1]!=o[1] ; no },
-					:mouse_up   => proc { |w,e,o| no= [e.x,e.y] ; (@ldraw.last << no) ; no}
-					})
-					popup {
-						pp_item("copy") 	{ alert 1 }
-						pp_item("cut") 		{ alert 2 }
-						pp_item("past")		{ alert 3 }
-						pp_item("duplicate"){ alert 4 }
-					}
-			  end
+			  cv=canvas(100,100,{ 
+				:expose     => proc { |w,cr|  
+				  @ldraw.each do |line|
+					next if line.size<3
+					color,ep,pt0,*poly=*line
+					cr.set_line_width(ep)
+					cr.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
+					cr.move_to(*pt0)
+					poly.each {|px|    cr.line_to(*px) } 
+					cr.stroke  
+				end
+				},          
+				:mouse_down => proc { |w,e|   no= [e.x,e.y] ;  @ldraw << [@color,@epaisseur.value,no] ;  no    },
+				:mouse_move => proc { |w,e,o| no= [e.x,e.y] ; (@ldraw.last << no) if no[0]!=o[0] || no[1]!=o[1] ; no },
+				:mouse_up   => proc { |w,e,o| no= [e.x,e.y] ; (@ldraw.last << no) ; no}
+				})
+				popup {
+					pp_item("copy") 	{ alert 1 }
+					pp_item("cut") 		{ alert 2 }
+					pp_item("past")		{ alert 3 }
+					pp_item("duplicate"){ alert 4 }
+				}
+
 			end 
 	 end
 	 def test_treeview()
@@ -204,7 +201,7 @@ end
 				properties("pixbuf",get_config(w.pixbuf))  
 				properties("widget",get_config(w),{:scroll => [300,100]})			
 			}
-			#calendar()
+			calendar()
 		when 1
 			h={};70.times { |i| h[i]= "aaa#{i+100}" }
 			properties("very big propertys editable",h,{edit: true,scroll: [100,400]}) { |a| log(a.inspect);log(h.inspect) }

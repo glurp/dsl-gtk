@@ -11,9 +11,6 @@ module Ruiby_default_dialog
 	def error(*txt) 
 		lt=txt.map { |o| 
 			if Exception===o 
-				puts "=================================================="
-				puts  "\n#{o} :\n  #{o.backtrace.join("\n  ")}\n\n"
-				puts "=================================================="
 				o.to_s + " : \n  "+o.backtrace.join("\n  ")
 			else
 				o.to_s

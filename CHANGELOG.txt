@@ -1,4 +1,3 @@
-0.53.1
     test.rb : gtk3 test
     windows.rb : error panel
     ruiby_dsl.rb : gtk3 compatibility
