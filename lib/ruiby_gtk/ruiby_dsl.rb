@@ -621,7 +621,16 @@ module Ruiby_dsl
 	def propertys(title,hash,options={:edit=>false, :scroll=>[0,0]},&b)
 	 properties(title,hash,options,&b)
 	end
-	
+  def _make_prop_line(prop_current,options,k,v)
+    if k.to_s =~/^sep\d+$/
+        cell_span(2,HSeparator.new)
+    else
+      cell_right(label(" "+k.to_s+" : "))
+      cell_left(options[:edit] ? 
+        (prop_current[k]=entry(v.to_s)) : 
+        label(v.to_s))
+    end
+  end
 	# create a property shower/editor : vertical liste of label/entry representing the ruby Hash content
 	# Edition: Option: use :edit => true for show value in text entry, and a validate button, 
 	# on button action, yield of bloc parameter is done with modified Hash as argument
@@ -642,20 +651,14 @@ module Ruiby_dsl
 				 vbox_scrolled(options[:scroll][0],options[:scroll][1]) {
 					 table(2,hash.size) {
 						hash.each { |k,v| row {
-							cell_right(label(" "+k.to_s+" : "))
-							cell_left(options[:edit] ? 
-								(prop_current[k]=entry(v.to_s)) : 
-								label(v.to_s))
+              _make_prop_line(prop_current,options,k,v)
 						}}
 					  }
 				  }
 				else
 				 table(2,hash.size) {
 					hash.each { |k,v| row {
-						cell_right(label(" "+k.to_s+" : "))
-						cell_left(options[:edit] ? 
-							(prop_current[k]=entry(v.to_s)) : 
-							label(v.to_s))
+              _make_prop_line(prop_current,options,k,v)
 					}}
 				  }
 				end
@@ -686,7 +689,8 @@ module Ruiby_dsl
 				when String then v_new
 				when Fixnum then v_new.to_i
 				when Float  then v_new.to_f
-				else eval( v_new ) rescue v_new.ro_s
+        when /^(\[.*\])|(\{.*\})$/ then eval( v_new ) rescue error($!)
+				else v_new.to_s
 			end
 			nhash[k]=vbin
 			nhash
