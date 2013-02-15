@@ -2,10 +2,10 @@
 # encoding: utf-8
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
+Thread.abort_on_exception=true
 
 require_relative '../lib/ruiby'
 
-Thread.abort_on_exception=true
 class RubyApp < Ruiby_gtk
     def initialize() 
 		super("Testing Ruiby Table / cell span",300,400) 
