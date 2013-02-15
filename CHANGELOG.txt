@@ -1,4 +1,6 @@
-0.54.2
+0.55.1
+    table.rb : no
+0.55.0 : 2013-02-15 15:22:38 +0100
     ruiby_dsl.rb : test
     editor.rb : test
     ruiby_dsl.rb : separator in properties editor
