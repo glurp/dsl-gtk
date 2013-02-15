@@ -195,7 +195,7 @@ module Ruiby_dsl
  		parent
  	end
 	
-
+  
 	def get_current_container() @lcur.last end
 
 	# get a Hash aff all properties of a gtk widget
@@ -1066,8 +1066,8 @@ module Ruiby_dsl
 		end
 		def scrolled_win.selection() a=list().selection.selected ; a ? a[0] : nil ; end
 		def scrolled_win.index() list().selection.selected end
-		autoslot(nil)
-		slot(scrolled_win)
+    autoslot(scrolled_win)
+    scrolled_win
 	end
 
 	# create a grid of data (as list, but multicolumn)
@@ -1355,3 +1355,4 @@ def secure_main()
 		end
 	end while true
 end
+
