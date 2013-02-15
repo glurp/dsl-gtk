@@ -117,7 +117,7 @@ class PopupForm < Ruiby_gtk
 	end
 	def component()
 	  stack do
-		label(@title)
+		labeli(@title)
 		@form=properties("",@data,@popt) { |a| @bloc.call(a) if @bloc }
 		case @options["button-direction"] 
 			when /^h/i then flowi  { button_list }
@@ -135,4 +135,17 @@ class PopupForm < Ruiby_gtk
 
 end
 
-
+class Object
+  def wtree(w)
+    log "*"*60
+    _wtree("   ",w)
+    log "*"*60
+  end
+  def _wtree(header,w)
+    log "#{header}--#{w.class} : #{w.text rescue ''}"
+    if w.respond_to?(:children)
+        cheader=header+"   |"
+        w.children.each { |cw| _wtree(cheader,cw) } 
+    end
+ end
+end
