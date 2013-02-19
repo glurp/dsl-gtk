@@ -1,6 +1,9 @@
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
 # Show dependencies af current Ruiby config
 require 'tsort'
+require 'Ruiby'
+require 'gtksourceview2'
 
 class Gims
   include TSort
@@ -10,9 +13,11 @@ class Gims
   def add(name, dependencies)        @gims[name] = dependencies         end
    
   def tsort_each_node(&block)        @gims.each_key(&block)             end   
-  def tsort_each_child(node, &block) @gims[node].each(&block) if @gims.has_key?(node)          end
+  def tsort_each_child(node, &block) @gims[node].each(&block) if @gims.has_key?(node) end
 end
-	 
+
+class String ; def lcenter(size) "%-#{size}s" % [self] end  ; end
+
 def gem_loaded()
     lg=Gem::Specification.all.select { |s| s.activated? }
     gims=Gims.new
@@ -21,8 +26,10 @@ def gem_loaded()
     lgs=gims.tsort.inject([]) { |a,n| a<< h[n] if h[n]; a }
     lgs.map  { |s|  [s.name,s.version,s.dependencies.map {|d|  "#{d.name}:#{d.requirement}" }]  }
 end
-class String ; def lcenter(size) "%-#{size}s" % [self] end  ; end
 
-require 'gtksourceview2'
-#puts gem_loaded.map { |(a,b,c)| "#{a.lcenter(20)} ==> #{c.join(' / ')}"}  
-puts gem_loaded.map { |(a,b,c)| "gem uninstall #{a.lcenter(20)} && gem install #{a.lcenter(15)} -v #{b}"}.join("\n")
+
+puts gem_loaded.map { |(a,b,c)| "#{a.lcenter(20)} ==> #{c.join(' / ')}"}  
+puts
+puts gem_loaded.map { |(a,b,c)| "gem uninstall #{a.lcenter(20)}" }.join("\n")
+puts
+puts gem_loaded.map { |(a,b,c)| "gem install #{a.lcenter(15)} -v #{b}"}.join("\n") 
