@@ -1,3 +1,6 @@
+0.55.2
+    dependencies.rb : creation
+    README.md : correctio
     table.rb : no
 0.55.0 : 2013-02-15 15:22:38 +0100
     ruiby_dsl.rb : test
