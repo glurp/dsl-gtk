@@ -8,13 +8,14 @@ A DSL for building simple GUI (gtk) ruby application rapidly.
 * 'without great look&feel precision' 
 * for little gui application, like autokey, autoit, xdialog...
 
-Based on gtk at first, 
-Perhaps will be adapte to www/(vaarin or sencha) ...
+Based on gtk.
 
 If your application become bigger and bigger: 
 
-* use gtk directly (ruiy coexists with gtk code, it is only DSL ressource)
-* or use stop with ruiy and go to glade/visualruby
+* use gtk directly (Ruiby is in frontof gtk, it is only DSL ressource)
+* or stop to use Ruiby, and switch to glade/visualruby
+
+Riuby is very cool for application which dynamicly build HMI from  data structure.
 
 
 Resources
@@ -30,9 +31,9 @@ Status
 ======
 Done :
 
-- rspec test : 80% DSL done, travis-ci integration done, codeclimate done
 - treeview almost done...
-- autodoc for dsl: make_dpc in place of rdoc
+- autodoc for dsl: make_doc in place of rdoc
+- gtk3 working...
 
 Todo for pass to 1.0 :
 
