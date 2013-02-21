@@ -1,4 +1,7 @@
-0.55.2
+0.55.3
+    dependencies.rb : no
+    ruiby_dsl.rb : reoganize Kernel methods
+    ruiby.rb : reorganize Kernel ressources
     dependencies.rb : creation
     README.md : correctio
     table.rb : no
