@@ -1,6 +1,6 @@
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
-# Show dependencies af current Ruiby config
+# Show dependencies of current Ruiby config
 require 'tsort'
 require 'Ruiby'
 require 'gtksourceview2'
