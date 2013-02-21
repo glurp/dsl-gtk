@@ -22,7 +22,7 @@
 require 'tmpdir'
 require 'thread'
 require 'pathname'
-require 'gtk2' if ! defined?(Gtk)
+require 'gtk2' if ! defined?(Gtk) # caller can preload gtk or gtk3, at his own risk...
 
 if Gtk.check_version(2, 0, 0) =~ /old/i
 	 md=Gtk::MessageDialog.new(nil,Gtk::Dialog::DESTROY_WITH_PARENT,Gtk::MessageDialog::QUESTION, 
@@ -31,7 +31,7 @@ if Gtk.check_version(2, 0, 0) =~ /old/i
 	 md.destroy
 	 exit!
 end
-#require 'gtksourceview2'
+#require 'gtksourceview2' # done by edit() tag, so only if source edit is needed
 
 module Ruiby
   DIR = Pathname.new(__FILE__).realpath.dirname.to_s
@@ -98,16 +98,16 @@ module Ruiby
   # A Exception in a callback will not kill the process.
   # Gtk Exception are trapped, so process should not exited by ruiby fault!
   def self.start_secure(&bloc)
-	return if defined?($__MARKER_IS_RUIBY_INITIALIZED)
-	$__MARKER_IS_RUIBY_INITIALIZED = true
-	$stdout.sync=true 
-	$stderr.sync=true 
-	Thread.abort_on_exception = true  
-	BasicSocket.do_not_reverse_lookup = true if defined?(BasicSocket)
-	trap("INT") { exit!(0) }
-	Gtk.init
-	yield
-	secure_main()	
+    return if defined?($__MARKER_IS_RUIBY_INITIALIZED)
+    $__MARKER_IS_RUIBY_INITIALIZED = true
+    $stdout.sync=true 
+    $stderr.sync=true 
+    Thread.abort_on_exception = true  
+    BasicSocket.do_not_reverse_lookup = true if defined?(BasicSocket)
+    trap("INT") { exit!(0) }
+    Gtk.init
+    yield
+    secure_main()	
   end
   
   # Direct acces to Ruiby DSL
@@ -155,42 +155,86 @@ Dir.glob("#{Ruiby::DIR}/plugins/*.rb").each do |filename|
 end
 
 module Kernel
-	# do a gem require, anfd if fail, try to load the gem from internet.
-	# asking  permission is done for each gem. the output of 'gem install'
-	# id show in ruiby log window
-	def ruiby_require(*gems)
-		w=Ruiby_dialog.new
-		gems.flatten.each do|gem| 
-			begin
-				require gem
-			rescue LoadError => e
-				rep=w.ask("Loading #{gems.join(', ')}\n\n'#{gem}' package is missing. Can I load it from internet ?")
-				exit! unless rep
-				Ruiby.update
-				require 'open3'
-				w.log("gem install  #{gem} --no-ri --no-rdoc")
-				Ruiby.update
-				Open3.popen3("gem install  #{gem} --no-ri --no-rdoc") { |si,so,se| 
-					q=Queue.new
-					Thread.new { loop {q.push(so.gets) } rescue p $!; q.push(nil)}
-					Thread.new { loop {q.push(se.gets) } rescue p $!; q.push(nil)}
-					str=""
-					while str
-						timeout(1) { str=q.pop } rescue p $!
-						(w.log(str);str="") if str && str.size>0
-						w.log Time.now
-						Ruiby.update						
-					end
-				}
-				w.log "done!"
-				Ruiby.update
-				Gem.clear_paths() 
-				require(gem) 
-				w.log("loading '#{gem}' ok!")
-				Ruiby.update
-			end		
-		end
-		w.destroy()
-		Ruiby.update
-	end
+  # do a gem require, and if fail, try to load the gem from internet.
+  # asking  permission is done for each gem. the output of 'gem install'
+  # id show in ruiby log window
+  def ruiby_require(*gems)
+    w=Ruiby_dialog.new
+    gems.flatten.each do|gem| 
+      begin
+        require gem
+      rescue LoadError => e
+        rep=w.ask("Loading #{gems.join(', ')}\n\n'#{gem}' package is missing. Can I load it from internet ?")
+        exit! unless rep
+        Ruiby.update
+        require 'open3'
+        w.log("gem install  #{gem} --no-ri --no-rdoc")
+        Ruiby.update
+        Open3.popen3("gem install  #{gem} --no-ri --no-rdoc") { |si,so,se| 
+          q=Queue.new
+          Thread.new { loop {q.push(so.gets) } rescue p $!; q.push(nil)}
+          Thread.new { loop {q.push(se.gets) } rescue p $!; q.push(nil)}
+          str=""
+          while str
+            timeout(1) { str=q.pop } rescue p $!
+            (w.log(str);str="") if str && str.size>0
+            w.log Time.now
+            Ruiby.update						
+          end
+        }
+        w.log "done!"
+        Ruiby.update
+        Gem.clear_paths() 
+        require(gem) 
+        w.log("loading '#{gem}' ok!")
+        Ruiby.update
+      end		
+    end
+    w.destroy()
+    Ruiby.update
+  end
+  # run gtk mainloop with trapping gtk/callback error
+  # used by sketchi.rb, not good
+  # see Ruiby.secure_main { }
+  def secure_main()
+    begin 
+      Gtk.main 
+      exit!
+    rescue Exception => e
+      if e.to_s=="exit"
+        $__mainwindow__.error("Error, see STDERR in console...")
+      else
+        $__mainwindow__.error("Error GTK : "+e.to_s + " :\n     " +  e.backtrace[0..10].join("\n     "))
+      end
+    end while true
+  end
+  
+  #######################################
+  # C=hash_to_class({a: 11, b: 22})
+  # o=C.new ;
+  # p o.keys ;p o.a ; p o.b        # => 11,22
+  # o.a=1 ;o.b=2 ;p o.a ; p o.b    # => 1 ,2
+  #
+  # o=C.new  a: 10,b: 20
+  # o=C.new ;
+  # p o.keys ;p o.a ; p o.b        # => 10,20
+  #
+  # o=C.new  a: 10
+  # o=C.new ;
+  # p o.keys ;p o.a ; p o.b ;      # ==> 10,22
+  #
+  def hash_to_class(h)
+    Class.new() {
+      def initialize(x=nil)
+        self.def_init()
+        @values= @values.merge(x) if x
+      end
+      define_method(:def_init) { @values= h.dup } }
+      define_method(:keys) {  h.keys }
+      h.each do |key,value|
+        define_method(key) { @values[key] }
+        define_method("#{key}=") { |x| @values[key]=x }
+      end
+    }
+  end  
 end
