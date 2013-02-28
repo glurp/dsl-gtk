@@ -20,7 +20,7 @@ Riuby is very cool for application which dynamicly build HMI from  data structur
 
 Resources
 ==========
-Screen copy at : http://regisaubarede.posterous.com/
+Screen copy at : http://raubarede.tumblr.com/post/20166283173/ruiby-currents-status
 
 Code: http://github.com/raubarede/Ruiby
 
