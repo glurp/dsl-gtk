@@ -25,13 +25,13 @@ require 'pathname'
 require 'gtk2' if ! defined?(Gtk) # caller can preload gtk or gtk3, at his own risk...
 
 if Gtk.check_version(2, 0, 0) =~ /old/i
-	 md=Gtk::MessageDialog.new(nil,Gtk::Dialog::DESTROY_WITH_PARENT,Gtk::MessageDialog::QUESTION, 
-            Gtk::MessageDialog::BUTTONS_YES_NO, "Gtk version invalide!, need 2.0.0 or later")
-	 md.run
-	 md.destroy
-	 exit!
+  md=Gtk::MessageDialog.new(nil,Gtk::Dialog::DESTROY_WITH_PARENT,Gtk::MessageDialog::QUESTION, 
+        Gtk::MessageDialog::BUTTONS_YES_NO, "Gtk version invalide!, need 2.0.0 or later")
+  md.run
+  md.destroy
+  exit!
 end
-#require 'gtksourceview2' # done by edit() tag, so only if source edit is needed
+#require 'gtksourceview2' # done by source_editor() tag, so only if source edit is needed
 
 module Ruiby
   DIR = Pathname.new(__FILE__).realpath.dirname.to_s
@@ -43,7 +43,7 @@ module Ruiby
   # log long list of message to screen...
   #
   def self.update() 
-		Gtk.main_iteration while Gtk.events_pending?  
+    Gtk.main_iteration while Gtk.events_pending?  
   end
   ###########################################################
   #                S t o r a g e 
@@ -118,27 +118,27 @@ module Ruiby
   #    stack do button("test") { action() } end
   # }
   def self.app(config={},&blk)
-		$blk=blk
-		klass = Class.new Ruiby_gtk do
-			def initialize(title,w,h)
-				super
-				threader(10)
-			end
-		end
-		klass.send(:define_method,:component,&blk)
-		klass.send(:chrome,config[:chrome]) if config.has_key?(:chrome)
-		start_secure { 
-			w=klass.new(config[:title] || "",config[:width] ||600,config[:height] ||600) 
-		    w.send(:chrome,config[:chrome]) if config[:chrome]
-		}
+    $blk=blk
+    klass = Class.new Ruiby_gtk do
+      def initialize(title,w,h)
+        super
+        threader(10)
+      end
+    end
+    klass.send(:define_method,:component,&blk)
+    klass.send(:chrome,config[:chrome]) if config.has_key?(:chrome)
+    start_secure { 
+      w=klass.new(config[:title] || "",config[:width] ||600,config[:height] ||600) 
+        w.send(:chrome,config[:chrome]) if config[:chrome]
+    }
   end
   def self.set_last_log_window(win)
-	@last_log=win
+    @last_log=win
   end
   def self.destroy_log()
-	return unless @last_log  && ! @last_log.destroyed?
-	@last_log.destroy() rescue nil
-	@last_log=nil
+    return unless @last_log  && ! @last_log.destroyed?
+    @last_log.destroy() rescue nil
+    @last_log=nil
   end
 end
 
@@ -224,17 +224,17 @@ module Kernel
   # p o.keys ;p o.a ; p o.b ;      # ==> 10,22
   #
   def hash_to_class(h)
-    Class.new() {
+    Class.new() do
       def initialize(x=nil)
         self.def_init()
         @values= @values.merge(x) if x
       end
-      define_method(:def_init) { @values= h.dup } }
+      define_method(:def_init) { @values= h.dup } 
       define_method(:keys) {  h.keys }
       h.each do |key,value|
         define_method(key) { @values[key] }
         define_method("#{key}=") { |x| @values[key]=x }
       end
-    }
+    end
   end  
 end
