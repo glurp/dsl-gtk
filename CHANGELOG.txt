@@ -1,4 +1,6 @@
-0.55.3
+0.55.4
+    ruiby.rb : hash_to_class creation
+    README.md : web site migtrate to tumbler
     dependencies.rb : no
     ruiby_dsl.rb : reoganize Kernel methods
     ruiby.rb : reorganize Kernel ressources
