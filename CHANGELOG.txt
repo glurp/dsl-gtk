@@ -1,4 +1,6 @@
-0.55.4
+0.56.1
+    README.md : blog reference
+0.56.0 : 2013-02-28 21:04:08 +0100
     ruiby.rb : hash_to_class creation
     README.md : web site migtrate to tumbler
     dependencies.rb : no
