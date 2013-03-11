@@ -2,18 +2,12 @@
 
 
 A DSL for building simple GUI (gtk) ruby application rapidly.
-
-'simple' mean :
-
-* 'without great look&feel precision' 
-* for little gui application, like autokey, autoit, xdialog...
-
 Based on gtk.
 
 If your application become bigger and bigger: 
 
-* use gtk directly (Ruiby is in frontof gtk, it is only DSL ressource)
-* or stop to use Ruiby, and switch to glade/visualruby
+* use gtk directly by Ruiby extensions: write your gtk code, call it by define a new Ruiby word
+* switch to glade/visualruby
 
 Riuby is very cool for application which dynamicly build HMI from  data structure.
 
