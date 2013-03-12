@@ -10,7 +10,13 @@ describe Ruiby do
 	destroy_window(@win)
  end
  it "create a editor window" do
-		if Gem.available?('gtksourceview2')
+    begin 
+      gem('gtksourceview2') 
+      ok=true
+    rescue Exception => e
+      ok=false
+    end
+		if ok
 			s=nil;@win.create { stack { s=source_editor() } }
 			content=File.read(__FILE__)
 			s.editor.buffer.text=content
