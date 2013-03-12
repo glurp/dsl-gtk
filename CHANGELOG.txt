@@ -1,4 +1,5 @@
-0.56.2
+0.56.3
+    test_dialogs.rb : gem test
     README.md : presentation update
     README.md : blog reference
 0.56.0 : 2013-02-28 21:04:08 +0100
