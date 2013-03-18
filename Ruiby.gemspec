@@ -11,16 +11,10 @@ Gem::Specification.new do |s|
   s.summary  = "A  DSL for building simple GUI ruby/gtk application"
   s.description = <<EEND
 A DSL for building simple GUI ruby application rapidly.
-'simple' mean :
-
-*    'without great look&feel precision'
-*    for little gui application, like autoit, xdialog...
-
-Inspirations from Shoes, but very different ...
 EEND
   
   dependencies = [
-    [:runtime,     "gtk2",  "~> 1.1.0"],  
+    [:runtime,     "gtk2",  "~> 1.2.3"],  
 	]
 #   [:runtime,     "gstreamer",  "~> 1.0.0"],
 
