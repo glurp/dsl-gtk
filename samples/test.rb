@@ -54,8 +54,10 @@ def component()
         page("Property Edit.") { test_properties(0) }
         page("Big PropEditor") { test_properties(1) }
         page("Source Editor") {
-		  @editor=source_editor(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 8",:on_change=> proc { edit_change }).editor
-		  @editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
+          if ed=source_editor(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 8",:on_change=> proc { edit_change })
+            @editor=ed.editor
+            @editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
+          end
         }
 		page("Menu") { test_menu }
         page("Accordion") { test_accordion }
