@@ -1,6 +1,5 @@
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
-
 # create a diaog which contain a little editor
 # text is colorize for ruby lang
 class Editor < Ruiby_gtk 
@@ -11,8 +10,10 @@ class Editor < Ruiby_gtk
     end	
 	def component()
 	  stack do
-		@edit=slot(source_editor()).editor
-		@edit.buffer.text=File.exists?(@filename) ? File.read(@filename) : @filename
+    if ed=source_editor()
+      @edit=slot(ed).editor
+      @edit.buffer.text=File.exists?(@filename) ? File.read(@filename) : @filename
+    end
 		sloti( button("Exit") { destroy() })
 	  end
 	end # endcomponent
