@@ -877,8 +877,8 @@ module Ruiby_dsl
     begin
       require 'gtksourceview2'
     rescue Exception => e
-      alert('gtksourceview2 not installed!')
-      return;
+      log('gtksourceview2 not installed!, please use text_area')
+      return
     end
     args[:width]  = 400 unless args[:width]
     args[:height] = 300 unless args[:height]
