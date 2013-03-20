@@ -45,6 +45,9 @@ module Ruiby
   def self.update() 
     Gtk.main_iteration while Gtk.events_pending?  
   end
+  def self.gtk_version(major)
+    Gtk.check_version(major, 0, 0)==nil
+  end
   ###########################################################
   #                S t o r a g e 
   ###########################################################
