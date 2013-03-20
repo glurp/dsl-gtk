@@ -1,4 +1,9 @@
-0.58.1
+0.59.1
+    sketchi.rb : gtk3, not finish (missing editor)
+    ruiby_default_dialog.rb : FileDialog for gtk3, incomplete
+    ruiby.rb : gtk3 can be preloaded
+    README.md : gtk3 install
+0.59.0 : 2013-03-20 17:58:36 +0100
     test.rb : comeback to gtk2
     windows.rb : gtk3 compatibility
     ruiby_dsl.rb : gtk3 compatibility
