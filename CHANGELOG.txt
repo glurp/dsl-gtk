@@ -1,4 +1,9 @@
-0.57.1
+0.58.1
+    test.rb : comeback to gtk2
+    windows.rb : gtk3 compatibility
+    ruiby_dsl.rb : gtk3 compatibility
+    ruiby.rb : test gtk version
+0.58.0 : 2013-03-18 16:17:06 +0100
     test.rb : no exception if gtksourceview2 not ready
     ruiby_dsl.rb : no axecpetion if gtksourceview2' not ready
 0.57.0 : 2013-03-18 16:10:46 +0100
