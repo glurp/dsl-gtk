@@ -40,7 +40,6 @@ class Ruiby_gtk < Gtk::Window
         signal_connect("destroy") { blk.call }
 	end
 	def ruiby_exit()
-		(self.at_exit() if self.respond_to?(:at_exit) ) rescue puts $!.to_s
 		Gtk.main_quit 
 	end
 	def component
