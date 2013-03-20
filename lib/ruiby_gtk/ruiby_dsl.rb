@@ -363,7 +363,9 @@ module Ruiby_dsl
           puts "Icones dispo: #{Stock.constants.map { |ii| ii.downcase }.join(", ")}"
         Gtk::ToolButton.new(Stock::MISSING_IMAGE)
       end
-      b.insert(i,w) if w
+      if w
+        Ruiby.gtk_version(2) ? b.insert(i,w) : b.insert(w,i)
+      end
       i+=1
      }
     attribs(b,options)
@@ -373,13 +375,23 @@ module Ruiby_dsl
 
   #combo box, decribe  with a Hash choice-text => value-of-choice
   def combo(choices,default=-1,option={})
-    w=ComboBox.new()
-    choices.each do |text,indice|  
-      w.append_text(text) 
+    if   Ruiby.gtk_version(2)
+      w=ComboBox.new()
+      choices.each do |text,indice|  
+        w.append_text(text) 
+      end
+      w.set_active(default) if default>=0
+      attribs(w,option)		
+      w
+    else
+      w=ComboBoxText.new()
+      choices.each do |text,indice|  
+        w.append_text(text) 
+      end
+      w.set_active(default) if default>=0
+      attribs(w,option)		
+      w
     end
-    w.set_active(default) if default>=0
-    attribs(w,option)		
-    w
   end
 
   # to state button, with text for each state and a initiale value
@@ -538,7 +550,8 @@ module Ruiby_dsl
     w=DrawingArea.new()
     w.set_size_request(width,height)
     w.events |= ( ::Gdk::Event::BUTTON_PRESS_MASK | ::Gdk::Event::POINTER_MOTION_MASK | ::Gdk::Event::BUTTON_RELEASE_MASK)
-    w.signal_connect('expose_event') { |w1,e| 
+    w.signal_connect( Ruiby.gtk_version(2) ? 'expose-event' : 'draw' ) { |w1,e| 
+      next unless w1.window.respond_to?(:create_cairo_context)
       cr = w1.window.create_cairo_context
       cr.save {
         cr.set_line_join(Cairo::LINE_JOIN_ROUND)
@@ -874,6 +887,7 @@ module Ruiby_dsl
   # @edit=source_editor().editor
   # @edit.buffer.text=File.read(@filename)
   def source_editor(args={}) # from green_shoes plugin
+  return
     begin
       require 'gtksourceview2'
     rescue Exception => e
@@ -940,8 +954,8 @@ module Ruiby_dsl
   # *	get_time()		: return time of selected day
   def calendar(time=Time.now,options={})
     c = Calendar.new
-    c.display_options(Calendar::SHOW_HEADING | Calendar::SHOW_DAY_NAMES |  
-            Calendar::SHOW_WEEK_NUMBERS | Gtk::Calendar::WEEK_START_MONDAY)
+    #c.display_options(Calendar::SHOW_HEADING | Calendar::SHOW_DAY_NAMES |  
+    #        Calendar::SHOW_WEEK_NUMBERS )
     after(1) { c.signal_connect("day-selected") { |w,e| options[:selection].call(w.day)  rescue error($!) } } if options[:selection]
     after(1) { c.signal_connect("month-changed") { |w,e| options[:changed].call(w)  rescue error($!) } }if options[:changed]
     calendar_set_time(c,time)
