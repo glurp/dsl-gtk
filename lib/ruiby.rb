@@ -22,7 +22,7 @@
 require 'tmpdir'
 require 'thread'
 require 'pathname'
-require 'gtk2' if ! defined?(Gtk) # caller can preload gtk or gtk3, at his own risk...
+require 'gtk2' if ! defined?(Gtk) # caller can preload  gtk3, at his own risk...
 
 if Gtk.check_version(2, 0, 0) =~ /old/i
   md=Gtk::MessageDialog.new(nil,Gtk::Dialog::DESTROY_WITH_PARENT,Gtk::MessageDialog::QUESTION, 
