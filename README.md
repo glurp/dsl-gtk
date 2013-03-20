@@ -27,10 +27,10 @@ Done :
 
 - treeview almost done...
 - autodoc for dsl: make_doc in place of rdoc
-- gtk3 working...
+- gtk3 half working...
 
 Todo for pass to 1.0 :
-
+- GTK3 compatibility : work now, but issue on Canvas,FileChooser
 - Easy Form : variables binding for entry/list/check-radio button...
 
 Installation
@@ -52,15 +52,16 @@ Install GTK2 :
 
 *	windows:
 > http://downloads.sourceforge.net/project/gtk-win/   
->        ==>> gtk2-runtime-2.24.8-2011-12-03-ash.exe
-
+>        ==>> gtk2-runtime-2.24.10-*-ash.exe
+> 
 
 2) install Ruiby
 
 ```
+> gem update --system   # gem 2.0.3
 > gem install Ruiby
 > ruiby_demo            # check good installation
-> ruiby_skechi          # write and test ruiby code
+> ruiby_sketchi          # write and test ruiby code
 ```
 
 NOTA
