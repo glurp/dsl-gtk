@@ -7,6 +7,7 @@
 #               not an IDE....
 #####################################################################
 # encoding: utf-8
+require 'gtk2'
 require_relative '../lib/ruiby'
 
 class RubyApp < Ruiby_gtk
@@ -45,7 +46,7 @@ class RubyApp < Ruiby_gtk
 				[flow_paned(1200,0.5) do 
 					[stack {
 						@title=sloti(label("Edit"))
-						@edit=slot(source_editor(:lang=> "ruby", :font=> "Courier new 12")).editor
+						#@edit=slot(source_editor(:lang=> "ruby", :font=> "Courier new 12")).editor
 						sloti(button("Test...") { execute() })
 					},
 					stack { @demo=stack {label("empty...")} }
@@ -55,7 +56,7 @@ class RubyApp < Ruiby_gtk
 					page("Error") { @error_log=slot(text_area(600,100,{:font=>"Courier new 10"})) }
 					page("Help") { make_help(slot(text_area(600,100,{:font=>"Courier new 10"}))) }
 					page("API") { make_api(slot(text_area(600,100,{:font=>"Courier new 10"}))) }
-					page("Example") { make_example(slot(source_editor(:width=>600,:height=>100,:lang=> "ruby", :font=> "Courier new 10"))) }
+					#page("Example") { make_example(slot(text_area(:font=> "Courier new 10"))) }
 				end
 				]
 			}
