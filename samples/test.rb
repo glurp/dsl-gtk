@@ -11,7 +11,7 @@ def mlog(text)
  puts "%8d | %s" % [delta,text.to_s]
 end
 mlog 'before require gtk2'
-require 'gtk2'
+require 'gtk2' 
 mlog 'before require ruiby'
 require_relative '../lib/ruiby'
 mlog 'after require ruiby'
