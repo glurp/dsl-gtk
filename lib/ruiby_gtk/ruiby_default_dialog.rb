@@ -88,10 +88,10 @@ module Ruiby_default_dialog
 	########## File dialog
 
 	def ask_file_to_read(dir,filter)
-		dialog_chooser("Choose File (#{filter}) ...", Gtk::FileChooser::ACTION_OPEN, Gtk::Stock::OPEN)
+		dialog_chooser("Choose File (#{filter}) ...", Ruiby.gtk_version(3) ? :open : Gtk::FileChooser::ACTION_OPEN, Gtk::Stock::OPEN)
 	end
 	def ask_file_to_write(dir,filter)
-	 dialog_chooser("Save File (#{filter}) ...", Gtk::FileChooser::ACTION_SAVE, Gtk::Stock::SAVE)
+	 dialog_chooser("Save File (#{filter}) ...", Ruiby.gtk_version(3) ? :save : Gtk::FileChooser::ACTION_SAVE, Gtk::Stock::SAVE)
 	end
 	def ask_dir_to_read(initial_dir=nil)
 		dialog_chooser(
@@ -110,14 +110,25 @@ module Ruiby_default_dialog
 		}
 	end
 	def dialog_chooser(title, action, button)
-	    dialog = Gtk::FileChooserDialog.new(
-	      title,
-	      self,
-	      action,
-	      nil,
-	      [Gtk::Stock::CANCEL, Gtk::Dialog::RESPONSE_CANCEL],
-	      [button, Gtk::Dialog::RESPONSE_ACCEPT]
-	    )
+      if Ruiby.gtk_version(3)
+        dialog = Gtk::FileChooserDialog.new(
+            :title => title, 
+            :parent => self, 
+            :action => action, 
+            :buttons => [ ##  ??
+              [Gtk::Stock::CANCEL, Ruiby.gtk_version(3) ? :cancel : Gtk::Dialog::RESPONSE_CANCEL],
+              [button, Gtk::Dialog::RESPONSE_ACCEPT]
+            ])
+      else
+        dialog = Gtk::FileChooserDialog.new(
+          title,
+          self,
+          action,
+          nil,
+          [Gtk::Stock::CANCEL, Ruiby.gtk_version(3) ? :cancel : Gtk::Dialog::RESPONSE_CANCEL],
+          [button, Gtk::Dialog::RESPONSE_ACCEPT]
+        )
+    end
 		dialog.set_window_position(Window::POS_CENTER)
 		yield(dialog) if block_given?
 	    ret = ( dialog.run == Gtk::Dialog::RESPONSE_ACCEPT ? dialog.filename : nil )rescue false
