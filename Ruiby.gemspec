@@ -14,9 +14,10 @@ A DSL for building simple GUI ruby application rapidly.
 EEND
   
   dependencies = [
-    [:runtime,     "gtk2",  "~> 1.2.3"],  
+    [:runtime,     "gtk2"]
 	]
 #   [:runtime,     "gstreamer",  "~> 1.0.0"],
+#   [:runtime,     "gtksourceview3",  "~> 1.0.0"],
 
   s.files         = Dir['**/*'].reject { |a| a =~ /^\.git/ || a =~ /\._$/}
   s.test_files    = Dir['samples/**'] 
