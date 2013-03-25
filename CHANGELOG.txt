@@ -1,4 +1,8 @@
-0.62.1
+0.62.2
+    ruiby_sketchi : comments
+    ruiby_demo3 : comments
+    ruiby_demo : commets
+    Ruiby.gemspec : gtk3
     Ruiby.gemspec : dependancy
 0.62.0 : 2013-03-25 16:57:07 +0100
     test_gtk3.rb : source editor on
