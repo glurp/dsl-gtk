@@ -24,8 +24,7 @@ EEND
   s.require_paths = ["lib"]
   s.bindir		  = "bin"
   s.executables   = `ls bin/*`.split("\n").map{ |f| File.basename(f) }
-  
-  
+
   ## Make sure you can build the gem on older versions of RubyGems too:
   s.rubygems_version = "1.8.15"
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
