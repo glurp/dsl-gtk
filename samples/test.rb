@@ -15,6 +15,7 @@ require 'gtk2'
 mlog 'before require ruiby'
 require_relative '../lib/ruiby'
 mlog 'after require ruiby'
+Gem.loaded_specs.each {|name,gem| puts "  #{gem.name}-#{gem.version}"}
 
 
 class RubyApp < Ruiby_gtk
@@ -54,6 +55,7 @@ def component()
         page("Property Edit.") { test_properties(0) }
         page("Big PropEditor") { test_properties(1) }
         page("Source Editor") {
+          button("eee")
           if ed=source_editor(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 8",:on_change=> proc { edit_change })
             @editor=ed.editor
             @editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
