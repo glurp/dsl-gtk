@@ -2,7 +2,7 @@
 # LGPL
 
 =begin
-general definition of Ruiby DSL. 
+general definition of Ruiby DSL, for GTK2. 
 
 Most of this ressource are not thread-safe : use ruiby in the context
 of main thread (thread which invoke Ruiby.start).
