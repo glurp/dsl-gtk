@@ -27,6 +27,7 @@ class RubyApp < Ruiby_gtk
 	
 	
 def component()   
+  after(1000) {puts "\n\n\n"  ; Gem.loaded_specs.each {|name,gem| puts "  #{gem.name}-#{gem.version}"} }
   mlog 'before Component'
   stack do
     sloti(htoolbar(
@@ -38,7 +39,7 @@ def component()
     sloti(label( <<-EEND ,:font=>"Arial 12"))
      This window is test & demo of Ruiby capacity,
      Ruiby version is #{Ruiby::VERSION}, Gtk version is #{Gtk::VERSION.join(".")}
-     HMI code is #{File.read(__FILE__).split("component"+"()")[1].split(/\r?\n/).select {|l| l.strip.size>3}.size} lines
+     HMI code is #{File.read(__FILE__).split("comp"+"onent"+"()")[1].split(/\r?\n/).select {|l| l.strip.size>3}.size} lines
 	EEND
     separator
     flow {
@@ -55,6 +56,7 @@ def component()
         page("Property Edit.") { test_properties(0) }
         page("Big PropEditor") { test_properties(1) }
         page("Source Editor") {
+          require 'gtksourceview3'
           if ed=source_editor(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 8",:on_change=> proc { edit_change })
             @editor=ed.editor
             @editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
