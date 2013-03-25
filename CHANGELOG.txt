@@ -1,4 +1,8 @@
-0.60.1
+0.61.1
+    test_gtk3.rb : source editor on
+    ruiby_dsl3.rb : sourceeditor on
+    Ruiby.gemspec : depend gtk2/3
+0.61.0 : 2013-03-25 16:32:23 +0100
     test.rb : editor
     dependencies.rb : creation
     ruiby_dsl.rb : only for gtk2
