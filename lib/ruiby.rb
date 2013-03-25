@@ -31,7 +31,7 @@ if Gtk.check_version(2, 0, 0) =~ /old/i
   md.destroy
   exit!
 end
-#require 'gtksourceview2' # done by source_editor() tag, so only if source edit is needed
+#require 'gtksourceviewX' # done by source_editor() tag, so only if source edit is needed
 
 module Ruiby
   DIR = Pathname.new(__FILE__).realpath.dirname.to_s
@@ -147,7 +147,7 @@ end
 
 
 require_relative 'ruiby_gtk/ruiby_default_dialog.rb'
-require_relative 'ruiby_gtk/ruiby_dsl.rb'
+require_relative(Ruiby.gtk_version(2) ? 'ruiby_gtk/ruiby_dsl.rb' : 'ruiby_gtk/ruiby_dsl3.rb')
 require_relative 'ruiby_gtk/ruiby_threader.rb'
 require_relative 'ruiby_gtk/windows.rb'
 require_relative 'ruiby_gtk/editor.rb'
