@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 #####################################################
-#  run Ruiby/samples/test.rb
+#  sketchi: edi and test Ruiby dsl fragment
 #######################################################
-require 'ruiby'
+require 'Ruiby'
 Dir.chdir(File.join(Ruiby::DIR,"..","samples"))
 load 'sketchi.rb',true
