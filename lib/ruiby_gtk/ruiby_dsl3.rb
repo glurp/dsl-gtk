@@ -881,12 +881,11 @@ module Ruiby_dsl
   # @edit=source_editor().editor
   # @edit.buffer.text=File.read(@filename)
   def source_editor(args={}) 
-    return
     begin
       require 'gtksourceview3'
     rescue Exception => e
       log('gtksourceview3 not installed!, please use text_area')
-      puts 'gtksourceview3 not installed!, please use text_area'
+      puts '******** gtksourceview3 not installed!, please use text_area ************' 
       return
     end
     args[:width]  = 400 unless args[:width]
@@ -910,7 +909,7 @@ module Ruiby_dsl
 
     cb.set_size_request(args[:width], args[:height])
     cb.set_policy(POLICY_AUTOMATIC, POLICY_AUTOMATIC)
-    cb.set_shadow_type(SHADOW_IN)
+    #cb.set_shadow_type(SHADOW_IN)
     cb.add(sv)
     cb.show_all
     attribs(cb,{})	
