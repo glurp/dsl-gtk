@@ -1,4 +1,9 @@
-0.59.1
+0.60.1
+    test.rb : editor
+    dependencies.rb : creation
+    ruiby_dsl.rb : only for gtk2
+    ruiby.rb : conditionaly require dsl or dsl3 gor gtk3
+0.60.0 : 2013-03-20 18:38:42 +0100
     sketchi.rb : gtk3, not finish (missing editor)
     ruiby_default_dialog.rb : FileDialog for gtk3, incomplete
     ruiby.rb : gtk3 can be preloaded
