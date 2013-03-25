@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 #####################################################
-#  run Ruiby/samples/test_gtk3.rb
+#  run Ruiby/samples/test_gtk3.rb : test with gtk2
 #######################################################
-require 'ruiby'
+require 'Ruiby'
 Dir.chdir(File.join(Ruiby::DIR,"..","samples"))
 load 'test_gtk3.rb'
