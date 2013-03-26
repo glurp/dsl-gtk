@@ -1,4 +1,7 @@
-0.63.1
+0.63.2
+    test_gtk3.rb : nothing
+    ruiby_dsl3.rb : inhibition gtksourceview : scratch
+    ruiby_demo3 : gtk3
     sketchi.rb : uncoment source_editor
     README.md : gtk3 comments
     Gemfile : add gtk3
