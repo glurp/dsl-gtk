@@ -27,17 +27,17 @@ Done :
 
 - treeview almost done...
 - autodoc for dsl: make_doc in place of rdoc
-- gtk3 half working...
+- gtk3 experimantal...
 
 Todo for pass to 1.0 :
-- GTK3 compatibility : work now, but issue on Canvas,FileChooser
+- GTK3 compatibility : work now, but som scratch
 - Easy Form : variables binding for entry/list/check-radio button...
 
 Installation
 ============
 1) system
 
-Install Ruby 1.9.x ...
+Install Ruby 2.0.x ...
 
 Install GTK2 :
 
@@ -60,12 +60,14 @@ Install GTK2 :
 ```
 > gem update --system   # gem 2.0.3
 > gem install Ruiby
-> ruiby_demo            # check good installation
+> ruiby_demo             # check good installation with gtk2 (default)
+> ruiby_demo3            # check good installation with gtk3 (experimental)
 > ruiby_sketchi          # write and test ruiby code
 ```
 
 NOTA
 We must correct the capitalization of Ruiby...
+GTK3 give lot of instability,hope this will  be short!
 
 
 Usage
