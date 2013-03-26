@@ -881,6 +881,7 @@ module Ruiby_dsl
   # @edit=source_editor().editor
   # @edit.buffer.text=File.read(@filename)
   def source_editor(args={}) 
+    return(nil) # loading gtksourceview3 scratch application...
     begin
       require 'gtksourceview3'
     rescue Exception => e
