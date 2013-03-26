@@ -46,7 +46,7 @@ class RubyApp < Ruiby_gtk
 				[flow_paned(1200,0.5) do 
 					[stack {
 						@title=sloti(label("Edit"))
-						#@edit=slot(source_editor(:lang=> "ruby", :font=> "Courier new 12")).editor
+						@edit=slot(source_editor(:lang=> "ruby", :font=> "Courier new 12")).editor
 						sloti(button("Test...") { execute() })
 					},
 					stack { @demo=stack {label("empty...")} }
