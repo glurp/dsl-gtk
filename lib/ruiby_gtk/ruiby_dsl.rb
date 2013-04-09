@@ -550,8 +550,7 @@ module Ruiby_dsl
     w=DrawingArea.new()
     w.set_size_request(width,height)
     w.events |= ( ::Gdk::Event::BUTTON_PRESS_MASK | ::Gdk::Event::POINTER_MOTION_MASK | ::Gdk::Event::BUTTON_RELEASE_MASK)
-    w.signal_connect( Ruiby.gtk_version(2) ? 'expose-event' : 'draw' ) { |w1,e| 
-      next unless w1.window.respond_to?(:create_cairo_context)
+    w.signal_connect( 'expose-event'  ) { |w1,e| 
       cr = w1.window.create_cairo_context
       cr.save {
         cr.set_line_join(Cairo::LINE_JOIN_ROUND)
