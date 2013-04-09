@@ -1,4 +1,6 @@
-0.68.1
+0.69.1
+    test_thread.rb : nothing
+0.69.0 : 2013-04-09 19:35:50 +0200
     Ruiby.gemspec : dev
 0.68.0 : 2013-04-09 19:35:19 +0200
     test_layout.rb : Box
