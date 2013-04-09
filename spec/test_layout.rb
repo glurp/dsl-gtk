@@ -23,19 +23,19 @@ describe Ruiby do
 	 it "create a stack and check its presence" do
 		ici=nil
 		@win.create { ici=stack {  } }
-		ici.should be_a_kind_of(Gtk::VBox)
+		ici.should be_a_kind_of(Gtk::Box)
 		ici.should be_a_kind_of(Gtk::Box)
 		ici.should be_a_kind_of(Gtk::Widget)
 	 end
 	 it "create a flow and check its presence" do
 		ici=nil
 		@win.create { ici=flow {  } }
-		ici.should be_a_kind_of(Gtk::HBox)
+		ici.should be_a_kind_of(Gtk::Box)
 	 end
 	 it "create a flow in a stack and check its presence" do
 		ici=nil
 		@win.create { stack {  ici=flow { } } }
-		ici.should be_a_kind_of(Gtk::HBox)
+		ici.should be_a_kind_of(Gtk::Box)
 	 end
 	 it "create a  button" do
 		ici=nil
@@ -102,7 +102,7 @@ describe Ruiby do
 		@win.append_to(ici) { @win.button("e") }
 		@win.append_to(ici) { ici2=@win.button("e") }
 		@win.slot_append_before(@win.flow { },ici2)
-		ici.children[1].should be_a_kind_of(Gtk::HBox)
+		ici.children[1].should be_a_kind_of(Gtk::Box)
 	 end
 	 it "slot_append_after" do
 		ici=nil; ici2=nil
@@ -110,7 +110,7 @@ describe Ruiby do
 		@win.append_to(ici) { ici2=@win.button("e") }
 		@win.append_to(ici) { @win.button("e") }
 		@win.slot_append_after(@win.flow { },ici2)
-		ici.children[1].should be_a_kind_of(Gtk::HBox)
+		ici.children[1].should be_a_kind_of(Gtk::Box)
 	 end
 	 it "delete a widget" do
 		ici=nil; ici2=nil;ici3=nil;
