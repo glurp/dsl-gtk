@@ -1,4 +1,6 @@
-0.65.1
+0.66.1
+    rspec_helper.rb : gtk3
+0.66.0 : 2013-04-09 19:14:10 +0200
     test_dialogs.rb : gtk3
 0.65.0 : 2013-04-09 19:11:24 +0200
     ruiby_dsl3.rb : canvas working : cairo_context ok
