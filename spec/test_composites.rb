@@ -58,7 +58,7 @@ describe Ruiby do
 			w=properties("Title",data)
 		} } 
 		@win.sleeping(100)
-		w.should be_a_kind_of(Gtk::VBox)
+		w.should be_a_kind_of(Gtk::Box)
 		t=w.children.first.children.first.children.first.children.first
 		t.should be_a_kind_of(Gtk::Table)
  end
@@ -69,7 +69,7 @@ describe Ruiby do
 			w=properties("Title",data,{scroll: [200,200],edit: true})
 		} } 
 		@win.sleeping(100)
-		w.should be_a_kind_of(Gtk::VBox)
+		w.should be_a_kind_of(Gtk::Box)
  end
   it "create properties editor" do
 		w=nil
@@ -78,7 +78,7 @@ describe Ruiby do
 			w=properties("Title",data,edit: true)
 		} } 
 		@win.sleeping(100)
-		w.should be_a_kind_of(Gtk::VBox)
+		w.should be_a_kind_of(Gtk::Box)
  end
   it "set/get data in properties editor" do
 		w=nil
@@ -133,7 +133,7 @@ describe Ruiby do
 		   }
 		} }
 		@win.sleeping(100,"Verify accordion")
-		w.should be_a_kind_of(Gtk::VBox)
+		w.should be_a_kind_of(Gtk::Box)
  end
   it "create a h accordion" do
 		w=nil
@@ -144,7 +144,7 @@ describe Ruiby do
 				aitem("ccc") { alabel("eee")}
 		   }
 		} }
-		w.should be_a_kind_of(Gtk::HBox)
+		w.should be_a_kind_of(Gtk::Box)
  end
   it "create panneds" do
 		w=nil
@@ -157,7 +157,7 @@ describe Ruiby do
 		   }
 		} }
 		@win.sleeping(100,"Verify panned")
-		w.should be_a_kind_of(Gtk::VPaned)
+		w.should be_a_kind_of(Gtk::Paned)
  end
   it "create calendar" do
 		w=[]
