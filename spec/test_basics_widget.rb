@@ -101,21 +101,21 @@ describe Ruiby do
 		w=nil
 		@win.create { stack {   w=fields("aa"=>0,"bb"=>1)  } }
 		@win.sleeping(100,"Verify fields")
-		w.should be_a_kind_of(Gtk::VBox)
+		w.should be_a_kind_of(Gtk::Box)
 		w.children.size.should eq(2)
  end
  it "create  fields with validation" do
 		w=nil
 		@win.create { stack {   w=fields("aa"=>0,"bb"=>1) { alert("value modify, ok") } } }
 		@win.sleeping(100,"Verify fields")
-		w.should be_a_kind_of(Gtk::VBox)
+		w.should be_a_kind_of(Gtk::Box)
 		w.children.size.should eq(4)
  end
  it "create a slider" do
 		w=nil
 		@win.create { stack {   w=islider(22,min: 0, max: 100,by: 1) { |v|p v} } }
 		@win.sleeping(100,"Verify islider")
-		w.should be_a_kind_of(Gtk::HScale)
+		w.should be_a_kind_of(Gtk::Scale)
  end
  it "create a canvas" do
 		w=nil
@@ -157,7 +157,7 @@ describe Ruiby do
 		@win.create { stack {    
 			w=color_choice("texte") { } 
 		} }
-		w.should be_a_kind_of(Gtk::HBox)
+		w.should be_a_kind_of(Gtk::Box)
  end
  it "create text area" do
 		w=nil
