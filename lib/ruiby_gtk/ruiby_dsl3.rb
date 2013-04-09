@@ -907,7 +907,7 @@ module Ruiby_dsl
     cb.define_singleton_method(:text) {  sv.buffer.text }
 
     cb.set_size_request(args[:width], args[:height])
-    cb.set_policy(POLICY_AUTOMATIC, POLICY_AUTOMATIC)
+    #cb.set_policy(POLICY_AUTOMATIC, POLICY_AUTOMATIC)
     #cb.set_shadow_type(SHADOW_IN)
     cb.add(sv)
     cb.show_all
