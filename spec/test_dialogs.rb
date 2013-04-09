@@ -11,7 +11,7 @@ describe Ruiby do
  end
  it "create a editor window" do
     begin 
-      gem('gtksourceview2') 
+      gem('gtksourceview3') 
       ok=true
     rescue Exception => e
       ok=false
