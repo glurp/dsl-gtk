@@ -649,6 +649,15 @@ module Ruiby_dsl
         label(v.to_s))
     end
   end
+  # show methods of a object/class in log window
+  def show_methods(obj=nil,filter=nil)
+    obj=self unless obj
+    title="\n============ #{Class===obj.class ? obj : obj.class} ===========\n"
+    data=(obj.methods-Object.methods).grep(filter || /.*/).sort.each_slice(3).map { |a,b,c| "%-30s| %-30s| %-30s" % [a,b,c]}.join("\n")
+    footer="\n==================================================\n"
+    log( title+data+footer)
+  end
+  
   # create a property shower/editor : vertical liste of label/entry representing the ruby Hash content
   # Edition: Option: use :edit => true for show value in text entry, and a validate button, 
   # on button action, yield of bloc parameter is done with modified Hash as argument
