@@ -69,8 +69,9 @@ module Ruiby_dsl
   # 'Gtk::Box#pack_start(child, :expand => true, :fill => true, :padding => 0)'
   def _cbox(expand,box,add1)
     autoslot()
+    parent=@lcur.last
     if add1
-      expand ? @lcur.last.add(box) : @lcur.last.pack_start(box, :expand => false, :fill => false, :padding => 3)
+      expand ? (parent.respond_to?(:pack_start) ? parent.pack_start(box, :expand => true, :fill => true, :padding => 3): parent.add(box) ) : parent.pack_start(box, :expand => false, :fill => false, :padding => 3)
     end
     @lcur << box
     yield
@@ -646,9 +647,13 @@ module Ruiby_dsl
         label(v.to_s))
     end
   end
+  # show methods of a object/class in log window
   def show_methods(obj=nil,filter=nil)
     obj=self unless obj
-    log( "\n"+(obj.methods-Object.methods).grep(filter || /.*/).sort.each_cons(3).map { |l| "%-30s | %-30s | %-30s" % l}.join("\n"))
+    title="\n============ #{Class===obj.class ? obj : obj.class} ===========\n"
+    data=(obj.methods-Object.methods).grep(filter || /.*/).sort.each_slice(3).map { |a,b,c| "%-30s| %-30s| %-30s" % [a,b,c]}.join("\n")
+    footer="\n==================================================\n"
+    log( title+data+footer)
   end
   # create a property shower/editor : vertical liste of label/entry representing the ruby Hash content
   # Edition: Option: use :edit => true for show value in text entry, and a validate button, 
@@ -864,19 +869,19 @@ module Ruiby_dsl
   # horizonaly disposed
   def flow_paned(size,fragment,&blk) _paned(true,size,fragment,&blk) end
 
-  def _paned(vertical,size,fragment)
-    paned = Paned.new(vertical ? :vertical : :horizontal)
-    #slot(paned)
+  def _paned(horizontal,size,fragment)
+    paned = Paned.new(horizontal ? :horizontal : :vertical)
     @lcur << paned
     frame1,frame2=*yield()
     @lcur.pop
     (frame1.shadow_type = :in) rescue nil
     (frame2.shadow_type = :in) rescue nil
     paned.position=size*fragment
-    vertical ? paned.set_size_request(size, -1) : paned.set_size_request(-1,size)
+    horizontal ? paned.set_size_request(size, -1) : paned.set_size_request(-1,size)
     paned.pack1(frame1, :resize => true, :shrink => false)
-    paned.pack2(frame2, :resize => false, :shrink => false)
+    paned.pack2(frame2, :resize => true, :shrink => false)
     show_all_children(paned)
+    slot(paned)
   end
 
   ##################### source editor
@@ -1359,6 +1364,25 @@ module Ruiby_dsl
     end
     begin
       Gtk::RC.parse_string(string_style)
+      @style_loaded=true
+    rescue Exception => e
+      error "Error loading style : #{e}\n#{string_style}"
+    end
+  end
+  # not ready!!!
+  def def_style3(string_style=nil)
+    unless string_style
+       fn=caller[0].gsub(/.rb$/,".rc")
+       raise "Style: no ressource (#{fn} not-exist)" if !File.exists?(fn)
+       string_style=File.read(fn)
+    end
+    begin
+      provider=Gtk::CssProvider.new
+      show_methods(provider)
+      show_methods(Gtk::StyleContext.new)
+      provider.load(Gtk::StyleContext.load_from_data(string_style, -1))
+      
+      #.add_provider(new Gtk.CssProvider.load_from_data(string_style, -1))
       @style_loaded=true
     rescue Exception => e
       error "Error loading style : #{e}\n#{string_style}"
