@@ -10,7 +10,7 @@ class Ruiby_gtk < Gtk::Window
  	def initialize(title,w,h)
 		super()
 		init_threader()
-		#threader(10) # must be call by user window, if necessary
+        #threader(10) # must be call by user window, if necessary
         set_title(title)
         set_default_size(w,h)
         signal_connect "destroy" do 
@@ -19,7 +19,7 @@ class Ruiby_gtk < Gtk::Window
 				Gtk.main_quit
 			end
 		end
-        set_window_position Window::POS_CENTER  # default, can be modified by window_position(x,y)
+        set_window_position Gtk::Window::Position::CENTER  # default, can be modified by window_position(x,y)
 		@lcur=[self]
 		@ltable=[]
 		@current_widget=nil
