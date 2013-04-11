@@ -1,4 +1,5 @@
-0.69.2
+0.69.3
+    ruiby_dsl.rb : show_method creation
     test_gtk3.rb : clear traces
     windows.rb : none
     ruiby_dsl3.rb : gtk3 warnng
