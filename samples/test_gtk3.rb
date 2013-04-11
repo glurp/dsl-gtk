@@ -26,6 +26,7 @@ class RubyApp < Ruiby_gtk
 	
 	
 def component()   
+  #def_style3("* { font_name :  Courier }")
   after(1000) {puts "\n\n\n"  ; Gem.loaded_specs.each {|name,gem| puts "  #{gem.name}-#{gem.version}"} }
   mlog 'before Component'
   stack do
@@ -293,13 +294,13 @@ end
 			stack {
 				sloti(label("Test scrolled zone"))
 				separator
-				stack_paned 300,0.5 do [
-				  vbox_scrolled(-1,100) { 
+				stack_paned 600,0.5 do [
+				  vbox_scrolled(-1,20) { 
 					30.times { |i| 
 					  flow { sloti(button("eeee#{i}"));sloti(button("eeee")) }
 					}
 				  },
-				  vbox_scrolled(100,100) { 
+				  vbox_scrolled(-1,20) { 
 					30.times { |i| 
 					  flow { sloti(button("eeee#{i}"));sloti(button("eeee"));sloti(button("aaa"*100)) }
 					}
