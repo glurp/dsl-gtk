@@ -1,4 +1,6 @@
-0.69.3
+0.69.4
+    test_gtk3.rb : panned tuning
+    ruiby_dsl3.rb : show_method creation
     ruiby_dsl.rb : show_method creation
     test_gtk3.rb : clear traces
     windows.rb : none
