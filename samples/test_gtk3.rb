@@ -15,7 +15,6 @@ require 'gtk3'
 mlog 'before require ruiby'
 require_relative '../lib/ruiby'
 mlog 'after require ruiby'
-Gem.loaded_specs.each {|name,gem| puts "  #{gem.name}-#{gem.version}"}
 
 class RubyApp < Ruiby_gtk
     def initialize
@@ -104,21 +103,27 @@ end
 				@epaisseur=sloti(islider(1,{:min=>1,:max=>30,:by=>1}))
 			  }
 			  @ldraw=[] ; @color=  ::Gdk::Color.parse("#33EEFF");
-			  cv=canvas(100,100,{ 
-				:expose     => proc { |w,cr|  
-				  @ldraw.each do |line|
-					next if line.size<3
-					color,ep,pt0,*poly=*line
-					cr.set_line_width(ep)
-					cr.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
-					cr.move_to(*pt0)
-					poly.each {|px|    cr.line_to(*px) } 
-					cr.stroke  
-				end
-				},          
-				:mouse_down => proc { |w,e|   no= [e.x,e.y] ;  @ldraw << [@color,@epaisseur.value,no] ;  no    },
-				:mouse_move => proc { |w,e,o| no= [e.x,e.y] ; (@ldraw.last << no) if no[0]!=o[0] || no[1]!=o[1] ; no },
-				:mouse_up   => proc { |w,e,o| no= [e.x,e.y] ; (@ldraw.last << no) ; no}
+			  cv=canvas(300,200,{ 
+          :expose     => proc { |w,cr|  
+              @ldraw.each do |line|
+                next if line.size<3
+                color,ep,pt0,*poly=*line
+                cr.set_line_width(ep)
+                cr.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
+                cr.move_to(*pt0)
+                poly.each {|px|    cr.line_to(*px) } 
+                cr.stroke  
+              end
+          },          
+          :mouse_down => proc { |w,e|   
+              no= [e.x,e.y] ;  @ldraw << [@color,@epaisseur.value,no] ;  no    
+          },
+          :mouse_move => proc { |w,e,o| 
+              no= [e.x,e.y] ; (@ldraw.last << no) if no[0]!=o[0] || no[1]!=o[1] ; no 
+          },
+          :mouse_up   => proc { |w,e,o| 
+              no= [e.x,e.y] ; (@ldraw.last << no) ; no
+          }
 				})
 				popup {
 					pp_item("copy") 	{ alert 1 }
