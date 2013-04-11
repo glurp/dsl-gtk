@@ -221,7 +221,7 @@ module Ruiby_dsl
   end
   # Image#initialize(:label => nil, :mnemonic => nil, :stock => nil, :size => nil)'
   def get_stockicon_pixbuf(name)
-    Image.new(:label => nil, :mnemonic => nil, :stock => eval("Gtk::Stock::"+name.upcase), :size => IconSize::BUTTON).pixbuf
+    Image.new(:label => nil, :mnemonic => nil, :stock => eval("Gtk::Stock::"+name.upcase), :size => :button).pixbuf
   end
 
   # get a Image widget from a file or from a Gtk::Stock
@@ -238,7 +238,7 @@ module Ruiby_dsl
     end
     iname=get_icon(name)
     if iname
-      Image.new(iname,IconSize::BUTTON)
+      Image.new(:stock => iname,:size=> :button)
     else
       nil
     end
@@ -283,7 +283,9 @@ module Ruiby_dsl
   # create a bar (vertical or horizontal according to stack/flow current container) 
   def separator(width=1.0)  
     autoslot()
-    sloti(HBox === @lcur.last ? VSeparator.new : HSeparator.new)  
+    sloti( Separator.new(
+      @lcur.last.orientation==Gtk::Orientation::VERTICAL ? 
+        Gtk::Orientation::HORIZONTAL : Gtk::Orientation::VERTICAL))  
   end
 
   # create  label, with text (or image if txt start with a '#')
@@ -351,21 +353,21 @@ module Ruiby_dsl
       end
       iname=get_icon(name)
       w=if iname
-        Gtk::ToolButton.new(iname).tap { |but|
+        Gtk::ToolButton.new(:stock_id => iname).tap { |but|
           but.signal_connect("clicked") { v.call rescue error($!) } if v
           but.set_tooltip_text(tooltip) if tooltip
         }
       elsif name=~/^sep/i
         Gtk::SeparatorToolItem.new				
       elsif name=~/^right-(.*)/i
-        Gtk::ToolButton.new(get_icon($1)).tap { |but|
+        Gtk::ToolButton.new(:stock_id => get_icon($1)).tap { |but|
           but.signal_connect("clicked") { v.call rescue error($!) } if v
           but.set_tooltip_text(tooltip) if tooltip
         }
       else
         puts "=======================\nUnknown icone : #{name}\n====================="
           puts "Icones dispo: #{Stock.constants.map { |ii| ii.downcase }.join(", ")}"
-        Gtk::ToolButton.new(Stock::MISSING_IMAGE)
+        Gtk::ToolButton.new(:stock_id => Stock::MISSING_IMAGE)
       end
       if w
         b.insert(w,i)
@@ -511,7 +513,7 @@ module Ruiby_dsl
   # current value can be read by w.value
   # if bloc is given, it with be call on each change, with new value as parameter
   def islider(value,option={},&b)
-    w=HScale.new(option[:min].to_i,option[:max].to_i,option[:by])
+    w=Scale.new(:horizontal,option[:min].to_i,option[:max].to_i,option[:by])
       .set_value(value ? value.to_i : 0)
     attribs(w,option)		
     w.signal_connect(:value_changed) { || b.call(w.value)  rescue error($!) } if block_given?
@@ -543,7 +545,10 @@ module Ruiby_dsl
     autoslot()
     w=DrawingArea.new()
     w.set_size_request(width,height)
-    w.events |= ( ::Gdk::Event::BUTTON_PRESS_MASK | ::Gdk::Event::POINTER_MOTION_MASK | ::Gdk::Event::BUTTON_RELEASE_MASK)
+    w.width_request=width
+    w.height_request=height
+    w.events |=  ( ::Gdk::Event::Mask::BUTTON_PRESS_MASK | ::Gdk::Event::Mask::POINTER_MOTION_MASK | ::Gdk::Event::Mask::BUTTON_RELEASE_MASK)
+
     w.signal_connect(  'draw' ) { |w1,cr| 
       cr.save {
         cr.set_line_join(Cairo::LINE_JOIN_ROUND)
@@ -583,7 +588,6 @@ module Ruiby_dsl
   def table(nb_col,nb_row,config={})
     table = Gtk::Table.new(nb_row,nb_col,false)
     table.set_column_spacings(config[:set_column_spacings]) if config[:set_column_spacings]
-    #sloti(table)
     @lcur << table
     @ltable << { :row => 0, :col => 0}
     yield
@@ -641,6 +645,10 @@ module Ruiby_dsl
         (prop_current[k]=entry(v.to_s)) : 
         label(v.to_s))
     end
+  end
+  def show_methods(obj=nil,filter=nil)
+    obj=self unless obj
+    log( "\n"+(obj.methods-Object.methods).grep(filter || /.*/).sort.each_cons(3).map { |l| "%-30s | %-30s | %-30s" % l}.join("\n"))
   end
   # create a property shower/editor : vertical liste of label/entry representing the ruby Hash content
   # Edition: Option: use :edit => true for show value in text entry, and a validate button, 
@@ -715,22 +723,22 @@ module Ruiby_dsl
   # create a notebook widget. it must contain page() wigget
   # notebook { page("first") { ... } ; ... }
   def notebook() 
-  nb = Notebook.new()
-  slot(nb)
-  @lcur << nb
-  yield
-  @lcur.pop
-  nb
+    nb = Notebook.new()
+    slot(nb)
+    @lcur << nb
+    yield
+    @lcur.pop
+    nb
   end
   # a page widget. only for notebook container.
   # button can be text or icone (if startin by '#', as label)
   def page(title,icon=nil)
-  if icon && icon[0,1]=="#" 
-    l = Image.new(get_icon(icon[1..-1]),IconSize::BUTTON); #flow(false) { label(icon) ; label(title) }
-  else
-    l=Label.new(title)
-  end 
-  @lcur.last.append_page( stack(false)  { yield }, l )
+    if icon && icon[0,1]=="#" 
+      l = Image.new(:stock => get_icon(icon[1..-1]),:size => :button); 
+    else
+      l=Label.new(title)
+    end 
+    @lcur.last.append_page( stack(false)  { yield }, l )
   end
 
   ############################## Popup
@@ -742,7 +750,7 @@ module Ruiby_dsl
   yield
   @lcur.pop
   ppmenu.show_all		
-  w.add_events(Gdk::Event::BUTTON_PRESS_MASK)
+  w.add_events(Gdk::Event::Mask::BUTTON_PRESS_MASK)
   w.signal_connect("button_press_event") do |widget, event|
     ppmenu.popup(nil, nil, event.button, event.time) if (event.button == 3)
   end
@@ -845,29 +853,29 @@ module Ruiby_dsl
 
   ############################## Panned : 
   # split current frame in 2 panes
-  # create a container which can cntaine 2 widget, separated by movable bar
+  # create a container which can containe 2 widgets, separated by movable bar
   # block invoked must return a array of 2 box wich will put in the 2 panes
   # vertivaly disposed
   def stack_paned(size,fragment,&blk) _paned(false,size,fragment,&blk) end
 
   # split current frame in 2 panes
-  # create a container which can cntaine 2 widget, separated by movable bar
+  # create a container which can containe 2 widgets, separated by movable bar
   # block invoked must return a array of 2 box wich will put in the 2 panes
   # horizonaly disposed
   def flow_paned(size,fragment,&blk) _paned(true,size,fragment,&blk) end
 
   def _paned(vertical,size,fragment)
-    paned = vertical ? HPaned.new : VPaned.new
-    slot(paned)
+    paned = Paned.new(vertical ? :vertical : :horizontal)
+    #slot(paned)
     @lcur << paned
     frame1,frame2=*yield()
     @lcur.pop
-    (frame1.shadow_type = Gtk::SHADOW_IN) rescue nil
-    (frame2.shadow_type = Gtk::SHADOW_IN) rescue nil
+    (frame1.shadow_type = :in) rescue nil
+    (frame2.shadow_type = :in) rescue nil
     paned.position=size*fragment
     vertical ? paned.set_size_request(size, -1) : paned.set_size_request(-1,size)
-    paned.pack1(frame1, true, false)
-    paned.pack2(frame2, false, false)
+    paned.pack1(frame1, :resize => true, :shrink => false)
+    paned.pack2(frame2, :resize => false, :shrink => false)
     show_all_children(paned)
   end
 
@@ -891,24 +899,23 @@ module Ruiby_dsl
     args[:height] = 300 unless args[:height]
     change_proc = proc { }
     (change_proc = args[:on_change]; args.delete :on_change) if args[:on_change]
-    sv = ::Gtk::SourceView.new
+    sv = GtkSource::View.new
     sv.show_line_numbers = true
     sv.insert_spaces_instead_of_tabs = false
-    sv.smart_home_end = Gtk::SourceView::SMART_HOME_END_ALWAYS
+    sv.smart_home_end = :always
     sv.tab_width = 4
     sv.buffer.text = (args[:text]||"").to_s
-    sv.buffer.language = Gtk::SourceLanguageManager.new.get_language(args[:lang]||'ruby')
+    sv.buffer.language = GtkSource::LanguageManager.new.get_language(args[:lang]||'ruby')
     sv.buffer.highlight_syntax = true
-    sv.modify_font(  Pango::FontDescription.new(args[:font] || "Courier new 10")) 
-
+    sv.override_font(  Pango::FontDescription.new(args[:font] || "Courier new 10")) 
     cb = ScrolledWindow.new
     cb.define_singleton_method(:editor) { sv }
     cb.define_singleton_method(:text=) { |t| sv.buffer.text=t }
     cb.define_singleton_method(:text) {  sv.buffer.text }
 
     cb.set_size_request(args[:width], args[:height])
-    #cb.set_policy(POLICY_AUTOMATIC, POLICY_AUTOMATIC)
-    #cb.set_shadow_type(SHADOW_IN)
+    cb.set_policy(:automatic, :automatic)
+    cb.set_shadow_type(:in)
     cb.add(sv)
     cb.show_all
     attribs(cb,{})	
@@ -989,7 +996,7 @@ module Ruiby_dsl
           Win32API.new('user32', 'GetForegroundWindow', [], 'N').call
         v.video_sink.xwindow_id = handle
     
-    wid.events |= ( ::Gdk::Event::BUTTON_PRESS_MASK | ::Gdk::Event::POINTER_MOTION_MASK | ::Gdk::Event::BUTTON_RELEASE_MASK)
+    wid.events |= ( ::Gdk::Event::Mask::BUTTON_PRESS_MASK | ::Gdk::Event::Mask::POINTER_MOTION_MASK | ::Gdk::Event::Mask::BUTTON_RELEASE_MASK)
     wid.signal_connect('expose_event') do |w1,e| 		
     end
     def wid.video() v end
@@ -1003,10 +1010,11 @@ module Ruiby_dsl
   # respond to : scrooo_to_top; scroll_to_bottom,
   def scrolled(width,height,&b)  vbox_scrolled(width,height,&b) end
   def vbox_scrolled(width,height,&b)
-    sw=slot(ScrolledWindow.new())
+    sw=ScrolledWindow.new()
+    slot(sw)
     sw.set_width_request(width)		if width>0 
     sw.set_height_request(height)	if height>0
-    sw.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS)
+    sw.set_policy(:automatic, :always)
     ret= stack(false,&b) if  block_given? 
     sw.add_with_viewport(ret)
     class << sw
@@ -1055,7 +1063,7 @@ module Ruiby_dsl
   #   index() : get the index  of selected item (or nil)
   def list(title,w=0,h=0)
     scrolled_win = Gtk::ScrolledWindow.new
-    scrolled_win.set_policy(Gtk::POLICY_AUTOMATIC,Gtk::POLICY_AUTOMATIC)
+    scrolled_win.set_policy(:automatic ,:automatic )
     scrolled_win.set_width_request(w)	if w>0
     scrolled_win.set_height_request(h)	if h>0
     model = Gtk::ListStore.new(String)
@@ -1068,7 +1076,7 @@ module Ruiby_dsl
       end		
     end
     treeview.append_column(column)
-    treeview.selection.set_mode(Gtk::SELECTION_SINGLE)
+    treeview.selection.set_mode(:single)
     scrolled_win.add_with_viewport(treeview)
     def scrolled_win.list() children[0].children[0] end
     def scrolled_win.model() list().model end
@@ -1094,13 +1102,13 @@ module Ruiby_dsl
   # all columnes are String type
   def grid(names,w=0,h=0)
     scrolled_win = Gtk::ScrolledWindow.new
-    scrolled_win.set_policy(Gtk::POLICY_AUTOMATIC,Gtk::POLICY_AUTOMATIC)
+    scrolled_win.set_policy(:automatic,:automatic)
     scrolled_win.set_width_request(w)	if w>0
     scrolled_win.set_height_request(h)	if h>0
     
     model = Gtk::ListStore.new(*([String]*names.size))
     treeview = Gtk::TreeView.new(model)
-    treeview.selection.set_mode(Gtk::SELECTION_SINGLE)
+    treeview.selection.set_mode(:single)
     names.each_with_index do  |name,i|
       treeview.append_column(
         Gtk::TreeViewColumn.new( name,Gtk::CellRendererText.new,{:text => i} )
@@ -1147,10 +1155,10 @@ module Ruiby_dsl
   # <li>  String 		else
   def tree_grid(names,w=0,h=0,options={})
     scrolled_win = Gtk::ScrolledWindow.new
-    scrolled_win.set_policy(Gtk::POLICY_AUTOMATIC,Gtk::POLICY_AUTOMATIC)
+    scrolled_win.set_policy(:automatic,:automatic)
     scrolled_win.set_width_request(w)	if w>0
     scrolled_win.set_height_request(h)	if h>0
-    scrolled_win.shadow_type = Gtk::SHADOW_ETCHED_IN
+    scrolled_win.shadow_type = :etched_in
     
     types=names.map do |name|
      case name[0,1]
@@ -1163,10 +1171,10 @@ module Ruiby_dsl
     model = Gtk::TreeStore.new(*types)
     
     treeview = Gtk::TreeView.new(model)
-    treeview.selection.set_mode(Gtk::SELECTION_SINGLE)
+    treeview.selection.set_mode(:single)
     names.each_with_index do  |name,i|
       renderer,symb= *(
-        if    types[i]==TrueClass then	 [Gtk::CellRendererToggle.new().tap { |r| r.signal_connect('toggled') { } },:win]
+        if    types[i]==TrueClass then	 [Gtk::CellRendererToggle.new().tap { |r| r.signal_connect('toggled') { } },:window]
         elsif types[i]==Gdk::Pixbuf then [Gtk::CellRendererPixbuf.new,:active]
         elsif types[i]==Numeric then	 [Gtk::CellRendererText.new,:text]
         else 							 [Gtk::CellRendererText.new,:text]
@@ -1310,14 +1318,14 @@ module Ruiby_dsl
     Ruiby.set_last_log_window(wdlog)
     logBuffer = TextBuffer.new
     @loglabel=TextView.new(logBuffer)
+    @loglabel.override_font(  Pango::FontDescription.new("Courier new 10")) 
     sw=ScrolledWindow.new()
     sw.set_width_request(800)	
     sw.set_height_request(200)	
     sw.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS)
     
     sw.add_with_viewport(@loglabel)
-    
-    wdlog.vbox.add(sw)
+    wdlog.vbox.pack_start(sw, :expand => true, :fill => true, :padding => 3)
     wdlog.signal_connect('response') { wdlog.destroy }
     wdlog.show_all	
     @loglabel
