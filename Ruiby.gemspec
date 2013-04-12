@@ -14,8 +14,10 @@ A DSL for building simple GUI ruby application rapidly.
 EEND
   
   dependencies = [
+    [:runtime,     "gtk2"],
+    [:runtime, "gtksourceview2"]
     [:runtime,     "gtk3"],
-    [:development, "gtksourceview3"]
+    [:runtime, "gtksourceview3"]
 	]
 
   s.files         = Dir['**/*'].reject { |a| a =~ /^\.git/ || a =~ /\._$/}
@@ -36,5 +38,20 @@ EEND
       s.add_dependency(name, version)
     end
   end
+ spec.post_install_message = <<-TEXT
+
+      -------------------------------------------------------------------------------
+
+      Hello, welcome to Ruiby univers....
+
+        $ ruiby_demo    # test with gtk2
+        $ ruiby_demo3   # test with gtk3 , experimental !
+        
+        $ ruiby -width 200 -height 100 "chrome(false); button 'Welcome' do exit!(0) end "
+        
+        $ ruiby_sketchi  # write and test ruiby gui
+
+      -------------------------------------------------------------------------------
+  TEXT  
 end
 
