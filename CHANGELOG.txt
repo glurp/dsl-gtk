@@ -1,4 +1,6 @@
-0.72.1
+0.73.1
+    Ruiby.gemspec : cti
+0.73.0 : 2013-04-12 19:51:31 +0200
     Ruiby.gemspec : cpi
 0.72.0 : 2013-04-12 19:50:58 +0200
     Ruiby.gemspec : cpi
