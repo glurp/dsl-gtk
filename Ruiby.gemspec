@@ -38,7 +38,7 @@ EEND
       s.add_dependency(name, version)
     end
   end
-  s.post_install_message = <<-TEXT
+  s.post_install_message = <<TTEXT
 
       -------------------------------------------------------------------------------
 
@@ -52,6 +52,6 @@ EEND
         $ ruiby_sketchi  # write and test ruiby gui
 
       -------------------------------------------------------------------------------
-  TEXT  
+TTEXT  
 end
 
