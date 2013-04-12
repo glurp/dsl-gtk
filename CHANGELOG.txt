@@ -1,4 +1,6 @@
-0.69.4
+0.69.5
+    sketchi.rb : compatible gtk3 gtk3 gtksoureviewx
+    Ruiby.gemspec : install post comment
     test_gtk3.rb : panned tuning
     ruiby_dsl3.rb : show_method creation
     ruiby_dsl.rb : show_method creation
