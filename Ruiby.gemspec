@@ -38,7 +38,7 @@ EEND
       s.add_dependency(name, version)
     end
   end
- spec.post_install_message = <<-TEXT
+  s.post_install_message = <<-TEXT
 
       -------------------------------------------------------------------------------
 
