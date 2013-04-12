@@ -1,4 +1,6 @@
-0.71.1
+0.72.1
+    Ruiby.gemspec : cpi
+0.72.0 : 2013-04-12 19:50:58 +0200
     Ruiby.gemspec : cpi
 0.71.0 : 2013-04-12 19:50:10 +0200
     Ruiby.gemspec : comment post install
