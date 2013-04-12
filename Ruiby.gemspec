@@ -15,7 +15,7 @@ EEND
   
   dependencies = [
     [:runtime,     "gtk2"],
-    [:runtime, "gtksourceview2"]
+    [:runtime, "gtksourceview2"],
     [:runtime,     "gtk3"],
     [:runtime, "gtksourceview3"]
 	]
