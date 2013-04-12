@@ -7,27 +7,27 @@
 #               not an IDE....
 #####################################################################
 # encoding: utf-8
-require 'gtk2'
+require 'gtk3'
 require_relative '../lib/ruiby'
 
 class RubyApp < Ruiby_gtk
     def initialize
-        super("Skechi",1200,0)
-		@filedef=Dir.tmpdir+"/sketchi_default.rb"
-		if File.exists?(@filedef)
-			load(@filedef,nil)
-		else
-			load("new.rb",<<-EEND)
-			stack {
-				propertys("data",{int: 1,float: 1.0, array: [1,2,3], hash: {a:1, b:2}},{edit: true})  { |aa| alert aa }
-				button("button 1")
-				button("button 2")
-				flowi {  button("button 3") ;  button("button 4")  }
-				entry("",20)
-				button("exit") { alert("exit? realy?") }
-			}
-			EEND
-		end
+      super("Skechi",1200,0)
+      @filedef=Dir.tmpdir+"/sketchi_default.rb"
+      if File.exists?(@filedef)
+        load(@filedef,nil)
+      else
+        load("new.rb",<<-EEND)
+        stack {
+          propertys("data",{int: 1,float: 1.0, array: [1,2,3], hash: {a:1, b:2}},{edit: true})  { |aa| alert aa }
+          button("button 1")
+          button("button 2")
+          flowi {  button("button 3") ;  button("button 4")  }
+          entry("",20)
+          button("exit") { alert("exit? realy?") }
+        }
+        EEND
+      end
     end
 	def component()
 		stack do
