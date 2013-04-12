@@ -52,6 +52,6 @@ EEND
         $ ruiby_sketchi  # write and test ruiby gui
 
       -------------------------------------------------------------------------------
-TTEXT  
+TTEXT
 end
 
