@@ -1,4 +1,6 @@
-0.69.5
+0.70.1
+    Ruiby.gemspec : comment post install
+0.70.0 : 2013-04-12 19:49:33 +0200
     sketchi.rb : compatible gtk3 gtk3 gtksoureviewx
     Ruiby.gemspec : install post comment
     test_gtk3.rb : panned tuning
