@@ -20,10 +20,12 @@ module Ruiby_default_dialog
 	end
 	# show a modal dialogu, asking question, active bloc closure with text response
 	def prompt(txt,value="") 
-		 dialog = Dialog.new("Message",
-			self,
-			Dialog::DESTROY_WITH_PARENT,
-			[ Stock::OK, Dialog::RESPONSE_NONE ])
+		 dialog = Dialog.new(
+      title: "Message",
+			parent: self,
+			flags: [Dialog::DESTROY_WITH_PARENT],
+			buttons: [ [Stock::OK,1], [:annulation,2] ]
+    )
 
 		label=Label.new(txt)
 		entry=Entry.new().tap {|e| e.set_text(value) }
@@ -43,7 +45,8 @@ module Ruiby_default_dialog
 	# show a modal dialog, asking yes/no question, return boolean response
 	def ask(*txt) 
 		text=txt.join(" ")
-        md = MessageDialog.new(self,
+        md = MessageDialog.new(
+            self,
             Dialog::DESTROY_WITH_PARENT,  Gtk::MessageDialog::QUESTION, 
             MessageDialog::BUTTONS_YES_NO, text)
 		md.set_window_position(Window::POS_CENTER)
