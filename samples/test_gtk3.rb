@@ -26,6 +26,7 @@ class RubyApp < Ruiby_gtk
 	
 	
 def component()   
+  self.override_font(Pango::FontDescription.new("Tahoma 10")) 
   #def_style3("* { font_name :  Courier }")
   after(1000) {puts "\n\n\n"  ; Gem.loaded_specs.each {|name,gem| puts "  #{gem.name}-#{gem.version}"} }
   mlog 'before Component'
@@ -36,10 +37,12 @@ def component()
 		"undo/defaire"=>nil,
 		"redo/refaire"=>proc { alert("e") }
 	   ))
-    sloti(label( <<-EEND ,:font=>"Arial 12"))
-     This window is test & demo of Ruiby capacity,
-     Ruiby version is #{Ruiby::VERSION}, Gtk version is #{Gtk::VERSION.join(".")}
-     HMI code is #{File.read(__FILE__).split("comp"+"onent"+"()")[1].split(/\r?\n/).select {|l| l.strip.size>3}.size} lines
+    sloti(label( <<-EEND ,:font=>"Tahoma bold 12"))
+     This window is test & demo of Ruiby capacity.
+     Ruiby       = #{Ruiby::VERSION}
+     Ruby        = #{RUBY_VERSION}
+     Gtk version = #{Gtk::VERSION.join(".")}
+     HMI code =#{File.read(__FILE__).split("comp"+"onent"+"()")[1].split(/\r?\n/).select {|l| l.strip.size>3}.size} lines
 	EEND
     separator
     flow {
@@ -52,7 +55,7 @@ def component()
         page("","#home") { label("A Notebook Page with icon as button-title",{font: "Arial 18"}) }
         page("List & grid") { test_list_grid }		
         page("Explorer") { test_treeview }
-		page("expander & dialog") { test_dialog }
+        page("expander & dialog") { test_dialog }
         page("Property Edit.") { test_properties(0) }
         page("Big PropEditor") { test_properties(1) }
         page("Source Editor") {
@@ -61,15 +64,14 @@ def component()
             @editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
           end
         }
-		page("Menu") { test_menu }
+        page("Menu") { test_menu }
         page("Accordion") { test_accordion }
-		page("Pan & Scrolled") { test_pan_scroll}
+        page("Pan & Scrolled") { test_pan_scroll}
 	  end # end notebook
     } # end flow
     sloti(button("Test dialogs...") { do_special_actions() })
     sloti( button("Exit") { ruiby_exit })
-	mlog 'after Component'
-	#after(100) { do_timeline }
+    mlog 'after Component'
   end
 end
 
@@ -315,21 +317,32 @@ end
 
   def do_special_actions()
     100.times { |i| log("#{i} "+ ("*"*(i+1))) }
-	dialog("Dialog tests") {
-		stack {
-			labeli "  alert, prompt, file chosser and log  "
-			c={width: 200,height: 40,font: "Arial old 12"}
-			log("")
-			button("alert", c)         { alert("alert is ok?") }
-			button("ask", c)           { log ask("alert is ok?") }
-			button("prompt", c)        { log prompt("test prompt()!\nveuillezz saisir un text de lonqueur \n plus grande que trois") { |reponse| reponse && reponse.size>3 }}
-			button("file Exist",c)     { log ask_file_to_read(".","*.rb") }
-			button("file new/Exist",c) { log ask_file_to_write(".","*.rb") }
-			button("Dir existant",c)   { log ask_dir_to_read(".") }
-			button("Dir new/Exist",c)  { log ask_dir_to_write(".") }
-			button("Timeline",c)  { do_timeline() }
-		}
-	}
+    dialog("Dialog tests") do
+      stack do
+        labeli "  alert, prompt, file chosser and log  "
+        c={width: 200,height: 40,font: "Arial old 12"}
+        button("Dialog",c) {
+          @std=nil
+          @std=dialog_async "test dialog" do
+            stack {
+              a=text_area(300,200)
+              a.text="ddd dd ddd ddd dd\n ddd"*200
+              separator
+              flowi{ button("ddd") {@std.destroy}; button("aaa") {@std.destroy}}
+            }
+          end
+        }
+
+        button("alert", c)         { alert("alert is ok?") }
+        button("ask", c)           { log ask("alert is ok?") }
+        button("prompt", c)        { log prompt("test prompt()!\nveuillezz saisir un text de lonqueur \n plus grande que trois") { |reponse| reponse && reponse.size>3 }}
+        button("file Exist",c)     { log ask_file_to_read(".","*.rb") }
+        button("file new/Exist",c) { log ask_file_to_write(".","*.rb") }
+        button("Dir existant",c)   { log ask_dir_to_read(".") }
+        button("Dir new/Exist",c)  { log ask_dir_to_write(".") }
+        button("Timeline",c)  { do_timeline() }
+      end
+    end
   end
   def do_timeline()
 	dialog("ruiby/gtk startup timestamps") do
@@ -344,7 +357,6 @@ end
 			ltext << [[pos+5,h],text+ "(#{time-ot} ms)"]
 			ot=time
 		}
-		
 		labeli("Total time : #{xmax} milliseconds")
 		canvas(500,200,{ 
 				:expose     => proc { |w,cr|  
