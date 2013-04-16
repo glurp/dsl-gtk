@@ -15,6 +15,8 @@ if they detect a invocation out of main thread, they auto-recall in a gui_invoke
     log(txt)
 
 =end
+require_relative 'ruiby_default_dialog3'
+
 module Ruiby_dsl
   include ::Gtk
   include ::Ruiby_default_dialog
@@ -45,7 +47,7 @@ module Ruiby_dsl
   def center() 
     autoslot()
     valign = Gtk::Alignment.new(0,0,0,0)
-    @lcur.last.pack_startpack_start(valign, :expand => false, :fill => false, :padding => 0)
+    @lcur.last.pack_start(valign, :expand => true, :fill => false, :padding => 0)
     vbox=Box.new(:vertical, 0)
     valign.add(vbox)
     @lcur << vbox
@@ -71,7 +73,11 @@ module Ruiby_dsl
     autoslot()
     parent=@lcur.last
     if add1
-      expand ? (parent.respond_to?(:pack_start) ? parent.pack_start(box, :expand => true, :fill => true, :padding => 3): parent.add(box) ) : parent.pack_start(box, :expand => false, :fill => false, :padding => 3)
+     parent.respond_to?(:pack_start) ? (
+      expand ?  parent.pack_start(box, :expand => true, :fill => true): 
+                parent.pack_start(box, :expand => false, :fill => true, :padding => 3)
+      ) :
+      parent.add(box) 
     end
     @lcur << box
     yield
@@ -931,7 +937,7 @@ module Ruiby_dsl
   # @edit.buffer.text="Hello!"
   def text_area(w=200,h=100,args={}) # from green_shoes app
       tv = Gtk::TextView.new
-      tv.wrap_mode = TextTag::WRAP_WORD
+      tv.wrap_mode = :word
       tv.buffer.text = args[:text].to_s if args[:text]
       tv.modify_font(Pango::FontDescription.new(args[:font])) if args[:font]
       tv.accepts_tab = true
@@ -945,9 +951,10 @@ module Ruiby_dsl
       def text()    self.children[0].buffer.text end
       def append(a) self.children[0].buffer.text+=a.to_s.encode("UTF-8") end
       end
-      eb.children[0].buffer.text=(args[:text]||"")
       eb.show_all
-      eb	
+      args.delete(:text)
+      args.delete(:font)
+      attribs(eb,args)	
   end	
 
   ############################# calendar
@@ -1256,22 +1263,25 @@ module Ruiby_dsl
   # Action on Ok/Nok/delete button make a call to :response bloc.
   # dialog is destoy if return value of :response is true
   #
-  def dialog_async(title,config,&b) 
-    dialog = Dialog.new("Message",
-      self,
-      Dialog::DESTROY_WITH_PARENT,
-      [Gtk::Stock::OK, Gtk::Dialog::RESPONSE_ACCEPT],
-            [Gtk::Stock::CANCEL, Gtk::Dialog::RESPONSE_REJECT])
+  def dialog_async(title,config={},&b) 
+    dialog = Dialog.new(
+      title:   "Message",
+      parent:  self,
+      flags:   [Dialog::DESTROY_WITH_PARENT],
+      buttons: []
+    )
+            
 
-    dialog.set_window_position(Window::POS_CENTER)
+    dialog.set_window_position(:center)
     
-    @lcur << dialog.vbox
+    @lcur << dialog.child
     hbox=stack { yield }
     @lcur.pop
-
-    dialog.signal_connect('response') do |w,e|
-      rep=config[:response].call(dialog,e)
-      dialog.destroy if rep
+    if config[:response]
+      dialog.signal_connect('response') do |w,e|
+        rep=config[:response].call(dialog,e) 
+        dialog.destroy if rep
+      end
     end
     dialog.show_all	
   end
@@ -1283,21 +1293,21 @@ module Ruiby_dsl
   # return true if dialog quit is done by action on OK button
 
   def dialog(title="") 
-    dialog = Dialog.new(title,
-      self,
-      Dialog::DESTROY_WITH_PARENT,
-      [Gtk::Stock::OK, Gtk::Dialog::RESPONSE_ACCEPT],
-            [Gtk::Stock::CANCEL, Gtk::Dialog::RESPONSE_REJECT])
+    dialog = Dialog.new(
+      title: title,
+      parent: self,
+      flags: :destroy_with_parent,
+      buttons: [])
       
-    @lcur << dialog.vbox
+    @lcur << dialog.child
     hbox=stack { yield }
     @lcur.pop
     
-    dialog.set_window_position(Window::POS_CENTER)
+    dialog.set_window_position(:center)
     dialog.show_all	
-    rep=dialog.run
+    rep=dialog.run  #  blocked
     dialog.destroy
-    rep
+    dialog
   end
 
   ###################################### Logs
@@ -1316,10 +1326,12 @@ module Ruiby_dsl
   end
   def _create_log_window() 
     return(@loglabel) if defined?(@loglabel) && @loglabel && ! @loglabel.destroyed?
-    wdlog = Dialog.new("Logs : #{$0}",
-      nil,
-      0,
-      [ Stock::OK, Dialog::RESPONSE_NONE ])
+   wdlog = Dialog.new(
+            title: "Logs #{$0}",
+            parent: nil,
+            flags: 0,
+            buttons:   [[ :Validation,1]]
+    )
     Ruiby.set_last_log_window(wdlog)
     logBuffer = TextBuffer.new
     @loglabel=TextView.new(logBuffer)
@@ -1327,10 +1339,10 @@ module Ruiby_dsl
     sw=ScrolledWindow.new()
     sw.set_width_request(800)	
     sw.set_height_request(200)	
-    sw.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS)
+    sw.set_policy(:automatic, :always)
     
     sw.add_with_viewport(@loglabel)
-    wdlog.vbox.pack_start(sw, :expand => true, :fill => true, :padding => 3)
+    wdlog.child.pack_start(sw, :expand => true, :fill => true, :padding => 3)
     wdlog.signal_connect('response') { wdlog.destroy }
     wdlog.show_all	
     @loglabel
@@ -1380,7 +1392,7 @@ module Ruiby_dsl
       provider=Gtk::CssProvider.new
       show_methods(provider)
       show_methods(Gtk::StyleContext.new)
-      provider.load(Gtk::StyleContext.load_from_data(string_style, -1))
+      provider.load(provider.load(string_style))
       
       #.add_provider(new Gtk.CssProvider.load_from_data(string_style, -1))
       @style_loaded=true
