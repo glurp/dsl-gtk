@@ -66,29 +66,26 @@ module Ruiby_dsl
   end
 
   # private: generic packer
-  # 'Gtk::Box#pack_start(child, expand = true, fill = true, padding = 0)' 
-  #  style has been deprecated. Use 
-  # 'Gtk::Box#pack_start(child, :expand => true, :fill => true, :padding => 0)'
   def _cbox(expand,box,add1)
-    autoslot()
+    autoslot() # pack last widget before append new bow
     parent=@lcur.last
     if add1
-     parent.respond_to?(:pack_start) ? (
-      expand ?  parent.pack_start(box, :expand => true, :fill => true): 
-                parent.pack_start(box, :expand => false, :fill => true, :padding => 3)
-      ) :
-      parent.add(box) 
+     _pack(parent,box,expand)
     end
     @lcur << box
     yield
-    autoslot()
-    @lcur.pop
+    autoslot() # pack last widget before closing box
+    @lcur.pop 
   end
-
+  def _pack(parent,box,expand)
+     parent.respond_to?(:pack_start) ? 
+          parent.pack_start(box, :expand => expand, :fill => true): 
+          parent.add(box) 
+  end
   # pack widget in parameter, share space with prother widget
   # this is the default: all widget will be sloted if they are not slotied
   # this is done by attribs(w) which is call after construction of almost all widget
-  def slot(w)  @current_widget=nil; @lcur.last.add(w) ; w end
+  def slot(w)  @current_widget=nil; _pack(@lcur.last,w,true) ; w end
   
   # pack widget in parameter, take only necessary space
   def sloti(w) @current_widget=nil; @lcur.last.pack_start(w, :expand => false, :fill => false, :padding => 3) ; w end
