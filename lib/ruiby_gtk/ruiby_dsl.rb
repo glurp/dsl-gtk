@@ -15,6 +15,9 @@ if they detect a invocation out of main thread, they auto-recall in a gui_invoke
     log(txt)
 
 =end
+require_relative 'ruiby_default_dialog'
+
+
 module Ruiby_dsl
   include ::Gtk
   include ::Ruiby_default_dialog
@@ -1272,7 +1275,7 @@ module Ruiby_dsl
     @lcur.pop
 
     dialog.signal_connect('response') do |w,e|
-      rep=config[:response].call(dialog,e)
+      rep=config[:response].call(dialog,e) if 
       dialog.destroy if rep
     end
     dialog.show_all	
