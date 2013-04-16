@@ -1,4 +1,12 @@
-0.73.1
+0.76.1
+    test_gtk3.rb : lbel with font
+    ruiby_dsl3.rb : pack_start gtk3 issue
+    ruiby_dsl.rb : dialog gtk2
+    ruiby_default_dialog.rb : pack_start issue
+    ruiby_dsl.rb : require gtk2 dialog
+    ruiby_default_dialog.rb : gtk3
+    ruiby.rb : require dialog dynamic
+0.76.0 : 2013-04-12 19:54:12 +0200
     Ruiby.gemspec : cti
 0.73.0 : 2013-04-12 19:51:31 +0200
     Ruiby.gemspec : cpi
