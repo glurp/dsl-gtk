@@ -936,7 +936,7 @@ module Ruiby_dsl
       tv = Gtk::TextView.new
       tv.wrap_mode = :word
       tv.buffer.text = args[:text].to_s if args[:text]
-      tv.modify_font(Pango::FontDescription.new(args[:font])) if args[:font]
+      tv.override_font(Pango::FontDescription.new(args[:font])) if args[:font]
       tv.accepts_tab = true
 
       eb = Gtk::ScrolledWindow.new
@@ -1389,7 +1389,7 @@ module Ruiby_dsl
       provider=Gtk::CssProvider.new
       show_methods(provider)
       show_methods(Gtk::StyleContext.new)
-      provider.load(provider.load(string_style))
+      provider.load(string_style)
       
       #.add_provider(new Gtk.CssProvider.load_from_data(string_style, -1))
       @style_loaded=true
