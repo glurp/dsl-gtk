@@ -23,14 +23,17 @@ Gem : https://rubygems.org/gems/Ruiby
 
 Status
 ======
-Done :
 
-- treeview almost done...
-- autodoc for dsl: make_doc in place of rdoc
-- gtk3 experimantal...
+NEW : 0.77.1 !!  (17-04-2013)
+- RSPEC and TRAVIS CI : Passing 70% DSL 
+- Treeview (not finished)
+- Migration to gtk3 :almost finish
 
-Todo for pass to 1.0 :
-- GTK3 compatibility : work now, but som scratch
+TODO
+- resolve 100% gtk3 deprecated warning
+- finish treeview   tree_grid,
+- corrections in ruiby_require
+- complete rspec => 99% ?
 - Easy Form : variables binding for entry/list/check-radio button...
 
 Installation
