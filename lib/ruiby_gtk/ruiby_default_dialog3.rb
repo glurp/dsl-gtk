@@ -6,7 +6,7 @@ module Ruiby_default_dialog
 	###################################### Alerts
 
 	# modal popup with text (as html one!)
-	def alert(*txt) message(MessageDialog::INFO,*txt) end
+	def alert(*txt) message(:info,*txt) end
 	# modal popup with text and/or ruby Exception.
 	def error(*txt) 
 		lt=txt.map { |o| 
@@ -16,7 +16,7 @@ module Ruiby_default_dialog
 				o.to_s
 			end
 		}
-		message(MessageDialog::ERROR,*lt) 
+		message(:error,*lt) 
 	end
 	# show a modal dialogu, asking question, active bloc closure with text response
 	def prompt(txt,value="") 
@@ -31,7 +31,7 @@ module Ruiby_default_dialog
 		entry=Entry.new().tap {|e| e.set_text(value) }
 		dialog.vbox.add(label)
 		dialog.vbox.add(entry)
-		dialog.set_window_position(Window::POS_CENTER)
+		dialog.set_window_position(:center)
 
 		dialog.signal_connect('response') do |w,e|
 			rep=true
@@ -45,32 +45,35 @@ module Ruiby_default_dialog
 	# show a modal dialog, asking yes/no question, return boolean response
 	def ask(*txt) 
 		text=txt.join(" ")
-        md = MessageDialog.new(
-            self,
-            Dialog::DESTROY_WITH_PARENT,  Gtk::MessageDialog::QUESTION, 
-            MessageDialog::BUTTONS_YES_NO, text)
-		md.set_window_position(Window::POS_CENTER)
+    md = MessageDialog.new(
+        self,
+        :destroy_with_parent, :question, 
+        MessageDialog::BUTTONS_YES_NO, text)
+		md.set_window_position(:center)
 		rep=md.run
 		md.destroy
 		return( rep==-8 )
 	end
 	
 	# a warning alert
-	def trace(*txt) message(MessageDialog::WARNING,*txt) end
+	def trace(*txt) message(:warning,*txt) end
 
 	def message(style,*txt)
 		text=txt.join(" ")
-        md = MessageDialog.new(self,
-            Dialog::DESTROY_WITH_PARENT, Gtk::MessageDialog::QUESTION, 
-            ::Gtk::MessageDialog::BUTTONS_CLOSE, text)
-		md.set_window_position(Window::POS_CENTER)
-        md.run
-        md.destroy
+    md = MessageDialog.new(
+        parent: self,
+        flags: :destroy_with_parent,
+        type: style,
+        buttons_type: :close, 
+        message: text)
+		md.set_window_position(:center)
+    md.run
+    md.destroy
 	end
 	# dialog asking a color
 	def ask_color
 		cdia = ColorSelectionDialog.new("Select color")
-		cdia.set_window_position(Window::POS_CENTER)
+		cdia.set_window_position(:center)
 		response=cdia.run
 		color=nil
         if response == Gtk::Dialog::RESPONSE_OK
@@ -132,7 +135,7 @@ module Ruiby_default_dialog
           [button, Gtk::Dialog::RESPONSE_ACCEPT]
         )
     end
-		dialog.set_window_position(Window::POS_CENTER)
+		dialog.set_window_position(:center)
 		yield(dialog) if block_given?
 	    ret = ( dialog.run == Gtk::Dialog::RESPONSE_ACCEPT ? dialog.filename : nil )rescue false
 	    dialog.destroy
