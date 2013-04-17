@@ -1,4 +1,7 @@
-0.76.1
+    ruiby_dsl3.rb : gtk3 dialogs
+    ruiby_default_dialog3.rb : gtk3 dialogs
+0.77.0 : 2013-04-16 22:35:35 +0200
+    ruiby_dsl3.rb : corection packing in Frame
     test_gtk3.rb : lbel with font
     ruiby_dsl3.rb : pack_start gtk3 issue
     ruiby_dsl.rb : dialog gtk2
