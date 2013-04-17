@@ -40,9 +40,9 @@ Installation
 ============
 1) system
 
-Install Ruby 2.0.x ...
+Install Ruby 1.9 or 2.0.x
 
-Install GTK2 :
+Install GTK2/GTK3 :
 
 *	linux: should be in the box... or install gtk2 and gtksourceview2 (dev version) :
 
@@ -51,6 +51,8 @@ Install GTK2 :
 > sudo apt-get install build-essential
 > sudo apt-get install libgtk2.0-dev 
 > sudo apt-get install gtksourceview2.0
+> sudo apt-get install  libgtk-3-dev
+> sudo apt-get install gtksourceview3
 ```
 
 *	windows:
@@ -61,7 +63,7 @@ Install GTK2 :
 2) install Ruiby
 
 ```
-> gem update --system   # gem 2.0.3
+> gem update --system    # gem 2.0.3
 > gem install Ruiby
 > ruiby_demo             # check good installation with gtk2 (default)
 > ruiby_demo3            # check good installation with gtk3 (experimental)
@@ -70,7 +72,7 @@ Install GTK2 :
 
 NOTA
 We must correct the capitalization of Ruiby...
-GTK3 give lot of instability,hope this will  be short!
+GTK3 give some instability.
 
 
 Usage
@@ -118,7 +120,7 @@ end
 Ruiby.start { Win.new("application title",350,10) }
 ```
 
-And, for very little application :
+Autonomous DSL, for very little application :
 
 ```ruby 
 require  'Ruiby'
@@ -193,7 +195,7 @@ Exemple
 =======
 see samples in "./samples" directory
 
-
+Complete API usage here (screen copy at http://raubarede.tumblr.com/gtk3 ) :
 ```ruby
 def component()        
   mlog 'before Component'
