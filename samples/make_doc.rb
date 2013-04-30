@@ -47,7 +47,7 @@ EEND
 
 
 def extract_doc_dsl() 
-	src=File.dirname(__FILE__)+"/../lib/ruiby_gtk/ruiby_dsl.rb"
+	src=File.dirname(__FILE__)+"/../lib/ruiby_gtk/ruiby_dsl3.rb"
 	content=File.read(src)
 	comment=""
 	hdoc=content.split(/\r?\n\s*/).inject({}) {|h,line|
