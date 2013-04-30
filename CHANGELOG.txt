@@ -1,4 +1,7 @@
-0.78.1
+0.79.1
+    test_basics_widget.rb : image commands give a Image widget
+    ruiby_dsl3.rb : delete deprecated api on calendard
+0.79.0 : 2013-04-30 23:45:14 +0200
     make_doc.rb : based on gtk3 dsl version
     ruiby_dsl3.rb : text_aarea docs and methods complete
     doc.html : update
