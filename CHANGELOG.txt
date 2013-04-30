@@ -1,3 +1,6 @@
+0.77.2
+    ruiby_dsl3.rb : bg and gf working for gtk3, widget_properties
+    ruiby_dsl.rb : raz rename by razslot, widget_properties
     ruiby_dsl3.rb : gtk3 dialogs
     ruiby_default_dialog3.rb : gtk3 dialogs
 0.77.0 : 2013-04-16 22:35:35 +0200
