@@ -473,7 +473,7 @@ module Ruiby_dsl
     }
   end
   # create a text entry for keyboard input
-  # if block defined, it while be trigger on ech of (character) change of the entry
+  # if block defined, it while be trigger on eech of (character) change of the entry
   def entry(value,size=10,option={},&blk)
     w=Entry.new().tap {|e| e.set_text(value ? value.to_s : "") }
     after(1) do
@@ -949,8 +949,14 @@ module Ruiby_dsl
   end
 
   # multiline entry
-  # @edit=text_area(300,100).text_area
-  # @edit.buffer.text="Hello!"
+  # w=text_area(min_width,min_height,options) 
+  #
+  # Some binding are defined :
+  # * w.text_area          ; get text area widdget (w is a ScrolledWindow)
+  # * w.text=""            ; set content
+  # * puts w.text()        ; get content
+  # * w.append("data \n")  ; append conent to the end of current content
+  # * w.text_area.wrap_mode = :none/:word
   def text_area(w=200,h=100,args={}) # from green_shoes app
       tv = Gtk::TextView.new
       tv.wrap_mode = :word
@@ -975,11 +981,11 @@ module Ruiby_dsl
 
   ############################# calendar
 
-    # Month Calendar with callback on month/year move and day selection :
+  # Month Calendar with callback on month/year move and day selection :
   # calendar(Time.now-24*3600, :selection => proc {|day| } , :changed => proc {|widget| }
   # calendar respond to
-  # *	set_time(time)  : toto and select the day of tume object
-  # *	get_time()		: return time of selected day
+  # *	set_time(time)  ; set a selected date from a Time object
+  # *	get_time()		  ; return Time of selected day
   def calendar(time=Time.now,options={})
     c = Calendar.new
     #c.display_options(Calendar::SHOW_HEADING | Calendar::SHOW_DAY_NAMES |  
@@ -999,12 +1005,6 @@ module Ruiby_dsl
     end
     attribs(c,options)
 
-  end
-
-  # deprecated : change the current selection of a calendar, by Time object
-  def calendar_set_time(cal,time=Time.now)
-    cal.select_month(time.month,time.year)
-    cal.select_day(time.day)
   end
 
   ############################# Video
@@ -1058,13 +1058,13 @@ module Ruiby_dsl
   # be contained in a clockable parent (EventBox)
   #  clickable(:callback_click_name) { label(" click me! ") }
   #  def callback_click_name(widget) ... end
-  # clickable with methone callback by name
-  def clickable(methode_name,&b) 
+  # clickable with method callback by name
+  def clickable(method_name,&b) 
     eventbox = Gtk::EventBox.new
     eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
     ret=_cbox(true,eventbox,true,&b) 
     eventbox.realize
-    eventbox.signal_connect('button_press_event') { |w, e| self.send(methode_name,ret)  rescue error($!) }
+    eventbox.signal_connect('button_press_event') { |w, e| self.send(method_name,ret)  rescue error($!) }
     ret
   end
 
