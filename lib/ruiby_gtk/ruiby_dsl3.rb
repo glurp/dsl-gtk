@@ -97,7 +97,7 @@ module Ruiby_dsl
     @current_widget=w 
   end
   # forget precedent wdget oconstructed
-  def raz() @current_widget=nil; end
+  def razslot() @current_widget=nil; end
 
   # append the result of bloc parameter to a contener (stack or flow)
   # thread protected
@@ -274,16 +274,34 @@ module Ruiby_dsl
 
   # general property automaticly applied for (almost) all widget (eval last argument a creation)
   def attribs(w,options)
-      w.set_size_request(*options[:size]) if options[:size]	
-      w.width_request=(options[:width]) if options[:width]
-      w.height_request=(options[:height]) if options[:height]
-      w.modify_bg(Gtk::STATE_NORMAL,options[:bg]) if options[:bg] # not work on window
-      w.modify_fg(Gtk::STATE_NORMAL,options[:fg]) if options[:fg] # not work on window
-      w.override_font(Pango::FontDescription.new(options[:font])) if options[:font]
-      autoslot(w)  # slot() precedent widget if existe and not already sloted, and declare this one as the precedent
+      #p options if options && options.size>0
+      _attribs(w,options)
+      autoslot(w)  # slot() precedent widget if exist and not already sloted, and declare this one as the precedent
       w
   end
-
+  def _attribs(w,options)
+      w.set_size_request(*options[:size])                                 if options[:size]	
+      w.width_request=(options[:width].to_i)                              if options[:width]
+      w.height_request=(options[:height].to_i)                            if options[:height]
+      w.override_background_color(:normal,color_conversion(options[:bg])) if options[:bg] 
+      w.override_color(:normal,color_conversion(options[:fg]))            if options[:fg] 
+      w.override_font(Pango::FontDescription.new(options[:font]))         if options[:font]
+  end
+  def color_conversion(color)
+    case color 
+      when ::Gdk::RGBA then color
+      when String then color_conversion(::Gdk::Color.parse(color))
+      when ::Gdk::Color then ::Gdk::RGBA.new(color.red,color.green,color.blue,1)
+      else
+        raise "unknown color : #{color.inspect}"
+    end
+  end
+  def widget_properties(title=nil,w=nil) 
+    widg=w||@current_widget||@lcur.last
+    p get_config(widg)
+    properties(title||widg.to_s,{},get_config(widg)) 
+  end
+  
   # create a bar (vertical or horizontal according to stack/flow current container) 
   def separator(width=1.0)  
     autoslot()
@@ -333,6 +351,7 @@ module Ruiby_dsl
       b=Button.new(:label => text, :mnemonic => nil, :stock_id => nil);
     end
     b.signal_connect("clicked") { |e| blk.call(e) rescue error($!) } if blk
+    _attribs(b.child,option)
     attribs(b,option)
   end 
   
@@ -610,31 +629,31 @@ module Ruiby_dsl
   # a cell in a row/table. take all space, centered
   def  cell(w) 	cell_hspan(1,w)	  end
   # a cell in a row/table. take space of n cells, horizontaly
-  def  cell_hspan(n,w) raz();@lcur.last.attach(w,@ltable.last[:col],@ltable.last[:col]+n,@ltable.last[:row],@ltable.last[:row]+1) ; @ltable.last[:col]+=n end 
+  def  cell_hspan(n,w) razslot();@lcur.last.attach(w,@ltable.last[:col],@ltable.last[:col]+n,@ltable.last[:row],@ltable.last[:row]+1) ; @ltable.last[:col]+=n end 
   # a cell in a row/table. take space of n cells, vericaly
-  def  cell_vspan(n,w) raz();@lcur.last.attach(w,@ltable.last[:col],@ltable.last[:col]+1,@ltable.last[:row],@ltable.last[:row]+n) ; @ltable.last[:col]+=1 end 
+  def  cell_vspan(n,w) razslot();@lcur.last.attach(w,@ltable.last[:col],@ltable.last[:col]+1,@ltable.last[:row],@ltable.last[:row]+n) ; @ltable.last[:col]+=1 end 
   # keep empty n cell consecutive on current row
   def  cell_pass(n=1)  @ltable.last[:col]+=n end
   # a cell in a row/table. take space of n cells, horizontaly
   def  cell_span(n=2,w) cell_hspan(n,w) end
 
   # create a cell in a row/table, left justified
-  def cell_left(w)     raz();w.set_alignment(0.0, 0.5) rescue nil; cell(w) end
+  def cell_left(w)     razslot();w.set_alignment(0.0, 0.5) rescue nil; cell(w) end
   # create a cell in a row/table, right justified
-  def cell_right(w)    raz();w.set_alignment(1.0, 0.5)rescue nil ; cell(w) end
+  def cell_right(w)    razslot();w.set_alignment(1.0, 0.5)rescue nil ; cell(w) end
 
   # create a hspan_cell in a row/table, left justified
-  def cell_hspan_left(n,w)   raz();w.set_alignment(0.0, 0.5)rescue nil ; cell_hspan(n,w) end
+  def cell_hspan_left(n,w)   razslot();w.set_alignment(0.0, 0.5)rescue nil ; cell_hspan(n,w) end
   # create a hspan_cell in a row/table, right justified
-  def cell_hspan_right(n,w)  raz();w.set_alignment(1.0, 0.5)rescue nil ; cell_hspan(n,w) end
+  def cell_hspan_right(n,w)  razslot();w.set_alignment(1.0, 0.5)rescue nil ; cell_hspan(n,w) end
 
   # create a cell in a row/table, top aligned
-  def cell_top(w)      raz();w.set_alignment(0.5, 0.0)rescue nil ; cell(w) end
+  def cell_top(w)      razslot();w.set_alignment(0.5, 0.0)rescue nil ; cell(w) end
   # create a cell in a row/table, bottom aligned
-  def cell_bottom(w)   raz();w.set_alignment(0.5, 1.0)rescue nil ; cell(w) end
+  def cell_bottom(w)   razslot();w.set_alignment(0.5, 1.0)rescue nil ; cell(w) end
 
-  def cell_vspan_top(n,w)    raz();w.set_alignment(0.5, 0.0)rescue nil ; cell_vspan(n,w) end
-  def cell_vspan_bottom(n,w) raz();w.set_alignment(0.5, 1.0)rescue nil ; cell_vspan(n,w) end
+  def cell_vspan_top(n,w)    razslot();w.set_alignment(0.5, 0.0)rescue nil ; cell_vspan(n,w) end
+  def cell_vspan_bottom(n,w) razslot();w.set_alignment(0.5, 1.0)rescue nil ; cell_vspan(n,w) end
 
   # deprecated: see properties
   def propertys(title,hash,options={:edit=>false, :scroll=>[0,0]},&b)
