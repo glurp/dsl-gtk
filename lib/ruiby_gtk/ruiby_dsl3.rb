@@ -992,7 +992,6 @@ module Ruiby_dsl
     #        Calendar::SHOW_WEEK_NUMBERS )
     after(1) { c.signal_connect("day-selected") { |w,e| options[:selection].call(w.day)  rescue error($!) } } if options[:selection]
     after(1) { c.signal_connect("month-changed") { |w,e| options[:changed].call(w)  rescue error($!) } }if options[:changed]
-    calendar_set_time(c,time)
     class << c
       def set_time(time)
         select_month(time.month,time.year)
@@ -1003,6 +1002,7 @@ module Ruiby_dsl
         Time.local(year, month, day) 
       end
     end
+    c.set_time(time)
     attribs(c,options)
 
   end
