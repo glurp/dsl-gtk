@@ -13,8 +13,9 @@ html=<<EEND
 <style>
 body { margin: 0px;}
 .title  {font: 35px arial,sans-serif; background: black ; color: white; text-align: center;padding: 30px;}
-.atitle {font: 25px arial,sans-serif; background: #A0A0A0; color: white;padding: 10px;border-radius: 10px;margin-left:30px;}
-.api    {font: 18px courier; background: #F0F0A0; color: black;margin-left:30px;}
+.atitle {font: 25px arial,sans-serif; background: #A0A0A0; color: white;padding: 10px;border-radius: 20px;
+ margin-left:30px;margin-right:30px;}
+.api    {font: 18px courier; background: #F0F0A0; color: black;margin-left:50px;margin-right:50px;}
 .descr  {font: 15px arial,sans-serif; background: #F0F0F0; color: black;margin: 10px 0 30px 30px}
 .a {float: left;	width: 150px;}
 	</style>
