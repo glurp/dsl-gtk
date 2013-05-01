@@ -25,14 +25,20 @@ module Ruiby_dsl
 
   def _nocodeeeeeeeeeee() end
 
-  # container : vertical box, take all space available, sloted in parent ny default
+  # container : vertical box, take all space available, sloted in parent by default
   def stack(add1=true,&b)    		_cbox(true,Box.new(:vertical, 2),add1,&b) end
-  # container : horizontal box, take all space available, sloted in parent
+  # container : horizontal box, take all space available, sloted in parent by default
   def flow(add1=true,&b)	   		_cbox(true,Box.new(:horizontal, 2),add1,&b) end
+  # container : vertical or horizontal box (stack/flow, choice by first argument), 
+  # sloted in parent by default
+  def var_box(sens,add1=true,&b) _cbox(true,Box.new(sens, 2),add1,&b) end
   # container : vertical box, take only necessary space , sloted in parent
   def stacki(add1=true,&b)    	_cbox(false,Box.new(:vertical, 2),add1,&b) end
   # container : horizontal box, take only necessary space , sloted in parent
   def flowi(add1=true,&b)	   		_cbox(false,Box.new(:horizontal, 2),add1,&b) end
+  # container : vertical or horizontal box (stacki/flowi, choice by first argument), 
+  # sloted in parent by default
+  def var_boxi(sens,add1=true,&b) _cbox(false,Box.new(sens, 2),add1,&b) end
 
   # box { } used for container which manage the widget (as stack(false) {} ) 
   # use it for cell in table : table { row { cell(box { });... };... }
@@ -272,14 +278,18 @@ module Ruiby_dsl
 
   ############### Commands
 
-  # general property automaticly applied for (almost) all widget (eval last argument a creation)
+  # common widget property  applied for (almost) all widget. 
+  # options are last argument of every dsl command, see apply_options
   def attribs(w,options)
       #p options if options && options.size>0
-      _attribs(w,options)
+      apply_options(w,options)
       autoslot(w)  # slot() precedent widget if exist and not already sloted, and declare this one as the precedent
       w
   end
-  def _attribs(w,options)
+  # apply some styles  property  to an existing widget. 
+  # options are :size, :width; :height, :bg, :fg, :font
+  # apply_options(w,:size=> [10,10], :width=>100;:heigh=>200,:bg=>'#FF00AA",:fg=> Gdk::Color:RED,:font=> "Tahoma bold 32")
+  def apply_options(w,options)
       w.set_size_request(*options[:size])                                 if options[:size]	
       w.width_request=(options[:width].to_i)                              if options[:width]
       w.height_request=(options[:height].to_i)                            if options[:height]
@@ -437,7 +447,8 @@ module Ruiby_dsl
     attribs(b,option)
     b
   end
-  # create a liste of radio button, horiznataly disposed
+  # create a liste of radio button, horizontaly disposed
+  # value is the indice of active item (0..(n-1)) at creation time
   def hradio_buttons(ltext=["empty!"],value=-1)
     flow(false) {
       b0=nil
@@ -448,17 +459,25 @@ module Ruiby_dsl
             slot(RadioButton.new(b0,t))
         end
         if i==value
-        b.toggled 
-        b.set_active(true) 
+          b.toggled 
+          b.set_active(true) 
         end
       }
     }
   end
 
-  # create a liste of radio button, vrtically disposed
-  def vradio_buttons(ltext=["empty!"],value=-1)
-    stack(false) {
-      b0=nil
+  # create a liste of radio button, vertically disposed
+  # value is the indice of active item (0..(n-1)) at creation time
+  # define 2 methods:
+  # * get_selected         # get indice of active radio-button
+  # * set_selected(indice) # set indice of active radio-button
+  def vradio_buttons(ltext=["empty!"],value=-1) _radio_buttons(:vertical,ltext,value) end
+  # as vradio_buttons , but horizontaly disposed
+  def hradio_buttons(ltext=["empty!"],value=-1) _radio_buttons(:horizontal,ltext,value) end
+  
+  def _radio_buttons(sens,ltext=["empty!"],value=-1)
+    b0=nil
+    s=var_box(sens,false) {
       ltext.each_with_index {|t,i|
         b=if i==0
             b0=slot(RadioButton.new(t))
@@ -466,11 +485,21 @@ module Ruiby_dsl
             slot(RadioButton.new(b0,t))
         end
         if i==value
-        b.toggled 
-        b.set_active(true) 
+          b.toggled 
+          b.set_active(true) 
         end
       }
     }
+    # TODO: test!
+    class << s
+      ;  def get_selected()
+        b0.group.each_with_index.map { |w,index| return(index) if w.active? }
+      end
+     ;  def set_selected(indice)
+        b0.group.each_with_index.map { |w,index| w.active=true if indice==index }
+      end
+    end
+    s
   end
   # create a text entry for keyboard input
   # if block defined, it while be trigger on eech of (character) change of the entry
@@ -969,9 +998,9 @@ module Ruiby_dsl
       eb.add(tv)
       eb.define_singleton_method(:text_area) { tv }
       class << eb
-      def text=(a)  self.children[0].buffer.text=a.to_s end
-      def text()    self.children[0].buffer.text end
-      def append(a) self.children[0].buffer.text+=a.to_s.encode("UTF-8") end
+      ; def text=(a)  self.children[0].buffer.text=a.to_s end
+      ; def text()    self.children[0].buffer.text end
+      ; def append(a) self.children[0].buffer.text+=a.to_s.encode("UTF-8") end
       end
       eb.show_all
       args.delete(:text)
@@ -993,11 +1022,11 @@ module Ruiby_dsl
     after(1) { c.signal_connect("day-selected") { |w,e| options[:selection].call(w.day)  rescue error($!) } } if options[:selection]
     after(1) { c.signal_connect("month-changed") { |w,e| options[:changed].call(w)  rescue error($!) } }if options[:changed]
     class << c
-      def set_time(time)
+    ;  def set_time(time)
         select_month(time.month,time.year)
         select_day(time.day)
       end
-      def get_time()
+    ;  def get_time()
         year, month, day= *date() 
         Time.local(year, month, day) 
       end
@@ -1046,8 +1075,8 @@ module Ruiby_dsl
     ret= stack(false,&b) if  block_given? 
     sw.add_with_viewport(ret)
     class << sw
-      def scroll_to_top()    vadjustment.set_value( 0 ) 					; vadjustment.value_changed ; end
-      def scroll_to_bottom() vadjustment.set_value( vadjustment.upper - 100); vadjustment.value_changed ; end
+    ;  def scroll_to_top()    vadjustment.set_value( 0 ) 					; vadjustment.value_changed ; end
+    ; def scroll_to_bottom() vadjustment.set_value( vadjustment.upper - 100); vadjustment.value_changed ; end
       #def scroll_to_left()   hadjustment.set_value( 0 ) end
       #def scroll_to_right()  hadjustment.set_value( hadjustment.upper-1 ) end
     end
@@ -1083,12 +1112,12 @@ module Ruiby_dsl
 
   # create a verticale liste of data, with scrollbar if necessary
   # define methods: 
-  #   list() : get (gtk)list widget embeded
-  #   model() : get (gtk) model of the list widget
-  #   clear()  clear content of the list
-  #   set_data(array) : clear and put new data in the list
-  #   selected() : get the selected item (or nil)
-  #   index() : get the index  of selected item (or nil)
+  # *  list() : get (gtk)list widget embeded
+  # *  model() : get (gtk) model of the list widget
+  # *  clear()  clear content of the list
+  # *  set_data(array) : clear and put new data in the list
+  # *  selected() : get the selected item (or nil)
+  # *  index() : get the index  of selected item (or nil)
   def list(title,w=0,h=0)
     scrolled_win = Gtk::ScrolledWindow.new
     scrolled_win.set_policy(:automatic ,:automatic )
