@@ -361,7 +361,7 @@ module Ruiby_dsl
       b=Button.new(:label => text, :mnemonic => nil, :stock_id => nil);
     end
     b.signal_connect("clicked") { |e| blk.call(e) rescue error($!) } if blk
-    _attribs(b.child,option)
+    apply_options(b.child,option)
     attribs(b,option)
   end 
   
@@ -647,8 +647,14 @@ module Ruiby_dsl
     @lcur.pop
     attribs(table,config)
   end
-    # create a row. must be defined in a table closure	
-  # can only contain cell(s) call
+  # create a row. must be defined in a table closure	
+  # Closure argment should only contain cell(s) call.
+  # many cell type are disponibles : cell cell_bottom cell_hspan cell_hspan_left 
+  # cell_hspan_right cell_left cell_pass cell_right cell_span cell_top cell_vspan 
+  # cell_vspan_bottom cell_vspan_top
+  # row do
+  #    cell( label("ee")) ; cell_hspan(3, button("rr") ) }
+  # end
   def row()
     autoslot()
     @ltable.last[:col]=0 # will be increment by cell..()
@@ -658,9 +664,19 @@ module Ruiby_dsl
   # a cell in a row/table. take all space, centered
   def  cell(w) 	cell_hspan(1,w)	  end
   # a cell in a row/table. take space of n cells, horizontaly
-  def  cell_hspan(n,w) razslot();@lcur.last.attach(w,@ltable.last[:col],@ltable.last[:col]+n,@ltable.last[:row],@ltable.last[:row]+1) ; @ltable.last[:col]+=n end 
-  # a cell in a row/table. take space of n cells, vericaly
-  def  cell_vspan(n,w) razslot();@lcur.last.attach(w,@ltable.last[:col],@ltable.last[:col]+1,@ltable.last[:row],@ltable.last[:row]+n) ; @ltable.last[:col]+=1 end 
+  def  cell_hspan(n,w) cell_hvspan(n,0,w) end 
+  # a cell in a row/table. take space of n cells, verticaly
+  def  cell_vspan(n,w) cell_hvspan(0,n,w) end 
+  # a cell in a row/table. take space of n x m cells, horizontaly x verticaly 
+  def  cell_hvspan(n,m,w) 
+    razslot();
+    @lcur.last.attach(w,
+       @ltable.last[:col],@ltable.last[:col]+n,
+       @ltable.last[:row],@ltable.last[:row]+m
+    )  
+    @ltable.last[:col]+=n
+    @ltable.last[:row]+=m
+  end 
   # keep empty n cell consecutive on current row
   def  cell_pass(n=1)  @ltable.last[:col]+=n end
   # a cell in a row/table. take space of n cells, horizontaly
@@ -680,8 +696,9 @@ module Ruiby_dsl
   def cell_top(w)      razslot();w.set_alignment(0.5, 0.0)rescue nil ; cell(w) end
   # create a cell in a row/table, bottom aligned
   def cell_bottom(w)   razslot();w.set_alignment(0.5, 1.0)rescue nil ; cell(w) end
-
+  # a cell_vspan aligned on top
   def cell_vspan_top(n,w)    razslot();w.set_alignment(0.5, 0.0)rescue nil ; cell_vspan(n,w) end
+  # a cell_vspan aligned on bottom
   def cell_vspan_bottom(n,w) razslot();w.set_alignment(0.5, 1.0)rescue nil ; cell_vspan(n,w) end
 
   # deprecated: see properties
@@ -798,71 +815,78 @@ module Ruiby_dsl
   end
 
   ############################## Popup
-  # popup { pp_item("text") { } ; ... }
+  # create a dynamic popup. (shoud by calling in a closure)
+  # opup block can be composed by pp_item and pp_separator
+  # Exemple :
+  # popup { pp_item("text") { } ; pp_seperator ; pp_item('Exit") { exit!(0)} ; ....}
   def popup(w=nil)
-  w ||= @lcur.last() 
-  ppmenu = Gtk::Menu.new
-  @lcur << ppmenu 
-  yield
-  @lcur.pop
-  ppmenu.show_all		
-  w.add_events(Gdk::Event::Mask::BUTTON_PRESS_MASK)
-  w.signal_connect("button_press_event") do |widget, event|
-    ppmenu.popup(nil, nil, event.button, event.time) if (event.button == 3)
+    w ||= @lcur.last() 
+    ppmenu = Gtk::Menu.new
+    @lcur << ppmenu 
+    yield
+    @lcur.pop
+    ppmenu.show_all		
+    w.add_events(Gdk::Event::Mask::BUTTON_PRESS_MASK)
+    w.signal_connect("button_press_event") do |widget, event|
+      ppmenu.popup(nil, nil, event.button, event.time) if (event.button == 3)
+    end
+    ppmenu
   end
-  ppmenu
-  end
+  # a button in a popup
   def pp_item(text,&blk)
-  item = Gtk::MenuItem.new(text)
-  item.signal_connect('activate') { |w| blk.call() }
-  @lcur.last.append(item)
+    item = Gtk::MenuItem.new(text)
+    item.signal_connect('activate') { |w| blk.call() }
+    @lcur.last.append(item)
   end
+  # a bar separator in a popup
   def pp_separator()
-  item = Gtk::SeparatorMenuItem.new()
-  @lcur.last.append(item)
+    item = Gtk::SeparatorMenuItem.new()
+    @lcur.last.append(item)
   end
+  
   ############################## Menu
+  
   # create a application menu. must contain menu() {} :
   # menu_bar {menu("F") {menu_button("a") { } ; menu_separator; menu_checkbutton("b") { |w|} ...}}
   def menu_bar()
-  @menuBar= MenuBar.new
-  ret=@menuBar
-  yield
-  sloti(@menuBar)
-  @menuBar=nil
-  ret
+    @menuBar= MenuBar.new
+    ret=@menuBar
+    yield
+    sloti(@menuBar)
+    @menuBar=nil
+    ret
   end
 
   # a vertial drop-down menu, only for menu_bar container
   def menu(text)
-  raise("menu(#{text}) without menu_bar {}") unless @menuBar
-  @filem = MenuItem.new(text.to_s)
-  @menuBar.append(@filem)
-  @mmenu = Menu.new()
-  yield
-  @filem.submenu=@mmenu
-  show_all_children(@mmenu)
-  @filem=nil
-  @mmenu=nil
+    raise("menu(#{text}) without menu_bar {}") unless @menuBar
+    @filem = MenuItem.new(text.to_s)
+    @menuBar.append(@filem)
+    @mmenu = Menu.new()
+    yield
+    @filem.submenu=@mmenu
+    show_all_children(@mmenu)
+    @filem=nil
+    @mmenu=nil
   end
 
   # create an text entry in a menu
   def menu_button(text="?",&blk)
-  raise("menu_button(#{text}) without menu('ee') {}") unless @mmenu
-  item = MenuItem.new(text.to_s)
-  @mmenu.append(item)
-  item.signal_connect("activate") { blk.call(text)  rescue error($!) }
+    raise("menu_button(#{text}) without menu('ee') {}") unless @mmenu
+    item = MenuItem.new(text.to_s)
+    @mmenu.append(item)
+    item.signal_connect("activate") { blk.call(text)  rescue error($!) }
   end
 
   # create an checkbox  entry in a menu
   def menu_checkbutton(text="?",state=false,&blk)
-  raise("menu_button(#{text}) without menu('ee') {}") unless @mmenu
-  item = CheckMenuItem.new(text,false)
-  item.active=state
-  @mmenu.append(item)
-  item.signal_connect("activate") {
-    blk.call(item,text) rescue error($!.to_s)
-  } 
+    raise("menu_button(#{text}) without menu('ee') {}") unless @mmenu
+    item = CheckMenuItem.new(text,false)
+    item.active=state
+    @mmenu.append(item)
+    item.signal_connect("activate") {
+      blk.call(item,text) rescue error($!.to_s)
+    } 
   end
   def menu_separator() @mmenu.append( SeparatorMenuItem.new ) end
 
@@ -1084,10 +1108,12 @@ module Ruiby_dsl
   end	
 
   # specific to gtk : some widget like label can't support click event, so they must
-  # be contained in a clockable parent (EventBox)
-  #  clickable(:callback_click_name) { label(" click me! ") }
-  #  def callback_click_name(widget) ... end
-  # clickable with method callback by name
+  # be contained in a clickable parent (EventBox)
+  #  
+  # Exemple: clickable(:callback_click_name) { label(" click me! ") }
+  #
+  # click callback  is definied by a method name.
+  # see pclickable for callback by closure.
   def clickable(method_name,&b) 
     eventbox = Gtk::EventBox.new
     eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
