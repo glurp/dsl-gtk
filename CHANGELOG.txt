@@ -1,4 +1,8 @@
-0.80.1
+0.80.2
+    test_basics_widget.rb : Image is Label
+    make_doc.rb : rounded title
+    ruiby_dsl3.rb : cell_hvspan creation
+    doc.html : non
     make_doc.rb : cross reference hypertext and look
     ruiby_dsl3.rb : comments for make_doc
     doc.html : cross references
