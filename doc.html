@@ -5,8 +5,9 @@
 <style>
 body { margin: 0px;}
 .title  {font: 35px arial,sans-serif; background: black ; color: white; text-align: center;padding: 30px;}
-.atitle {font: 25px arial,sans-serif; background: #A0A0A0; color: white;padding: 10px;border-radius: 10px;margin-left:30px;}
-.api    {font: 18px courier; background: #F0F0A0; color: black;margin-left:30px;}
+.atitle {font: 25px arial,sans-serif; background: #A0A0A0; color: white;padding: 10px;border-radius: 20px;
+ margin-left:30px;margin-right:30px;}
+.api    {font: 18px courier; background: #F0F0A0; color: black;margin-left:50px;margin-right:50px;}
 .descr  {font: 15px arial,sans-serif; background: #F0F0F0; color: black;margin: 10px 0 30px 30px}
 .a {float: left;	width: 150px;}
 	</style>
@@ -15,11 +16,11 @@ body { margin: 0px;}
 <body>
 
 <div class='title'>Ruiby DSL Documentation</div>
-Ruiby Version: 0.80.0<br>
-Generated at : 2013-05-01 02:33:18 +0200<br>
+Ruiby Version: 0.80.1<br>
+Generated at : 2013-05-01 03:02:31 +0200<br>
 <hr>
 <br>
-<span class="a"><a href="#accordion">accordion</a></span> <span class="a"><a href="#aitem">aitem</a></span> <span class="a"><a href="#alabel">alabel</a></span> <span class="a"><a href="#append_to">append_to</a></span> <span class="a"><a href="#apply_options">apply_options</a></span> <span class="a"><a href="#attribs">attribs</a></span> <span class="a"><a href="#autoslot">autoslot</a></span> <span class="a"><a href="#box">box</a></span> <span class="a"><a href="#button">button</a></span> <span class="a"><a href="#button_expand">button_expand</a></span> <span class="a"><a href="#buttoni">buttoni</a></span> <span class="a"><a href="#calendar">calendar</a></span> <span class="a"><a href="#canvas">canvas</a></span> <span class="a"><a href="#cell">cell</a></span> <span class="a"><a href="#cell_bottom">cell_bottom</a></span> <span class="a"><a href="#cell_hspan">cell_hspan</a></span> <span class="a"><a href="#cell_hspan_left">cell_hspan_left</a></span> <span class="a"><a href="#cell_hspan_right">cell_hspan_right</a></span> <span class="a"><a href="#cell_left">cell_left</a></span> <span class="a"><a href="#cell_pass">cell_pass</a></span> <span class="a"><a href="#cell_right">cell_right</a></span> <span class="a"><a href="#cell_span">cell_span</a></span> <span class="a"><a href="#cell_top">cell_top</a></span> <span class="a"><a href="#cell_vspan">cell_vspan</a></span> <span class="a"><a href="#cell_vspan_bottom">cell_vspan_bottom</a></span> <span class="a"><a href="#cell_vspan_top">cell_vspan_top</a></span> <span class="a"><a href="#center">center</a></span> <span class="a"><a href="#check_button">check_button</a></span> <span class="a"><a href="#clear">clear</a></span> <span class="a"><a href="#clear_append_to">clear_append_to</a></span> <span class="a"><a href="#clickable">clickable</a></span> <span class="a"><a href="#color_choice">color_choice</a></span> <span class="a"><a href="#color_conversion">color_conversion</a></span> <span class="a"><a href="#combo">combo</a></span> <span class="a"><a href="#def_style">def_style</a></span> <span class="a"><a href="#def_style3">def_style3</a></span> <span class="a"><a href="#delete">delete</a></span> <span class="a"><a href="#dialog">dialog</a></span> <span class="a"><a href="#dialog_async">dialog_async</a></span> <span class="a"><a href="#entry">entry</a></span> <span class="a"><a href="#fentry">fentry</a></span> <span class="a"><a href="#field">field</a></span> <span class="a"><a href="#fields">fields</a></span> <span class="a"><a href="#flow">flow</a></span> <span class="a"><a href="#flow_paned">flow_paned</a></span> <span class="a"><a href="#flowi">flowi</a></span> <span class="a"><a href="#force_update">force_update</a></span> <span class="a"><a href="#frame">frame</a></span> <span class="a"><a href="#framei">framei</a></span> <span class="a"><a href="#get_config">get_config</a></span> <span class="a"><a href="#get_current_container">get_current_container</a></span> <span class="a"><a href="#get_icon">get_icon</a></span> <span class="a"><a href="#get_image_from">get_image_from</a></span> <span class="a"><a href="#get_pixbuf">get_pixbuf</a></span> <span class="a"><a href="#get_stockicon_pixbuf">get_stockicon_pixbuf</a></span> <span class="a"><a href="#grid">grid</a></span> <span class="a"><a href="#haccordion">haccordion</a></span> <span class="a"><a href="#hradio_buttons">hradio_buttons</a></span> <span class="a"><a href="#htoolbar">htoolbar</a></span> <span class="a"><a href="#ientry">ientry</a></span> <span class="a"><a href="#image">image</a></span> <span class="a"><a href="#islider">islider</a></span> <span class="a"><a href="#label">label</a></span> <span class="a"><a href="#labeli">labeli</a></span> <span class="a"><a href="#list">list</a></span> <span class="a"><a href="#log">log</a></span> <span class="a"><a href="#menu">menu</a></span> <span class="a"><a href="#menu_bar">menu_bar</a></span> <span class="a"><a href="#menu_button">menu_button</a></span> <span class="a"><a href="#menu_checkbutton">menu_checkbutton</a></span> <span class="a"><a href="#menu_separator">menu_separator</a></span> <span class="a"><a href="#notebook">notebook</a></span> <span class="a"><a href="#page">page</a></span> <span class="a"><a href="#pclickable">pclickable</a></span> <span class="a"><a href="#popup">popup</a></span> <span class="a"><a href="#pp_item">pp_item</a></span> <span class="a"><a href="#pp_separator">pp_separator</a></span> <span class="a"><a href="#properties">properties</a></span> <span class="a"><a href="#propertys">propertys</a></span> <span class="a"><a href="#razslot">razslot</a></span> <span class="a"><a href="#row">row</a></span> <span class="a"><a href="#scrolled">scrolled</a></span> <span class="a"><a href="#separator">separator</a></span> <span class="a"><a href="#show_all_children">show_all_children</a></span> <span class="a"><a href="#show_methods">show_methods</a></span> <span class="a"><a href="#slot">slot</a></span> <span class="a"><a href="#slot_append_after">slot_append_after</a></span> <span class="a"><a href="#slot_append_before">slot_append_before</a></span> <span class="a"><a href="#sloti">sloti</a></span> <span class="a"><a href="#source_editor">source_editor</a></span> <span class="a"><a href="#space">space</a></span> <span class="a"><a href="#stack">stack</a></span> <span class="a"><a href="#stack_paned">stack_paned</a></span> <span class="a"><a href="#stacki">stacki</a></span> <span class="a"><a href="#table">table</a></span> <span class="a"><a href="#text_area">text_area</a></span> <span class="a"><a href="#toggle_button">toggle_button</a></span> <span class="a"><a href="#tree_grid">tree_grid</a></span> <span class="a"><a href="#var_box">var_box</a></span> <span class="a"><a href="#var_boxi">var_boxi</a></span> <span class="a"><a href="#vbox_scrolled">vbox_scrolled</a></span> <span class="a"><a href="#video">video</a></span> <span class="a"><a href="#vradio_buttons">vradio_buttons</a></span> <span class="a"><a href="#widget_properties">widget_properties</a></span> <!-- table des matieres -->
+<span class="a"><a href="#accordion">accordion</a></span> <span class="a"><a href="#aitem">aitem</a></span> <span class="a"><a href="#alabel">alabel</a></span> <span class="a"><a href="#append_to">append_to</a></span> <span class="a"><a href="#apply_options">apply_options</a></span> <span class="a"><a href="#attribs">attribs</a></span> <span class="a"><a href="#autoslot">autoslot</a></span> <span class="a"><a href="#box">box</a></span> <span class="a"><a href="#button">button</a></span> <span class="a"><a href="#button_expand">button_expand</a></span> <span class="a"><a href="#buttoni">buttoni</a></span> <span class="a"><a href="#calendar">calendar</a></span> <span class="a"><a href="#canvas">canvas</a></span> <span class="a"><a href="#cell">cell</a></span> <span class="a"><a href="#cell_bottom">cell_bottom</a></span> <span class="a"><a href="#cell_hspan">cell_hspan</a></span> <span class="a"><a href="#cell_hspan_left">cell_hspan_left</a></span> <span class="a"><a href="#cell_hspan_right">cell_hspan_right</a></span> <span class="a"><a href="#cell_hvspan">cell_hvspan</a></span> <span class="a"><a href="#cell_left">cell_left</a></span> <span class="a"><a href="#cell_pass">cell_pass</a></span> <span class="a"><a href="#cell_right">cell_right</a></span> <span class="a"><a href="#cell_span">cell_span</a></span> <span class="a"><a href="#cell_top">cell_top</a></span> <span class="a"><a href="#cell_vspan">cell_vspan</a></span> <span class="a"><a href="#cell_vspan_bottom">cell_vspan_bottom</a></span> <span class="a"><a href="#cell_vspan_top">cell_vspan_top</a></span> <span class="a"><a href="#center">center</a></span> <span class="a"><a href="#check_button">check_button</a></span> <span class="a"><a href="#clear">clear</a></span> <span class="a"><a href="#clear_append_to">clear_append_to</a></span> <span class="a"><a href="#clickable">clickable</a></span> <span class="a"><a href="#color_choice">color_choice</a></span> <span class="a"><a href="#color_conversion">color_conversion</a></span> <span class="a"><a href="#combo">combo</a></span> <span class="a"><a href="#def_style">def_style</a></span> <span class="a"><a href="#def_style3">def_style3</a></span> <span class="a"><a href="#delete">delete</a></span> <span class="a"><a href="#dialog">dialog</a></span> <span class="a"><a href="#dialog_async">dialog_async</a></span> <span class="a"><a href="#entry">entry</a></span> <span class="a"><a href="#fentry">fentry</a></span> <span class="a"><a href="#field">field</a></span> <span class="a"><a href="#fields">fields</a></span> <span class="a"><a href="#flow">flow</a></span> <span class="a"><a href="#flow_paned">flow_paned</a></span> <span class="a"><a href="#flowi">flowi</a></span> <span class="a"><a href="#force_update">force_update</a></span> <span class="a"><a href="#frame">frame</a></span> <span class="a"><a href="#framei">framei</a></span> <span class="a"><a href="#get_config">get_config</a></span> <span class="a"><a href="#get_current_container">get_current_container</a></span> <span class="a"><a href="#get_icon">get_icon</a></span> <span class="a"><a href="#get_image_from">get_image_from</a></span> <span class="a"><a href="#get_pixbuf">get_pixbuf</a></span> <span class="a"><a href="#get_stockicon_pixbuf">get_stockicon_pixbuf</a></span> <span class="a"><a href="#grid">grid</a></span> <span class="a"><a href="#haccordion">haccordion</a></span> <span class="a"><a href="#hradio_buttons">hradio_buttons</a></span> <span class="a"><a href="#htoolbar">htoolbar</a></span> <span class="a"><a href="#ientry">ientry</a></span> <span class="a"><a href="#image">image</a></span> <span class="a"><a href="#islider">islider</a></span> <span class="a"><a href="#label">label</a></span> <span class="a"><a href="#labeli">labeli</a></span> <span class="a"><a href="#list">list</a></span> <span class="a"><a href="#log">log</a></span> <span class="a"><a href="#menu">menu</a></span> <span class="a"><a href="#menu_bar">menu_bar</a></span> <span class="a"><a href="#menu_button">menu_button</a></span> <span class="a"><a href="#menu_checkbutton">menu_checkbutton</a></span> <span class="a"><a href="#menu_separator">menu_separator</a></span> <span class="a"><a href="#notebook">notebook</a></span> <span class="a"><a href="#page">page</a></span> <span class="a"><a href="#pclickable">pclickable</a></span> <span class="a"><a href="#popup">popup</a></span> <span class="a"><a href="#pp_item">pp_item</a></span> <span class="a"><a href="#pp_separator">pp_separator</a></span> <span class="a"><a href="#properties">properties</a></span> <span class="a"><a href="#propertys">propertys</a></span> <span class="a"><a href="#razslot">razslot</a></span> <span class="a"><a href="#row">row</a></span> <span class="a"><a href="#scrolled">scrolled</a></span> <span class="a"><a href="#separator">separator</a></span> <span class="a"><a href="#show_all_children">show_all_children</a></span> <span class="a"><a href="#show_methods">show_methods</a></span> <span class="a"><a href="#slot">slot</a></span> <span class="a"><a href="#slot_append_after">slot_append_after</a></span> <span class="a"><a href="#slot_append_before">slot_append_before</a></span> <span class="a"><a href="#sloti">sloti</a></span> <span class="a"><a href="#source_editor">source_editor</a></span> <span class="a"><a href="#space">space</a></span> <span class="a"><a href="#stack">stack</a></span> <span class="a"><a href="#stack_paned">stack_paned</a></span> <span class="a"><a href="#stacki">stacki</a></span> <span class="a"><a href="#table">table</a></span> <span class="a"><a href="#text_area">text_area</a></span> <span class="a"><a href="#toggle_button">toggle_button</a></span> <span class="a"><a href="#tree_grid">tree_grid</a></span> <span class="a"><a href="#var_box">var_box</a></span> <span class="a"><a href="#var_boxi">var_boxi</a></span> <span class="a"><a href="#vbox_scrolled">vbox_scrolled</a></span> <span class="a"><a href="#video">video</a></span> <span class="a"><a href="#vradio_buttons">vradio_buttons</a></span> <span class="a"><a href="#widget_properties">widget_properties</a></span> <!-- table des matieres -->
 <div style='clear: both;'> </div>
 <br>
 <br>
@@ -95,6 +96,10 @@ Generated at : 2013-05-01 02:33:18 +0200<br>
 <div class='api'>cell_hspan_right(n,w)</div>
 <div class='descr'>create a hspan_cell in a <a href='#row'>row</a>/<a href='#table'>table</a>, right justified<br></div>
 
+<div class='atitle'><a name='cell_hvspan'>cell_hvspan</a></div>
+<div class='api'>cell_hvspan(n,m,w)</div>
+<div class='descr'>a <a href='#cell'>cell</a> in a <a href='#row'>row</a>/<a href='#table'>table</a>. take <a href='#space'>space</a> of n x m cells, horizontaly x verticaly <br></div>
+
 <div class='atitle'><a name='cell_left'>cell_left</a></div>
 <div class='api'>cell_left(w)</div>
 <div class='descr'>create a <a href='#cell'>cell</a> in a <a href='#row'>row</a>/<a href='#table'>table</a>, left justified<br></div>
@@ -117,15 +122,15 @@ Generated at : 2013-05-01 02:33:18 +0200<br>
 
 <div class='atitle'><a name='cell_vspan'>cell_vspan</a></div>
 <div class='api'>cell_vspan(n,w)</div>
-<div class='descr'>a <a href='#cell'>cell</a> in a <a href='#row'>row</a>/<a href='#table'>table</a>. take <a href='#space'>space</a> of n cells, vericaly<br></div>
+<div class='descr'>a <a href='#cell'>cell</a> in a <a href='#row'>row</a>/<a href='#table'>table</a>. take <a href='#space'>space</a> of n cells, verticaly<br></div>
 
 <div class='atitle'><a name='cell_vspan_bottom'>cell_vspan_bottom</a></div>
 <div class='api'>cell_vspan_bottom(n,w)</div>
-<div class='descr'></div>
+<div class='descr'>a <a href='#cell_vspan'>cell_vspan</a> aligned on bottom<br></div>
 
 <div class='atitle'><a name='cell_vspan_top'>cell_vspan_top</a></div>
 <div class='api'>cell_vspan_top(n,w)</div>
-<div class='descr'></div>
+<div class='descr'>a <a href='#cell_vspan'>cell_vspan</a> aligned on top<br></div>
 
 <div class='atitle'><a name='center'>center</a></div>
 <div class='api'>center()</div>
@@ -145,7 +150,7 @@ Generated at : 2013-05-01 02:33:18 +0200<br>
 
 <div class='atitle'><a name='clickable'>clickable</a></div>
 <div class='api'>clickable(method_name,&b)</div>
-<div class='descr'>specific to gtk : some widget like <a href='#label'>label</a> can't support click event, so they must<br>be contained in a clockable parent (EventBox)<br>clickable(:callback_click_name) { <a href='#label'>label</a>(" click me! ") }<br>def callback_click_name(widget) ... end<br>clickable with method callback by name<br></div>
+<div class='descr'>specific to gtk : some widget like <a href='#label'>label</a> can't support click event, so they must<br>be contained in a clickable parent (EventBox)<br><br>Exemple: clickable(:callback_click_name) { <a href='#label'>label</a>(" click me! ") }<br><br>click callback  is definied by a method name.<br>see <a href='#pclickable'>pclickable</a> for callback by closure.<br></div>
 
 <div class='atitle'><a name='color_choice'>color_choice</a></div>
 <div class='api'>color_choice(text=nil,options={},&cb)</div>
@@ -321,15 +326,15 @@ Generated at : 2013-05-01 02:33:18 +0200<br>
 
 <div class='atitle'><a name='popup'>popup</a></div>
 <div class='api'>popup(w=nil)</div>
-<div class='descr'> Popup<br>popup { <a href='#pp_item'>pp_item</a>("text") { } ; ... }<br></div>
+<div class='descr'> Popup<br>create a dynamic popup. (shoud by calling in a closure)<br>opup block can be composed by <a href='#pp_item'>pp_item</a> and <a href='#pp_separator'>pp_separator</a><br>Exemple :<br>popup { <a href='#pp_item'>pp_item</a>("text") { } ; pp_seperator ; <a href='#pp_item'>pp_item</a>('Exit") { exit!(0)} ; ....}<br></div>
 
 <div class='atitle'><a name='pp_item'>pp_item</a></div>
 <div class='api'>pp_item(text,&blk)</div>
-<div class='descr'></div>
+<div class='descr'>a <a href='#button'>button</a> in a <a href='#popup'>popup</a><br></div>
 
 <div class='atitle'><a name='pp_separator'>pp_separator</a></div>
 <div class='api'>pp_separator()</div>
-<div class='descr'></div>
+<div class='descr'>a bar <a href='#separator'>separator</a> in a <a href='#popup'>popup</a><br></div>
 
 <div class='atitle'><a name='properties'>properties</a></div>
 <div class='api'>properties(title,hash,options={:edit=>false, :scroll=>[0,0]})</div>
@@ -345,7 +350,7 @@ Generated at : 2013-05-01 02:33:18 +0200<br>
 
 <div class='atitle'><a name='row'>row</a></div>
 <div class='api'>row()</div>
-<div class='descr'>create a row. must be defined in a <a href='#table'>table</a> closure	<br>can only contain <a href='#cell'>cell</a>(s) call<br></div>
+<div class='descr'>create a row. must be defined in a <a href='#table'>table</a> closure	<br>Closure argment should only contain <a href='#cell'>cell</a>(s) call.<br>many <a href='#cell'>cell</a> type are disponibles : <a href='#cell'>cell</a> <a href='#cell_bottom'>cell_bottom</a> <a href='#cell_hspan'>cell_hspan</a> <a href='#cell_hspan_left'>cell_hspan_left</a> <br><a href='#cell_hspan_right'>cell_hspan_right</a> <a href='#cell_left'>cell_left</a> <a href='#cell_pass'>cell_pass</a> <a href='#cell_right'>cell_right</a> <a href='#cell_span'>cell_span</a> <a href='#cell_top'>cell_top</a> <a href='#cell_vspan'>cell_vspan</a> <br><a href='#cell_vspan_bottom'>cell_vspan_bottom</a> <a href='#cell_vspan_top'>cell_vspan_top</a><br>row do<br><a href='#cell'>cell</a>( <a href='#label'>label</a>("ee")) ; <a href='#cell_hspan'>cell_hspan</a>(3, <a href='#button'>button</a>("rr") ) }<br>end<br></div>
 
 <div class='atitle'><a name='scrolled'>scrolled</a></div>
 <div class='api'>scrolled(width,height,&b)</div>
