@@ -1,4 +1,8 @@
-0.79.1
+0.80.1
+    make_doc.rb : cross reference hypertext and look
+    ruiby_dsl3.rb : comments for make_doc
+    doc.html : cross references
+0.80.0 : 2013-04-30 23:53:11 +0200
     test_basics_widget.rb : image commands give a Image widget
     ruiby_dsl3.rb : delete deprecated api on calendard
 0.79.0 : 2013-04-30 23:45:14 +0200
