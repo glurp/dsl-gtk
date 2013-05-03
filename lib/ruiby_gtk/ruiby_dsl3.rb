@@ -672,7 +672,7 @@ module Ruiby_dsl
     razslot();
     @lcur.last.attach(w,
        @ltable.last[:col],@ltable.last[:col]+n,
-       @ltable.last[:row],@ltable.last[:row]+m
+       @ltable.last[:row],@ltable.last[:row]+m+1
     )  
     @ltable.last[:col]+=n
     @ltable.last[:row]+=m
