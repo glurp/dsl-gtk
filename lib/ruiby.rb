@@ -18,19 +18,12 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-# d
+# 
 require 'tmpdir'
 require 'thread'
 require 'pathname'
 require 'gtk2' if ! defined?(Gtk) # caller can preload  gtk3, at his own risk...
 
-if Gtk.check_version(2, 0, 0) =~ /old/i
-  md=Gtk::MessageDialog.new(nil,Gtk::Dialog::DESTROY_WITH_PARENT,Gtk::MessageDialog::QUESTION, 
-        Gtk::MessageDialog::BUTTONS_YES_NO, "Gtk version invalide!, need 2.0.0 or later")
-  md.run
-  md.destroy
-  exit!
-end
 #require 'gtksourceviewX' # done by source_editor() tag, so only if source edit is needed
 
 module Ruiby
@@ -56,23 +49,23 @@ module Ruiby
   # dictionary is serialised (Marshalling) to a default file
   # file is /tmp/$0.storage
   def self.stock_put(name,value)
-	db="#{Dir.tmpdir}/#{File.basename($0)}.storage"
-	data={}
+    db="#{Dir.tmpdir}/#{File.basename($0)}.storage"
+    data={}
     (File.open(db,"r") { |f| data=Marshal.load(f) } if File.exists?(db)) rescue nil
-	data[name]=value
-    File.open(db,"w") { |f| Marshal.dump(data,f) }
+    data[name]=value
+      File.open(db,"w") { |f| Marshal.dump(data,f) }
   end
   # read a value associated to a name from persistant storage
-  def self.stock_get(name)
-	db="#{Dir.tmpdir}/#{File.basename($0)}.storage"
-	data={}
+  def self.stock_get(name,default="")
+    db="#{Dir.tmpdir}/#{File.basename($0)}.storage"
+    data={}
     (File.open(db,"r") { |f| data=Marshal.load(f) } if File.exists?(db) )rescue nil
-	data[name] || ""
+    data[name] || default
   end
   # clear persistant strorage
   def self.stock_reset()
-	db="#{Dir.tmpdir}/#{File.basename($0)}.storage"
-	File.delete(db) if File.exists?(db)
+    db="#{Dir.tmpdir}/#{File.basename($0)}.storage"
+    File.delete(db) if File.exists?(db)
   end
   ###########################################################
   #                start Ruiby application
@@ -85,16 +78,16 @@ module Ruiby
   # Thread.abort_on_exception, BasicSocket.do_not_reverse_lookup, 
   # trap('INT') are settings
   def self.start(&bloc)
-	return if defined?($__MARKER_IS_RUIBY_INITIALIZED)
-	$__MARKER_IS_RUIBY_INITIALIZED = true
-	$stdout.sync=true 
-	$stderr.sync=true 
-	Thread.abort_on_exception = true  
-	BasicSocket.do_not_reverse_lookup = true if defined?(BasicSocket)
-	trap("INT") { exit!(0) }
-	Gtk.init
-	yield
-	Gtk.main
+    return if defined?($__MARKER_IS_RUIBY_INITIALIZED)
+    $__MARKER_IS_RUIBY_INITIALIZED = true
+    $stdout.sync=true 
+    $stderr.sync=true 
+    Thread.abort_on_exception = true  
+    BasicSocket.do_not_reverse_lookup = true if defined?(BasicSocket)
+    trap("INT") { exit!(0) }
+    Gtk.init
+    yield
+    Gtk.main
   end
   
   # Start ruiby with a main loop which trap all error :
