@@ -1,4 +1,4 @@
-# Ruiby [![Build Status](https://secure.travis-ci.org/raubarede/Ruiby.png?branch=master)](http://travis-ci.org/raubarede/Ruiby) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/raubarede/Ruiby) [![Dependency Status]("http://www.versioneye.com/package/Ruiby/badge.png)]
+# Ruiby [![Build Status](https://secure.travis-ci.org/raubarede/Ruiby.png?branch=master)](http://travis-ci.org/raubarede/Ruiby) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/raubarede/Ruiby) [![Dependency Status](http://www.versioneye.com/package/Ruiby/badge.png)]
 
 A DSL for building simple GUI (gtk) ruby application rapidly.
 Based on gtk.
