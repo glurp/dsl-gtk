@@ -1,4 +1,7 @@
-0.80.2
+0.80.3
+    ruiby_dsl3.rb : table paccking
+    ruiby.rb : comments
+    README.md : versioneye append
     test_basics_widget.rb : Image is Label
     make_doc.rb : rounded title
     ruiby_dsl3.rb : cell_hvspan creation
