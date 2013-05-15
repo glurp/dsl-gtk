@@ -8,7 +8,7 @@
 #
 #  args : fragment of ruiby dsl commands :
 #      args while be joined with blanc, and evaluated in a stack do ...code... end
-#      in args, characteres '#' or '~' are replaced by a single quote (')
+#      characteres '#' or '~' are replaced by a single quote (')
 #
 ############################################################################
 #
@@ -19,9 +19,11 @@
 #			l=list(~Samples~);l.set_data Dir.glob(~sa*/*.rb~) ;\
 #			buttoni(~Selected~) { system(~ruby ~+l.selection)  } ;\
 #		 	buttoni(~Annul~) { exit!(1) }
-#	> ruiby   field(~aaaa~,10,11);field(~bb~,10,22);field(~cccc~,10,33);button(~ok~) { exit!(0) }
+#
+#	   > ruiby   field(~aaaa~,10,11);field(~bb~,10,22);field(~cccc~,10,33);button(~ok~) { exit!(0) }
+#
 ############################################################################
-require_relative '../lib/ruiby'
+require_relative '../lib/ruiby' unless defined?(Ruiby)
 
 if ARGV.size==0 || ARGV[0]=~ /^-+help/i
  puts "Usage: >ruiby -width 300 -height 200  -title boot  button(# Wait #) { system(~reboot~)}"
