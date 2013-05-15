@@ -1,4 +1,6 @@
-0.80.6
+0.80.7
+    ruiby_demo3 : defined
+    ruiby : defined
     README.md : versioneye
     README.md : versioneye
     README.md : versioneye
