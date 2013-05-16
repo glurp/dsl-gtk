@@ -196,7 +196,7 @@ module Kernel
   def secure_main()
     if defined?(EM) 
         EM::run do
-          give_tick = proc { Gtk::main_iteration; EM.next_tick(give_tick); }
+          give_tick = proc { Gtk::main_iteration rescue puts $!.to_s ; EM.next_tick(give_tick); }
           give_tick.call
         end
     else
