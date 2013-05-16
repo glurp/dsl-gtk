@@ -201,7 +201,7 @@ task :test do
 	 content=File.read("#{NAME}/samples/test.rb").gsub(/^\s*require_relative/,"require").gsub('../lib/','')
 	 File.open(nname,"w") { |f| f.write(content) }
 	 sh "gem install #{FileList["#{NAME}/#{NAME}*.gem"][-1]}"
-	 ruby  nname
+	 system("ruby","-e",'system(''ruby'','''+name+''')"')
 	 cd NAME
 	 print "\n\nOk for diffusion ? "
 	 rep=$stdin.gets
