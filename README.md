@@ -164,13 +164,13 @@ require 'em-proxy'
 require 'Ruiby'
 ```
 
-Warning : EM.run is done when starting mainloop, after creation of window(s)
-so, if yu need initlization of event-machine callback, do it in componon() in a after(0):
+Warning : EM.run is done when starting mainloop, after creation of window(s).
+So, if you need initialization of event-machine callback, do it in component(), in a after(1):
 
 ```ruby 
-Ruiby.app
+Ruiby.app do
   ....
-  after(0) { EventMachine::start_server().. { ... } }
+  after(1) { EventMachine::start_server().. { ... } }
 end
 ```
 
