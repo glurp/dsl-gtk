@@ -195,16 +195,16 @@ module Kernel
   # if EventMachine is present, do loop with wixed EM/main_iteration
   def secure_main()
     if defined?(EM)
-        puts "Ruiby: EM detected, mainloop is mixed EM/Gtk"
+        puts "Ruiby mainloop: EM is detected, mainloop while be mixed EM/Gtk"
         EM::run do
           give_tick = proc do
             begin
               Gtk::main_iteration
+              EM.next_tick(give_tick); 
             rescue Exception => e
               exit!(0) if e.to_s=="exit"
               $__mainwindow__.error("Error GTK : "+e.to_s + " :\n     " +  e.backtrace[0..10].join("\n     "))
             end
-            EM.next_tick(give_tick); 
           end
           give_tick.call
         end
