@@ -194,7 +194,8 @@ module Kernel
   # see Ruiby.secure_main { }
   # if EventMachine is present, do loop with wixed EM/main_iteration
   def secure_main()
-    if defined?(EM) 
+    if defined?(EM)
+        puts "Ruiby: EM detected, man-loop mixed EM/Gtk"
         EM::run do
           give_tick = proc { Gtk::main_iteration rescue puts $!.to_s ; EM.next_tick(give_tick); }
           give_tick.call
