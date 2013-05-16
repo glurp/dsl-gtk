@@ -211,7 +211,7 @@ module Kernel
     else
       begin 
         Gtk.main 
-        exit!
+        exit!(0)
       rescue Exception => e
         if e.to_s=="exit"
           $__mainwindow__.error("Error, see STDERR in console...")
