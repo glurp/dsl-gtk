@@ -23,13 +23,12 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 0.83.0 !!  (16-05-2013)
-- RSPEC and TRAVIS CI : Passing 70% DSL 
+NEW : 0.88.0 !!  (16-05-2013)
 - Treeview (not finished)
 - Migration to gtk3 :almost finish
 - EventMachine integration (main loop)
 
-TODO
+TODO for 1.0 :
 - resolve 100% gtk3 deprecated warning
 - finish treeview   tree_grid,
 - corrections in ruiby_require
@@ -173,6 +172,9 @@ Ruiby.app do
   after(1) { EventMachine::start_server().. { ... } }
 end
 ```
+
+See samples/spygui.rb, for exemple of gui with EM.
+
 
 Threading
 =========
