@@ -23,10 +23,11 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 0.77.1 !!  (17-04-2013)
+NEW : 0.83.0 !!  (16-05-2013)
 - RSPEC and TRAVIS CI : Passing 70% DSL 
 - Treeview (not finished)
 - Migration to gtk3 :almost finish
+- EventMachine integration (main loop)
 
 TODO
 - resolve 100% gtk3 deprecated warning
@@ -142,12 +143,45 @@ And, for very very little application ('~' are replaced by guillemet):
 
 ```
 
+Require
+=======
+Simple usage with gtk2 :
+
+```ruby 
+require 'Ruiby'
+```
+Simple usage with gtk3 : preloag gtk3 before Ruiby :
+
+```ruby 
+require 'gtk3'
+require 'Ruiby'
+```
+
+Usage with Event Machine: preloag event-machine before Ruiby :
+
+```ruby 
+require 'em-proxy'
+require 'Ruiby'
+```
+
+Warning : EM.run is done when starting mainloop, after creation of window(s)
+so, if yu need initlization of event-machine callback, do it in componon() in a after(0):
+
+```ruby 
+Ruiby.app
+  ....
+  after(0) { EventMachine::start_server().. { ... } }
+end
+```
+
 Threading
 =========
+Ruiby do not confidence qith gtk multi threading, so all Ruiby commands must be done in
+main thread context. A Ruiby delegate is provided in Kenel module for supporte multi-threading
 
-Threading is supported via a Queue polled by main-window thread :
+A Queue is polled by main-window thread :
 * main window poll Queue , messagers are proc to be instance_eval() in the main window context
-* everywere, a thread can invoke invoke_gui {ruiby code}. this send to the main queue the proc,
+* everywere, a thread can invoke ```invoke_gui {ruiby code}```. this send to the main queue the proc,
  which will be evaluated asynchroniously 
 
 instance_eval is avoided in ruiby. He is used only for thread invoker : gui_invoke().
