@@ -87,7 +87,7 @@ module Ruiby
     trap("INT") { exit!(0) }
     Gtk.init
     yield
-    Gtk.main
+    secure_main()	
   end
   
   # Start ruiby with a main loop which trap all error :
@@ -192,17 +192,25 @@ module Kernel
   # run gtk mainloop with trapping gtk/callback error
   # used by sketchi.rb, not good
   # see Ruiby.secure_main { }
+  # if EventMachine is present, do loop with wixed EM/main_iteration
   def secure_main()
-    begin 
-      Gtk.main 
-      exit!
-    rescue Exception => e
-      if e.to_s=="exit"
-        $__mainwindow__.error("Error, see STDERR in console...")
-      else
-        $__mainwindow__.error("Error GTK : "+e.to_s + " :\n     " +  e.backtrace[0..10].join("\n     "))
-      end
-    end while true
+    if defined?(EM) 
+        EM::run do
+          give_tick = proc { Gtk::main_iteration; EM.next_tick(give_tick); }
+          give_tick.call
+        end
+    else
+      begin 
+        Gtk.main 
+        exit!
+      rescue Exception => e
+        if e.to_s=="exit"
+          $__mainwindow__.error("Error, see STDERR in console...")
+        else
+          $__mainwindow__.error("Error GTK : "+e.to_s + " :\n     " +  e.backtrace[0..10].join("\n     "))
+        end
+      end while true
+    end
   end
   
   #######################################
