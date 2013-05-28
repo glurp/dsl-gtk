@@ -23,15 +23,17 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 0.88.0 !!  (16-05-2013)
+NEW : 0.90.0 !!  (16-05-2013)
 - Treeview (not finished)
 - Migration to gtk3 :almost finish
-- EventMachine integration (main loop)
+- EventMachine integration (main loop by EM.run if EM is present)
+- ruiby_demo3 ; ruiby_skechi fixes (preload gtk3 before Ruiby)
 
 TODO for 1.0 :
 - resolve 100% gtk3 deprecated warning
-- finish treeview   tree_grid,
+- finish treeview and tree_grid,
 - corrections in ruiby_require
+- adk_file_for_read... do be remasterisez (default dir, file filter...)
 - complete rspec => 99% ?
 - Easy Form : variables binding for entry/list/check-radio button...
 
