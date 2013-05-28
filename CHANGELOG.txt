@@ -1,4 +1,6 @@
-0.89.1
+0.90.1
+    README.md : uppdate 90
+0.90.0 : 2013-05-27 20:05:53 +0200
     ruiby_demo3 : resolve scratch with gtk3 init
 0.89.0 : 2013-05-27 20:03:18 +0200
     README.md : todo and EM
