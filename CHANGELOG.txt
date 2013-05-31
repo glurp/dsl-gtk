@@ -1,4 +1,6 @@
-0.90.3
+0.90.4
+    make_doc.rb : review look of autognerated doc
+    doc.html : review look of documentation
     LICENSE.html : update txt
     LICENSE.html : update html to text
     README.md : uppdate 90
