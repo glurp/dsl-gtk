@@ -12,11 +12,27 @@ html=<<EEND
 <title>Ruiby DSL doc</title>
 <style>
 body { margin: 0px;}
-.title  {font: 35px arial,sans-serif; background: black ; color: white; text-align: center;padding: 30px;}
-.atitle {font: 25px arial,sans-serif; background: #A0A0A0; color: white;padding: 10px;border-radius: 20px;
- margin-left:30px;margin-right:30px;}
-.api    {font: 18px courier; background: #F0F0A0; color: black;margin-left:50px;margin-right:50px;}
-.descr  {font: 15px arial,sans-serif; background: #F0F0F0; color: black;margin: 10px 0 30px 30px}
+.title{font-size:33;color:white; padding:10px 100px 10px 100px;margin-bottom:20px;
+background: #5e8077;background: linear-gradient(to bottom, #606060 0%%,#808080 100%%);   
+box-shadow: 0px 2px 11px 2px #000; }
+.atitle {
+  font: 17px arial,sans-serif;         
+  background: #5e8077;
+  color:white; padding:5px 10px 4px 5px;margin-bottom:20px;
+  background: linear-gradient(to right, #606060 0%%,#808080 100%%);   
+  border-radius: 10px 10px ;
+  box-shadow: 2px 2px 6px 1px #000; 
+  margin-left:3px;margin-right:70px;
+  padding-left: 30px
+}
+.api    {font: 18px courier; background: #F0F0A0; color: black;margin-left:3px;margin-right:50px;padding:4px}
+.descr  {font: 15px arial,sans-serif; background: #FFF; color: black;margin: 10px 0 30px 3px;
+padding: 5px;}
+a.l { color: #303030 ;  text-decoration:none ;}
+a:link { }     
+a:visited {}
+a:hover {text-decoration: underline ;}
+a:active {color: #0000FF}
 .a {float: left;	width: 150px;}
 	</style>
 </head>
@@ -28,18 +44,22 @@ Ruiby Version: %s<br>
 Generated at : %s<br>
 <hr>
 <br>
+<ul>
 %s <!-- table des matieres -->
 <div style='clear: both;'> </div>
+</ul>
 <br>
 <br>
-%s  <!-- documentation -->
+<table style="width:90%%;">
+<tr><td>%s</td><td>%s</td></tr>  <!-- documentation -->
+</table>
 <hr>
 <center>made by samples/make_doc.rb</center>
 </body>
 </html>
 EEND
 
-htable='<span class="a"><a href="#%s">%s</a></span>'
+htable='<span class="a"><a class="l" href="#%s">%s</a></span>'
 
 hitem=<<EEND
 <div class='atitle'><a name='%s'>%s</a></div>
@@ -83,13 +103,16 @@ end
 
 hdoc=extract_doc_dsl()
 table=hdoc.keys.sort.select {|a| (a !~ /\./) }.map { |name| htable % [name,name]}.join(" ")
-apis=hdoc.keys.sort.select {|a| (a !~ /\./) }.map {  |k|  hitem % hdoc[k] }.join("\n")
-
+lapis=hdoc.keys.sort.select {|a| (a !~ /\./) }.map {  |k|  hitem % hdoc[k] }
+s=lapis.size
+api1=lapis[0..(s/2)].join("\n")
+api2=lapis[((s/2)+1)..-1].join("\n")
 content=html % [
 	File.read("#{File.dirname(__FILE__)}/../VERSION"),
 	Time.now.to_s,
 	table,
-	apis
+	api1,
+  api2
 ]
 
 output="#{File.dirname(__FILE__)}/../doc.html"
