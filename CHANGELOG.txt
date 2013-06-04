@@ -1,4 +1,6 @@
-0.90.4
+0.90.5
+    test_gtk3.rb : versions
+    test.rb : versions
     make_doc.rb : review look of autognerated doc
     doc.html : review look of documentation
     LICENSE.html : update txt
