@@ -35,13 +35,37 @@ a:hover {text-decoration: underline ;}
 a:active {color: #0000FF}
 .a {float: left;	width: 150px;}
 	</style>
-</head>
+
+<script>
+function doSearch(text) {
+    if (window.find && window.getSelection) {
+        document.designMode = "on";
+        var sel = window.getSelection();
+        sel.collapse(document.body, 0);
+
+        while (window.find(text)) {
+            document.execCommand("HiliteColor", false, "pink");
+            //sel.collapseToEnd();
+        }
+        document.designMode = "off";
+    } else if (document.body.createTextRange) {
+        var textRange = document.body.createTextRange();
+        while (textRange.findText(text)) {
+            textRange.execCommand("BackColor", false, "pink");
+            textRange.collapse(false);
+        }
+    }
+}
+</script>
+ </head>
 
 <body>
 
 <div class='title'>Ruiby DSL Documentation</div>
 Ruiby Version: %s<br>
 Generated at : %s<br>
+<hr>
+<center>Search : <input type='input' value="" size='80' onchange='doSearch(this.value);'></center>
 <hr>
 <br>
 <ul>
@@ -69,26 +93,29 @@ EEND
 
 
 def extract_doc_dsl() 
-	src=File.dirname(__FILE__)+"/../lib/ruiby_gtk/ruiby_dsl3.rb"
-	content=File.read(src)
-	comment=""
-	hdoc=content.split(/\r?\n\s*/).inject({}) {|h,line|
-		ret=nil
-		if a=/^def\s+([^_].*)/.match(line)
-			name=a[1].split('(')[0]
-			api=a[1].split(')')[0]+")"
-			descr=comment.gsub('#\s*',"")
-			comment=""
-			h[name]=[name,name,api,descr]
-		elsif a=/^\s*#\s*(.*)/.match(line)
-			comment+=a[1].gsub("#","").gsub(/^\s*\*/,"<li>")+"<br>"
-		elsif /^\s*end\b/.match(line) || /^\s*def\s+(_.*)/.match(line) || /^\s*$/.match(line) || line.size==0
-			comment=""
-		end
-		h
-	}
+	glob=File.dirname(__FILE__)+"/../lib/ruiby_gtk/*.rb"
+  hdoc={}
+  Dir[glob].each do |src| next if src =~ /dsl.rb/
+    content=File.read(src)
+    comment=""
+    hdoc=content.split(/\r?\n\s*/).inject(hdoc) {|h,line|
+      ret=nil
+      if a=/^def\s+([^_].*)/.match(line)
+        name=a[1].split('(')[0]
+        api=a[1].split(')')[0]+")"
+        descr=comment.gsub('#\s*',"")
+        comment=""
+        h[name]=[name,name,api,descr]
+      elsif a=/^\s*#\s*(.*)/.match(line)
+        comment+=a[1].gsub("#","").gsub(/^\s*\*/,"<li>")+"<br>"
+      elsif /^\s*end\b/.match(line) || /^\s*def\s+(_.*)/.match(line) || /^\s*$/.match(line) || line.size==0
+        comment=""
+      end
+      h
+    }
+  end
   # make hyperlink cross reference to word definition in each description text
-	hdoc.keys.sort.each {|k|
+  hdoc.keys.sort.each {|k|
     name1,name2,api,descr= hdoc[k]
     d=descr.gsub(/\w+/) { |word| (word!=k && hdoc[word]) ? make_anchor(word) : word}
     hdoc[k]=[name1,name2,api,d] if d !=descr
