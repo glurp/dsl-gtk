@@ -39,9 +39,7 @@ def component()
 	   ))
     sloti(label( <<-EEND ,:font=>"Tahoma bold 12"))
      This window is test & demo of Ruiby capacity.
-     Ruiby       = #{Ruiby::VERSION}
-     Ruby        = #{RUBY_VERSION}
-     Gtk version = #{Gtk::VERSION.join(".")}
+     Ruby = #{RUBY_VERSION}, Ruiby is #{Ruiby::VERSION}, Gtk is  #{Gtk::VERSION.join(".")}
      HMI code =#{File.read(__FILE__).split("comp"+"onent"+"()")[1].split(/\r?\n/).select {|l| l.strip.size>3}.size} lines
 	EEND
     separator
