@@ -1,4 +1,6 @@
-0.90.5
+0.90.6
+    make_doc.rb : search engine
+    doc.html : search dialog input
     test_gtk3.rb : versions
     test.rb : versions
     make_doc.rb : review look of autognerated doc
