@@ -38,7 +38,7 @@ def component()
 	   ))
     sloti(label( <<-EEND ,:font=>"Arial 12"))
      This window is test & demo of Ruiby capacity,
-     Ruiby version is #{Ruiby::VERSION}, Gtk version is #{Gtk::VERSION.join(".")}
+     RUBY is #{RUBY_VERSION}, Ruiby is #{Ruiby::VERSION}, Gtk version is #{Gtk::VERSION.join(".")}
 	EEND
     separator
     flow {
