@@ -46,9 +46,12 @@ module Ruiby_default_dialog
 	def ask(*txt) 
 		text=txt.join(" ")
     md = MessageDialog.new(
-        self,
-        :destroy_with_parent, :question, 
-        MessageDialog::BUTTONS_YES_NO, text)
+      :parent => self, 
+      :flags => :destroy_with_parent, 
+      :type => :question, 
+      :buttons_type => :yes_no,
+      :message => text
+    )
 		md.set_window_position(:center)
 		rep=md.run
 		md.destroy
