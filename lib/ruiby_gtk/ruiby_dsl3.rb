@@ -541,6 +541,9 @@ module Ruiby_dsl
     attribs(w,option)		
     w
   end
+  
+  # show a label and a entry in a  flow. entrey widget is returned
+  # see fields()
   def field(tlabel,width,value,option={},&blk)
     e=nil
     flow {
@@ -550,16 +553,22 @@ module Ruiby_dsl
     }
     e
   end
-  def fields(alabel,option={},&blk)   
+  
+  # show a stack of label/entry and buttons validation/annulation
+  # on button, bloc is invoked with the list of values of entrys
+  def fields(alabel=[["nothing",""]],option={},&blk)   
     size=alabel.map {|t| t[0].size}.max
-    stack {
+    stack do
       le=alabel.map { |(label,value)| field(label,size,value) }
       if block_given?
-          button("Validation") { blk.call(*le.map {|t| t.text}) }
-          button("Annulation") { blk.call(*le.map {|t| nil}) }
+          flowi {
+            button("Validation") { blk.call(*le.map {|t| t.text}) }
+            button("Annulation") { blk.call(*le.map {|t| nil}) }
+          }
       end
-    }
+    end
   end
+  
   # create a slider
   # option must define :min :max :by for spin button
   # current value can be read by w.value
@@ -1327,19 +1336,19 @@ module Ruiby_dsl
   end
   ######################## Dialog ##################
 
-  # dialog_async("title",:response=> bloc {|dia,e| }) {
-  #   flow { button("dd") ... }
-  # }
   # Dialog content is build with bloc parameter.
   # Action on Ok/Nok/delete button make a call to :response bloc.
   # dialog is destoy if return value of :response is true
   #
+  # dialog_async("title",:response=> bloc {|dia,e| }) {
+  #   flow { button("dd") ... }
+  # }
   def dialog_async(title,config={},&b) 
     dialog = Dialog.new(
       title:   "Message",
       parent:  self,
-      flags:   [Dialog::DESTROY_WITH_PARENT],
-      buttons: []
+      buttons: [[Gtk::Stock::OK, :accept],
+                [Gtk::Stock::CANCEL, :reject]]
     )
             
 
@@ -1356,19 +1365,21 @@ module Ruiby_dsl
     end
     dialog.show_all	
   end
-  # dialog_sync("title") {
-  #   flow { button("dd") ... }
-  # }
+  
   # Dialog contents is build with bloc parameter.
   # call is bloced until action on Ok/Nok/delete button 
   # return true if dialog quit is done by action on OK button
-
+  #
+  # dialog("title") {
+  #   flow { button("dd") ... }
+  # }
   def dialog(title="") 
     dialog = Dialog.new(
       title: title,
       parent: self,
-      flags: :destroy_with_parent,
-      buttons: [])
+      buttons: [[Gtk::Stock::OK, :accept],
+                [Gtk::Stock::CANCEL, :reject]]
+    )
       
     @lcur << dialog.child
     hbox=stack { yield }
