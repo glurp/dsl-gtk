@@ -74,9 +74,9 @@ Generated at : %s<br>
 </ul>
 <br>
 <br>
-<table style="width:90%%;">
-<tr><td>%s</td><td>%s</td></tr>  <!-- documentation -->
-</table>
+<div style='-moz-column-count:2;-webkit-column-count:2;column-count:2;'>
+%s
+</div>
 <hr>
 <center>made by samples/make_doc.rb</center>
 </body>
@@ -131,15 +131,12 @@ end
 hdoc=extract_doc_dsl()
 table=hdoc.keys.sort.select {|a| (a !~ /\./) }.map { |name| htable % [name,name]}.join(" ")
 lapis=hdoc.keys.sort.select {|a| (a !~ /\./) }.map {  |k|  hitem % hdoc[k] }
-s=lapis.size
-api1=lapis[0..(s/2)].join("\n")
-api2=lapis[((s/2)+1)..-1].join("\n")
+api1=lapis.join("\n")
 content=html % [
 	File.read("#{File.dirname(__FILE__)}/../VERSION"),
 	Time.now.to_s,
 	table,
-	api1,
-  api2
+	api1
 ]
 
 output="#{File.dirname(__FILE__)}/../doc.html"

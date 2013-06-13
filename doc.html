@@ -54,8 +54,8 @@ function doSearch(text) {
 <body>
 
 <div class='title'>Ruiby DSL Documentation</div>
-Ruiby Version: 0.90.5<br>
-Generated at : 2013-06-04 19:23:28 +0200<br>
+Ruiby Version: 0.93.1<br>
+Generated at : 2013-06-13 22:09:30 +0200<br>
 <hr>
 <center>Search : <input type='input' value="" size='80' onchange='doSearch(this.value);'></center>
 <hr>
@@ -66,8 +66,8 @@ Generated at : 2013-06-04 19:23:28 +0200<br>
 </ul>
 <br>
 <br>
-<table style="width:90%;">
-<tr><td><div class='atitle'><a name='accordion'>accordion</a></div>
+<div style='-moz-column-count:2;-webkit-column-count:2;column-count:2;'>
+<div class='atitle'><a name='accordion'>accordion</a></div>
 <div class='api'>accordion()</div>
 <div class='descr'> Accordion<br>create a accordion <a href='#menu'>menu</a>. 	<br>must contain <a href='#aitem'>aitem</a>() which must containe <a href='#alabel'>alabel</a>() :<br>accordion { <a href='#aitem'>aitem</a>(txt) { <a href='#alabel'>alabel</a>(lib) { code }; ...} ... }<br></div>
 
@@ -273,11 +273,11 @@ Generated at : 2013-06-04 19:23:28 +0200<br>
 
 <div class='atitle'><a name='dialog'>dialog</a></div>
 <div class='api'>dialog(title="")</div>
-<div class='descr'>dialog_sync("title") {<br><a href='#flow'>flow</a> { <a href='#button'>button</a>("dd") ... }<br>}<br>Dialog contents is build with bloc parameter.<br>call is bloced until action on Ok/Nok/<a href='#delete'>delete</a> <a href='#button'>button</a> <br>return true if dialog quit is done by action on OK <a href='#button'>button</a><br></div>
+<div class='descr'>Dialog contents is build with bloc parameter.<br>call is bloced until action on Ok/Nok/<a href='#delete'>delete</a> <a href='#button'>button</a> <br>return true if dialog quit is done by action on OK <a href='#button'>button</a><br><br>dialog("title") {<br><a href='#flow'>flow</a> { <a href='#button'>button</a>("dd") ... }<br>}<br></div>
 
 <div class='atitle'><a name='dialog_async'>dialog_async</a></div>
 <div class='api'>dialog_async(title,config={},&b)</div>
-<div class='descr'> Dialog <br>dialog_async("title",:response=> bloc {|dia,e| }) {<br><a href='#flow'>flow</a> { <a href='#button'>button</a>("dd") ... }<br>}<br>Dialog content is build with bloc parameter.<br>Action on Ok/Nok/<a href='#delete'>delete</a> <a href='#button'>button</a> make a call to :response bloc.<br><a href='#dialog'>dialog</a> is destoy if return value of :response is true<br><br></div>
+<div class='descr'> Dialog <br>Dialog content is build with bloc parameter.<br>Action on Ok/Nok/<a href='#delete'>delete</a> <a href='#button'>button</a> make a call to :response bloc.<br><a href='#dialog'>dialog</a> is destoy if return value of :response is true<br><br>dialog_async("title",:response=> bloc {|dia,e| }) {<br><a href='#flow'>flow</a> { <a href='#button'>button</a>("dd") ... }<br>}<br></div>
 
 <div class='atitle'><a name='dialog_chooser'>dialog_chooser</a></div>
 <div class='api'>dialog_chooser(title, action, button)</div>
@@ -301,11 +301,11 @@ Generated at : 2013-06-04 19:23:28 +0200<br>
 
 <div class='atitle'><a name='field'>field</a></div>
 <div class='api'>field(tlabel,width,value,option={},&blk)</div>
-<div class='descr'></div>
+<div class='descr'>show a <a href='#label'>label</a> and a <a href='#entry'>entry</a> in a  <a href='#flow'>flow</a>. entrey widget is returned<br>see <a href='#fields'>fields</a>()<br></div>
 
 <div class='atitle'><a name='fields'>fields</a></div>
-<div class='api'>fields(alabel,option={},&blk)</div>
-<div class='descr'></div>
+<div class='api'>fields(alabel=[["nothing",""]],option={},&blk)</div>
+<div class='descr'>show a <a href='#stack'>stack</a> of <a href='#label'>label</a>/<a href='#entry'>entry</a> and buttons validation/annulation<br>on <a href='#button'>button</a>, bloc is invoked with the <a href='#list'>list</a> of values of entrys<br></div>
 
 <div class='atitle'><a name='flow'>flow</a></div>
 <div class='api'>flow(add1=true,&b)</div>
@@ -362,7 +362,8 @@ Generated at : 2013-06-04 19:23:28 +0200<br>
 <div class='atitle'><a name='gui_invoke'>gui_invoke</a></div>
 <div class='api'>gui_invoke(&blk)</div>
 <div class='descr'> Invoke HMI from anywhere <br>if <a href='#threader'>threader</a>() is done by almost one window,  <br>evaluate (instance_eval) the bloc  in the context of this window<br>async: bloc will be evaluate <a href='#after'>after</a> the return!<br></div>
-</td><td><div class='atitle'><a name='gui_invoke_in_window'>gui_invoke_in_window</a></div>
+
+<div class='atitle'><a name='gui_invoke_in_window'>gui_invoke_in_window</a></div>
 <div class='api'>gui_invoke_in_window(w,&blk)</div>
 <div class='descr'></div>
 
@@ -649,8 +650,8 @@ Generated at : 2013-06-04 19:23:28 +0200<br>
 <div class='atitle'><a name='wtree'>wtree</a></div>
 <div class='api'>wtree(w)</div>
 <div class='descr'></div>
-</td></tr>  <!-- documentation -->
-</table>
+
+</div>
 <hr>
 <center>made by samples/make_doc.rb</center>
 </body>
