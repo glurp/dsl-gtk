@@ -3,6 +3,9 @@
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
 
+# test background/foreground for label and button
+# windows : ok with gtk3, nol with gtk2
+
 require 'gtk3' if ARGV.size==1 
 require_relative '../lib/ruiby'
 
