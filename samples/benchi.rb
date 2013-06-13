@@ -62,10 +62,10 @@ class Appli < Ruiby_gtk
 			Ruiby.stock_put("test1",code)
 		    clear_append_to(@demo) do
 				begin
-					eval( "class Test ; def self.test()  #{code} ; end ; end ",$global)
+					eval( "class Test ; def self.test()  #{code} ; end ; end ",$global,"<text>",1)
 					mlabel "Result=#{Test.test()}"
-				rescue
-					mlabel"Error: " + $!.to_s  
+				rescue Exception => e
+					mlabel"Error: " + e.to_s  
 				end
 		    end
 	    end 
@@ -83,8 +83,8 @@ class Appli < Ruiby_gtk
 				begin
 					eval( "class Test ; def self.test()  #{code} ; end ; end ",$global)
 					mlabel  "Result=#{Test.test()}"
-				rescue
-					mlabel "Error: " + $!.to_s  
+				rescue Exception => e
+					mlabel "Error: " + e.to_s  
 				end
 		    end
 	    end 
