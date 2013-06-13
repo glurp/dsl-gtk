@@ -1,5 +1,6 @@
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
+
 # Show dependencies of current Ruiby config
 
 require 'tsort'
