@@ -109,7 +109,7 @@ describe Ruiby do
 		@win.create { stack {   w=fields("aa"=>0,"bb"=>1) { alert("value modify, ok") } } }
 		@win.sleeping(100,"Verify fields")
 		w.should be_a_kind_of(Gtk::Box)
-		w.children.size.should eq(4)
+		w.children.size.should eq(3)
  end
  it "create a slider" do
 		w=nil
