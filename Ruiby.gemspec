@@ -3,10 +3,11 @@ $:.push('lib')
 
 Gem::Specification.new do |s|
   s.name     = "Ruiby"
+  s.licenses = ['LGPL', 'CC-BY-SA']
   s.version  = File.read("VERSION").strip
   s.date     = Time.now.to_s.split(/\s+/)[0]
   s.email    = "regis.aubarede@gmail.com"
-  s.homepage = "http://github.com/raubarede/Ruiby"
+  s.homepage = "http://raubarede.tumblr.com/"
   s.authors  = ["Regis d'Aubarede"]
   s.summary  = "A  DSL for building simple GUI ruby/gtk application"
   s.description = <<EEND
@@ -14,8 +15,6 @@ A DSL for building simple GUI ruby application rapidly.
 EEND
   
   dependencies = [
-    [:runtime,     "gtk2"],
-    [:runtime, "gtksourceview2"],
     [:runtime,     "gtk3"],
     [:runtime, "gtksourceview3"]
 	]
@@ -42,7 +41,7 @@ EEND
 
       -------------------------------------------------------------------------------
 
-      Hello, welcome to Ruiby univers....
+      Hello, welcome to Ruiby....
 
         $ ruiby_demo    # test with gtk2
         $ ruiby_demo3   # test with gtk3 , experimental !
