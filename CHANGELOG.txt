@@ -1,4 +1,6 @@
-0.92.2
+0.93.1
+    test_basics_widget.rb : fileds size
+0.93.0 : 2013-06-13 20:32:34 +0200
     test.rb : switch to gtk3
     color.rb : dialogs tests
     ruiby_dsl3.rb : fields better
