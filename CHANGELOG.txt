@@ -1,4 +1,8 @@
-0.90.6
+0.90.7
+    netprog.rb : force gtk3 
+    dependencies.rb : comments
+    color.rb : comments
+    benchi.rb : fixed font
     make_doc.rb : search engine
     doc.html : search dialog input
     test_gtk3.rb : versions
