@@ -19,5 +19,22 @@ Ruiby.app title: "Color test for button/label" do
 			flow { label("red / blue",{bg:"#0000FF",fg:"#FF0000"}) ;label("red / blue",font:"Arial bold 32") ;label("red / blue",{}) ;}
 			flow { label("red / green / Arial",{bg:"#00FF00",fg:"#FF0000",font:"Arial 32"}) ;label("red / blue",{}) ;label("red / blue",{}) ;}
       flow { properties("props of (1)",get_config(a)) ; properties("props of child of(1)",get_config(a.child))}
+      button("dialog...") do
+        dialog("title") {
+          stack  { 
+            fields([["prop1","1"],["prop1","2"],["properties1","3"]]) {|*avalues| alert(avalues.join(", "))}
+            separator
+          }
+        }
+      end
+      button("dialog async...") do
+        dialog_async("title",:response=> proc { ask("ok") }) {
+          stack  { 
+            label "without validations.."
+            fields([["prop1","1"],["prop1","2"],["properties1","3"]]) 
+            separator
+          }
+        }
+      end
     }
 end
