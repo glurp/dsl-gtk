@@ -1,4 +1,6 @@
-0.90.7
+0.91.1
+    Ruiby.gemspec : homepage, licenses
+0.91.0 : 2013-06-13 15:46:26 +0200
     netprog.rb : force gtk3 
     dependencies.rb : comments
     color.rb : comments
