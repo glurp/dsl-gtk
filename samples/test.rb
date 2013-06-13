@@ -10,13 +10,9 @@ def mlog(text)
  $mlog << [delta,text]
  puts "%8d | %s" % [delta,text.to_s]
 end
-mlog 'before require gtk2'
-require 'gtk2' 
-mlog 'before require ruiby'
-require_relative '../lib/ruiby'
-mlog 'after require ruiby'
-Gem.loaded_specs.each {|name,gem| puts "  #{gem.name}-#{gem.version}"}
 
+mlog 'require gtk3...'     ; require 'gtk3' 
+mlog 'require ruiby....'   ; require_relative '../lib/ruiby' ; mlog 'require ruiby done.'
 
 class RubyApp < Ruiby_gtk
     def initialize
@@ -27,7 +23,10 @@ class RubyApp < Ruiby_gtk
     end
 	
 	
-def component()        
+def component()   
+  self.override_font(Pango::FontDescription.new("Tahoma 10")) 
+  #def_style3("* { font_name :  Courier }")
+  after(1000) {puts "\n\n\n"  ; Gem.loaded_specs.each {|name,gem| puts "  #{gem.name}-#{gem.version}"} }
   mlog 'before Component'
   stack do
     sloti(htoolbar(
@@ -36,9 +35,10 @@ def component()
 		"undo/defaire"=>nil,
 		"redo/refaire"=>proc { alert("e") }
 	   ))
-    sloti(label( <<-EEND ,:font=>"Arial 12"))
-     This window is test & demo of Ruiby capacity,
-     RUBY is #{RUBY_VERSION}, Ruiby is #{Ruiby::VERSION}, Gtk version is #{Gtk::VERSION.join(".")}
+    sloti(label( <<-EEND ,:font=>"Tahoma bold 12"))
+     This window is test & demo of Ruiby capacity.
+     Ruby = #{RUBY_VERSION}, Ruiby is #{Ruiby::VERSION}, Gtk is  #{Gtk::VERSION.join(".")}
+     HMI code =#{File.read(__FILE__).split("comp"+"onent"+"()")[1].split(/\r?\n/).select {|l| l.strip.size>3}.size} lines
 	EEND
     separator
     flow {
@@ -51,25 +51,23 @@ def component()
         page("","#home") { label("A Notebook Page with icon as button-title",{font: "Arial 18"}) }
         page("List & grid") { test_list_grid }		
         page("Explorer") { test_treeview }
-		page("expander & dialog") { test_dialog }
+        page("expander & dialog") { test_dialog }
         page("Property Edit.") { test_properties(0) }
         page("Big PropEditor") { test_properties(1) }
         page("Source Editor") {
-          button("eee")
           if ed=source_editor(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 8",:on_change=> proc { edit_change })
             @editor=ed.editor
             @editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
           end
         }
-		page("Menu") { test_menu }
+        page("Menu") { test_menu }
         page("Accordion") { test_accordion }
-		page("Pan & Scrolled") { test_pan_scroll}
+        page("Pan & Scrolled") { test_pan_scroll}
 	  end # end notebook
     } # end flow
     sloti(button("Test dialogs...") { do_special_actions() })
     sloti( button("Exit") { ruiby_exit })
-	mlog 'after Component'
-	#after(100) { do_timeline }
+    mlog 'after Component'
   end
 end
 
@@ -104,21 +102,27 @@ end
 				@epaisseur=sloti(islider(1,{:min=>1,:max=>30,:by=>1}))
 			  }
 			  @ldraw=[] ; @color=  ::Gdk::Color.parse("#33EEFF");
-			  cv=canvas(100,100,{ 
-				:expose     => proc { |w,cr|  
-				  @ldraw.each do |line|
-					next if line.size<3
-					color,ep,pt0,*poly=*line
-					cr.set_line_width(ep)
-					cr.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
-					cr.move_to(*pt0)
-					poly.each {|px|    cr.line_to(*px) } 
-					cr.stroke  
-				end
-				},          
-				:mouse_down => proc { |w,e|   no= [e.x,e.y] ;  @ldraw << [@color,@epaisseur.value,no] ;  no    },
-				:mouse_move => proc { |w,e,o| no= [e.x,e.y] ; (@ldraw.last << no) if no[0]!=o[0] || no[1]!=o[1] ; no },
-				:mouse_up   => proc { |w,e,o| no= [e.x,e.y] ; (@ldraw.last << no) ; no}
+			  cv=canvas(300,200,{ 
+          :expose     => proc { |w,cr|  
+              @ldraw.each do |line|
+                next if line.size<3
+                color,ep,pt0,*poly=*line
+                cr.set_line_width(ep)
+                cr.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
+                cr.move_to(*pt0)
+                poly.each {|px|    cr.line_to(*px) } 
+                cr.stroke  
+              end
+          },          
+          :mouse_down => proc { |w,e|   
+              no= [e.x,e.y] ;  @ldraw << [@color,@epaisseur.value,no] ;  no    
+          },
+          :mouse_move => proc { |w,e,o| 
+              no= [e.x,e.y] ; (@ldraw.last << no) if no[0]!=o[0] || no[1]!=o[1] ; no 
+          },
+          :mouse_up   => proc { |w,e,o| 
+              no= [e.x,e.y] ; (@ldraw.last << no) ; no
+          }
 				})
 				popup {
 					pp_item("copy") 	{ alert 1 }
@@ -288,13 +292,13 @@ end
 			stack {
 				sloti(label("Test scrolled zone"))
 				separator
-				stack_paned 300,0.5 do [
-				  vbox_scrolled(-1,100) { 
+				stack_paned 600,0.5 do [
+				  vbox_scrolled(-1,20) { 
 					30.times { |i| 
 					  flow { sloti(button("eeee#{i}"));sloti(button("eeee")) }
 					}
 				  },
-				  vbox_scrolled(100,100) { 
+				  vbox_scrolled(-1,20) { 
 					30.times { |i| 
 					  flow { sloti(button("eeee#{i}"));sloti(button("eeee"));sloti(button("aaa"*100)) }
 					}
@@ -309,56 +313,83 @@ end
 
   def do_special_actions()
     100.times { |i| log("#{i} "+ ("*"*(i+1))) }
-	dialog("Dialog tests") {
-		stack {
-			labeli "  alert, prompt, file chosser and log  "
-			c={width: 200,height: 40,font: "Arial old 12"}
-			log("")
-			button("alert", c)         { alert("alert is ok?") }
-			button("ask", c)           { log ask("alert is ok?") }
-			button("prompt", c)        { log prompt("test prompt()!\nveuillezz saisir un text de lonqueur \n plus grande que trois") { |reponse| reponse && reponse.size>3 }}
-			button("file Exist",c)     { log ask_file_to_read(".","*.rb") }
-			button("file new/Exist",c) { log ask_file_to_write(".","*.rb") }
-			button("Dir existant",c)   { log ask_dir_to_read(".") }
-			button("Dir new/Exist",c)  { log ask_dir_to_write(".") }
-			button("Timeline",c)  { do_timeline() }
-		}
-	}
+    dialog("Dialog tests") do
+      stack do
+        labeli "  alert, prompt, file chosser and log  "
+        c={width: 200,height: 40,font: "Arial old 12"}
+        button("Dialog",c) {
+          @std=nil
+          @std=dialog_async "test dialog" do
+            stack {
+              a=text_area(300,200)
+              a.text="ddd dd ddd ddd dd\n ddd"*200
+              separator
+              flowi{ button("ddd") {@std.destroy}; button("aaa") {@std.destroy}}
+            }
+          end
+        }
+
+        button("alert", c)         { alert("alert is ok?") }
+        button("ask", c)           { log ask("alert is ok?") }
+        button("prompt", c)        { log prompt("test prompt()!\nveuillezz saisir un text de lonqueur \n plus grande que trois") { |reponse| reponse && reponse.size>3 }}
+        button("file Exist",c)     { log ask_file_to_read(".","*.rb") }
+        button("file new/Exist",c) { log ask_file_to_write(".","*.rb") }
+        button("Dir existant",c)   { log ask_dir_to_read(".") }
+        button("Dir new/Exist",c)  { log ask_dir_to_write(".") }
+        button("dialog...") do
+          dialog("title") {
+            stack  { 
+              fields([["prop1","1"],["prop1","2"],["properties1","3"]]) {|*avalues| alert(avalues.join(", "))}
+              separator
+            }
+          }
+        end
+        button("dialog async...") do
+          dialog_async("title",:response=> proc { ask("ok") }) {
+            stack  { 
+              label "without validations.."
+              fields([["prop1","1"],["prop1","2"],["properties1","3"]]) 
+              separator
+            }
+          }
+        end        
+        button("Timeline",c)  { do_timeline() }
+      end
+    end
   end
   def do_timeline()
-	dialog("ruiby/gtk startup timestamps") do
-		lline=[[10  ,180]]
-		ltext=[]
-		xmin, xmax= $mlog.first[0], $mlog.last[0]
-		a,b,ot = (400.0-20)/(xmax-xmin) , 10.0 , 0
-		$mlog.each_with_index {|(time,text),i|
-			pos=a*time+b
-			h=50+i*15
-			lline << [pos,180] ;lline << [pos,h] ;lline << [pos,180]
-			ltext << [[pos+5,h],text+ "(#{time-ot} ms)"]
-			ot=time
-		}
-		
-		labeli("Total time : #{xmax} milliseconds")
-		canvas(500,200,{ 
-				:expose     => proc { |w,cr|  
-					color=::Gdk::Color.parse("#774433")
-					ep=2
-					pt0,*poly=*lline
-					cr.set_line_width(ep)
-					cr.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
-					cr.move_to(*pt0)
-					poly.each {|px| cr.line_to(*px) } 
-					cr.stroke  
-					ltext.each { |(pos,text)| 
-						cr.move_to(*pos)
-						cr.show_text(text) 
-					}
-				}
-		});          
-	end
+    dialog("ruiby/gtk startup timestamps") do
+      lline=[[10  ,180]]
+      ltext=[]
+      xmin, xmax= $mlog.first[0], $mlog.last[0]
+      a,b,ot = (400.0-20)/(xmax-xmin) , 10.0 , 0
+      $mlog.each_with_index {|(time,text),i|
+        pos=a*time+b
+        h=50+i*15
+        lline << [pos,180] ;lline << [pos,h] ;lline << [pos,180]
+        ltext << [[pos+5,h],text+ "(#{time-ot} ms)"]
+        ot=time
+      }
+      labeli("Total time : #{xmax} milliseconds")
+      canvas(500,200,{ 
+          :expose     => proc { |w,cr|  
+            color=::Gdk::Color.parse("#774433")
+            ep=2
+            pt0,*poly=*lline
+            cr.set_line_width(ep)
+            cr.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
+            cr.move_to(*pt0)
+            poly.each {|px| cr.line_to(*px) } 
+            cr.stroke  
+            ltext.each { |(pos,text)| 
+              cr.move_to(*pos)
+              cr.show_text(text) 
+            }
+          }
+      });          
+    end
   end
-# endcomponent
+# end component()
 end
 # test autoload plugins
 Exemple.new
