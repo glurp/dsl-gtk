@@ -1,4 +1,8 @@
-0.92.1
+0.92.2
+    test.rb : switch to gtk3
+    color.rb : dialogs tests
+    ruiby_dsl3.rb : fields better
+    ruiby_default_dialog3.rb : MessageDialog gtk3 style
     benchi.rb : error trap
 0.92.0 : 2013-06-13 15:59:01 +0200
     Ruiby.gemspec : homepage, licenses
