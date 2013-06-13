@@ -5,6 +5,7 @@
 # select * from netstat join tasklist where *.to_s like '%1%'    ;)
 ################################################################################
 raise("not windows!") unless RUBY_PLATFORM =~ /in.*32/
+require 'gtk3'
 require_relative '../lib/ruiby'
 
 $fi=ARGV[0] || "LISTENING"
