@@ -22,7 +22,7 @@
 require 'tmpdir'
 require 'thread'
 require 'pathname'
-require 'gtk2' if ! defined?(Gtk) # caller can preload  gtk3, at his own risk...
+require 'gtk3' if ! defined?(Gtk) # caller can preload  gtk3/gtk2, at his own risk...
 
 #require 'gtksourceviewX' # done by source_editor() tag, so only if source edit is needed
 
