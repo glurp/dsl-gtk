@@ -25,7 +25,7 @@ class RubyApp < Ruiby_gtk
 			@change=true
 			c=@ed[no]
 			dref=Time.new(c.year,c.month+1,c.day)-(30*24*3600)*no
-			@ed.each_with_index { |c,i| calendar_set_time(c,dref+i*(30*24*3600)) }
+			@ed.each_with_index { |c,i| c.set_time(dref+i*(30*24*3600)) }
 			@change=false
 		end
 	end
