@@ -1,3 +1,7 @@
+0.94.1
+    cal.rb : gtk3
+    ruiby.rb : gtk3 default
+0.94.0 : 2013-06-13 23:35:24 +0200
     test_basics_widget.rb : fileds size
 0.93.0 : 2013-06-13 20:32:34 +0200
     test.rb : switch to gtk3
