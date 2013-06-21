@@ -23,11 +23,11 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 0.90.0 !!  (16-05-2013)
-- Treeview (not finished)
-- Migration to gtk3 :almost finish
+NEW : 0.95.0 !!  (21-06-2013)
 - EventMachine integration (main loop by EM.run if EM is present)
 - ruiby_demo3 ; ruiby_skechi fixes (preload gtk3 before Ruiby)
+- gtk3 by default
+- tools samples/canvas.rb : online drawing by programming...
 
 TODO for 1.0 :
 - resolve 100% gtk3 deprecated warning
