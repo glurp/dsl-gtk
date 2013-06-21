@@ -1,4 +1,6 @@
-0.94.1
+0.95.1
+    README.md : update for canvas.rb
+0.95.0 : 2013-06-18 22:05:41 +0200
     cal.rb : gtk3
     ruiby.rb : gtk3 default
 0.94.0 : 2013-06-13 23:35:24 +0200
