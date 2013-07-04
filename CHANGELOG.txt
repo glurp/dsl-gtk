@@ -1,4 +1,28 @@
-0.97.1
+0.98.1
+    rspec_helper.rb : R
+    tree.rb : R
+    tilesviewer.rb : R
+    testth.rb : R
+    test_systray.rb : R
+    test_include.rb : R
+    test_gtk2.rb : R
+    test.rb : R
+    table2.rb : R
+    spygui.rb : R
+    sketchi.rb : R
+    paned.rb : R
+    netprog.rb : R
+    multi_window_threading.rb : R
+    images.rb : R
+    hello.rb : R
+    editor.rb : R
+    dialogs.rb : R
+    color.rb : R
+    canvas.rb : R
+    cal.rb : R
+    benchi.rb : R
+    accordion.rb : no
+0.98.0 : 2013-07-04 16:17:52 +0200
     Ruiby.gemspec : pres
 0.97.0 : 2013-07-04 16:15:39 +0200
     README.md : gtk3 and capitalisation of Ruiby
