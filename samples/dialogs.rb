@@ -1,7 +1,7 @@
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
 
-require_relative '../lib/ruiby'
+require_relative '../lib/Ruiby'
 
 def test_dialogues()
 	$gheader=%w{id first-name last-name age str}
