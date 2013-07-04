@@ -3,7 +3,7 @@
 
 # show all raster file which names are in  ARGV
 # First example of a Ruiby.app
-require_relative '../lib/ruiby'
+require_relative '../lib/Ruiby'
 
 if ARGV.size==0
 	Message.alert("Usage\n>ruby   images.rb    raster.png   raster.gif ....")
