@@ -8,7 +8,7 @@
 #####################################################################
 # encoding: utf-8
 require 'gtk3'
-require_relative '../lib/ruiby'
+require_relative '../lib/Ruiby'
 
 class RubyApp < Ruiby_gtk
     def initialize
