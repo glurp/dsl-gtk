@@ -6,7 +6,7 @@
 ################################################################################
 raise("not windows!") unless RUBY_PLATFORM =~ /in.*32/
 require 'gtk3'
-require_relative '../lib/ruiby'
+require_relative '../lib/Ruiby'
 
 $fi=ARGV[0] || "LISTENING"
 $filtre=Regexp.new($fi)
