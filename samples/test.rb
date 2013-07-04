@@ -12,7 +12,7 @@ def mlog(text)
 end
 
 mlog 'require gtk3...'     ; require 'gtk3' 
-mlog 'require ruiby....'   ; require_relative '../lib/ruiby' ; mlog 'require ruiby done.'
+mlog 'require ruiby....'   ; require_relative '../lib/Ruiby' ; mlog 'require ruiby done.'
 
 class RubyApp < Ruiby_gtk
     def initialize
