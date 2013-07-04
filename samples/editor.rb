@@ -6,7 +6,7 @@
 #  editor.rb : simple text (ruby) editor in Ruiby
 #####################################################################
 # encoding: utf-8
-require_relative '../lib/ruiby'
+require_relative '../lib/Ruiby'
 
 
 class RubyApp < Ruiby_gtk
