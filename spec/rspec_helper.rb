@@ -8,7 +8,7 @@
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require 'gtk3'
-require 'ruiby'
+require 'Ruiby'
 require 'timeout'
 $here=File.dirname(__FILE__)
 
