@@ -11,7 +11,7 @@
 #    this show zomm level 18, with utilization of tiles raster of zoom level 15
 #
 ####################################################################################
-require_relative '../lib/ruiby'
+require_relative '../lib/Ruiby'
 
 if ARGV.size<3
 	Message.alert("Usage\n>ruby #{$0}.rb  pathToTiles zoomLevel-examine  zommLevel-show")
