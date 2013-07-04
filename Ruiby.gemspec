@@ -37,20 +37,17 @@ EEND
       s.add_dependency(name, version)
     end
   end
-  s.post_install_message = <<TTEXT
+  s.post_install_message = <<-TTEXT
 
-      -------------------------------------------------------------------------------
+  -------------------------------------------------------------------------------
 
       Hello, welcome to Ruiby....
 
-        $ ruiby_demo    # test with gtk2
-        $ ruiby_demo3   # test with gtk3 , experimental !
-        
-        $ ruiby -width 200 -height 100 "chrome(false); button 'Welcome' do exit!(0) end "
-        
+        $ ruiby_demo    # test with gtk3        
+        $ ruiby -width 200 -height 100 "chrome(false); button 'Welcome' do exit!(0) end "        
         $ ruiby_sketchi  # write and test ruiby gui
 
-      -------------------------------------------------------------------------------
-TTEXT
+   -------------------------------------------------------------------------------
+   TTEXT
 end
 
