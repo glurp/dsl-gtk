@@ -1,4 +1,4 @@
-require_relative '../lib/ruiby'
+require_relative '../lib/Ruiby'
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
 
