@@ -3,7 +3,7 @@
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
 
-require_relative '../lib/ruiby'
+require_relative '../lib/Ruiby'
 
 Thread.abort_on_exception=true
 class RubyApp < Ruiby_gtk
