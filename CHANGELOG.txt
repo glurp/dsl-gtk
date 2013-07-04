@@ -1,3 +1,5 @@
+0.96.2
+    README.md : gtk3 and capitalisation of Ruiby
 0.96.1
 0.96.0 : 2013-06-21 19:14:26 +0200
     README.md : update for canvas.rb
