@@ -1,12 +1,12 @@
 # Ruiby [![Build Status](https://secure.travis-ci.org/raubarede/Ruiby.png?branch=master)](http://travis-ci.org/raubarede/Ruiby) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/raubarede/Ruiby) [![Dependency Status](http://www.versioneye.com/package/Ruiby/badge.png)](http://www.versioneye.com/package/Ruiby)
 
-A DSL for building simple GUI (gtk) ruby application rapidly.
+A DSL for building simple GUI (gtk) ruby application quickly.
 Based on gtk.
 
 If your application become bigger and bigger: 
 
-* use gtk directly by Ruiby extensions: write your gtk code, call it by define a new Ruiby word
-* switch to glade/visualruby
+* use gtk directly by Ruiby extensions: write your gtk code, call it by define a new Ruiby word, add to plugin directory
+* switch to glade / visualruby
 
 Riuby is very cool for application which dynamicly build HMI from  data structure.
 
@@ -23,11 +23,12 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 0.95.0 !!  (21-06-2013)
+NEW : 0.96.0 !!  04-07-2013)
 - EventMachine integration (main loop by EM.run if EM is present)
 - ruiby_demo3 ; ruiby_skechi fixes (preload gtk3 before Ruiby)
 - gtk3 by default
 - tools samples/canvas.rb : online drawing by programming...
+- rename ruiby.rb to Ruiby.rb for *ix require 'Ruiby'
 
 TODO for 1.0 :
 - resolve 100% gtk3 deprecated warning
@@ -43,37 +44,21 @@ Installation
 
 Install Ruby 1.9 or 2.0.x
 
-Install GTK2/GTK3 :
-
-*	linux: should be in the box... or install gtk2 and gtksourceview2 (dev version) :
-
-(debian example)
-```
-> sudo apt-get install build-essential
-> sudo apt-get install libgtk2.0-dev 
-> sudo apt-get install gtksourceview2.0
-> sudo apt-get install  libgtk-3-dev
-> sudo apt-get install gtksourceview3
-```
-
-*	windows:
-> http://downloads.sourceforge.net/project/gtk-win/   
->        ==>> gtk2-runtime-2.24.10-*-ash.exe
-> 
 
 2) install Ruiby
+(ruiby install ruby-gtk3 which install gtk3 libs)
 
 ```
 > gem update --system    # gem 2.0.3
 > gem install Ruiby
-> ruiby_demo             # check good installation with gtk2 (default)
-> ruiby_demo3            # check good installation with gtk3 (experimental)
+> ruiby_demo             # check good installation with gtk3 (default)
 > ruiby_sketchi          # write and test ruiby code
 ```
 
 NOTA
-We must correct the capitalization of Ruiby...
-GTK3 give some instability.
+GTK3 give some instability : 
+*  dialog window resize scratch on windows
+*  many deprecated messages on stdout
 
 
 Usage
