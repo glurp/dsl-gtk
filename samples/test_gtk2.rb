@@ -13,7 +13,7 @@ end
 mlog 'before require gtk2'
 require 'gtk2' 
 mlog 'before require ruiby'
-require_relative '../lib/ruiby'
+require_relative '../lib/Ruiby'
 mlog 'after require ruiby'
 Gem.loaded_specs.each {|name,gem| puts "  #{gem.name}-#{gem.version}"}
 
