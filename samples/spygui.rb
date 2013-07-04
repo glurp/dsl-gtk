@@ -11,7 +11,7 @@
 #########################################################################################################
 require 'gtk3'
 require 'em-proxy'
-require_relative '../lib/ruiby'
+require_relative '../lib/Ruiby'
 #require 'Ruiby'
 require 'logger'
 
