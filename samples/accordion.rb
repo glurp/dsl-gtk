@@ -3,7 +3,7 @@
 
 #!/usr/bin/ruby
 # encoding: utf-8
-require_relative '../lib/ruiby'
+require_relative '../lib/Ruiby'
 
 Thread.abort_on_exception=true
 
