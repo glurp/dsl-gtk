@@ -9,7 +9,7 @@
 #
 # Author : Regis d'Aubarede, @ Actemium
 #
-require_relative '../lib/ruiby'
+require_relative '../lib/Ruiby'
 require 'timeout'
 
 $global=binding
