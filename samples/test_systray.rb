@@ -3,7 +3,7 @@
 #####################################################################################
 #          test_systray.rb : tst systray & style
 #####################################################################################
-require_relative  '../lib/ruiby' 
+require_relative  '../lib/Ruiby' 
 
 HAPPY_ICON   ="media/face_smile_big.png"
 Thread.abort_on_exception=true
