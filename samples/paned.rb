@@ -6,7 +6,7 @@
 #  panned.rb : IDE ruiby :) test paned h/v
 #####################################################################
 # encoding: utf-8
-require_relative '../lib/ruiby'
+require_relative '../lib/Ruiby'
 
 
 class RubyApp < Ruiby_gtk
