@@ -7,7 +7,7 @@
 # windows : ok with gtk3, nol with gtk2
 
 require 'gtk3' if ARGV.size==1 
-require_relative '../lib/ruiby'
+require_relative '../lib/Ruiby'
 
 Ruiby.app title: "Color test for button/label" do
     a=nil
