@@ -1,11 +1,13 @@
 #!/usr/bin/ruby
 # encoding: utf-8
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
 ###########################################################
 #   multi_window_threading.rb : 
 #             test threading :
 #             gui_invoke() and gui_invoke_in_window()
 ###########################################################
-require_relative '../lib/ruiby'
+require_relative '../lib/Ruiby'
 
 def run(lapp) 
 	loop {
