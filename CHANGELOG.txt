@@ -1,4 +1,6 @@
-0.96.2
+0.97.1
+    Ruiby.gemspec : pres
+0.97.0 : 2013-07-04 16:15:39 +0200
     README.md : gtk3 and capitalisation of Ruiby
 0.96.1
 0.96.0 : 2013-06-21 19:14:26 +0200
