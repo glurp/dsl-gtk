@@ -46,7 +46,7 @@ EEND
         $ ruiby_demo    # test with gtk3        
         $ ruiby -width 200 -height 100 "chrome(false); button 'Welcome' do exit!(0) end "        
         $ ruiby_sketchi  # write and test ruiby gui
-        $ ruiby_canvas   # write and test draowing code
+        $ ruiby_canvas   # write and test drawing code
 
    -------------------------------------------------------------------------------
    TTEXT
