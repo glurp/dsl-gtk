@@ -1,4 +1,6 @@
-0.98.1
+0.99.1
+    canvas.rb : look
+0.99.0 : 2013-07-04 19:18:56 +0200
     rspec_helper.rb : R
     tree.rb : R
     tilesviewer.rb : R
