@@ -1,4 +1,6 @@
-0.101.1
+0.102.1
+    Ruiby.gemspec : canvas
+0.102.0 : 2013-07-05 19:45:55 +0200
     test.rb : elative
     Rakefile.rb : re
 0.101.0 : 2013-07-05 19:41:34 +0200
