@@ -1,4 +1,7 @@
-0.100.1
+0.101.1
+    test.rb : elative
+    Rakefile.rb : re
+0.101.0 : 2013-07-05 19:41:34 +0200
     test.rb : relative
 0.100.0 : 2013-07-05 19:35:14 +0200
     canvas.rb : look
