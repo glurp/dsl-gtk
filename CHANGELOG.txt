@@ -1,4 +1,6 @@
-0.102.1
+0.103.1
+    Ruiby.gemspec : add ruiby_canvas bin command
+0.103.0 : 2013-07-05 19:48:53 +0200
     Ruiby.gemspec : canvas
 0.102.0 : 2013-07-05 19:45:55 +0200
     test.rb : elative
