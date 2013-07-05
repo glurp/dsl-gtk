@@ -1,0 +1,7 @@
+#!/usr/bin/ruby
+#####################################################
+#  run Ruiby/samples/canvas.rb : prgramm for drawing
+#######################################################
+require 'Ruiby'
+Dir.chdir(File.join(Ruiby::DIR,"..","samples"))
+load 'canvas.rb'
