@@ -1,12 +1,10 @@
 #!/usr/bin/ruby
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
-
 #####################################################################
 #  canvas.rb : edit/test drowing code
 #####################################################################
 # encoding: utf-8
-require 'gtk3'
 require 'timeout'
 require_relative '../lib/Ruiby'
 
@@ -54,7 +52,7 @@ end
 			)) 
 			stack {
 				flow do 
-				  stack {
+				  stacki {
 						@title=sloti(label("Edit"))
 						@edit=source_editor(:lang=> "ruby", :font=> "Courier new 12").editor
 						sloti(button("Test...") { execute() })
@@ -68,8 +66,7 @@ end
 				end
 				notebook do 
 					page("Error") { @error_log=slot(text_area(600,100,{:font=>"Courier new 10"})) }
-					page("Help") { make_help(slot(text_area(600,100,{:font=>"Courier new 10"}))) }
-					page("Ruiby API") { make_api(slot(text_area(600,100,{:font=>"Courier new 10"}))) }
+					page("Canvas Help") { make_help(slot(text_area(600,100,{:font=>"Courier new 10"}))) }
 				end
 			}
 		end
@@ -127,6 +124,16 @@ plot_xyft(t0,step) { |t| t=Math::PI/(t/700) ; [fx(x),fy(t)] }
   draw a parametric curve 
 text(x,y,"Hello")
   draw a text
+
+Examples
+
+0.step(100,10) { |x| pt( rand*x, rand*x ,"#000",4)
+line([ [0,0],[100,0],[100,100],[0,1000],[50,50],[0,0]],"#FF0000",4)
+
+axes(20,800,800,20,10)
+plot_yfx(10,3) { |x| 20+100+100*Math.sin(Math::PI*x/40)}
+  
+  
 EEND
 	end
 	def make_example(ta)
