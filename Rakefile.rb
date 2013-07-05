@@ -198,7 +198,7 @@ task :test do
 	 cd ".."
 	 mkdir "#{NAME}Test" unless File.exists?("#{NAME}Test")
 	 nname="#{NAME}Test/test.rb"
-	 content=File.read("#{NAME}/samples/test.rb").gsub(/^\s*require_relative/,"require").gsub('../lib/','')
+	 content=File.read("#{NAME}/samples/test.rb").gsub(/require_relative/," require").gsub('../lib/','')
 	 File.open(nname,"w") { |f| f.write(content) }
 	 sh "gem install #{FileList["#{NAME}/#{NAME}*.gem"][-1]}"
 	 ruby nname rescue nil
