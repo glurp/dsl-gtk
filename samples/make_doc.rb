@@ -11,30 +11,40 @@ html=<<EEND
 <head>
 <title>Ruiby DSL doc</title>
 <style>
-body { margin: 0px;}
-.title{font-size:33;color:white; padding:10px 100px 10px 100px;margin-bottom:20px;
-background: #5e8077;background: linear-gradient(to bottom, #606060 0%%,#808080 100%%);   
-box-shadow: 0px 2px 11px 2px #000; }
-.atitle {
-  font: 17px arial,sans-serif;         
-  background: #5e8077;
-  color:white; padding:5px 10px 4px 5px;margin-bottom:20px;
-  background: linear-gradient(to right, #606060 0%%,#808080 100%%);   
-  border-radius: 10px 10px ;
-  box-shadow: 2px 2px 6px 1px #000; 
-  margin-left:3px;margin-right:70px;
-  padding-left: 30px
-}
-.api    {font: 18px courier; background: #F0F0A0; color: black;margin-left:3px;margin-right:50px;padding:4px}
-.descr  {font: 15px arial,sans-serif; background: #FFF; color: black;margin: 10px 0 30px 3px;
-padding: 5px;}
-a.l { color: #303030 ;  text-decoration:none ;}
-a:link { }     
-a:visited {}
-a:hover {text-decoration: underline ;}
-a:active {color: #0000FF}
-.a {float: left;	width: 150px;}
-	</style>
+  body { margin: 0px;}
+  .title {font-size:33;color:white; padding:10px 100px 10px 100px;margin-bottom:20px;
+  background: #5e8077;background: linear-gradient(to bottom, #606060 0%%,#808080 100%%);   
+  box-shadow: 0px 2px 11px 2px #000; }
+  .atitle {
+    font: 17px arial,sans-serif;         
+    background: #5e8077;
+    color:white; padding:5px 10px 4px 5px;margin-bottom:20px;
+    background: linear-gradient(to right, #606060 0%%,#808080 100%%);   
+    border-radius: 10px 10px ;
+    box-shadow: 2px 2px 6px 1px #000; 
+    margin-left:3px;margin-right:70px;
+    padding-left: 30px
+  }
+  .api    {font: 18px courier; background: #F0F0A0; color: black;margin-left:3px;margin-right:50px;padding:4px}
+  .code    {font: 18px courier; background: #FFFFFF; color: black;margin-left:3px;margin-right:50px;padding:4px}
+  .descr  {
+    font: 15px arial,sans-serif; background: #FFF; color: black;margin: 10px 0 30px 3px;
+    padding: 5px;
+  }
+  a.l { color: #303030 ;  text-decoration:none ;}
+  a:link { }     
+  a:visited {}
+  a:hover {text-decoration: underline ;}
+  a:active {color: #0000FF}
+  .a {float: left;	width: 150px;}
+  #popup-div {
+    border-radius: 20px 20px ;
+    position: absolute;
+    visibility:hidden;
+    border : 2px solid black;
+    background: #FFFFF0;
+  }
+</style>
 
 <script>
 function doSearch(text) {
@@ -56,14 +66,34 @@ function doSearch(text) {
         }
     }
 }
+//================== popup data
+var hdoc={};
+
+%s
+
+//================ popup code
+
+function popup(word) {
+ if (! hdoc[word]) return;
+   
+ var node=document.getElementById('popup-txt');
+ node.innerHTML= hdoc[word];
+ node=document.getElementById('popup-div');
+ node.style.position ='fixed';
+ node.style.visibility ='visible';
+ node.style.left='25%%';
+ node.style.bottom='25%%';
+ node.style.width='50%%';
+ node.style.height='50%%';
+}
+
 </script>
  </head>
-
 <body>
-
 <div class='title'>Ruiby DSL Documentation</div>
 Ruiby Version: %s<br>
 Generated at : %s<br>
+<a href="#code">See code example</a>
 <hr>
 <center>Search : <input type='input' value="" size='80' onchange='doSearch(this.value);'></center>
 <hr>
@@ -77,8 +107,24 @@ Generated at : %s<br>
 <div style='-moz-column-count:2;-webkit-column-count:2;column-count:2;'>
 %s
 </div>
+<a name="code"></a>
+<div class="title">Code (from samples/test.rb)</div>
+<div class='code'>
+<pre><code>
+%s
+</code></pre>
+</div>
+
 <hr>
 <center>made by samples/make_doc.rb</center>
+
+<div id='popup-div'>
+ <div class='atitle'>
+    <input type='button' onclick="document.getElementById('popup-div').style.visibility='hidden';" value='X'>
+ </div>
+ <div id='popup-txt'></div>
+</div 
+
 </body>
 </html>
 EEND
@@ -122,21 +168,43 @@ def extract_doc_dsl()
   }
   hdoc
 end
+
 def make_anchor(word)
    ret="<a href='##{word}'>#{word}</a>"
    ret
+end
+
+def make_popup(word)
+   ret="<a href='javascript:popup(\"#{word}\");'>#{word}</a>"
+   ret
+end
+
+def make_example(hdoc)
+  src=File.dirname(__FILE__)+"/test.rb"
+  content=File.read(src)
+  code= 'component()' + content.split('component()')[1]
+  code=code.gsub(/\w+/) { |word| (hdoc[word]) ? make_popup(word) : word}
+  code
+end
+def make_hdoc(hdoc)
+ hdoc.map {|w,v|  "hdoc['%s']= '<div class=\"api\"><br>%s</div><div>%s</div>';"  % [w,v[2],v[3].gsub("'","")]}.join("\n")
 end
 ########################## M A I N ###############################
 
 hdoc=extract_doc_dsl()
 table=hdoc.keys.sort.select {|a| (a !~ /\./) }.map { |name| htable % [name,name]}.join(" ")
 lapis=hdoc.keys.sort.select {|a| (a !~ /\./) }.map {  |k|  hitem % hdoc[k] }
+dico_hdoc=make_hdoc(hdoc)
+test=make_example(hdoc)
+
 api1=lapis.join("\n")
 content=html % [
+  dico_hdoc,
 	File.read("#{File.dirname(__FILE__)}/../VERSION"),
 	Time.now.to_s,
 	table,
-	api1
+	api1,
+  test
 ]
 
 output="#{File.dirname(__FILE__)}/../doc.html"
