@@ -1,4 +1,6 @@
-0.104.1
+0.105.1
+    canvas.rb : default color forr text item
+0.105.0 : 2013-07-09 18:32:48 +0200
     make_doc.rb : code ex
     doc.html : code example with popup asist
     Ruiby.gemspec : add gtk2 dependencie
