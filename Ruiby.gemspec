@@ -15,6 +15,7 @@ A DSL for building simple GUI ruby application rapidly.
 EEND
   
   dependencies = [
+    [:runtime,     "gtk2"],
     [:runtime,     "gtk3"],
     [:runtime, "gtksourceview3"]
 	]
