@@ -187,6 +187,8 @@ EEND
     line(l)
   end
   def text(x,y,text)
+    $ctx.set_line_width(1)
+    $ctx.set_source_rgba(0, 0 ,0, 1)
     $ctx.move_to(x,y)
     $ctx.show_text(text)
   end
