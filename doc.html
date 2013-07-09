@@ -3,30 +3,40 @@
 <head>
 <title>Ruiby DSL doc</title>
 <style>
-body { margin: 0px;}
-.title{font-size:33;color:white; padding:10px 100px 10px 100px;margin-bottom:20px;
-background: #5e8077;background: linear-gradient(to bottom, #606060 0%,#808080 100%);   
-box-shadow: 0px 2px 11px 2px #000; }
-.atitle {
-  font: 17px arial,sans-serif;         
-  background: #5e8077;
-  color:white; padding:5px 10px 4px 5px;margin-bottom:20px;
-  background: linear-gradient(to right, #606060 0%,#808080 100%);   
-  border-radius: 10px 10px ;
-  box-shadow: 2px 2px 6px 1px #000; 
-  margin-left:3px;margin-right:70px;
-  padding-left: 30px
-}
-.api    {font: 18px courier; background: #F0F0A0; color: black;margin-left:3px;margin-right:50px;padding:4px}
-.descr  {font: 15px arial,sans-serif; background: #FFF; color: black;margin: 10px 0 30px 3px;
-padding: 5px;}
-a.l { color: #303030 ;  text-decoration:none ;}
-a:link { }     
-a:visited {}
-a:hover {text-decoration: underline ;}
-a:active {color: #0000FF}
-.a {float: left;	width: 150px;}
-	</style>
+  body { margin: 0px;}
+  .title {font-size:33;color:white; padding:10px 100px 10px 100px;margin-bottom:20px;
+  background: #5e8077;background: linear-gradient(to bottom, #606060 0%,#808080 100%);   
+  box-shadow: 0px 2px 11px 2px #000; }
+  .atitle {
+    font: 17px arial,sans-serif;         
+    background: #5e8077;
+    color:white; padding:5px 10px 4px 5px;margin-bottom:20px;
+    background: linear-gradient(to right, #606060 0%,#808080 100%);   
+    border-radius: 10px 10px ;
+    box-shadow: 2px 2px 6px 1px #000; 
+    margin-left:3px;margin-right:70px;
+    padding-left: 30px
+  }
+  .api    {font: 18px courier; background: #F0F0A0; color: black;margin-left:3px;margin-right:50px;padding:4px}
+  .code    {font: 18px courier; background: #FFFFFF; color: black;margin-left:3px;margin-right:50px;padding:4px}
+  .descr  {
+    font: 15px arial,sans-serif; background: #FFF; color: black;margin: 10px 0 30px 3px;
+    padding: 5px;
+  }
+  a.l { color: #303030 ;  text-decoration:none ;}
+  a:link { }     
+  a:visited {}
+  a:hover {text-decoration: underline ;}
+  a:active {color: #0000FF}
+  .a {float: left;	width: 150px;}
+  #popup-div {
+    border-radius: 20px 20px ;
+    position: absolute;
+    visibility:hidden;
+    border : 2px solid black;
+    background: #FFFFF0;
+  }
+</style>
 
 <script>
 function doSearch(text) {
@@ -48,14 +58,200 @@ function doSearch(text) {
         }
     }
 }
+//================== popup data
+var hdoc={};
+
+hdoc['initialize']= '<div class="api"><br>initialize(title,w,h)</div><div>Creative Commons BY-SA :  Regis dAubarede <regis.aubarede@gmail.com><br>LGPL<br><br>windows.rb : main ruiby windows  <br><br></div>';
+hdoc['component']= '<div class="api"><br>component)</div><div></div>';
+hdoc['update']= '<div class="api"><br>update(data)</div><div></div>';
+hdoc['button_list']= '<div class="api"><br>button_list()</div><div></div>';
+hdoc['wtree']= '<div class="api"><br>wtree(w)</div><div></div>';
+hdoc['alert']= '<div class="api"><br>alert(*txt)</div><div>Creative Commons BY-SA :  Regis dAubarede <regis.aubarede@gmail.com><br>LGPL<br> Alerts<br>modal <a href=#popup>popup</a> with text (as html one!)<br></div>';
+hdoc['error']= '<div class="api"><br>error(*txt)</div><div>modal <a href=#popup>popup</a> with text and/or ruby Exception.<br></div>';
+hdoc['prompt']= '<div class="api"><br>prompt(txt,value="")</div><div>show a modal dialogu, asking question, active bloc closure with text response<br></div>';
+hdoc['ask']= '<div class="api"><br>ask(*txt)</div><div>show a modal <a href=#dialog>dialog</a>, asking yes/no question, return boolean response<br></div>';
+hdoc['trace']= '<div class="api"><br>trace(*txt)</div><div>a warning <a href=#alert>alert</a><br></div>';
+hdoc['message']= '<div class="api"><br>message(style,*txt)</div><div></div>';
+hdoc['ask_color']= '<div class="api"><br>ask_color)</div><div><a href=#dialog>dialog</a> asking a color<br></div>';
+hdoc['edit']= '<div class="api"><br>edit(filename)</div><div> File Edit<br><a href=#dialog>dialog</a> showing code editor<br></div>';
+hdoc['ask_file_to_read']= '<div class="api"><br>ask_file_to_read(dir,filter)</div><div> File <a href=#dialog>dialog</a><br></div>';
+hdoc['ask_file_to_write']= '<div class="api"><br>ask_file_to_write(dir,filter)</div><div></div>';
+hdoc['ask_dir_to_read']= '<div class="api"><br>ask_dir_to_read(initial_dir=nil)</div><div></div>';
+hdoc['ask_dir_to_write']= '<div class="api"><br>ask_dir_to_write(initial_dir=nil)</div><div></div>';
+hdoc['dialog_chooser']= '<div class="api"><br>dialog_chooser(title, action, button)</div><div></div>';
+hdoc['self.alert']= '<div class="api"><br>self.alert(*txt)</div><div></div>';
+hdoc['self.error']= '<div class="api"><br>self.error(*txt)</div><div></div>';
+hdoc['self.ask']= '<div class="api"><br>self.ask(*txt)</div><div></div>';
+hdoc['self.prompt']= '<div class="api"><br>self.prompt(txt,value="")</div><div></div>';
+hdoc['stack']= '<div class="api"><br>stack(add1=true,&b)</div><div>container : vertical <a href=#box>box</a>, take all <a href=#space>space</a> available, sloted in parent by default<br></div>';
+hdoc['flow']= '<div class="api"><br>flow(add1=true,&b)</div><div>container : horizontal <a href=#box>box</a>, take all <a href=#space>space</a> available, sloted in parent by default<br></div>';
+hdoc['var_box']= '<div class="api"><br>var_box(sens,add1=true,&b)</div><div>container : vertical or horizontal <a href=#box>box</a> (<a href=#stack>stack</a>/<a href=#flow>flow</a>, choice by first argument), <br>sloted in parent by default<br></div>';
+hdoc['stacki']= '<div class="api"><br>stacki(add1=true,&b)</div><div>container : vertical <a href=#box>box</a>, take only necessary <a href=#space>space</a> , sloted in parent<br></div>';
+hdoc['flowi']= '<div class="api"><br>flowi(add1=true,&b)</div><div>container : horizontal <a href=#box>box</a>, take only necessary <a href=#space>space</a> , sloted in parent<br></div>';
+hdoc['var_boxi']= '<div class="api"><br>var_boxi(sens,add1=true,&b)</div><div>container : vertical or horizontal <a href=#box>box</a> (<a href=#stacki>stacki</a>/<a href=#flowi>flowi</a>, choice by first argument), <br>sloted in parent by default<br></div>';
+hdoc['box']= '<div class="api"><br>box()</div><div>box { } used for container which manage the widget (as <a href=#stack>stack</a>(false) {} ) <br>use it for <a href=#cell>cell</a> in <a href=#table>table</a> : <a href=#table>table</a> { <a href=#row>row</a> { <a href=#cell>cell</a>(box { });... };... }<br></div>';
+hdoc['center']= '<div class="api"><br>center()</div><div>center { }  container which center his content (auto-sloted)<br></div>';
+hdoc['frame']= '<div class="api"><br>frame(t="",add1=true,&b)</div><div>a <a href=#box>box</a> with border and texte title, take all <a href=#space>space</a><br></div>';
+hdoc['framei']= '<div class="api"><br>framei(t="",add1=true,&b)</div><div>a <a href=#box>box</a> with border and texte title, take only necessary <a href=#space>space</a><br></div>';
+hdoc['slot']= '<div class="api"><br>slot(w)</div><div>pack widget in parameter, share <a href=#space>space</a> with prother widget<br>this is the default: all widget will be sloted if they are not slotied<br>this is done by <a href=#attribs>attribs</a>(w) which is call <a href=#after>after</a> construction of almost all widget<br></div>';
+hdoc['sloti']= '<div class="api"><br>sloti(w)</div><div>pack widget in parameter, take only necessary <a href=#space>space</a><br></div>';
+hdoc['autoslot']= '<div class="api"><br>autoslot(w=nil)</div><div><a href=#slot>slot</a>() precedently created widget if not sloted.<br>this is done by <a href=#attribs>attribs</a>(w) which is call <a href=#after>after</a> construction of almost all widget<br></div>';
+hdoc['razslot']= '<div class="api"><br>razslot()</div><div>forget precedent wdget oconstructed<br></div>';
+hdoc['append_to']= '<div class="api"><br>append_to(cont,&blk)</div><div>append the result of bloc parameter to a contener (<a href=#stack>stack</a> or <a href=#flow>flow</a>)<br>thread protected<br>Usage : <br>@<a href=#stack>stack</a>= <a href=#stack>stack</a> {}<br>. . . . <br>append_to(@<a href=#stack>stack</a>) { <a href=#button>button</a>("Hello") }<br></div>';
+hdoc['clear']= '<div class="api"><br>clear(cont)</div><div>clear a containet (<a href=#stack>stack</a> or <a href=#flow>flow</a>)<br>thread protected<br></div>';
+hdoc['clear_append_to']= '<div class="api"><br>clear_append_to(cont,&blk)</div><div><a href=#clear>clear</a> a container (<a href=#stack>stack</a> or <a href=#flow>flow</a>) and append the result of bloc parameter to this<br>container<br>thread protected<br></div>';
+hdoc['show_all_children']= '<div class="api"><br>show_all_children(c)</div><div></div>';
+hdoc['slot_append_before']= '<div class="api"><br>slot_append_before(w,wref)</div><div>append the widget w before another one wref<br>thread protected<br></div>';
+hdoc['slot_append_after']= '<div class="api"><br>slot_append_after(w,wref)</div><div>append the widget w <a href=#after>after</a> anotherone wref)<br>thread protected<br></div>';
+hdoc['delete']= '<div class="api"><br>delete(w)</div><div>delete a widget or a timer<br>thread protected<br></div>';
+hdoc['get_current_container']= '<div class="api"><br>get_current_container()</div><div></div>';
+hdoc['get_config']= '<div class="api"><br>get_config(w)</div><div>get a Hash aff all <a href=#properties>properties</a> of a gtk widget<br></div>';
+hdoc['get_icon']= '<div class="api"><br>get_icon(name)</div><div> raster images access <br></div>';
+hdoc['get_stockicon_pixbuf']= '<div class="api"><br>get_stockicon_pixbuf(name)</div><div>Imageinitialize(:<a href=#label>label</a> => nil, :mnemonic => nil, :stock => nil, :size => nil)<br></div>';
+hdoc['get_image_from']= '<div class="api"><br>get_image_from(name)</div><div>get a Image widget from a file or from a Gtk::Stock<br><a href=#image>image</a> can be a filename or a predefined icon in GTK::Stock<br>for file <a href=#image>image</a>, whe can specify a sub <a href=#image>image</a> (sqared) :<br>filename.png[NoCol , NoRow]xSize<br>filename.png[3,2]x32 : extract a icon of 32x32 pixel size from third column/second line<br>see samples/draw.rb<br></div>';
+hdoc['get_pixbuf']= '<div class="api"><br>get_pixbuf(name)</div><div></div>';
+hdoc['attribs']= '<div class="api"><br>attribs(w,options)</div><div> Commands<br>common widget property  applied for (almost) all widget. <br>options are last argument of every dsl command, see <a href=#apply_options>apply_options</a><br></div>';
+hdoc['apply_options']= '<div class="api"><br>apply_options(w,options)</div><div>apply some styles  property  to an existing widget. <br>options are :size, :width; :height, :bg, :fg, :font<br>apply_options(w,:size=> [10,10], :width=>100;:heigh=>200,:bg=>FF00AA",:fg=> Gdk::Color:RED,:font=> "Tahoma bold 32")<br></div>';
+hdoc['color_conversion']= '<div class="api"><br>color_conversion(color)</div><div></div>';
+hdoc['widget_properties']= '<div class="api"><br>widget_properties(title=nil,w=nil)</div><div></div>';
+hdoc['separator']= '<div class="api"><br>separator(width=1.0)</div><div>create a bar (vertical or horizontal according to <a href=#stack>stack</a>/<a href=#flow>flow</a> current container) <br></div>';
+hdoc['label']= '<div class="api"><br>label(text,options={})</div><div>create  label, with text (or <a href=#image>image</a> if txt start with a )<br></div>';
+hdoc['labeli']= '<div class="api"><br>labeli(text,options={})</div><div></div>';
+hdoc['image']= '<div class="api"><br>image(file,options={})</div><div>create a icon with a raster file <br>option can specify a new size : :width and :height, or :size  (square image)<br></div>';
+hdoc['space']= '<div class="api"><br>space(n=1)</div><div>create a one-character size space, (or n character x n line space)<br></div>';
+hdoc['button']= '<div class="api"><br>button(text,option={},&blk)</div><div>create  button, with text (or <a href=#image>image</a> if txt start with a )<br>block argument is evaluate at button click<br></div>';
+hdoc['buttoni']= '<div class="api"><br>buttoni(text,option={},&blk)</div><div>create  <a href=#button>button</a>, with text (or <a href=#image>image</a> if txt start with a )<br>block argument is evaluate at <a href=#button>button</a> click, slotied :<br>packed without expand for share free place<br></div>';
+hdoc['htoolbar']= '<div class="api"><br>htoolbar(items,options={})</div><div>horizontal toolbar of icon <a href=#button>button</a> and/or <a href=#separator>separator</a><br>if icon name contain a /, second last is  tooltip text<br>Usage: <br>htoolbar(["text/tooltip", proc { },"<a href=#separator>separator</a>" => "", ....]<br></div>';
+hdoc['combo']= '<div class="api"><br>combo(choices,default=-1,option={})</div><div> Inputs widgets<br>combo <a href=#box>box</a>, decribe  with a Hash choice-text => value-of-choice<br></div>';
+hdoc['toggle_button']= '<div class="api"><br>toggle_button(text1,text2=nil,value=false,option={},&blk)</div><div>to state <a href=#button>button</a>, with text for each state and a initiale value<br>value can be read by w.active?<br>callback on state change with new value as argument<br></div>';
+hdoc['check_button']= '<div class="api"><br>check_button(text="",value=false,option={})</div><div>create a checked <a href=#button>button</a><br>no callback<br>state can be read by cb.active?<br></div>';
+hdoc['hradio_buttons']= '<div class="api"><br>hradio_buttons(ltext=["empty!"],value=-1)</div><div>as <a href=#vradio_buttons>vradio_buttons</a> , but horizontaly disposed<br></div>';
+hdoc['vradio_buttons']= '<div class="api"><br>vradio_buttons(ltext=["empty!"],value=-1)</div><div>create a liste of radio <a href=#button>button</a>, vertically disposed<br>value is the indice of active item (0..(n-1)) at creation time<br>define 2 methods:<br><li> get_selected          get indice of active radio-<a href=#button>button</a><br><li> set_selected(indice)  set indice of active radio-<a href=#button>button</a><br></div>';
+hdoc['entry']= '<div class="api"><br>entry(value,size=10,option={},&blk)</div><div>create a text entry for keyboard input<br>if block defined, it while be trigger on eech of (character) change of the entry<br></div>';
+hdoc['ientry']= '<div class="api"><br>ientry(value,option={},&blk)</div><div>create a integer text <a href=#entry>entry</a> for keyboed input<br>option must define :min :max :by for spin <a href=#button>button</a><br></div>';
+hdoc['fentry']= '<div class="api"><br>fentry(value,option={},&blk)</div><div>create a integer text <a href=#entry>entry</a> for keyboed input<br>option must define :min :max :by for spin <a href=#button>button</a><br></div>';
+hdoc['field']= '<div class="api"><br>field(tlabel,width,value,option={},&blk)</div><div>show a <a href=#label>label</a> and a <a href=#entry>entry</a> in a  <a href=#flow>flow</a>. entrey widget is returned<br>see <a href=#fields>fields</a>()<br></div>';
+hdoc['fields']= '<div class="api"><br>fields(alabel=[["nothing",""]],option={},&blk)</div><div>show a <a href=#stack>stack</a> of <a href=#label>label</a>/<a href=#entry>entry</a> and buttons validation/annulation<br>on <a href=#button>button</a>, bloc is invoked with the <a href=#list>list</a> of values of entrys<br></div>';
+hdoc['islider']= '<div class="api"><br>islider(value,option={},&b)</div><div>create a slider<br>option must define :min :max :by for spin <a href=#button>button</a><br>current value can be read by w.value<br>if bloc is given, it with be call on each change, with new value as parameter<br></div>';
+hdoc['color_choice']= '<div class="api"><br>color_choice(text=nil,options={},&cb)</div><div>create a <a href=#button>button</a> wich will show a <a href=#dialog>dialog</a> for color choice<br>if bloc is given, it with be call on each change, with new color value as parameter<br></div>';
+hdoc['canvas']= '<div class="api"><br>canvas(width,height,option={})</div><div>create a drawing area, for pixel draw<br>option can define closure :mouse_down :mouse_up :mouse_move<br>for interactive actions<br>see tst.rb fo little example<br>see samples/draw.rb for a little vector editor...<br></div>';
+hdoc['w.redraw']= '<div class="api"><br>w.redraw()</div><div></div>';
+hdoc['force_update']= '<div class="api"><br>force_update(canvas)</div><div><a href=#update>update</a> a <a href=#canvas>canvas</a><br></div>';
+hdoc['table']= '<div class="api"><br>table(nb_col,nb_row,config={})</div><div> table<br>create a container for table-disposed widgets. this is not a <a href=#grid>grid</a>!<br>table(r,c) { <a href=#row>row</a> { <a href=#cell>cell</a>(w) ; .. } ; ... }<br></div>';
+hdoc['row']= '<div class="api"><br>row()</div><div>create a row. must be defined in a <a href=#table>table</a> closure	<br>Closure argment should only contain <a href=#cell>cell</a>(s) call.<br>many <a href=#cell>cell</a> type are disponibles : <a href=#cell>cell</a> <a href=#cell_bottom>cell_bottom</a> <a href=#cell_hspan>cell_hspan</a> <a href=#cell_hspan_left>cell_hspan_left</a> <br><a href=#cell_hspan_right>cell_hspan_right</a> <a href=#cell_left>cell_left</a> <a href=#cell_pass>cell_pass</a> <a href=#cell_right>cell_right</a> <a href=#cell_span>cell_span</a> <a href=#cell_top>cell_top</a> <a href=#cell_vspan>cell_vspan</a> <br><a href=#cell_vspan_bottom>cell_vspan_bottom</a> <a href=#cell_vspan_top>cell_vspan_top</a><br>row do<br><a href=#cell>cell</a>( <a href=#label>label</a>("ee")) ; <a href=#cell_hspan>cell_hspan</a>(3, <a href=#button>button</a>("rr") ) }<br>end<br></div>';
+hdoc['cell']= '<div class="api"><br>cell(w)</div><div>a cell in a <a href=#row>row</a>/<a href=#table>table</a>. take all <a href=#space>space</a>, centered<br></div>';
+hdoc['cell_hspan']= '<div class="api"><br>cell_hspan(n,w)</div><div>a <a href=#cell>cell</a> in a <a href=#row>row</a>/<a href=#table>table</a>. take <a href=#space>space</a> of n cells, horizontaly<br></div>';
+hdoc['cell_vspan']= '<div class="api"><br>cell_vspan(n,w)</div><div>a <a href=#cell>cell</a> in a <a href=#row>row</a>/<a href=#table>table</a>. take <a href=#space>space</a> of n cells, verticaly<br></div>';
+hdoc['cell_hvspan']= '<div class="api"><br>cell_hvspan(n,m,w)</div><div>a <a href=#cell>cell</a> in a <a href=#row>row</a>/<a href=#table>table</a>. take <a href=#space>space</a> of n x m cells, horizontaly x verticaly <br></div>';
+hdoc['cell_pass']= '<div class="api"><br>cell_pass(n=1)</div><div>keep empty n <a href=#cell>cell</a> consecutive on current <a href=#row>row</a><br></div>';
+hdoc['cell_span']= '<div class="api"><br>cell_span(n=2,w)</div><div>a <a href=#cell>cell</a> in a <a href=#row>row</a>/<a href=#table>table</a>. take <a href=#space>space</a> of n cells, horizontaly<br></div>';
+hdoc['cell_left']= '<div class="api"><br>cell_left(w)</div><div>create a <a href=#cell>cell</a> in a <a href=#row>row</a>/<a href=#table>table</a>, left justified<br></div>';
+hdoc['cell_right']= '<div class="api"><br>cell_right(w)</div><div>create a <a href=#cell>cell</a> in a <a href=#row>row</a>/<a href=#table>table</a>, right justified<br></div>';
+hdoc['cell_hspan_left']= '<div class="api"><br>cell_hspan_left(n,w)</div><div>create a hspan_cell in a <a href=#row>row</a>/<a href=#table>table</a>, left justified<br></div>';
+hdoc['cell_hspan_right']= '<div class="api"><br>cell_hspan_right(n,w)</div><div>create a hspan_cell in a <a href=#row>row</a>/<a href=#table>table</a>, right justified<br></div>';
+hdoc['cell_top']= '<div class="api"><br>cell_top(w)</div><div>create a <a href=#cell>cell</a> in a <a href=#row>row</a>/<a href=#table>table</a>, top aligned<br></div>';
+hdoc['cell_bottom']= '<div class="api"><br>cell_bottom(w)</div><div>create a <a href=#cell>cell</a> in a <a href=#row>row</a>/<a href=#table>table</a>, bottom aligned<br></div>';
+hdoc['cell_vspan_top']= '<div class="api"><br>cell_vspan_top(n,w)</div><div>a <a href=#cell_vspan>cell_vspan</a> aligned on top<br></div>';
+hdoc['cell_vspan_bottom']= '<div class="api"><br>cell_vspan_bottom(n,w)</div><div>a <a href=#cell_vspan>cell_vspan</a> aligned on bottom<br></div>';
+hdoc['propertys']= '<div class="api"><br>propertys(title,hash,options={:edit=>false, :scroll=>[0,0]},&b)</div><div>deprecated: see <a href=#properties>properties</a><br></div>';
+hdoc['show_methods']= '<div class="api"><br>show_methods(obj=nil,filter=nil)</div><div>show methods of a object/class in <a href=#log>log</a> window<br></div>';
+hdoc['properties']= '<div class="api"><br>properties(title,hash,options={:edit=>false, :scroll=>[0,0]})</div><div>create a property shower/editor : vertical liste of <a href=#label>label</a>/<a href=#entry>entry</a> representing the ruby Hash content<br>Edition: Option: use :<a href=#edit>edit</a> => true for show value in text <a href=#entry>entry</a>, and a validate <a href=#button>button</a>, <br>on <a href=#button>button</a> action, yield of bloc parameter is done with modified Hash as argument<br>widget define set_data()methods for changing current value<br></div>';
+hdoc['widget.set_data']= '<div class="api"><br>widget.set_data(newh)</div><div></div>';
+hdoc['widget.get_data']= '<div class="api"><br>widget.get_data()</div><div></div>';
+hdoc['notebook']= '<div class="api"><br>notebook()</div><div> notebooks<br>create a notebook widget. it must contain <a href=#page>page</a>() wigget<br>notebook { <a href=#page>page</a>("first") { ... } ; ... }<br></div>';
+hdoc['page']= '<div class="api"><br>page(title,icon=nil)</div><div>a page widget. only for <a href=#notebook>notebook</a> container.<br><a href=#button>button</a> can be text or icone (if startin by , as <a href=#label>label</a>)<br></div>';
+hdoc['popup']= '<div class="api"><br>popup(w=nil)</div><div> Popup<br>create a dynamic popup. (shoud by calling in a closure)<br>opup block can be composed by <a href=#pp_item>pp_item</a> and <a href=#pp_separator>pp_separator</a><br>Exemple :<br>popup { <a href=#pp_item>pp_item</a>("text") { } ; pp_seperator ; <a href=#pp_item>pp_item</a>(Exit") { exit!(0)} ; ....}<br></div>';
+hdoc['pp_item']= '<div class="api"><br>pp_item(text,&blk)</div><div>a <a href=#button>button</a> in a <a href=#popup>popup</a><br></div>';
+hdoc['pp_separator']= '<div class="api"><br>pp_separator()</div><div>a bar <a href=#separator>separator</a> in a <a href=#popup>popup</a><br></div>';
+hdoc['menu_bar']= '<div class="api"><br>menu_bar()</div><div> Menu<br>create a application <a href=#menu>menu</a>. must contain <a href=#menu>menu</a>() {} :<br>menu_bar {<a href=#menu>menu</a>("F") {<a href=#menu_button>menu_button</a>("a") { } ; <a href=#menu_separator>menu_separator</a>; <a href=#menu_checkbutton>menu_checkbutton</a>("b") { |w|} ...}}<br></div>';
+hdoc['menu']= '<div class="api"><br>menu(text)</div><div>a vertial drop-down menu, only for <a href=#menu_bar>menu_bar</a> container<br></div>';
+hdoc['menu_button']= '<div class="api"><br>menu_button(text="?",&blk)</div><div>create an text <a href=#entry>entry</a> in a <a href=#menu>menu</a><br></div>';
+hdoc['menu_checkbutton']= '<div class="api"><br>menu_checkbutton(text="?",state=false,&blk)</div><div>create an checkbox  <a href=#entry>entry</a> in a <a href=#menu>menu</a><br></div>';
+hdoc['menu_separator']= '<div class="api"><br>menu_separator()</div><div></div>';
+hdoc['accordion']= '<div class="api"><br>accordion()</div><div> Accordion<br>create a accordion <a href=#menu>menu</a>. 	<br>must contain <a href=#aitem>aitem</a>() which must containe <a href=#alabel>alabel</a>() :<br>accordion { <a href=#aitem>aitem</a>(txt) { <a href=#alabel>alabel</a>(lib) { code }; ...} ... }<br></div>';
+hdoc['haccordion']= '<div class="api"><br>haccordion()</div><div>create a hoizontral <a href=#accordion>accordion</a> <a href=#menu>menu</a>. 	<br></div>';
+hdoc['aitem']= '<div class="api"><br>aitem(txt,&blk)</div><div>a <a href=#button>button</a> <a href=#menu>menu</a> in <a href=#accordion>accordion</a><br></div>';
+hdoc['alabel']= '<div class="api"><br>alabel(txt,&blk)</div><div>create e <a href=#entry>entry</a> in <a href=#button>button</a> associate vue af a <a href=#accordion>accordion</a> <a href=#menu>menu</a><br></div>';
+hdoc['stack_paned']= '<div class="api"><br>stack_paned(size,fragment,&blk)</div><div> Panned : <br>split current <a href=#frame>frame</a> in 2 panes<br>create a container which can containe 2 widgets, separated by movable bar<br>block invoked must return a array of 2 <a href=#box>box</a> wich will put in the 2 panes<br>vertivaly disposed<br></div>';
+hdoc['flow_paned']= '<div class="api"><br>flow_paned(size,fragment,&blk)</div><div>split current <a href=#frame>frame</a> in 2 panes<br>create a container which can containe 2 widgets, separated by movable bar<br>block invoked must return a array of 2 <a href=#box>box</a> wich will put in the 2 panes<br>horizonaly disposed<br></div>';
+hdoc['source_editor']= '<div class="api"><br>source_editor(args={})</div><div> source editor<br>a source_editor widget : text as showed in fixed font, colorized (default: ruby syntaxe)<br>from: green shoes plugin<br>options= :width  :height :on_change :lang :font<br>@<a href=#edit>edit</a>=source_editor().editor<br>@<a href=#edit>edit</a>.buffer.text=File.read(@filename)<br></div>';
+hdoc['text_area']= '<div class="api"><br>text_area(w=200,h=100,args={})</div><div>multiline <a href=#entry>entry</a><br>w=text_area(min_width,min_height,options) <br><br>Some binding are defined :<br><li> w.text_area          ; get text area widdget (w is a ScrolledWindow)<br><li> w.text=""            ; set content<br><li> puts w.text()        ; get content<br><li> w.append("data \n")  ; append conent to the end of current content<br><li> w.text_area.wrap_mode = :none/:word<br></div>';
+hdoc['calendar']= '<div class="api"><br>calendar(time=Time.now,options={})</div><div> calendar<br>Month Calendar with callback on month/year move and day selection :<br>calendar(Time.now-24*3600, :selection => proc {|day| } , :changed => proc {|widget| }<br>calendar respond to<br><li>	set_time(time)  ; set a selected date from a Time object<br><li>	get_time()		  ; return Time of selected day<br></div>';
+hdoc['video']= '<div class="api"><br>video(uri,w=300,h=200)</div><div> Video<br>from: green shoes plugin<br><li>*  not tested!	**<br></div>';
+hdoc['wid.video']= '<div class="api"><br>wid.video()</div><div></div>';
+hdoc['scrolled']= '<div class="api"><br>scrolled(width,height,&b)</div><div> Scrollable <a href=#stack>stack</a> container<br>create a Scrolled widget with a autobuild <a href=#stack>stack</a> in it<br><a href=#stack>stack</a> can be populated <br>respond to : scrooo_to_top; scroll_to_bottom,<br></div>';
+hdoc['vbox_scrolled']= '<div class="api"><br>vbox_scrolled(width,height,&b)</div><div></div>';
+hdoc['clickable']= '<div class="api"><br>clickable(method_name,&b)</div><div>specific to gtk : some widget like <a href=#label>label</a> cant support click event, so they must<br>be contained in a clickable parent (EventBox)<br><br>Exemple: clickable(:callback_click_name) { <a href=#label>label</a>(" click me! ") }<br><br>click callback  is definied by a method name.<br>see <a href=#pclickable>pclickable</a> for callback by closure.<br></div>';
+hdoc['pclickable']= '<div class="api"><br>pclickable(aproc,&b)</div><div><a href=#clickable>clickable</a> with callback by closure :<br>pclicakble(proc { <a href=#alert>alert</a>("e") }) { <a href=#alabel>alabel</a>("click me!") }<br></div>';
+hdoc['list']= '<div class="api"><br>list(title,w=0,h=0)</div><div> List<br>create a verticale liste of data, with scrollbar if necessary<br>define methods: <br><li>  list() : get (gtk)list widget embeded<br><li>  model() : get (gtk) model of the list widget<br><li>  <a href=#clear>clear</a>()  <a href=#clear>clear</a> content of the list<br><li>  set_data(array) : <a href=#clear>clear</a> and put new data in the list<br><li>  selected() : get the selected item (or nil)<br><li>  index() : get the index  of selected item (or nil)<br></div>';
+hdoc['scrolled_win.list']= '<div class="api"><br>scrolled_win.list()</div><div></div>';
+hdoc['scrolled_win.model']= '<div class="api"><br>scrolled_win.model()</div><div></div>';
+hdoc['scrolled_win.clear']= '<div class="api"><br>scrolled_win.clear()</div><div></div>';
+hdoc['scrolled_win.add_item']= '<div class="api"><br>scrolled_win.add_item(word)</div><div></div>';
+hdoc['scrolled_win.set_data']= '<div class="api"><br>scrolled_win.set_data(hdata,parent=nil,first=true)</div><div></div>';
+hdoc['scrolled_win.selection']= '<div class="api"><br>scrolled_win.selection()</div><div></div>';
+hdoc['scrolled_win.index']= '<div class="api"><br>scrolled_win.index()</div><div></div>';
+hdoc['grid']= '<div class="api"><br>grid(names,w=0,h=0)</div><div>create a grid of data (as <a href=#list>list</a>, but multicolumn)<br>use set_data() to put a 2 dimensions array of text<br>same methods as <a href=#list>list</a> widget<br>all columnes are String type<br></div>';
+hdoc['scrolled_win.grid']= '<div class="api"><br>scrolled_win.grid()</div><div></div>';
+hdoc['scrolled_win.add_row']= '<div class="api"><br>scrolled_win.add_row(words)</div><div></div>';
+hdoc['scrolled_win.get_data']= '<div class="api"><br>scrolled_win.get_data()</div><div></div>';
+hdoc['tree_grid']= '<div class="api"><br>tree_grid(names,w=0,h=0,options={})</div><div>create a tree view of data (as <a href=#grid>grid</a>, but first column is a tree)<br>use set_data() to put a  Hash of data<br>same methods as <a href=#grid>grid</a> widget<br>a columns Class are distinges by column name :<br><li>  raster <a href=#image>image</a> if name start with  a <br><li>  checkbutton  if name start with  a ?<br><li>  Integer      if name start with  a 0<br><li>  String 		else<br></div>';
+hdoc['scrolled_win.init']= '<div class="api"><br>scrolled_win.init(types)</div><div>------------- Build singleton<br></div>';
+hdoc['scrolled_win.tree']= '<div class="api"><br>scrolled_win.tree()</div><div></div>';
+hdoc['scrolled_win.set_row']= '<div class="api"><br>scrolled_win.set_row(data,parent=nil)</div><div></div>';
+hdoc['button_expand']= '<div class="api"><br>button_expand(text,initiale_state=false,options={},&b)</div><div>TODO: test!<br></div>';
+hdoc['dialog_async']= '<div class="api"><br>dialog_async(title,config={},&b)</div><div> Dialog <br>Dialog content is build with bloc parameter.<br>Action on Ok/Nok/<a href=#delete>delete</a> <a href=#button>button</a> make a call to :response bloc.<br><a href=#dialog>dialog</a> is destoy if return value of :response is true<br><br>dialog_async("title",:response=> bloc {|dia,e| }) {<br><a href=#flow>flow</a> { <a href=#button>button</a>("dd") ... }<br>}<br></div>';
+hdoc['dialog']= '<div class="api"><br>dialog(title="")</div><div>Dialog contents is build with bloc parameter.<br>call is bloced until action on Ok/Nok/<a href=#delete>delete</a> <a href=#button>button</a> <br>return true if dialog quit is done by action on OK <a href=#button>button</a><br><br>dialog("title") {<br><a href=#flow>flow</a> { <a href=#button>button</a>("dd") ... }<br>}<br></div>';
+hdoc['log']= '<div class="api"><br>log(*txt)</div><div> Logs<br>put a line of <a href=#message>message</a> text in log <a href=#dialog>dialog</a> (create and show the log <a href=#dialog>dialog</a> if not exist)<br></div>';
+hdoc['def_style']= '<div class="api"><br>def_style(string_style=nil)</div><div> define style !! Warning: specific to gtk<br>see http://ruby-gnome2.sourceforge.jp/hiki.cgi?Gtk%3A%3ARC<br>%GTK_BASEPATH%/share/themes/Metal/gtk-2.0/gtkrc<br><br>style "mstyle"<br>{<br>GtkWidget::interior_focus = 1<br>GtkButton::default_spacing = { 1, 1, 1, 1 }<br>GtkButton::default_outside_spacing = { 0, 0, 0, 0 }<br>font_name = "lucida"<br>bg_pixmap[NORMAL] = pixmap.png<br>bg[NORMAL]      = { 0.80, 0.80, 0.80 }<br>bg[PRELIGHT]    = { 0.80, 0.80, 1.00 }<br>bg[ACTIVE]      = { 0.80, 0.80, 0.80 }<br>bg[SELECTED]    = { 0.60, 0.60, 0.80 }<br>text[SELECTED]  = { 0.00, 0.00, 0.00 }<br>text[ACTIVE]    = { 0.00, 0.00, 0.00 }<br>}	<br>class "GtkLabel" style "mstyle"<br><br></div>';
+hdoc['def_style3']= '<div class="api"><br>def_style3(string_style=nil)</div><div>not ready!!!<br></div>';
+hdoc['init_threader']= '<div class="api"><br>init_threader)</div><div>Creative Commons BY-SA :  Regis dAubarede <regis.aubarede@gmail.com><br>LGPL<br>implictly called by Ruiby window creator<br><a href=#initialize>initialize</a> multi thread engine<br></div>';
+hdoc['threader']= '<div class="api"><br>threader(per)</div><div>must be created by application (in <a href=#initialize>initialize</a>, <a href=#after>after</a> super), active the tread engine for <br>caller window.<br>if several windows, last created is the winner : gtk_invoke will throw to last treaded() window!<br></div>';
+hdoc['anim']= '<div class="api"><br>anim(n,&blk)</div><div>shot peridicly a  bloc parameter<br>no threading: the bloc is evaluated by gtk mainloop in main thread context<br>return handle of animation. can be stoped by <a href=#delete>delete</a>(anim) // NOT WORK!, return a Numeric...<br></div>';
+hdoc['after']= '<div class="api"><br>after(n,&blk)</div><div>as <a href=#anim>anim</a>, but one shot, after some millisecs<br>no threading: the bloc is evaluated by gtk mainloop in main thread context<br></div>';
+hdoc['gui_invoke']= '<div class="api"><br>gui_invoke(&blk)</div><div> Invoke HMI from anywhere <br>if <a href=#threader>threader</a>() is done by almost one window,  <br>evaluate (instance_eval) the bloc  in the context of this window<br>async: bloc will be evaluate <a href=#after>after</a> the return!<br></div>';
+hdoc['gui_invoke_in_window']= '<div class="api"><br>gui_invoke_in_window(w,&blk)</div><div></div>';
+hdoc['gui_invoke_wait']= '<div class="api"><br>gui_invoke_wait(&blk)</div><div>if <a href=#threader>threader</a>() is done by almost one window,  <br>evaluate (instance_eval) the bloc  in the context of this window<br>sync: bloc will be evaluate before  the return. Warining! : imlementation is stupid<br></div>';
+hdoc['systray']= '<div class="api"><br>systray(x=nil,y=nil)</div><div></div>';
+hdoc['syst_icon']= '<div class="api"><br>syst_icon(file)</div><div></div>';
+hdoc['syst_add_button']= '<div class="api"><br>syst_add_button(label,&prc)</div><div></div>';
+hdoc['syst_add_sepratator']= '<div class="api"><br>syst_add_sepratator()</div><div></div>';
+hdoc['syst_add_check']= '<div class="api"><br>syst_add_check(label,&prc)</div><div></div>';
+hdoc['syst_quit_button']= '<div class="api"><br>syst_quit_button(yes)</div><div></div>';
+hdoc['systray_setup']= '<div class="api"><br>systray_setup(config)</div><div></div>';
+hdoc['show_app']= '<div class="api"><br>show_app()</div><div></div>';
+hdoc['hide_app']= '<div class="api"><br>hide_app)</div><div></div>';
+hdoc['close_dialog']= '<div class="api"><br>close_dialog)</div><div></div>';
+hdoc['on_destroy']= '<div class="api"><br>on_destroy(&blk)</div><div></div>';
+hdoc['ruiby_exit']= '<div class="api"><br>ruiby_exit()</div><div></div>';
+hdoc['rposition']= '<div class="api"><br>rposition(x,y)</div><div>change position of window in the desktop. relative position works only in *nix<br>system.<br></div>';
+hdoc['chrome']= '<div class="api"><br>chrome(on=false)</div><div>show or supress the window system decoration<br></div>';
+hdoc['ruiby_component']= '<div class="api"><br>ruiby_component()</div><div>can be included by a gtk windows, for  use ruiby.<br>do an include, and then call ruiby_component() with bloc for use ruiby dsl<br>ruiby_component() must be call one shot for a window, <br>it initialise ruiby.<br>then <a href=#append_to>append_to</a>(),append_before()...  can be use fore dsl usage<br></div>';
+hdoc['intialize']= '<div class="api"><br>intialize()</div><div></div>';
+
+//================ popup code
+
+function popup(word) {
+ if (! hdoc[word]) return;
+   
+ var node=document.getElementById('popup-txt');
+ node.innerHTML= hdoc[word];
+ node=document.getElementById('popup-div');
+ node.style.position ='fixed';
+ node.style.visibility ='visible';
+ node.style.left='25%';
+ node.style.bottom='25%';
+ node.style.width='50%';
+ node.style.height='50%';
+}
+
 </script>
  </head>
-
 <body>
-
 <div class='title'>Ruiby DSL Documentation</div>
-Ruiby Version: 0.93.1<br>
-Generated at : 2013-06-13 22:09:30 +0200<br>
+Ruiby Version: 0.104.0<br>
+Generated at : 2013-07-05 21:51:30 +0200<br>
+<a href="#code">See code example</a>
 <hr>
 <center>Search : <input type='input' value="" size='80' onchange='doSearch(this.value);'></center>
 <hr>
@@ -652,7 +848,389 @@ Generated at : 2013-06-13 22:09:30 +0200<br>
 <div class='descr'></div>
 
 </div>
+<a name="code"></a>
+<div class="title">Code (from samples/test.rb)</div>
+<div class='code'>
+<pre><code>
+<a href='javascript:popup("component");'>component</a>()   
+  self.override_font(Pango::FontDescription.new("Tahoma 10")) 
+  #<a href='javascript:popup("def_style3");'>def_style3</a>("* { font_name :  Courier }")
+  <a href='javascript:popup("after");'>after</a>(1000) {puts "\n\n\n"  ; Gem.loaded_specs.each {|name,gem| puts "  #{gem.name}-#{gem.version}"} }
+  mlog 'before Component'
+  <a href='javascript:popup("stack");'>stack</a> do
+    <a href='javascript:popup("sloti");'>sloti</a>(<a href='javascript:popup("htoolbar");'>htoolbar</a>(
+		"open/tooltip text on <a href='javascript:popup("button");'>button</a>"=>proc { <a href='javascript:popup("edit");'>edit</a>(__FILE__) },
+		"close/fermer le fichier"=>nil,
+		"undo/defaire"=>nil,
+		"redo/refaire"=>proc { <a href='javascript:popup("alert");'>alert</a>("e") }
+	   ))
+    <a href='javascript:popup("sloti");'>sloti</a>(<a href='javascript:popup("label");'>label</a>( <<-EEND ,:font=>"Tahoma bold 12"))
+     This window is test & demo of Ruiby capacity.
+     Ruby = #{RUBY_VERSION}, Ruiby is #{Ruiby::VERSION}, Gtk is  #{Gtk::VERSION.join(".")}
+     HMI code =#{File.read(__FILE__).split("comp"+"onent"+"()")[1].split(/\r?\n/).select {|l| l.strip.size>3}.size} lines
+	EEND
+    <a href='javascript:popup("separator");'>separator</a>
+    <a href='javascript:popup("flow");'>flow</a> {
+      @left=<a href='javascript:popup("stack");'>stack</a> {
+		test_table
+		test_canvas
+     }
+	<a href='javascript:popup("separator");'>separator</a>
+      <a href='javascript:popup("notebook");'>notebook</a> do
+        <a href='javascript:popup("page");'>page</a>("","#home") { <a href='javascript:popup("label");'>label</a>("A Notebook Page with icon as <a href='javascript:popup("button");'>button</a>-title",{font: "Arial 18"}) }
+        <a href='javascript:popup("page");'>page</a>("List & <a href='javascript:popup("grid");'>grid</a>") { test_list_grid }		
+        <a href='javascript:popup("page");'>page</a>("Explorer") { test_treeview }
+        <a href='javascript:popup("page");'>page</a>("expander & <a href='javascript:popup("dialog");'>dialog</a>") { test_dialog }
+        <a href='javascript:popup("page");'>page</a>("Property Edit.") { test_properties(0) }
+        <a href='javascript:popup("page");'>page</a>("Big PropEditor") { test_properties(1) }
+        <a href='javascript:popup("page");'>page</a>("Source Editor") {
+          if ed=<a href='javascript:popup("source_editor");'>source_editor</a>(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 8",:on_change=> proc { edit_change })
+            @editor=ed.editor
+            @editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
+          end
+        }
+        <a href='javascript:popup("page");'>page</a>("Menu") { test_menu }
+        <a href='javascript:popup("page");'>page</a>("Accordion") { test_accordion }
+        <a href='javascript:popup("page");'>page</a>("Pan & Scrolled") { test_pan_scroll}
+	  end # end <a href='javascript:popup("notebook");'>notebook</a>
+    } # end <a href='javascript:popup("flow");'>flow</a>
+    <a href='javascript:popup("sloti");'>sloti</a>(<a href='javascript:popup("button");'>button</a>("Test dialogs...") { do_special_actions() })
+    <a href='javascript:popup("sloti");'>sloti</a>( <a href='javascript:popup("button");'>button</a>("Exit") { <a href='javascript:popup("ruiby_exit");'>ruiby_exit</a> })
+    mlog '<a href='javascript:popup("after");'>after</a> Component'
+  end
+end
+
+	def test_table	
+		<a href='javascript:popup("frame");'>frame</a>("") { <a href='javascript:popup("table");'>table</a>(2,10,{set_column_spacings: 3}) do
+			  <a href='javascript:popup("row");'>row</a> { <a href='javascript:popup("cell_right");'>cell_right</a>(<a href='javascript:popup("label");'>label</a>  "mode de fontionnement"); <a href='javascript:popup("cell");'>cell</a>(<a href='javascript:popup("button");'>button</a>("set") { <a href='javascript:popup("alert");'>alert</a>("?") }) }
+			  <a href='javascript:popup("row");'>row</a> { <a href='javascript:popup("cell_right");'>cell_right</a> <a href='javascript:popup("label");'>label</a>  "vitesse"               ; <a href='javascript:popup("cell");'>cell</a>(<a href='javascript:popup("entry");'>entry</a>("aa"))  }
+			  <a href='javascript:popup("row");'>row</a> { <a href='javascript:popup("cell_right");'>cell_right</a> <a href='javascript:popup("label");'>label</a>  "size"                  ; <a href='javascript:popup("cell");'>cell</a> <a href='javascript:popup("ientry");'>ientry</a>(11,{:min=>0,:max=>100,:by=>1})  }
+			  <a href='javascript:popup("row");'>row</a> { <a href='javascript:popup("cell_right");'>cell_right</a> <a href='javascript:popup("label");'>label</a>  "feeling"               ; <a href='javascript:popup("cell");'>cell</a> <a href='javascript:popup("islider");'>islider</a>(10,{:min=>0,:max=>100,:by=>1})  }
+			  <a href='javascript:popup("row");'>row</a> { <a href='javascript:popup("cell_right");'>cell_right</a> <a href='javascript:popup("label");'>label</a>  "speedy"                ; <a href='javascript:popup("cell");'>cell</a>(<a href='javascript:popup("toggle_button");'>toggle_button</a>("on","off",false) {|ok| <a href='javascript:popup("alert");'>alert</a> ok ? "Off": "On" })  }
+			  <a href='javascript:popup("row");'>row</a> { <a href='javascript:popup("cell");'>cell</a>       <a href='javascript:popup("label");'>label</a>  "acceleration type"     ; <a href='javascript:popup("cell");'>cell</a> <a href='javascript:popup("hradio_buttons");'>hradio_buttons</a>(%w{aa bb cc},1)  }
+			  <a href='javascript:popup("row");'>row</a> { <a href='javascript:popup("cell");'>cell</a>      <a href='javascript:popup("label");'>label</a>  "mode on"               ; <a href='javascript:popup("cell");'>cell</a> <a href='javascript:popup("check_button");'>check_button</a>("",false)  }
+			  <a href='javascript:popup("row");'>row</a> { <a href='javascript:popup("cell");'>cell</a>      <a href='javascript:popup("label");'>label</a>  "mode off"              ; <a href='javascript:popup("cell");'>cell</a> <a href='javascript:popup("check_button");'>check_button</a>("",true)  }
+			  <a href='javascript:popup("row");'>row</a> { <a href='javascript:popup("cell_left");'>cell_left</a> <a href='javascript:popup("label");'>label</a>  "Variable"              ; <a href='javascript:popup("cell");'>cell</a> <a href='javascript:popup("combo");'>combo</a>({"aaa"=>1,"bbb"=>2,"ccc"=>3},1) }
+			  <a href='javascript:popup("row");'>row</a> { p 4;<a href='javascript:popup("cell_left");'>cell_left</a> <a href='javascript:popup("label");'>label</a>  "Couleur"               ; <a href='javascript:popup("cell");'>cell</a> <a href='javascript:popup("color_choice");'>color_choice</a>()  }
+			end 
+		}
+        <a href='javascript:popup("frame");'>frame</a>("Buttons in <a href='javascript:popup("frame");'>frame</a>") {
+          <a href='javascript:popup("flow");'>flow</a> { <a href='javascript:popup("sloti");'>sloti</a>(<a href='javascript:popup("button");'>button</a>("packed with <a href='javascript:popup("sloti");'>sloti</a>()") {<a href='javascript:popup("alert");'>alert</a>("<a href='javascript:popup("button");'>button</a> packed with <a href='javascript:popup("sloti");'>sloti</a>()")}) 
+		         @bref=<a href='javascript:popup("sloti");'>sloti</a>(<a href='javascript:popup("button");'>button</a>("bb")) ;  <a href='javascript:popup("button");'>button</a>("packed with <a href='javascript:popup("slot");'>slot</a>()") ; 
+		  }
+        }
+	end
+	def test_canvas()
+		 <a href='javascript:popup("flow");'>flow</a> do
+			  <a href='javascript:popup("stack");'>stack</a> {
+				<a href='javascript:popup("button");'>button</a>("Couleur") {
+				  #<a href='javascript:popup("alert");'>alert</a>("<a href='javascript:popup("alert");'>alert</a> !") ; <a href='javascript:popup("error");'>error</a>("<a href='javascript:popup("error");'>error</a> !") ; <a href='javascript:popup("ask");'>ask</a>("<a href='javascript:popup("ask");'>ask</a> !") ;<a href='javascript:popup("trace");'>trace</a>("<a href='javascript:popup("trace");'>trace</a> !") ;
+				  @color=<a href='javascript:popup("ask_color");'>ask_color</a>()
+				}
+				<a href='javascript:popup("sloti");'>sloti</a>(<a href='javascript:popup("label");'>label</a>('Epaisseur'))
+				@epaisseur=<a href='javascript:popup("sloti");'>sloti</a>(<a href='javascript:popup("islider");'>islider</a>(1,{:min=>1,:max=>30,:by=>1}))
+			  }
+			  @ldraw=[] ; @color=  ::Gdk::Color.parse("#33EEFF");
+			  cv=<a href='javascript:popup("canvas");'>canvas</a>(300,200,{ 
+          :expose     => proc { |w,cr|  
+              @ldraw.each do |line|
+                next if line.size<3
+                color,ep,pt0,*poly=*line
+                cr.set_line_width(ep)
+                cr.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
+                cr.move_to(*pt0)
+                poly.each {|px|    cr.line_to(*px) } 
+                cr.stroke  
+              end
+          },          
+          :mouse_down => proc { |w,e|   
+              no= [e.x,e.y] ;  @ldraw << [@color,@epaisseur.value,no] ;  no    
+          },
+          :mouse_move => proc { |w,e,o| 
+              no= [e.x,e.y] ; (@ldraw.last << no) if no[0]!=o[0] || no[1]!=o[1] ; no 
+          },
+          :mouse_up   => proc { |w,e,o| 
+              no= [e.x,e.y] ; (@ldraw.last << no) ; no
+          }
+				})
+				<a href='javascript:popup("popup");'>popup</a> {
+					<a href='javascript:popup("pp_item");'>pp_item</a>("copy") 	{ <a href='javascript:popup("alert");'>alert</a> 1 }
+					<a href='javascript:popup("pp_item");'>pp_item</a>("cut") 		{ <a href='javascript:popup("alert");'>alert</a> 2 }
+					<a href='javascript:popup("pp_item");'>pp_item</a>("past")		{ <a href='javascript:popup("alert");'>alert</a> 3 }
+					<a href='javascript:popup("pp_item");'>pp_item</a>("duplicate"){ <a href='javascript:popup("alert");'>alert</a> 4 }
+				}
+
+			end 
+	 end
+	 def test_treeview()
+		<a href='javascript:popup("stack");'>stack</a> do
+			tr=<a href='javascript:popup("tree_grid");'>tree_grid</a>(%w{month name prename 0age ?male})
+			tr.set_data({
+				janvier: {
+					s1:["aaa","bbb",22,true],
+					s2:["aaa","bbb",33,false],
+					s3:["aaa","bbb",111,true],
+					s4:["aaa","bbb",0xFFFF,true],
+				},
+				fevrier: {
+					s1:["aaa","bbb",22,true],
+					s2:["aaa","bbb",33,false],
+				},
+			})
+		end
+	 end
+	 def test_dialog()
+		<a href='javascript:popup("stack");'>stack</a> do
+			<a href='javascript:popup("sloti");'>sloti</a>(<a href='javascript:popup("button_expand");'>button_expand</a>("Test <a href='javascript:popup("button_expand");'>button_expand</a>()") {
+				<a href='javascript:popup("stack");'>stack</a> { 5.times { |a| <a href='javascript:popup("button");'>button</a>("a#{a}",{font: "arial 8"}) } }
+			})
+			<a href='javascript:popup("buttoni");'>buttoni</a>("dailog...") {
+				rep=<a href='javascript:popup("dialog");'>dialog</a>("modal window...") {
+					<a href='javascript:popup("label");'>label</a>("eee")  
+					<a href='javascript:popup("list");'>list</a>("aa",100,100)
+				}
+				<a href='javascript:popup("alert");'>alert</a>("Response was "+rep.to_s)
+			}
+			<a href='javascript:popup("buttoni");'>buttoni</a>("dailog async...") {
+				<a href='javascript:popup("dialog_async");'>dialog_async</a>("modal window...",{response: proc {|a| <a href='javascript:popup("alert");'>alert</a>(a);true}}) {
+					<a href='javascript:popup("label");'>label</a>("eee") 
+					<a href='javascript:popup("list");'>list</a>("aa",100,100)
+				}
+			}	 
+		end
+	 end
+	 def test_list_grid()
+			<a href='javascript:popup("flow");'>flow</a> {
+				<a href='javascript:popup("frame");'>frame</a>("List") {
+					<a href='javascript:popup("stack");'>stack</a> {
+						@<a href='javascript:popup("list");'>list</a>=<a href='javascript:popup("list");'>list</a>("Demo",0,100)
+						<a href='javascript:popup("flow");'>flow</a> {
+							<a href='javascript:popup("button");'>button</a>("s.content") { <a href='javascript:popup("alert");'>alert</a>("Selected= #{@<a href='javascript:popup("list");'>list</a>.selection()}") }
+							<a href='javascript:popup("button");'>button</a>("s.index") { <a href='javascript:popup("alert");'>alert</a>("iSelected= #{@<a href='javascript:popup("list");'>list</a>.index()}") }
+						}
+					}
+				}
+				<a href='javascript:popup("frame");'>frame</a>("Grid") {
+					<a href='javascript:popup("stack");'>stack</a> { <a href='javascript:popup("stacki");'>stacki</a> {
+						@<a href='javascript:popup("grid");'>grid</a>=<a href='javascript:popup("grid");'>grid</a>(%w{nom prenom age},100,150)
+						<a href='javascript:popup("flow");'>flow</a> {
+							<a href='javascript:popup("button");'>button</a>("s.content") { <a href='javascript:popup("alert");'>alert</a>("Selected= #{@<a href='javascript:popup("grid");'>grid</a>.selection()}") }
+							<a href='javascript:popup("button");'>button</a>("s.index") { <a href='javascript:popup("alert");'>alert</a>("iSelected= #{@<a href='javascript:popup("grid");'>grid</a>.index()}") }
+						}
+					} }
+				}
+			}
+			10.times { |i| @<a href='javascript:popup("list");'>list</a>.add_item("Hello #{i}") }
+			@<a href='javascript:popup("grid");'>grid</a>.set_data((1..30).map { |n| ["e#{n}",n,1.0*n]})
+	end
+	def test_properties(no)  
+		case no 
+	     when 0
+			<a href='javascript:popup("flowi");'>flowi</a> {
+				<a href='javascript:popup("sloti");'>sloti</a>(<a href='javascript:popup("button");'>button</a>("#harddisk") { <a href='javascript:popup("alert");'>alert</a>("<a href='javascript:popup("image");'>image</a> <a href='javascript:popup("button");'>button</a>!")})
+				tt={int: 1,float: 1.0, array: [1,2,3], hash: {a:1, b:2}}
+				<a href='javascript:popup("properties");'>properties</a>("props editable",tt,{<a href='javascript:popup("edit");'>edit</a>: true}) { |a| <a href='javascript:popup("log");'>log</a>(a.inspect);<a href='javascript:popup("log");'>log</a>(tt.inspect) }
+				<a href='javascript:popup("properties");'>properties</a>("props show",tt)
+		    }
+			<a href='javascript:popup("flow");'>flow</a> {
+				fn=File.join(Ruiby::DIR,"../samples/media/face_smile_big.png")
+				w=<a href='javascript:popup("label");'>label</a>( "#"+fn ) 
+				<a href='javascript:popup("properties");'>properties</a>("pixbuf",<a href='javascript:popup("get_config");'>get_config</a>(w.pixbuf))  
+				<a href='javascript:popup("properties");'>properties</a>("widget",<a href='javascript:popup("get_config");'>get_config</a>(w),{:scroll => [300,100]})			
+			}
+			<a href='javascript:popup("calendar");'>calendar</a>()
+		when 1
+			h={};70.times { |i| h[i]= "aaa#{i+100}" }
+			<a href='javascript:popup("properties");'>properties</a>("very big <a href='javascript:popup("propertys");'>propertys</a> editable",h,{<a href='javascript:popup("edit");'>edit</a>: true,scroll: [100,400]}) { |a| <a href='javascript:popup("log");'>log</a>(a.inspect);<a href='javascript:popup("log");'>log</a>(h.inspect) }
+			<a href='javascript:popup("button");'>button</a>("<a href='javascript:popup("dialog");'>dialog</a> <a href='javascript:popup("grid");'>grid</a> & form") {
+				test_crud()
+			}
+		end
+	end
+	def test_crud()
+		$gheader=%w{id first-name last-name age}
+		$gdata=[%w{regis aubarede 12},%w{siger ederabu 21},%w{baraque aubama 12},%w{ruiby ruby 1}]
+		i=-1; $gdata.map! { |l| i+=1; [i]+l }
+		a=PopupTable.new("title of <a href='javascript:popup("dialog");'>dialog</a>",400,200,
+			$gheader,
+			$gdata,
+			{
+			  "Delete" => proc {|line| 
+					$gdata.select! { |l| l[0] !=line[0] || l[1] !=line[1]} 
+					a.<a href='javascript:popup("update");'>update</a>($gdata)
+			  },
+			  "Duplicate" => proc {|line| 
+					nline=line.clone
+					nline[0]=$gdata.size
+					$gdata << nline
+					a.<a href='javascript:popup("update");'>update</a>($gdata)
+			  },
+			  "Create" => proc {|line| 
+					nline=line.clone.map {|v| ""}
+					nline[0]=$gdata.size
+					$gdata << nline
+					a.<a href='javascript:popup("update");'>update</a>($gdata)
+			  },
+			  "Edit" => proc {|line| 
+				data={} ;line.zip($gheader) { |v,k| data[k]=v }
+				PopupForm.new("Edit #{line[1]}",0,0,data,{				
+					"Rename" => proc {|w,cdata|  cdata['first-name']+="+" ; w.set_data(cdata)},
+					"<a href='javascript:popup("button");'>button</a>-orrient" => "h"
+				}) do |h|
+					$gdata.map! { |l| l[0] ==h.values[0] ?  h.values : l} 
+					a.<a href='javascript:popup("update");'>update</a>($gdata)
+				end
+			  },
+			}
+		) { |data| <a href='javascript:popup("alert");'>alert</a> data.map { |k| k.join ', '}.join("\n")  }
+	end
+	def test_menu
+			<a href='javascript:popup("stack");'>stack</a> {
+				<a href='javascript:popup("menu_bar");'>menu_bar</a> {
+					<a href='javascript:popup("menu");'>menu</a>("File Example") {
+						<a href='javascript:popup("menu_button");'>menu_button</a>("Open") { <a href='javascript:popup("alert");'>alert</a>("o") }
+						<a href='javascript:popup("menu_button");'>menu_button</a>("Close") { <a href='javascript:popup("alert");'>alert</a>("i") }
+						<a href='javascript:popup("menu_separator");'>menu_separator</a>
+						<a href='javascript:popup("menu_checkbutton");'>menu_checkbutton</a>("Lock...") { |w| 
+							w.toggle
+							<a href='javascript:popup("append_to");'>append_to</a>(@f) { <a href='javascript:popup("button");'>button</a>("ee #{}") }
+						}
+					}
+					<a href='javascript:popup("menu");'>menu</a>("Edit Example") {
+						<a href='javascript:popup("menu_button");'>menu_button</a>("Copy") { <a href='javascript:popup("alert");'>alert</a>("a") }
+					}
+				} 
+				@f=<a href='javascript:popup("stacki");'>stacki</a> { }				
+			}
+	end
+	def test_accordion()
+			<a href='javascript:popup("flow");'>flow</a> {
+				<a href='javascript:popup("accordion");'>accordion</a> do
+					("A".."G").each do |cc| 
+						<a href='javascript:popup("aitem");'>aitem</a>("#{cc} Flip...") do
+								5.times { |i| 
+									<a href='javascript:popup("alabel");'>alabel</a>("#{cc}e#{i}") { <a href='javascript:popup("alert");'>alert</a>("#{cc} x#{i}") }
+								}
+						end
+					end
+				end
+				<a href='javascript:popup("label");'>label</a> "x"
+			}
+	end
+	def test_pan_scroll()
+			<a href='javascript:popup("stack");'>stack</a> {
+				<a href='javascript:popup("sloti");'>sloti</a>(<a href='javascript:popup("label");'>label</a>("Test <a href='javascript:popup("scrolled");'>scrolled</a> zone"))
+				<a href='javascript:popup("separator");'>separator</a>
+				<a href='javascript:popup("stack_paned");'>stack_paned</a> 600,0.5 do [
+				  <a href='javascript:popup("vbox_scrolled");'>vbox_scrolled</a>(-1,20) { 
+					30.times { |i| 
+					  <a href='javascript:popup("flow");'>flow</a> { <a href='javascript:popup("sloti");'>sloti</a>(<a href='javascript:popup("button");'>button</a>("eeee#{i}"));<a href='javascript:popup("sloti");'>sloti</a>(<a href='javascript:popup("button");'>button</a>("eeee")) }
+					}
+				  },
+				  <a href='javascript:popup("vbox_scrolled");'>vbox_scrolled</a>(-1,20) { 
+					30.times { |i| 
+					  <a href='javascript:popup("flow");'>flow</a> { <a href='javascript:popup("sloti");'>sloti</a>(<a href='javascript:popup("button");'>button</a>("eeee#{i}"));<a href='javascript:popup("sloti");'>sloti</a>(<a href='javascript:popup("button");'>button</a>("eeee"));<a href='javascript:popup("sloti");'>sloti</a>(<a href='javascript:popup("button");'>button</a>("aaa"*100)) }
+					}
+				  }] end
+			  }
+	end
+	
+ 
+  def edit_change()
+	<a href='javascript:popup("alert");'>alert</a>("please, do not change my code..")
+  end
+
+  def do_special_actions()
+    100.times { |i| <a href='javascript:popup("log");'>log</a>("#{i} "+ ("*"*(i+1))) }
+    <a href='javascript:popup("dialog");'>dialog</a>("Dialog tests") do
+      <a href='javascript:popup("stack");'>stack</a> do
+        <a href='javascript:popup("labeli");'>labeli</a> "  <a href='javascript:popup("alert");'>alert</a>, <a href='javascript:popup("prompt");'>prompt</a>, file chosser and <a href='javascript:popup("log");'>log</a>  "
+        c={width: 200,height: 40,font: "Arial old 12"}
+        <a href='javascript:popup("button");'>button</a>("Dialog",c) {
+          @std=nil
+          @std=<a href='javascript:popup("dialog_async");'>dialog_async</a> "test <a href='javascript:popup("dialog");'>dialog</a>" do
+            <a href='javascript:popup("stack");'>stack</a> {
+              a=<a href='javascript:popup("text_area");'>text_area</a>(300,200)
+              a.text="ddd dd ddd ddd dd\n ddd"*200
+              <a href='javascript:popup("separator");'>separator</a>
+              <a href='javascript:popup("flowi");'>flowi</a>{ <a href='javascript:popup("button");'>button</a>("ddd") {@std.destroy}; <a href='javascript:popup("button");'>button</a>("aaa") {@std.destroy}}
+            }
+          end
+        }
+
+        <a href='javascript:popup("button");'>button</a>("<a href='javascript:popup("alert");'>alert</a>", c)         { <a href='javascript:popup("alert");'>alert</a>("<a href='javascript:popup("alert");'>alert</a> is ok?") }
+        <a href='javascript:popup("button");'>button</a>("<a href='javascript:popup("ask");'>ask</a>", c)           { <a href='javascript:popup("log");'>log</a> <a href='javascript:popup("ask");'>ask</a>("<a href='javascript:popup("alert");'>alert</a> is ok?") }
+        <a href='javascript:popup("button");'>button</a>("<a href='javascript:popup("prompt");'>prompt</a>", c)        { <a href='javascript:popup("log");'>log</a> <a href='javascript:popup("prompt");'>prompt</a>("test <a href='javascript:popup("prompt");'>prompt</a>()!\nveuillezz saisir un text de lonqueur \n plus grande que trois") { |reponse| reponse && reponse.size>3 }}
+        <a href='javascript:popup("button");'>button</a>("file Exist",c)     { <a href='javascript:popup("log");'>log</a> <a href='javascript:popup("ask_file_to_read");'>ask_file_to_read</a>(".","*.rb") }
+        <a href='javascript:popup("button");'>button</a>("file new/Exist",c) { <a href='javascript:popup("log");'>log</a> <a href='javascript:popup("ask_file_to_write");'>ask_file_to_write</a>(".","*.rb") }
+        <a href='javascript:popup("button");'>button</a>("Dir existant",c)   { <a href='javascript:popup("log");'>log</a> <a href='javascript:popup("ask_dir_to_read");'>ask_dir_to_read</a>(".") }
+        <a href='javascript:popup("button");'>button</a>("Dir new/Exist",c)  { <a href='javascript:popup("log");'>log</a> <a href='javascript:popup("ask_dir_to_write");'>ask_dir_to_write</a>(".") }
+        <a href='javascript:popup("button");'>button</a>("<a href='javascript:popup("dialog");'>dialog</a>...") do
+          <a href='javascript:popup("dialog");'>dialog</a>("title") {
+            <a href='javascript:popup("stack");'>stack</a>  { 
+              <a href='javascript:popup("fields");'>fields</a>([["prop1","1"],["prop1","2"],["properties1","3"]]) {|*avalues| <a href='javascript:popup("alert");'>alert</a>(avalues.join(", "))}
+              <a href='javascript:popup("separator");'>separator</a>
+            }
+          }
+        end
+        <a href='javascript:popup("button");'>button</a>("<a href='javascript:popup("dialog");'>dialog</a> async...") do
+          <a href='javascript:popup("dialog_async");'>dialog_async</a>("title",:response=> proc { <a href='javascript:popup("ask");'>ask</a>("ok") }) {
+            <a href='javascript:popup("stack");'>stack</a>  { 
+              <a href='javascript:popup("label");'>label</a> "without validations.."
+              <a href='javascript:popup("fields");'>fields</a>([["prop1","1"],["prop1","2"],["properties1","3"]]) 
+              <a href='javascript:popup("separator");'>separator</a>
+            }
+          }
+        end        
+        <a href='javascript:popup("button");'>button</a>("Timeline",c)  { do_timeline() }
+      end
+    end
+  end
+  def do_timeline()
+    <a href='javascript:popup("dialog");'>dialog</a>("ruiby/gtk startup timestamps") do
+      lline=[[10  ,180]]
+      ltext=[]
+      xmin, xmax= $mlog.first[0], $mlog.last[0]
+      a,b,ot = (400.0-20)/(xmax-xmin) , 10.0 , 0
+      $mlog.each_with_index {|(time,text),i|
+        pos=a*time+b
+        h=50+i*15
+        lline << [pos,180] ;lline << [pos,h] ;lline << [pos,180]
+        ltext << [[pos+5,h],text+ "(#{time-ot} ms)"]
+        ot=time
+      }
+      <a href='javascript:popup("labeli");'>labeli</a>("Total time : #{xmax} milliseconds")
+      <a href='javascript:popup("canvas");'>canvas</a>(500,200,{ 
+          :expose     => proc { |w,cr|  
+            color=::Gdk::Color.parse("#774433")
+            ep=2
+            pt0,*poly=*lline
+            cr.set_line_width(ep)
+            cr.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
+            cr.move_to(*pt0)
+            poly.each {|px| cr.line_to(*px) } 
+            cr.stroke  
+            ltext.each { |(pos,text)| 
+              cr.move_to(*pos)
+              cr.show_text(text) 
+            }
+          }
+      });          
+    end
+  end
+# end 
+</code></pre>
+</div>
+
 <hr>
 <center>made by samples/make_doc.rb</center>
+
+<div id='popup-div'>
+ <div class='atitle'>
+    <input type='button' onclick="document.getElementById('popup-div').style.visibility='hidden';" value='X'>
+ </div>
+ <div id='popup-txt'></div>
+</div 
+
 </body>
 </html>
