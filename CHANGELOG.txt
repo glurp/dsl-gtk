@@ -1,4 +1,8 @@
-0.103.1
+0.104.1
+    make_doc.rb : code ex
+    doc.html : code example with popup asist
+    Ruiby.gemspec : add gtk2 dependencie
+0.104.0 : 2013-07-05 19:50:07 +0200
     Ruiby.gemspec : add ruiby_canvas bin command
 0.103.0 : 2013-07-05 19:48:53 +0200
     Ruiby.gemspec : canvas
