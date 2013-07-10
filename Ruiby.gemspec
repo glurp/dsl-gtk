@@ -18,7 +18,7 @@ EEND
     [:runtime,     "gtk2"],
     [:runtime,     "gtk3"],
     [:runtime, "gtksourceview3"]
-	]
+  ]
 
   s.files         = Dir['**/*'].reject { |a| a =~ /^\.git/ || a =~ /\._$/}
   s.test_files    = Dir['samples/**'] 
@@ -39,16 +39,16 @@ EEND
     end
   end
   s.post_install_message = <<-TTEXT
-
+        
   -------------------------------------------------------------------------------
-
+        
       Hello, welcome to Ruiby....
 
-        $ ruiby_demo    # test with gtk3        
-        $ ruiby -width 200 -height 100 "chrome(false); button 'Welcome' do exit!(0) end "        
+        $ ruiby_demo     # test with gtk3        
+        $ ruiby "chrome(false); button 'Welcome' do exit!(0) end "        
         $ ruiby_sketchi  # write and test ruiby gui
         $ ruiby_canvas   # write and test drawing code
-
+        
    -------------------------------------------------------------------------------
    TTEXT
 end
