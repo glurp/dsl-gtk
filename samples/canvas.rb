@@ -9,6 +9,8 @@ require 'timeout'
 require_relative '../lib/Ruiby'
 
 class RubyApp < Ruiby_gtk
+    include Math 
+
     def initialize
       @blk=nil
       @redraw_error=false
@@ -185,6 +187,16 @@ EEND
     l=[]
     x0.step(700,pas) { |x| y= b.call(x) ; l << [20+x,20+y] }
     line(l)
+  end
+  def plot_xyft(t0,tmax,pas,xy,color="#000000",ep=2,&b)
+    l=[]
+    t0.step(tmax,pas) { |t| 
+      t1= b.call(t)
+      l << [xy[0].call(t1)+20,xy[1].call(t1)+20] 
+    }
+    line(l,color,ep)
+    pt(*l.first,"#AAAAFF",4)
+    pt(*l.last,"#FFAAAA",4)
   end
   def text(x,y,text)
     $ctx.set_line_width(1)
