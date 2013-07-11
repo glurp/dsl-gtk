@@ -52,19 +52,18 @@ end
 					File.open(@file,"wb") { |f| f.write(content) } if @file && content && content.size>2
 				}
 			)) 
-			stack {
-				flow do 
-				  stacki {
+			stack_paned(800,0.7) {
+				flow_paned(900,0.4) do 
+				  stack {
 						@title=sloti(label("Edit"))
 						@edit=source_editor(:lang=> "ruby", :font=> "Courier new 12").editor
 						sloti(button("Test...") { execute() })
 					}
-					stack { 
-            @canvas= canvas(400,400,{ 
-              :expose     => proc { |w,cr|   redraw(w,cr) }
-            }) 
-          }
-			  
+          stack { 
+              @canvas= canvas(400,400,{ 
+                :expose     => proc { |w,cr|   redraw(w,cr) }
+              }) 
+           }           
 				end
 				notebook do 
 					page("Error") { @error_log=slot(text_area(600,100,{:font=>"Courier new 10"})) }
