@@ -61,7 +61,11 @@ module Ruiby_dsl
     autoslot()
     @lcur.pop
   end
-
+  
+  def style(options) 
+    apply_options(@lcur.last,options) if @lcur.size>0  # not working ...
+  end
+  
   # a box with border and texte title, take all space
   def frame(t="",add1=true,&b)  	
     _cbox(true,Frame.new(t),add1) { stack { b.call } } 
