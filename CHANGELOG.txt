@@ -1,4 +1,6 @@
-0.110.1
+0.111.1
+    README.md : paned update
+0.111.0 : 2013-07-11 19:57:02 +0200
     README.md : paned upgrade
 0.110.0 : 2013-07-11 19:36:58 +0200
     test_composites.rb : paned update
