@@ -1,4 +1,11 @@
-0.106.1
+0.108.1
+    test.rb : noting
+    sketchi.rb : paned by bloc
+    paned.rb : paned by bloc
+    canvas.rb : paned by bloc
+    ruiby_dsl3.rb : paned by block
+0.108.0 : 2013-07-10 15:00:24 +0200
+0.107.0 : 2013-07-10 14:59:41 +0200
     canvas.rb : plot xyft
     Ruiby.gemspec : indentations
 0.106.0 : 2013-07-09 18:55:53 +0200
