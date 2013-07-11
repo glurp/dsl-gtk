@@ -23,7 +23,7 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 0.96.0 !!  04-07-2013)
+NEW : 0.111.0 !!  11-07-2013
 - EventMachine integration (main loop by EM.run if EM is present)
 - gtk3 by default
 - rename ruiby.rb to Ruiby.rb for *ix require 'Ruiby'
