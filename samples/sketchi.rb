@@ -42,24 +42,22 @@ class RubyApp < Ruiby_gtk
 					File.open(@file,"wb") { |f| f.write(content) } if @file && content && content.size>2
 				}
 			)) 
-			stack_paned(600,0.7) {
-				[flow_paned(1200,0.5) do 
-					[stack {
+			stack_paned(600,0.7) do
+				flow_paned(1200,0.5) do 
+					stack {
 						@title=sloti(label("Edit"))
 						@edit=slot(source_editor(:lang=> "ruby", :font=> "Courier new 12")).editor
 						sloti(button("Test...") { execute() })
-					},
+					}
 					stack { @demo=stack {label("empty...")} }
-					]
-				end,
+				end
 				notebook do 
 					page("Error") { @error_log=slot(text_area(600,100,{:font=>"Courier new 10"})) }
 					page("Help") { make_help(slot(text_area(600,100,{:font=>"Courier new 10"}))) }
 					page("API") { make_api(slot(text_area(600,100,{:font=>"Courier new 10"}))) }
 					#page("Example") { make_example(slot(text_area(:font=> "Courier new 10"))) }
 				end
-				]
-			}
+			end
 		end
 	end
 	def execute()
