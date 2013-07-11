@@ -17,14 +17,16 @@ class RubyApp < Ruiby_gtk
 			flow_paned(800,0.5) do
         stack_paned(800,0.6) do
           stack_paned(400,0.5) do
-            frame { label("Label1 ",:size=> [0,0]) }
+            frame { 
+              label("Label1 ",:size=> [100,100]) 
+            }
             frame { label("Label2 ",:size=> [0,0]) } 
           end
           stack {
             frame { label("Label3 ",:size=> [200,200]) }
           }
         end
-        frame { label("second flow") }
+        frame { label("second flow") ; style(bg: "#FF0000")}
       end
 	end
 end
