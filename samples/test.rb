@@ -289,21 +289,22 @@ end
 			}
 	end
 	def test_pan_scroll()
-			stack {
+			stack do
 				sloti(label("Test scrolled zone"))
 				separator
-				stack_paned 600,0.5 do [
+				stack_paned 600,0.5 do 
 				  vbox_scrolled(-1,20) { 
-					30.times { |i| 
-					  flow { sloti(button("eeee#{i}"));sloti(button("eeee")) }
-					}
-				  },
+            30.times { |i| 
+              flow { sloti(button("eeee#{i}"));sloti(button("eeee")) }
+            }
+				  }
 				  vbox_scrolled(-1,20) { 
-					30.times { |i| 
-					  flow { sloti(button("eeee#{i}"));sloti(button("eeee"));sloti(button("aaa"*100)) }
-					}
-				  }] end
-			  }
+            30.times { |i| 
+              flow { sloti(button("eeee#{i}"));sloti(button("eeee"));sloti(button("aaa"*100)) }
+            }
+				  }
+        end
+			end
 	end
 	
  
