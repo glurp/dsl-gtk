@@ -1,4 +1,6 @@
-0.108.1
+0.109.1
+    test_composites.rb : paned update
+0.109.0 : 2013-07-11 19:32:53 +0200
     test.rb : noting
     sketchi.rb : paned by bloc
     paned.rb : paned by bloc
