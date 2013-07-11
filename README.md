@@ -25,10 +25,9 @@ Status
 
 NEW : 0.96.0 !!  04-07-2013)
 - EventMachine integration (main loop by EM.run if EM is present)
-- ruiby_demo3 ; ruiby_skechi fixes (preload gtk3 before Ruiby)
 - gtk3 by default
-- tools samples/canvas.rb : online drawing by programming...
 - rename ruiby.rb to Ruiby.rb for *ix require 'Ruiby'
+- paned : no more array
 
 TODO for 1.0 :
 - resolve 100% gtk3 deprecated warning
