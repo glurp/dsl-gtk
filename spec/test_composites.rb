@@ -150,10 +150,8 @@ describe Ruiby do
 		w=nil
 		@win.create { stack {
 		   w=stack_paned(100,0.5) {
-		     [
-			 flow_paned(100,0.7) { [ box { button("ee") }, box {button("ee") } ]},
-			 flow_paned(200,0.3) { [ box { button("ee") }, box {button("ee") } ]}
-			 ]
+			 flow_paned(100,0.7) {  button("ee") ; button("ee")  }
+			 flow_paned(200,0.3) { button("ee") ; button("ee")  }
 		   }
 		} }
 		@win.sleeping(100,"Verify panned")
