@@ -1,4 +1,7 @@
-0.111.1
+0.112.1
+    paned.rb : style test
+    ruiby_dsl3.rb : container style
+0.112.0 : 2013-07-11 19:58:18 +0200
     README.md : paned update
 0.111.0 : 2013-07-11 19:57:02 +0200
     README.md : paned upgrade
