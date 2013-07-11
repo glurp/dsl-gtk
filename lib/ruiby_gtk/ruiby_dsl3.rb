@@ -941,30 +941,42 @@ module Ruiby_dsl
   end
 
   ############################## Panned : 
-  # split current frame in 2 panes
+  
   # create a container which can containe 2 widgets, separated by movable bar
-  # block invoked must return a array of 2 box wich will put in the 2 panes
+  # block invoked must create 2 widgets
   # vertivaly disposed
+  # deprecated: block must return a array of 2 containers
   def stack_paned(size,fragment,&blk) _paned(false,size,fragment,&blk) end
 
-  # split current frame in 2 panes
   # create a container which can containe 2 widgets, separated by movable bar
-  # block invoked must return a array of 2 box wich will put in the 2 panes
+  # block invoked must create 2 widgets
   # horizonaly disposed
+  # deprecated: block must return a array of 2 containers
   def flow_paned(size,fragment,&blk) _paned(true,size,fragment,&blk) end
 
-  def _paned(horizontal,size,fragment)
-    paned = Paned.new(horizontal ? :horizontal : :vertical)
-    @lcur << paned
-    frame1,frame2=*yield()
+  def _paned(horizontal,size,fragment)    
+    s=stack(true) {} # create a temporary contnaier for inner widgets
+    @lcur << s
+    yield()
+    autoslot
     @lcur.pop
-    (frame1.shadow_type = :in) rescue nil
-    (frame2.shadow_type = :in) rescue nil
+    
+    raise("panned : must contain only 2  children") if s.children.size!=2
+    
+    frame1,frame2=*s.children
+
+    (frame1.shadow_type = :in)  rescue nil
+    (frame2.shadow_type = :in)  rescue nil
+    
+    paned = Paned.new(horizontal ? :horizontal : :vertical)
     paned.position=size*fragment
     horizontal ? paned.set_size_request(size, -1) : paned.set_size_request(-1,size)
+    
+    s.remove(frame1)
+    s.remove(frame2)
+    s.parent.remove(s)
     paned.pack1(frame1, :resize => true, :shrink => false)
     paned.pack2(frame2, :resize => true, :shrink => false)
-    show_all_children(paned)
     slot(paned)
   end
 
