@@ -1,4 +1,10 @@
-0.112.1
+0.112.2
+    make_doc.rb : popup on code example
+    ruiby_dsl3.rb : comments
+    ruiby_default_dialog3.rb : comments
+    editor.rb : button_list become private, dor documentation
+    ruiby : R for r
+    README.md : doc reference
     paned.rb : style test
     ruiby_dsl3.rb : container style
 0.112.0 : 2013-07-11 19:58:18 +0200
