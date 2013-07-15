@@ -21,9 +21,69 @@ module Ruiby_dsl
   include ::Gtk
   include ::Ruiby_default_dialog
 
-  ############################ Slot : H/V Box or Frame
 
   def _nocodeeeeeeeeeee() end
+  
+  # All Ruiby commands correspond of
+  #   * a object creation (container, widget)
+  #   * a immediate command : 
+  #   after  anim append_to apply_options  attribs autoslot chrome clear clear_append_to color_conversion def_style def_style3 delete  force_update 
+  #   get_config get_current_container get_icon get_image_from get_pixbuf get_stockicon_pixbuf gui_invoke gui_invoke_in_window 
+  #   gui_invoke_wait  hide_app log  on_destroy  razslot rposition ruiby_component ruiby_exit show_all_children show_app show_methods 
+  #   slot slot_append_after slot_append_before sloti style threader  update 
+  # 
+  #
+  # 2 kinds of objects :
+  # * container
+  #    stack, flow, frame, table, notebook, menu, accordion , scrolled ....
+  #    containers organize children widget, but show (almost) nothing.
+  #    children must be created in container bloc :
+  #       > stack do
+  #       >   button("Hello")
+  #       >   label(" word")
+  #       > end
+  #       >
+  # * widgets
+  #    button,label,entry,list,grid ...
+  #    must be placed in a container.
+  #    2 kinds of placement :
+  #      sloted  : widget take all disponible space ( gtk: pack(expand,fill) ), share
+  #                 space with other sloted widget in same container
+  #      slotied : widget take only necessary place ( gtk: pack(no-expand , no-fill) ) 
+  #
+  #<pre><code>
+  #   |------------------------|
+  #   |<buttoni               >|
+  #   |<labeli                >|
+  #   |<--------------------- >|
+  #   |<                      >|
+  #   |<    button            >|
+  #   |<                      >|
+  #   |<--------------------- >|
+  #   |<                      >|
+  #   |<    label             >|
+  #   |<                      >|
+  #   |<--------------------- >|
+  #   |<buttoni               >|
+  #   |------------------------|
+  #
+  #</code></pre> 
+  #    by default, all widgetcontainer are sloted !
+  #    widget name ended by 'i' ( buttoni, labeli, stacki , flowi ...) are slotied
+  #
+  #    slot()  command is deprecated. sloti() command must be use if *i command 
+  #    do not exist  :  w=sloti( widgetname() {...} )
+  #    space() can be used for slot a ampty space
+  #
+  # Attachement :
+  # * scoth xxxx in top of frame    : >stack { stacki { xxx } ; stack { } }
+  # * scoth xxxx in bottom of frame : >stack {  stack { } ; stacki { xxx } }
+  # * scoth xxxx in left of frame   : >flow { flowi { xxx } ; stack { } }
+  #
+  def aaa_generalities()
+  end
+  
+  ############################ Slot : H/V Box or Frame
 
   # container : vertical box, take all space available, sloted in parent by default
   def stack(add1=true,&b)    		_cbox(true,Box.new(:vertical, 2),add1,&b) end
@@ -40,8 +100,9 @@ module Ruiby_dsl
   # sloted in parent by default
   def var_boxi(sens,add1=true,&b) _cbox(false,Box.new(sens, 2),add1,&b) end
 
-  # box { } used for container which manage the widget (as stack(false) {} ) 
-  # use it for cell in table : table { row { cell(box { });... };... }
+  # box { } container which manage children widget without slot (pack()) 
+  # in parent container.
+  # Use it for cell in table, notebook  : table { row { cell(box { });... }; ... }
   def box() 
     box=Gtk::Box.new(:vertical,2)
     @lcur << box
@@ -49,7 +110,9 @@ module Ruiby_dsl
     autoslot()
     @lcur.pop
   end
+  
   # center { }  container which center his content (auto-sloted)
+  # TODO : not tested!
   def center() 
     autoslot()
     valign = Gtk::Alignment.new(0,0,0,0)
@@ -601,11 +664,12 @@ module Ruiby_dsl
     attribs(hb,options)		
     hb
   end
-  # create a drawing area, for pixel draw
+
+  # Create a drawing area, for pixel draw
   # option can define closure :mouse_down :mouse_up :mouse_move
   # for interactive actions
-  # see tst.rb fo little example
-  # see samples/draw.rb for a little vector editor...
+  # See test.rb fo little example.
+  # See samples/draw.rb for a little vector editor...
   def canvas(width,height,option={})
     autoslot()
     w=DrawingArea.new()
@@ -916,7 +980,9 @@ module Ruiby_dsl
     separator
     w
   end
-  # create a hoizontral accordion menu. 	
+  # create a horizontral accordion menu. 	
+  # must contain aitem() which must containe alabel() :
+  # accordion { aitem(txt) { alabel(lib) { code }; ...} ... }
   def haccordion() 
     @slot_accordion_active=nil #only one accordion active by window!
     w=flow { flowi {
@@ -926,6 +992,8 @@ module Ruiby_dsl
     w
   end
   #  a button menu in accordion
+  #  bloc is evaluate for create/view a list of alabel :
+  #  aitem(txt) { alabel(lib) { code }; ...}
   def aitem(txt,&blk) 
     b2=nil
     b=button(txt) {
@@ -939,6 +1007,7 @@ module Ruiby_dsl
   end
 
   # create e entry in button associate vue af a accordion menu
+  # bloc is evbaluate ion user click
   def alabel(txt,&blk)
     l=nil
     pclickable(proc { blk.call(l) if blk} ) { l=label(txt) }
@@ -947,15 +1016,11 @@ module Ruiby_dsl
   ############################## Panned : 
   
   # create a container which can containe 2 widgets, separated by movable bar
-  # block invoked must create 2 widgets
-  # vertivaly disposed
-  # deprecated: block must return a array of 2 containers
+  # block invoked must create 2 widgets, vertivaly disposed
   def stack_paned(size,fragment,&blk) _paned(false,size,fragment,&blk) end
 
   # create a container which can containe 2 widgets, separated by movable bar
-  # block invoked must create 2 widgets
-  # horizonaly disposed
-  # deprecated: block must return a array of 2 containers
+  # block invoked must create 2 widgets,horizonaly disposed
   def flow_paned(size,fragment,&blk) _paned(true,size,fragment,&blk) end
 
   def _paned(horizontal,size,fragment)    
@@ -1113,7 +1178,7 @@ module Ruiby_dsl
 
   # create a Scrolled widget with a autobuild stack in it
   # stack can be populated 
-  # respond to : scrooo_to_top; scroll_to_bottom,
+  # respond to : scroll_to_top; scroll_to_bottom,
   def scrolled(width,height,&b)  vbox_scrolled(width,height,&b) end
   def vbox_scrolled(width,height,&b)
     sw=ScrolledWindow.new()
@@ -1125,7 +1190,7 @@ module Ruiby_dsl
     sw.add_with_viewport(ret)
     class << sw
     ;  def scroll_to_top()    vadjustment.set_value( 0 ) 					; vadjustment.value_changed ; end
-    ; def scroll_to_bottom() vadjustment.set_value( vadjustment.upper - 100); vadjustment.value_changed ; end
+    ;  def scroll_to_bottom() vadjustment.set_value( vadjustment.upper - 100); vadjustment.value_changed ; end
       #def scroll_to_left()   hadjustment.set_value( 0 ) end
       #def scroll_to_right()  hadjustment.set_value( hadjustment.upper-1 ) end
     end
