@@ -3,7 +3,8 @@
 #
 
 module Ruiby_default_dialog
-  def _gooooooooooo ; send
+  def _gooooooooooo 
+  end
   
 	include ::Gtk
 
