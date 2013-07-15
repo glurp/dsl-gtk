@@ -1,4 +1,6 @@
-0.112.2
+0.113.1
+    ruiby_default_dialog3.rb : gooooooooo
+0.113.0 : 2013-07-15 18:45:25 +0200
     make_doc.rb : popup on code example
     ruiby_dsl3.rb : comments
     ruiby_default_dialog3.rb : comments
