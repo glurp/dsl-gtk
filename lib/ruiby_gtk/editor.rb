@@ -58,9 +58,9 @@ class PopupTable < Ruiby_gtk
 	def component()
 	  stack do
 		flow {
-			stacki { space;button_list;space } if @options["button-orrient"] =~ /^l/i
+			stacki { space;_button_list;space } if @options["button-orrient"] =~ /^l/i
 			@grid=grid(@captions,100,150)
-			stacki { space;button_list;space } if @options["button-orrient"] =~ /^r/i
+			stacki { space;_button_list;space } if @options["button-orrient"] =~ /^r/i
 		}
 		@mgrid=@grid
 		@grid.set_data(@data)	
@@ -69,7 +69,7 @@ class PopupTable < Ruiby_gtk
 		sloti( button(" Exit ") { @bloc ? @bloc.call(@grid.get_data()) : destroy()} )
 	  end
 	end 
-	def button_list()
+	def _button_list()
 		@options.each do |name,action| 
 			next unless   action.respond_to?(:call)
 			button(name) {
