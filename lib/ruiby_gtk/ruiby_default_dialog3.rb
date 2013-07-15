@@ -1,11 +1,13 @@
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
+#
 
 module Ruiby_default_dialog
+  def gooooooooooo end
+  
 	include ::Gtk
-	###################################### Alerts
 
-	# modal popup with text (as html one!)
+	# alert(txt): modal popup with text (as in html)
 	def alert(*txt) message(:info,*txt) end
 	# modal popup with text and/or ruby Exception.
 	def error(*txt) 
@@ -18,7 +20,9 @@ module Ruiby_default_dialog
 		}
 		message(:error,*lt) 
 	end
-	# show a modal dialogu, asking question, active bloc closure with text response
+	# show a modal dialog, asking question, active bloc closure with text response
+  # in parameters
+  # prompt("Age ?") { |n| alert("Your age is #{n-1}, bravo !")
 	def prompt(txt,value="") 
 		 dialog = Dialog.new(
       title: "Message",
@@ -58,7 +62,7 @@ module Ruiby_default_dialog
 		return( rep==-8 )
 	end
 	
-	# a warning alert
+	# travce() : like alert(), but with a  warning icone
 	def trace(*txt) message(:warning,*txt) end
 
 	def message(style,*txt)
@@ -73,8 +77,9 @@ module Ruiby_default_dialog
     md.run
     md.destroy
 	end
-	# dialog asking a color
-	def ask_color
+  
+	# modal dialog asking a color
+	def ask_color()
 		cdia = ColorSelectionDialog.new("Select color")
 		cdia.set_window_position(:center)
 		response=cdia.run
@@ -96,12 +101,17 @@ module Ruiby_default_dialog
 	
 	########## File dialog
 
+  # ask a existent file name 
 	def ask_file_to_read(dir,filter)
 		dialog_chooser("Choose File (#{filter}) ...", Ruiby.gtk_version(3) ? :open : Gtk::FileChooser::ACTION_OPEN, Gtk::Stock::OPEN)
 	end
+  
+  # ask a filename for creation/modification
 	def ask_file_to_write(dir,filter)
 	 dialog_chooser("Save File (#{filter}) ...", Ruiby.gtk_version(3) ? :save : Gtk::FileChooser::ACTION_SAVE, Gtk::Stock::SAVE)
 	end
+  
+  # ask a existent dir name
 	def ask_dir_to_read(initial_dir=nil)
 		dialog_chooser(
 				"Select existing Folder ...",
@@ -110,6 +120,8 @@ module Ruiby_default_dialog
 			d.filename=initial_dir if initial_dir && File.exists?(initial_dir)
 		}
 	end
+  
+  # ask  a dir name 
 	def ask_dir_to_write(initial_dir=nil)
 		dialog_chooser(
 			"Select Folder or create one ...", 
@@ -146,7 +158,7 @@ module Ruiby_default_dialog
 	end
 end
 
-#  To be use for direct  call (blocing) of common dialog :
+#  common dialog to be use for direct  call in none Ruiby context class. :
 #  Message.alert("ddde",'eee')
 class Message
 	class Embbeded  < ::Gtk::Window
