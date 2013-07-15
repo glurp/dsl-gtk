@@ -163,8 +163,11 @@ def extract_doc_dsl()
   # make hyperlink cross reference to word definition in each description text
   hdoc.keys.sort.each {|k|
     name1,name2,api,descr= hdoc[k]
+    if name1 =~/^aaa/
+        api="" 
+    end
     d=descr.gsub(/\w+/) { |word| (word!=k && hdoc[word]) ? make_anchor(word) : word}
-    hdoc[k]=[name1,name2,api,d] if d !=descr
+    hdoc[k]=[name1,name2,api,d] 
   }
   hdoc
 end
@@ -193,7 +196,10 @@ end
 
 hdoc=extract_doc_dsl()
 table=hdoc.keys.sort.select {|a| (a !~ /\./) }.map { |name| htable % [name,name]}.join(" ")
-lapis=hdoc.keys.sort.select {|a| (a !~ /\./) }.map {  |k|  hitem % hdoc[k] }
+lapis=hdoc.keys.sort.select {|a| (a !~ /\./) }.map {  |k|  
+  n1,n2,a,d= *hdoc[k]
+  hitem % [n1.gsub(/^aaa/,'').gsub('_',' '),n2.gsub(/^aaa/,'').gsub('_',' '),a,d]
+}
 dico_hdoc=make_hdoc(hdoc)
 test=make_example(hdoc)
 
