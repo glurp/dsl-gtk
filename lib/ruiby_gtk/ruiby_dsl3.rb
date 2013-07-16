@@ -23,33 +23,55 @@ module Ruiby_dsl
 
 
   def _nocodeeeeeeeeeee() end
-  
+
+
   # All Ruiby commands correspond of
-  #   * a object creation (container, widget)
-  #   * a immediate command : 
-  #   after  anim append_to apply_options  attribs autoslot chrome clear clear_append_to color_conversion def_style def_style3 delete  force_update 
-  #   get_config get_current_container get_icon get_image_from get_pixbuf get_stockicon_pixbuf gui_invoke gui_invoke_in_window 
-  #   gui_invoke_wait  hide_app log  on_destroy  razslot rposition ruiby_component ruiby_exit show_all_children show_app show_methods 
-  #   slot slot_append_after slot_append_before sloti style threader  update 
+  #   * a object creation (container, widget), see later,
+  #   * a immediate dialog (modal) command : 
+  #   <ul>
+  #       alert  ask ask_color ask_dir_to_read ask_dir_to_write ask_file_to_read  
+  #       ask_file_to_write color_choice dialog dialog_async edit 
+  #    </ul>
+  #   * a immediate command, the can be used in callback code: gui manipulation... : 
+  #   <ul>
+  #       after  anim append_to apply_options  attribs autoslot chrome clear clear_append_to  
+  #       color_conversion def_style def_style3 delete  force_update get_config  
+  #       get_current_container get_icon get_image_from get_pixbuf get_stockicon_pixbuf 
+  #       gui_invoke gui_invoke_in_window gui_invoke_wait  hide_app  log  on_destroy  
+  #       rposition ruiby_component ruiby_exit  show_methods 
+  #       slot_append_after slot_append_before sloti style threader  update 
+  #    </ul>
   # 
   #
   # 2 kinds of objects :
   # * container
-  #    stack, flow, frame, table, notebook, menu, accordion , scrolled ....
-  #    containers organize children widget, but show (almost) nothing.
-  #    children must be created in container bloc :
-  #       > stack do
-  #       >   button("Hello")
-  #       >   label(" word")
-  #       > end
-  #       >
+  #   <ul>
+  #       accordion box  center flow flow_paned flowi frame framei  grid haccordion notebook  
+  #       pclickable popup stack stack_paned stacki systray table var_box var_boxi vbox_scrolled 
+  #    </ul>
+  #    Containers organize children widget, but show (almost) nothing.
+  #    Children must be created in container bloc, container can contains widget and container :
+  #       <code><pre> 
+  #       | stack do
+  #       |   button("Hello")
+  #       |   label(" word")
+  #       |   flow { button("x") ; label("y") }
+  #       | end
+  #       </pre></code>
   # * widgets
-  #    button,label,entry,list,grid ...
-  #    must be placed in a container.
+  #   <ul>
+  #       accordion aitem alabel box button  calendar canvas cell* center check_button  combo  dialog
+  #       dialog_async  edit entry fentry field fields grid  haccordion  hradio_buttons htoolbar ientry image  
+  #       islider label labeli list menu menu_bar menu_button menu_checkbutton menu_separator   page  
+  #       pp_item pp_separator  properties   row   scrolled separator  show_methods  source_editor space 
+  #       syst_add_button syst_add_check syst_add_sepratator syst_icon syst_quit_button 
+  #       systray table text_area  toggle_button  tree_grid  vradio_buttons wtree
+  #    </ul>
+  #    Widget must be placed in a container.
   #    2 kinds of placement :
-  #      sloted  : widget take all disponible space ( gtk: pack(expand,fill) ), share
+  #    <li>sloted  : widget take all disponible space ( gtk: pack(expand,fill) ), share
   #                 space with other sloted widget in same container
-  #      slotied : widget take only necessary place ( gtk: pack(no-expand , no-fill) ) 
+  #    <li>slotied : widget take only necessary place ( gtk: pack(no-expand , no-fill) ) 
   #
   #<pre><code>
   #   |------------------------|
@@ -76,9 +98,9 @@ module Ruiby_dsl
   #    space() can be used for slot a ampty space
   #
   # Attachement :
-  # * scoth xxxx in top of frame    : >stack { stacki { xxx } ; stack { } }
-  # * scoth xxxx in bottom of frame : >stack {  stack { } ; stacki { xxx } }
-  # * scoth xxxx in left of frame   : >flow { flowi { xxx } ; stack { } }
+  # <li> scoth xxxx in top of frame    : >stack { stacki { xxx } ; stack { } }
+  # <li> scoth xxxx in bottom of frame : >stack {  stack { } ; stacki { xxx } }
+  # <li> scoth xxxx in left of frame   : >flow { flowi { xxx } ; stack { } }
   #
   def aaa_generalities()
   end
@@ -1006,8 +1028,9 @@ module Ruiby_dsl
     b2=stacki { }
   end
 
-  # create e entry in button associate vue af a accordion menu
-  # bloc is evbaluate ion user click
+  # create a button-entry  in a  accordion menu
+  # bloc is evaluate on user click. must be in aitem() bloc :
+  # accordion { aitem(txt) { alabel(lib) { code }; ...} ... }
   def alabel(txt,&blk)
     l=nil
     pclickable(proc { blk.call(l) if blk} ) { l=label(txt) }
