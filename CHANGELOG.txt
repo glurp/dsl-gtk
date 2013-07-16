@@ -1,4 +1,6 @@
-0.115.2
+0.116.1
+    ruiby : correction help
+0.116.0 : 2013-07-16 15:41:27 +0200
     ruiby : %% 
 0.115.0 : 2013-07-15 18:50:14 +0200
     ruiby_default_dialog3.rb : goooooooooooo
