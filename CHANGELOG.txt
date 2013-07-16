@@ -1,29 +1,16 @@
-0.118.1
     make_doc.rb : link to all words
-    ruiby_dsl3.rb : comment principes
-0.118.0 : 2013-07-16 16:18:48 +0200
-0.117.0 : 2013-07-16 16:17:46 +0200
-    ruiby : correction help
+    ruiby_dsl3.rb : comment generalities
 0.116.0 : 2013-07-16 15:41:27 +0200
-    ruiby : %% 
-0.115.0 : 2013-07-15 18:50:14 +0200
-    ruiby_default_dialog3.rb : goooooooooooo
-0.114.0 : 2013-07-15 18:47:57 +0200
-    ruiby_default_dialog3.rb : gooooooooo
+    ruiby : %% as guillemet
 0.113.0 : 2013-07-15 18:45:25 +0200
     make_doc.rb : popup on code example
-    ruiby_dsl3.rb : comments
-    ruiby_default_dialog3.rb : comments
-    editor.rb : button_list become private, dor documentation
-    ruiby : R for r
+    editor.rb : button_list become private, for documentation
+    ruiby : require Ruiby ruiby
     README.md : doc reference
     paned.rb : style test
     ruiby_dsl3.rb : container style
-0.112.0 : 2013-07-11 19:58:18 +0200
-    README.md : paned update
 0.111.0 : 2013-07-11 19:57:02 +0200
     README.md : paned upgrade
-0.110.0 : 2013-07-11 19:36:58 +0200
     test_composites.rb : paned update
 0.109.0 : 2013-07-11 19:32:53 +0200
     test.rb : noting
@@ -31,57 +18,21 @@
     paned.rb : paned by bloc
     canvas.rb : paned by bloc
     ruiby_dsl3.rb : paned by block
-0.108.0 : 2013-07-10 15:00:24 +0200
 0.107.0 : 2013-07-10 14:59:41 +0200
     canvas.rb : plot xyft
     Ruiby.gemspec : indentations
 0.106.0 : 2013-07-09 18:55:53 +0200
-    canvas.rb : default color forr text item
-0.105.0 : 2013-07-09 18:32:48 +0200
+    canvas.rb : default color for text item
     make_doc.rb : code ex
     doc.html : code example with popup asist
     Ruiby.gemspec : add gtk2 dependencie
-0.104.0 : 2013-07-05 19:50:07 +0200
     Ruiby.gemspec : add ruiby_canvas bin command
-0.103.0 : 2013-07-05 19:48:53 +0200
     Ruiby.gemspec : canvas
-0.102.0 : 2013-07-05 19:45:55 +0200
-    test.rb : elative
-    Rakefile.rb : re
-0.101.0 : 2013-07-05 19:41:34 +0200
-    test.rb : relative
-0.100.0 : 2013-07-05 19:35:14 +0200
     canvas.rb : look
 0.99.0 : 2013-07-04 19:18:56 +0200
-    rspec_helper.rb : R
-    tree.rb : R
-    tilesviewer.rb : R
-    testth.rb : R
-    test_systray.rb : R
-    test_include.rb : R
-    test_gtk2.rb : R
-    test.rb : R
-    table2.rb : R
-    spygui.rb : R
-    sketchi.rb : R
-    paned.rb : R
-    netprog.rb : R
-    multi_window_threading.rb : R
-    images.rb : R
-    hello.rb : R
-    editor.rb : R
-    dialogs.rb : R
-    color.rb : R
-    canvas.rb : R
-    cal.rb : R
-    benchi.rb : R
-    accordion.rb : no
+    samples/*.rb : require Ruiby / ruiby
 0.98.0 : 2013-07-04 16:17:52 +0200
-    Ruiby.gemspec : pres
-0.97.0 : 2013-07-04 16:15:39 +0200
     README.md : gtk3 and capitalisation of Ruiby
-0.96.1
-0.96.0 : 2013-06-21 19:14:26 +0200
     README.md : update for canvas.rb
 0.95.0 : 2013-06-18 22:05:41 +0200
     cal.rb : gtk3
@@ -350,123 +301,3 @@
     spec/test_all.rb : creation
     spec/rspec_helper.rb : creation
     Rakefile.rb : travis
-0.41.0 : 2012-09-25 19:18:21 +0200
-    lib/ruiby_gtk/ruiby_dsl.rb : buttoni
-    lib/ruiby_gtk/ruiby_dsl.rb : buttoni and labeli, for ruiby.sh
-0.40.0 : 2012-09-24 21:14:00 +0200
-    samples/testth.rb : differed threading
-    samples/sketchi.rb : moif help extractor
-    Rakefile.rb : diff
-    lib/ruiby_gtk/windows.rb : what
-    samples/dialogs.rb : big data
-0.39.0 : 2012-09-13 19:57:34 +0200
-    samples/tilesviewer.rb : autoresize
-    samples/test.rb : test grid anf form dialog
-    samples/dialogs.rb : test grid and form dialog
-    lib/ruiby_gtk/ruiby_dsl.rb : grid methods
-    lib/ruiby_gtk/editor.rb : grid dialog and form dialog
-    lib/ruiby_gtk/ruiby_dsl.rb : center and relative container
-    samples/tilesviewer.rb : center  map tiles
-    lib/ruiby_gtk/ruiby_dsl.rb : center and relative container
-0.38.1 : 2012-08-18 01:42:08 +0200
-    lib/ruiby_gtk/windows.rb : comment for yard bug
-    lib/ruiby_gtk/ruiby_dsl.rb : comment for yard
-    samples/test.rb : check button test
-    lib/ruiby_gtk/ruiby_dsl.rb : callback on check button
-0.37.0 : 2012-08-18 01:42:08 +0200
-    lib/ruiby_gtk/ruiby_dsl.rb : comment
-0.36.0 : 2012-08-18 00:11:32 +0200
-    samples/tilesviewer.rb : show tiles raster from osm web mapping
-    lib/ruiby_gtk/ruiby_dsl.rb : image sizable
-    lib/ruiby.rb : local storage
-    lib/ruiby_gtk/ruiby_dsl.rb : init textarea
-0.33.0 : 2012-07-30 00:40:28 +0200
-    samples/sketchi.rb : suppress DATA section
-0.32.0 : 2012-07-30 00:27:59 +0200
-0.31.0 : 2012-07-30 00:19:02 +0200
-    samples/sketchi.rb : supress DATA section
-0.30.1
-    samples/draw.rb : export to svg
-0.30.0 : 2012-07-04 19:30:10 +0200
-    lib/ruiby_gtk/ruiby_dsl.rb : rescue callback error with a dialogue for all actions
-    samples/draw.rb : icones for selection actions
-    lib/ruiby_gtk/ruiby_dsl.rb : trap exception on callbacks(1)
-    samples/draw.rb : correct errors
-    lib/ruiby_gtk/ruiby_dsl.rb : suppress some print
-0.29.0 : 2012-06-29 22:24:48 +0200
-0.28.0 : 2012-06-29 22:23:12 +0200
-    samples/draw.rb : slection, save (marshal), export svg
-    lib/ruiby_gtk/ruiby_dsl.rb : callback on islider, ientry ...
-    samples/draw.rb : creation text,image, selection part 1
-    lib/ruiby_gtk/ruiby_dsl.rb : can define a image from a fraction of e raster file
-    lib/ruiby_gtk/ruiby_default_dialog.rb : prompt revisited
-    samples/draw.rb : create rectangle type vector, animation for testing rotate and scale
-0.27.0 : 2012-06-28 00:33:15 +0200
-0.26.0 : 2012-06-28 00:31:56 +0200
-    samples/draw.rb : drawing editor and vectored widget, in building
-    lib/ruiby_gtk/ruiby_dsl.rb : callback on slider, color chooser
-0.25.0 : 2012-05-09 15:48:39 +0200
-    samples/test.rb : add get_config test
-    lib/ruiby_gtk/ruiby_dsl.rb : correction get_config() with w.class.properties()
-    Rakefile.rb : best changelog management
-    samples/dsl.rb : creation
-    Rakefile.rb : mask markers files
-    samples/test.rb : test get_config and recursive table
-0.22.0 : 2012-05-04 20:57:11 +0200
-    samples/images.rb : properties of images
-    lib/ruiby_gtk/windows.rb : recursive table
-    lib/ruiby_gtk/ruiby_dsl.rb : recursive table, get_config() creation
-    lib/ruiby.rb : Comments on Ruiby.app
-    lib/ruiby.rb : Comment on Ruiby.app
-    samples/images.rb : simpler
-    samples/images.rb : creation demo Ruiby.app
-    Rakefile.rb : 
-    lib/ruiby.rb : add Ruiby.app for micro-application
-0.18.0 : 2012-04-11 20:40:07 +0200
-    Rakefile.rb : test
-    Rakefile.rb : test gem
-    Rakefile.rb : win32 detection
-    Rakefile.rb : git add
-0.17.0 : 2012-04-11 19:30:46 +0200
-    Rakefile.rb : gem builder
-    Rakefile.rb : commit foreach file modified
-    Rakefile.rb : creation
-	update code example from test.rb     
-	correct main_quit        
-	remove utils.rb        
-	big crunch auto documentation V1     
-0.13.0
-	alabel as clickable label      
-	show exception and stack trace in Messsage.error   
-	set_data on properties editor      
-	readme: howto install and test     
-0.12.0
-	secure_main         
-	make accordeon in general test test.rb    
-	pseudo-private on dsl for sketchi
-	accordion creation pclickable
-0.10.0
-	creation image()
-	sketch memo in tmp dir
-0.9.0
-	news
-	correct autosloting on seprarator(),table()base64
-	space() creation
-	icones to source/base64 generator
-	mini edi ruiby
-	property show and editor
-	improve slotation in test.rb
-	readme news
-0.8.0
-	ruiby_require Ruiby.update
-0.7.0
-	bug  3 ___ in __window__
-	update Mendelaiev code in readme
-0.6.0
-	automatic slot done if widget is not packed
-	update readme2
-	update readme
-	modify changelog managment
-0.5.0
-	create changelog
-0.4.4
