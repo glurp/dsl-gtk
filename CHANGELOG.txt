@@ -1,4 +1,8 @@
-0.116.1
+0.118.1
+    make_doc.rb : link to all words
+    ruiby_dsl3.rb : comment principes
+0.118.0 : 2013-07-16 16:18:48 +0200
+0.117.0 : 2013-07-16 16:17:46 +0200
     ruiby : correction help
 0.116.0 : 2013-07-16 15:41:27 +0200
     ruiby : %% 
