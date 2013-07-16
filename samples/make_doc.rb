@@ -146,7 +146,7 @@ def extract_doc_dsl()
     comment=""
     hdoc=content.split(/\r?\n\s*/).inject(hdoc) {|h,line|
       ret=nil
-      if a=/^def\s+([^_].*)/.match(line)
+      if a=/^\s*def\s+([^_].*)/.match(line)
         name=a[1].split('(')[0]
         api=a[1].split(')')[0]+")"
         descr=comment.gsub('#\s*',"")
@@ -198,7 +198,7 @@ hdoc=extract_doc_dsl()
 table=hdoc.keys.sort.select {|a| (a !~ /\./) }.map { |name| htable % [name,name]}.join(" ")
 lapis=hdoc.keys.sort.select {|a| (a !~ /\./) }.map {  |k|  
   n1,n2,a,d= *hdoc[k]
-  hitem % [n1.gsub(/^aaa/,'').gsub('_',' '),n2.gsub(/^aaa/,'').gsub('_',' '),a,d]
+  hitem % [n1,n2.gsub(/^aaa/,'').gsub('_',' '),a,d]
 }
 dico_hdoc=make_hdoc(hdoc)
 test=make_example(hdoc)
