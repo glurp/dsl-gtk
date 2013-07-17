@@ -81,15 +81,16 @@ module Ruiby_default_dialog
   
 	# modal dialog asking a color
 	def ask_color()
-		cdia = ColorSelectionDialog.new("Select color")
+		cdia = ColorSelectionDialog.new(title: "Select color")
 		cdia.set_window_position(:center)
 		response=cdia.run
 		color=nil
-        if response == Gtk::Dialog::RESPONSE_OK
-            colorsel = cdia.colorsel
-            color = colorsel.current_color
-        end 		
+    if response == Gtk::ResponseType::OK
+        colorsel = cdia.color_selection
+        color = colorsel.current_color
+    end 		
 		cdia.destroy
+    p color
 		color
 	end
 
