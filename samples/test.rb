@@ -72,7 +72,7 @@ def component()
 end
 
 	def test_table	
-		frame("") { table(2,10,{set_column_spacings: 3}) do
+		frame("Forms",margins: 10,bg: "#FEE") { table(2,10,{set_column_spacings: 3}) do
 			  row { cell_right(label  "mode de fontionnement"); cell(button("set") { alert("?") }) }
 			  row { cell_right label  "vitesse"               ; cell(entry("aa"))  }
 			  row { cell_right label  "size"                  ; cell ientry(11,{:min=>0,:max=>100,:by=>1})  }
@@ -82,14 +82,14 @@ end
 			  row { cell      label  "mode on"               ; cell check_button("",false)  }
 			  row { cell      label  "mode off"              ; cell check_button("",true)  }
 			  row { cell_left label  "Variable"              ; cell combo({"aaa"=>1,"bbb"=>2,"ccc"=>3},1) }
-			  row { p 4;cell_left label  "Couleur"               ; cell color_choice()  }
+			  row { cell_left label  "Couleur"               ; cell box { color_choice() {|c| alert(c.to_s)}  } }
 			end 
 		}
-        frame("Buttons in frame") {
+    frame("Buttons in frame") {
           flow { sloti(button("packed with sloti()") {alert("button packed with sloti()")}) 
 		         @bref=sloti(button("bb")) ;  button("packed with slot()") ; 
 		  }
-        }
+    }
 	end
 	def test_canvas()
 		 flow do
