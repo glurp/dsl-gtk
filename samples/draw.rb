@@ -844,7 +844,7 @@ class Application < Ruiby_gtk
 			x= Time.now.to_i%2==0 ? 1 : -1
 			@win.scale(400,400,1.0+x*0.001,1.0+x*0.001) if @t && @t.active?
 		}
-	end
+	end # end component()
 	def define_style
 		@win.define_style({:fg=>@fgcolor,:bg=>@bgcolor,:width=>@stroke_width,:font=>"Arial",:font_size=>33})
 	end
