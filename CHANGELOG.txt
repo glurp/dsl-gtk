@@ -1,3 +1,8 @@
+0.118.2
+    test.rb : color_choice correction
+    make_doc.rb : d
+    ruiby_dsl3.rb : y
+    ruiby_default_dialog3.rb : correction ask_color
     make_doc.rb : link to all words
     ruiby_dsl3.rb : comment generalities
 0.116.0 : 2013-07-16 15:41:27 +0200
