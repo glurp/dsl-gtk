@@ -15,6 +15,9 @@ html=<<EEND
   .title {font-size:33;color:white; padding:10px 100px 10px 100px;margin-bottom:20px;
   background: #5e8077;background: linear-gradient(to bottom, #606060 0%%,#808080 100%%);   
   box-shadow: 0px 2px 11px 2px #000; }
+  .title2 {font-size:16;color:white; padding:10px 100px 10px 100px;margin-bottom:20px;
+  background: #5e8077;background: linear-gradient(to bottom, #606060 0%%,#808080 100%%);   
+  box-shadow: 0px 2px 11px 2px #000; }
   .atitle {
     font: 17px arial,sans-serif;         
     background: #5e8077;
@@ -108,11 +111,7 @@ Generated at : %s<br>
 %s
 </div>
 <a name="code"></a>
-<div class="title">Code (from samples/test.rb)</div>
-<div class='code'>
-<pre><code>
 %s
-</code></pre>
 </div>
 
 <hr>
@@ -134,7 +133,7 @@ htable='<span class="a"><a class="l" href="#%s">%s</a></span>'
 hitem=<<EEND
 <div class='atitle'><a name='%s'>%s</a></div>
 <div class='api'>%s</div>
-<div class='descr'>%s</div>
+<div class='descr'>%s <a href='#ex_%s'>ex</a></div>
 EEND
 
 
@@ -177,17 +176,22 @@ def make_anchor(word)
    ret
 end
 
+$hexample={}
 def make_popup(word)
    ret="<a href='javascript:popup(\"#{word}\");'>#{word}</a>"
+   unless $hexample[word]
+     ret="<a name='ex_#{word}'></a>"+ret
+   end
+   $hexample[word]=1
    ret
 end
 
-def make_example(hdoc)
-  src=File.dirname(__FILE__)+"/test.rb"
+def make_example(hdoc,filename)
+  src=File.dirname(__FILE__)+"/"+filename
   content=File.read(src)
-  code= 'component()' + content.split('component()')[1]
+  code= 'def component()' + content.split('component()')[1]
   code=code.gsub(/\w+/) { |word| (hdoc[word]) ? make_popup(word) : word}
-  code
+  '<div class="title2">Code (from samples/%s)</div><div class="code"><pre><code>%s</code></pre><br>' % [filename,code]
 end
 
 def make_hdoc(hdoc)
@@ -200,10 +204,18 @@ hdoc=extract_doc_dsl()
 table=hdoc.keys.sort.select {|a| (a !~ /\./) }.map { |name| htable % [name,name]}.join(" ")
 lapis=hdoc.keys.sort.select {|a| (a !~ /\./) }.map {  |k|  
   n1,n2,a,d= *hdoc[k]
-  hitem % [n1,n2.gsub(/^aaa/,'').gsub('_',' '),a,d]
+  hitem % [n1,n2.gsub(/^aaa/,'').gsub('_',' '),a,d,n1]
 }
 dico_hdoc=make_hdoc(hdoc)
-test=make_example(hdoc)
+test=[
+  make_example(hdoc,"test.rb"),
+  make_example(hdoc,"test_systray.rb"),
+  make_example(hdoc,"table2.rb"),
+  make_example(hdoc,"draw.rb"),
+  make_example(hdoc,"accordion.rb"),
+].join("<hr>")
+
+eend="<hr><br><p><b>No example for</b> : %s" % [(hdoc.keys - $hexample.keys- %w{initialize component}).join(', ')]
 
 api1=lapis.join("\n")
 content=html % [
@@ -212,7 +224,7 @@ content=html % [
 	Time.now.to_s,
 	table,
 	api1,
-  test
+  test+eend
 ]
 
 output="#{File.dirname(__FILE__)}/../doc.html"
