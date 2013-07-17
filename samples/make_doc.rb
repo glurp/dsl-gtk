@@ -189,9 +189,11 @@ def make_example(hdoc)
   code=code.gsub(/\w+/) { |word| (hdoc[word]) ? make_popup(word) : word}
   code
 end
+
 def make_hdoc(hdoc)
  hdoc.map {|w,v|  "hdoc['%s']= '<div class=\"api\"><br>%s</div><div>%s</div>';"  % [w,v[2],v[3].gsub("'","")]}.join("\n")
 end
+
 ########################## M A I N ###############################
 
 hdoc=extract_doc_dsl()
