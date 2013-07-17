@@ -108,19 +108,19 @@ module Ruiby_dsl
   ############################ Slot : H/V Box or Frame
 
   # container : vertical box, take all space available, sloted in parent by default
-  def stack(add1=true,&b)    		_cbox(true,Box.new(:vertical, 2),add1,&b) end
+  def stack(config={},add1=true,&b)    		_cbox(true,Box.new(:vertical, 2),config,add1,&b) end
   # container : horizontal box, take all space available, sloted in parent by default
-  def flow(add1=true,&b)	   		_cbox(true,Box.new(:horizontal, 2),add1,&b) end
+  def flow(config={},add1=true,&b)	   		_cbox(true,Box.new(:horizontal, 2),config,add1,&b) end
   # container : vertical or horizontal box (stack/flow, choice by first argument), 
   # sloted in parent by default
-  def var_box(sens,add1=true,&b) _cbox(true,Box.new(sens, 2),add1,&b) end
+  def var_box(sens,config={},add1=true,&b) _cbox(true,Box.new(sens, 2),config,add1,&b) end
   # container : vertical box, take only necessary space , sloted in parent
-  def stacki(add1=true,&b)    	_cbox(false,Box.new(:vertical, 2),add1,&b) end
+  def stacki(config={},add1=true,&b)    	_cbox(false,Box.new(:vertical, 2),config,add1,&b) end
   # container : horizontal box, take only necessary space , sloted in parent
-  def flowi(add1=true,&b)	   		_cbox(false,Box.new(:horizontal, 2),add1,&b) end
+  def flowi(config={},add1=true,&b)	   		_cbox(false,Box.new(:horizontal, 2),config,add1,&b) end
   # container : vertical or horizontal box (stacki/flowi, choice by first argument), 
   # sloted in parent by default
-  def var_boxi(sens,add1=true,&b) _cbox(false,Box.new(sens, 2),add1,&b) end
+  def var_boxi(sens,config={},add1=true,&b) _cbox(false,Box.new(sens, 2),config,add1,&b) end
 
   # box { } container which manage children widget without slot (pack()) 
   # in parent container.
@@ -152,16 +152,16 @@ module Ruiby_dsl
   end
   
   # a box with border and texte title, take all space
-  def frame(t="",add1=true,&b)  	
-    _cbox(true,Frame.new(t),add1) { stack { b.call } } 
+  def frame(t="",config={},add1=true,&b)  	
+    w=_cbox(true,Frame.new(t),config,add1) { s=stack { b.call } ; s.set_border_width(5) } 
   end
   # a box with border and texte title, take only necessary space
-  def framei(t="",add1=true,&b)
-    _cbox(false,Frame.new(t),add1) { stack { b.call } }
+  def framei(t="",config={},add1=true,&b)
+    _cbox(false,Frame.new(t),config,add1) { s=stack { b.call } ; s.set_border_width(5) }
   end
 
   # private: generic packer
-  def _cbox(expand,box,add1)
+  def _cbox(expand,box,config,add1)
     autoslot() # pack last widget before append new bow
     parent=@lcur.last
     if add1
@@ -171,6 +171,7 @@ module Ruiby_dsl
     yield
     autoslot() # pack last widget before closing box
     @lcur.pop 
+    apply_options(box,config) 
   end
   def _pack(parent,box,expand)
      parent.respond_to?(:pack_start) ? 
@@ -376,21 +377,29 @@ module Ruiby_dsl
       w
   end
   # apply some styles  property  to an existing widget. 
-  # options are :size, :width; :height, :bg, :fg, :font
-  # apply_options(w,:size=> [10,10], :width=>100;:heigh=>200,:bg=>'#FF00AA",:fg=> Gdk::Color:RED,:font=> "Tahoma bold 32")
+  # options are :size, :width; :height, :margins, :bg, :fg, :font
+  # apply_options(w,
+  #   :size=> [10,10], 
+  #   :width=>100, :heigh=>200,
+  #   :margins=> 10
+  #   :bg=>'#FF00AA",:fg=> Gdk::Color:RED,
+  #   :font=> "Tahoma bold 32"
+  # )
   def apply_options(w,options)
       w.set_size_request(*options[:size])                                 if options[:size]	
+      w.set_border_width(options[:margins])                               if options[:margins]	
       w.width_request=(options[:width].to_i)                              if options[:width]
       w.height_request=(options[:height].to_i)                            if options[:height]
       w.override_background_color(:normal,color_conversion(options[:bg])) if options[:bg] 
       w.override_color(:normal,color_conversion(options[:fg]))            if options[:fg] 
       w.override_font(Pango::FontDescription.new(options[:font]))         if options[:font]
+      w
   end
   def color_conversion(color)
     case color 
       when ::Gdk::RGBA then color
       when String then color_conversion(::Gdk::Color.parse(color))
-      when ::Gdk::Color then ::Gdk::RGBA.new(color.red,color.green,color.blue,1)
+      when ::Gdk::Color then ::Gdk::RGBA.new(color.red/65000.0,color.green/65000.0,color.blue/65000.0,1)
       else
         raise "unknown color : #{color.inspect}"
     end
@@ -566,7 +575,7 @@ module Ruiby_dsl
   
   def _radio_buttons(sens,ltext=["empty!"],value=-1)
     b0=nil
-    s=var_box(sens,false) {
+    s=var_box(sens,{},false) {
       ltext.each_with_index {|t,i|
         b=if i==0
             b0=slot(RadioButton.new(t))
@@ -672,19 +681,22 @@ module Ruiby_dsl
 
   # create a button wich will show a dialog for color choice
   # if bloc is given, it with be call on each change, with new color value as parameter
+  # current color is w.get_color()
   def color_choice(text=nil,options={},&cb)
-    b,d=nil,nil
-    hb=flow(false) { b = slot(button(text.to_s||"Color?...")) ; d=slot(DrawingArea.new) }					
-    b.signal_connect("clicked") {
-      c=ask_color
-      if c
-      d.modify_bg(Gtk::STATE_NORMAL,c)
-      b.modify_bg(Gtk::STATE_NORMAL,c)
-      cb.call(c) if block_given?
+    but,lab=nil,nil
+    out=flow { 
+      but = button((text||"Color?...").to_s) do
+        c=ask_color    
+        apply_options(lab,{bg: c}) if c
+        cb.call(c) if block_given? 
       end
+      lab=label("  c    ")
     }
-    attribs(hb,options)		
-    hb
+    attribs(but,options)		
+    def out.get_color()
+       chilldren[1].get_color()
+    end
+    out
   end
 
   # Create a drawing area, for pixel draw
@@ -910,7 +922,7 @@ module Ruiby_dsl
     else
       l=Label.new(title)
     end 
-    @lcur.last.append_page( stack(false)  { yield }, l )
+    @lcur.last.append_page( box { yield }, l )
   end
 
   ############################## Popup
@@ -1047,7 +1059,7 @@ module Ruiby_dsl
   def flow_paned(size,fragment,&blk) _paned(true,size,fragment,&blk) end
 
   def _paned(horizontal,size,fragment)    
-    s=stack(true) {} # create a temporary contnaier for inner widgets
+    s=stack {} # create a temporary container for inner widgets
     @lcur << s
     yield()
     autoslot
@@ -1209,7 +1221,7 @@ module Ruiby_dsl
     sw.set_width_request(width)		if width>0 
     sw.set_height_request(height)	if height>0
     sw.set_policy(:automatic, :always)
-    ret= stack(false,&b) if  block_given? 
+    ret= box(&b) if  block_given? 
     sw.add_with_viewport(ret)
     class << sw
     ;  def scroll_to_top()    vadjustment.set_value( 0 ) 					; vadjustment.value_changed ; end
@@ -1230,7 +1242,7 @@ module Ruiby_dsl
   def clickable(method_name,&b) 
     eventbox = Gtk::EventBox.new
     eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
-    ret=_cbox(true,eventbox,true,&b) 
+    ret=_cbox(true,eventbox,{},true,&b) 
     eventbox.realize
     eventbox.signal_connect('button_press_event') { |w, e| self.send(method_name,ret)  rescue error($!) }
     ret
@@ -1241,7 +1253,7 @@ module Ruiby_dsl
   def pclickable(aproc,&b) 
     eventbox = Gtk::EventBox.new
     eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
-    ret=_cbox(true,eventbox,true,&b) 
+    ret=_cbox(true,eventbox,{},true,&b) 
     eventbox.realize
     eventbox.signal_connect('button_press_event') { |w, e| aproc.call(w,e)  rescue error($!)  }
     ret
