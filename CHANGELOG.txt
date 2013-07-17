@@ -1,4 +1,10 @@
-0.118.2
+0.118.3
+    test_systray.rb : presentation for doc
+    test.rb : indent for doc
+    make_doc.rb : reference manual to example, many exemples
+    draw.rb : comment for doc
+    accordion.rb : indentations
+    windows.rb : ionitialize
     test.rb : color_choice correction
     make_doc.rb : d
     ruiby_dsl3.rb : y
