@@ -31,12 +31,13 @@ class Application < Ruiby_gtk
 		  move(100,100)
 		  chrome(false)
 		  update()
-		  systray(nil,850) do
-			syst_icon  HAPPY_ICON
-		    syst_add_button "Reload"				do |state| load(__FILE__) rescue log $! ; end
-			syst_add_button "Execute Test"			do |state|  move(100,100);show; update() end
-			syst_quit_button true
-		  end
+      # component()
+      systray(nil,850) do
+        syst_icon  HAPPY_ICON
+        syst_add_button "Reload"        do |state| load(__FILE__) rescue log $! ; end
+        syst_add_button "Execute Test"  do |state|  move(100,100);show; update() end
+        syst_quit_button true
+      end # end component()
 	  end
 	  def selection() update()  end
 	  def component()
