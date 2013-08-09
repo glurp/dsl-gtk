@@ -43,7 +43,7 @@ class SysTray < StatusIcon
 	end
 	if config[:quit]
 		@bquit_tray=ImageMenuItem.new(Stock::QUIT)
-		@bquit_tray.signal_connect("activate"){window.main_quit}
+		@bquit_tray.signal_connect("activate"){Gtk.main_quit}
 		#@popup_tray.append(SeparatorMenuItem.new)
 		@popup_tray.append(@bquit_tray)
 	end
@@ -51,7 +51,7 @@ class SysTray < StatusIcon
 	super()
 	
 	self.pixbuf= file ?  Gdk::Pixbuf.new(file) :  nil 
-	self.tooltip=title
+	#self.tooltip=title
 	self.signal_connect('activate'){ 
 		if window.visible? 
 			$wposition=window.position
@@ -62,7 +62,7 @@ class SysTray < StatusIcon
 		end
 	}
 	self.signal_connect('popup-menu'){|tray, button, time|
-	  @popup_tray.popup(nil, nil, button, time) {|menu, x, y, push_in| [(x0||x),(y0||y)] }
+	  @popup_tray.popup(nil, nil, button, time) #{|menu, x, y, push_in| [(x0||x),(y0||y)] }
 	}
   end
 end
