@@ -29,12 +29,13 @@ def component()
   after(1000) {puts "\n\n\n"  ; Gem.loaded_specs.each {|name,gem| puts "  #{gem.name}-#{gem.version}"} }
   mlog 'before Component'
   stack do
-    sloti(htoolbar(
-      "open/tooltip text on button"=>proc { edit(__FILE__) },
-      "close/fermer le fichier"=>nil,
-      "undo/defaire"=>nil,
-      "redo/refaire"=>proc { alert("e") }
-    ))
+    htoolbar_with_icon_text(
+      "open/ouvrir..."=>proc { edit(__FILE__) },
+      "save/save.."=>nil,
+      "sep" => nil,
+      "undo/undo"=>nil,
+      "redo/redo"=>proc { alert("e") }
+    )
     sloti(label( <<-EEND ,:font=>"Tahoma bold 12"))
      This window is test & demo of Ruiby capacity.
      Ruby = #{RUBY_VERSION}, Ruiby is #{Ruiby::VERSION}, Gtk is  #{Gtk::VERSION.join(".")}
