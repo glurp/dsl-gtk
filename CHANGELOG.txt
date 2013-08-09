@@ -1,4 +1,8 @@
-0.118.5
+0.118.6
+    test_systray.rb : chrome true
+    sketchi.rb : button_icon_text
+    systray.rb : gtk.main_quit
+    ruiby_dsl3.rb : larg icon for button_text_icon
     doc.html : prototypes
     test.rb : toolbar test update
     sketchi.rb : helpers icones end font
