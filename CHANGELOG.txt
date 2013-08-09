@@ -1,4 +1,8 @@
-0.118.3
+0.118.4
+    test.rb : toolbar test update
+    sketchi.rb : helpers icones end font
+    make_doc.rb : chow prototype of functions
+    ruiby_dsl3.rb : toolbar with icon and text
     test_systray.rb : presentation for doc
     test.rb : indent for doc
     make_doc.rb : reference manual to example, many exemples
