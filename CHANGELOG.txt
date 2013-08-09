@@ -1,4 +1,5 @@
-0.118.4
+0.118.5
+    doc.html : prototypes
     test.rb : toolbar test update
     sketchi.rb : helpers icones end font
     make_doc.rb : chow prototype of functions
