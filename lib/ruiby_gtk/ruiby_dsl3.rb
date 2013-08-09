@@ -330,7 +330,7 @@ module Ruiby_dsl
   #     filename.png[NoCol , NoRow]xSize
   #     filename.png[3,2]x32 : extract a icon of 32x32 pixel size from third column/second line
   #    see samples/draw.rb
-  def get_image_from(name)
+  def get_image_from(name,size=:button)
     if name.index('.') 
       return Image.new(name) if File.exists?(name)
       return _sub_image(name) if name.index("[")
@@ -338,7 +338,7 @@ module Ruiby_dsl
     end
     iname=get_icon(name)
     if iname
-      Image.new(:stock => iname,:size=> :button)
+      Image.new(:stock => iname,:size=> size)
     else
       nil
     end
@@ -419,14 +419,16 @@ module Ruiby_dsl
   end
 
   # create  label, with text (or image if txt start with a '#')
+  # spatial option : isize : icon size if image (menu,small_toolbar,large_toolbar,button,dnd,dialog)
   def label(text,options={})
     l=_label(text,options)
     attribs(l,options)
   end
   def labeli(text,options={}) sloti(label(text,options)) end 
+  
   def _label(text,options={})
     l=if text && text[0,1]=="#"
-      get_image_from(text[1..-1]);
+      get_image_from(text[1..-1],options[:isize]||:button);
     else
       Label.new(text);
     end
@@ -514,8 +516,8 @@ module Ruiby_dsl
   # htoolbar_with_icontext("dialog_info/text info" => proc {alert(1)},"dialog_error/text error" => proc {alert(2)} )
   # Usage 2 :
   # htoolbar_with_icon_text do
-  #  icon_text "dialog_info","text info" do alert(1) end
-  #  icon_text "dialog_error","text error" do alert(2) end
+  #  button_icon_text "dialog_info","text info" do alert(1) end
+  #  button_icon_text "dialog_error","text error" do alert(2) end
   # end
   # if icone name start with 'sep' : a vertical separator is drawn in place of touch
   # see sketchi
@@ -531,7 +533,7 @@ module Ruiby_dsl
            if icon !~ /^sep/
               spacie
               pclickablie(proc { v.call  }) { stacki { 
-                  label "#"+icon do v.call end 
+                  label("#"+icon,isize: :dialog) do v.call end 
                   label text[0,12] 
              } }
            else
@@ -541,14 +543,15 @@ module Ruiby_dsl
       }
     end
   end
-  # a button with icon+text, coupled in a stacki
-  # can be call anywhere and in htool_bar_with_icon_text
-  def icon_text(icon,text="",&b)
+  # a button with icon+text vertivcaly aligned,
+  # can be call anywhere, and in htool_bar_with_icon_text
+  # option is label options and  isize ( option for icon size, see label())
+  def button_icon_text(icon,text="",options={},&b)
        if icon !~ /^sep/
           spacie
           pclickablie(proc { b.call  }) { stacki { 
-              label "#"+icon do v.call end 
-              label text[0,15] 
+              label("#"+icon,{isize: (options[:isize] || :dialog) }) 
+              label(text[0,15],options)
          } }
        else
           separator
@@ -1647,12 +1650,9 @@ module Ruiby_dsl
        string_style=File.read(fn)
     end
     begin
-      provider=Gtk::CssProvider.new
-      show_methods(provider)
-      show_methods(Gtk::StyleContext.new)
-      provider.load(string_style)
-      
-      #.add_provider(new Gtk.CssProvider.load_from_data(string_style, -1))
+      css=Gtk::CssProvider.new
+      css.load(data: string_style)
+      self.style_context.add_provider(css, 600)      
       @style_loaded=true
     rescue Exception => e
       error "Error loading style : #{e}\n#{string_style}"
