@@ -145,9 +145,9 @@ def extract_doc_dsl()
     comment=""
     hdoc=content.split(/\r?\n\s*/).inject(hdoc) {|h,line|
       ret=nil
-      if a=/^\s*def\s+([^_].*)/.match(line)
+      if a=/^\s*def\s+([^_][a-z0-9_]*)/.match(line)
         name=a[1].split('(')[0]
-        api=a[1].split(')')[0]+")"
+        api=line.split(')')[0]+")"
         descr=comment.gsub('#\s*',"")
         comment=""
         h[name]=[name,name,api,descr]
