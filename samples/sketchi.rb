@@ -17,31 +17,43 @@ class RubyApp < Ruiby_gtk
       if File.exists?(@filedef)
         load(@filedef,nil)
       else
-        load("new.rb",<<-EEND)
-        stack {
-          propertys("data",{int: 1,float: 1.0, array: [1,2,3], hash: {a:1, b:2}},{edit: true})  { |aa| alert aa }
-          button("button 1")
-          button("button 2")
-          flowi {  button("button 3") ;  button("button 4")  }
-          entry("",20)
-          button("exit") { alert("exit? realy?") }
-        }
-        EEND
+        load("new.rb",<<EEND)
+def b()
+  w=button(Time.now.to_i.to_s)
+  w.sensitive=true
+  w
+end
+
+stack {
+   stacki { b ; b ; b}
+   stack { flow { 
+		stacki { b;b;b}; 
+		f=frame("Eeedddddddd") { b;b;w=b ; } ; 
+		f.set_border_width(30)
+	 } 
+   } 
+   buttoni("eeeeeeeee")
+}
+EEND
       end
     end
 	def component()
 		stack do
-			sloti(htoolbar(
-				"open/Open file..."=> proc {
+			htoolbar_with_icon_text do
+				icon_text "open","Open file..." do
 					load(ask_file_to_read(".","*.rb"),nil)
-				},
-				"Save/Save buffer to file..."=> proc {
+				end
+				icon_text "Save","Save buffer to file..." do
 					@file=ask_file_to_write(".","*.rb") unless File.exists?(@file)
 					@title.text=@file
 					content=@edit.buffer.text
 					File.open(@file,"wb") { |f| f.write(content) } if @file && content && content.size>2
-				}
-			)) 
+				end
+				separator
+				icon_text("about","Show predifined icon Gtk::Stock::???"){ dialog_icones }
+        icon_text("select_font","Show font")  { dialog_font }
+			end 
+      separator
 			stack_paned(600,0.7) do
 				flow_paned(1200,0.5) do 
 					stack {
@@ -60,6 +72,34 @@ class RubyApp < Ruiby_gtk
 			end
 		end
 	end
+  def dialog_icones
+    dia=dialog "Ruiby Predefined icones" do
+        stack do
+          labeli <<-EEND
+          
+              label or button can be represented by a icon if '#' char prefixe is present :
+                  button("#open") { }
+                  label("#close") { }
+                  
+              Here, the list of predefined icones, (known by gtk/gnome)
+              
+          EEND
+          scrolled(400,500) { Stock.constants.map { |name|  
+            flow { labeli "#"+name.to_s ; labeli name.to_s.capitalize } 
+          } }
+        end
+    end
+  end
+  def dialog_font
+    dia=dialog "Ruiby Predefined icones" do
+        conf={typo: "Arial", type: "bold", size: 12}
+        we=entry("text...",300)
+        properties("attributes",conf,edit: true) { |conf|
+          p conf
+          apply_options(we,font: conf.values.join(" "))
+        }
+    end
+  end
 	def execute()
 		@content=@edit.buffer.text
 		clear_append_to(@demo) {
