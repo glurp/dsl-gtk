@@ -448,6 +448,7 @@ module Ruiby_dsl
   end
   # create a one-character size space, (or n character x n line space)
   def space(n=1) label(([" "*n]*n).join("\n"))  end
+  def spacie(n=1) labeli(([" "*n]*n).join("\n"))  end
 
   # create  button, with text (or image if txt start with a '#')
   # block argument is evaluate at button click
@@ -507,7 +508,52 @@ module Ruiby_dsl
      }
     attribs(b,options)
   end 
-
+  
+  # horizontal toolbar of (icone+text)
+  # Usage 1:
+  # htoolbar_with_icontext("dialog_info/text info" => proc {alert(1)},"dialog_error/text error" => proc {alert(2)} )
+  # Usage 2 :
+  # htoolbar_with_icon_text do
+  #  icon_text "dialog_info","text info" do alert(1) end
+  #  icon_text "dialog_error","text error" do alert(2) end
+  # end
+  # if icone name start with 'sep' : a vertical separator is drawn in place of touch
+  # see sketchi
+  def htoolbar_with_icon_text(conf={})
+    if  block_given?
+      flowi {
+        yield
+      }
+    else
+      flowi {
+        conf.each do |k,v|
+           icon,text=k.split('/',2)
+           if icon !~ /^sep/
+              spacie
+              pclickablie(proc { v.call  }) { stacki { 
+                  label "#"+icon do v.call end 
+                  label text[0,12] 
+             } }
+           else
+              separator
+           end
+        end
+      }
+    end
+  end
+  # a button with icon+text, coupled in a stacki
+  # can be call anywhere and in htool_bar_with_icon_text
+  def icon_text(icon,text="",&b)
+       if icon !~ /^sep/
+          spacie
+          pclickablie(proc { b.call  }) { stacki { 
+              label "#"+icon do v.call end 
+              label text[0,15] 
+         } }
+       else
+          separator
+       end
+  end
   ############### Inputs widgets
 
   #combo box, decribe  with a Hash choice-text => value-of-choice
@@ -1248,12 +1294,26 @@ module Ruiby_dsl
     ret
   end
 
-  # clickable with callback by closure :
-  # pclicakble(proc { alert("e") }) { alabel("click me!") }
+  # specific to gtk : some widget like label can't support click event, so they must
+  # be contained in a clickable parent (EventBox)
+  #  
+  # Exemple: pclickable(proc { alert true}) { label(" click me! ") }
+  #
+  # bloc is evaluated in a stack container
   def pclickable(aproc,&b) 
     eventbox = Gtk::EventBox.new
     eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
     ret=_cbox(true,eventbox,{},true,&b) 
+    eventbox.realize
+    eventbox.signal_connect('button_press_event') { |w, e| aproc.call(w,e)  rescue error($!)  }
+    ret
+  end
+  # as pclickable, but container is a stacki
+  # pclickablei(proc { alert("e") }) { label("click me!") }
+  def pclickablie(aproc,&b) 
+    eventbox = Gtk::EventBox.new
+    eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
+    ret=_cbox(false,eventbox,{},true,&b) 
     eventbox.realize
     eventbox.signal_connect('button_press_event') { |w, e| aproc.call(w,e)  rescue error($!)  }
     ret
