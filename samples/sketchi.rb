@@ -7,7 +7,6 @@
 #               not an IDE....
 #####################################################################
 # encoding: utf-8
-require 'gtk3'
 require_relative '../lib/Ruiby'
 
 class RubyApp < Ruiby_gtk
@@ -40,18 +39,18 @@ EEND
 	def component()
 		stack do
 			htoolbar_with_icon_text do
-				icon_text "open","Open file..." do
+				button_icon_text "open","Open file..." do
 					load(ask_file_to_read(".","*.rb"),nil)
 				end
-				icon_text "Save","Save buffer to file..." do
+				button_icon_text "Save","Save buffer to file..." do
 					@file=ask_file_to_write(".","*.rb") unless File.exists?(@file)
 					@title.text=@file
 					content=@edit.buffer.text
 					File.open(@file,"wb") { |f| f.write(content) } if @file && content && content.size>2
 				end
 				separator
-				icon_text("about","Show predifined icon Gtk::Stock::???"){ dialog_icones }
-        icon_text("select_font","Show font")  { dialog_font }
+				button_icon_text("about","Show predifined icon Gtk::Stock::???"){ dialog_icones }
+        button_icon_text("select_font","Show font")  { dialog_font }
 			end 
       separator
 			stack_paned(600,0.7) do
