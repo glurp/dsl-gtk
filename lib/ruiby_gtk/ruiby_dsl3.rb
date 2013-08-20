@@ -1610,40 +1610,9 @@ module Ruiby_dsl
   end
 
   ############################ define style !! Warning: specific to gtk
-  # see http://ruby-gnome2.sourceforge.jp/hiki.cgi?Gtk%3A%3ARC
-  # %GTK_BASEPATH%/share/themes/Metal/gtk-2.0/gtkrc
   #
-  # style "mstyle"
-  # {
-  # 	GtkWidget::interior_focus = 1
-  # 	GtkButton::default_spacing = { 1, 1, 1, 1 }
-  # 	GtkButton::default_outside_spacing = { 0, 0, 0, 0 }
-  # 	font_name = "lucida"
-  #   bg_pixmap[NORMAL] = 'pixmap.png'
-  # 	bg[NORMAL]      = { 0.80, 0.80, 0.80 }
-  # 	bg[PRELIGHT]    = { 0.80, 0.80, 1.00 }
-  # 	bg[ACTIVE]      = { 0.80, 0.80, 0.80 }
-  # 	bg[SELECTED]    = { 0.60, 0.60, 0.80 }
-  # 	text[SELECTED]  = { 0.00, 0.00, 0.00 }
-  # 	text[ACTIVE]    = { 0.00, 0.00, 0.00 }
-  # }	
-  # class "GtkLabel" style "mstyle"
-  #
-  def def_style(string_style=nil)
-    unless string_style
-       fn=caller[0].gsub(/.rb$/,".rc")
-       raise "Style: no ressource (#{fn} not-exist)" if !File.exists?(fn)
-       string_style=File.read(fn)
-    end
-    begin
-      Gtk::RC.parse_string(string_style)
-      @style_loaded=true
-    rescue Exception => e
-      error "Error loading style : #{e}\n#{string_style}"
-    end
-  end
   # not ready!!!
-  def def_style3(string_style=nil)
+  def def_style(string_style=nil)
     unless string_style
        fn=caller[0].gsub(/.rb$/,".rc")
        raise "Style: no ressource (#{fn} not-exist)" if !File.exists?(fn)
