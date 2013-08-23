@@ -1,4 +1,6 @@
-0.120.4
+0.120.5
+    make_doc.rb : order ex
+    README.md : doc via rawgithub
     test_systray.rb : no style
     table2.rb : stack false obsolete
     make_doc.rb : create and include base64 image osnapshot of each exemple
