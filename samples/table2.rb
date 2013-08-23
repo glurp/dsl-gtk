@@ -51,7 +51,7 @@ class RubyApp < Ruiby_gtk
 		} end
 	end 
   def pan(t)
-	stack(false) { button(t) ; button("2 lines") } 
+		box { button(t) ; button("2 lines") } 
   end
  
 end
