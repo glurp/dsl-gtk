@@ -207,7 +207,8 @@ def make_example(hdoc,filename)
 			icontent=open(ifn,"rb") do |f|
 				Base64.encode64(f.read(File.size(ifn)))
 			end
-			'<br/><img src="data:image/gif;base64,'+icontent+'"><br/>'
+			File.delete(ifn)
+			'<br/><center><img src="data:image/gif;base64,'+icontent+'"></center><br/>'
 	else
 	  puts "no snapshot"
 	  ""
@@ -233,7 +234,7 @@ lapis=hdoc.keys.sort.select {|a| (a !~ /\./) }.map {  |k|
 }
 dico_hdoc=make_hdoc(hdoc)
 
-lscript=%w{canvas.rb table2.rb testth.rb animtext.rb  test_systray.rb  multi_window_threading.rb netprog.rb  test.rb }
+lscript=%w{canvas.rb table2.rb testth.rb animtext.rb  test_systray.rb  multi_window_threading.rb test_include.rb netprog.rb test.rb }
 test=lscript.map { |file| make_example(hdoc,file) }.join("<hr>")
 puts "\n\n no exemples for : #{hdoc.size - $hexample.size} words\n"
 eend="<hr><br><p><b>No example for</b> : %s" % [(hdoc.keys - $hexample.keys- %w{initialize component}).join(', ')]
