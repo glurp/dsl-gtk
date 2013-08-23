@@ -4,6 +4,8 @@
 
 ### make_doc : extract api from soure DSL code file and
 ### make html documentation
+require 'base64'
+
 
 html=<<EEND
 <?DOCTYPE html>
@@ -186,13 +188,36 @@ def make_popup(word)
    ret
 end
 
+
 def make_example(hdoc,filename)
+  count= $hexample.size
   src=File.dirname(__FILE__)+"/"+filename
-  content=File.read(src)
-  code= 'def component()' + content.split('component()')[1]
+	system('ruby',src,"take-a-snapshot")
+  content=File.read(src).gsub('<','&lt;')
+	code= if content =~ /component\(\)/
+		'def component()' + content.split('component()')[1]
+	else
+	  content
+	end
   code=code.gsub(/\w+/) { |word| (hdoc[word]) ? make_popup(word) : word}
-  '<div class="title2">Code (from samples/%s)</div><div class="code"><pre><code>%s</code></pre><br>' % [filename,code]
+	count-=$hexample.size
+	puts " #{filename} : #{-count}"
+	ifn="snapshot_#{filename}.png"
+	img=if File.exists?(ifn)
+			icontent=open(ifn,"rb") do |f|
+				Base64.encode64(f.read(File.size(ifn)))
+			end
+			'<br/><img src="data:image/gif;base64,'+icontent+'"><br/>'
+	else
+	  puts "no snapshot"
+	  ""
+	end
+  '<div class="title2">Code of <a href="https://github.com/raubarede/Ruiby/blob/master/samples/%s">samples/%s</a></div>%s<div class="code"><pre><code>%s</code></pre><br></div><br>' % [filename,filename,img,code]
 end
+
+
+
+
 
 def make_hdoc(hdoc)
  hdoc.map {|w,v|  "hdoc['%s']= '<div class=\"api\"><br>%s</div><div>%s</div>';"  % [w,v[2],v[3].gsub("'","")]}.join("\n")
@@ -207,14 +232,10 @@ lapis=hdoc.keys.sort.select {|a| (a !~ /\./) }.map {  |k|
   hitem % [n1,n2.gsub(/^aaa/,'').gsub('_',' '),a,d,n1]
 }
 dico_hdoc=make_hdoc(hdoc)
-test=[
-  make_example(hdoc,"test.rb"),
-  make_example(hdoc,"test_systray.rb"),
-  make_example(hdoc,"table2.rb"),
-  make_example(hdoc,"draw.rb"),
-  make_example(hdoc,"accordion.rb"),
-].join("<hr>")
 
+lscript=%w{canvas.rb table2.rb testth.rb animtext.rb  test_systray.rb  multi_window_threading.rb netprog.rb  test.rb }
+test=lscript.map { |file| make_example(hdoc,file) }.join("<hr>")
+puts "\n\n no exemples for : #{hdoc.size - $hexample.size} words\n"
 eend="<hr><br><p><b>No example for</b> : %s" % [(hdoc.keys - $hexample.keys- %w{initialize component}).join(', ')]
 
 api1=lapis.join("\n")
