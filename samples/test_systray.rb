@@ -41,18 +41,6 @@ class Application < Ruiby_gtk
 	  end
 	  def selection() update()  end
 	  def component()
-	    # 17 pixel h
-	    def_style3(<<-EEND)
-        GtkLabel {
-            color: #ff0000 ;
-            background-color: #0000ff ;
-        }
-        GtkWindow > GtkLabel {
-            color: #ff0000 ;
-            background-color: #0000ff ;
-        }
-
-	    EEND
 		clickable(:selection) { @st= stack { slot(label("...")) } }
 	  end
 	end
