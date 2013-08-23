@@ -136,17 +136,19 @@ end
 #############################################################
 desc "job after local commit done: push to git repo"
 task :post_commit do
-  if $changed
-	  $version=change_version { |a| a[-1]=(a.last.to_i+1) }  
-      sh "git commit VERSION -m update"
-	  changelog_push_currrent_versions {
-		  sh "git commit CHANGELOG.txt -m update"
-		  sh "git push"
-		  puts "\n\nNew version is #{$version}\n"
-	  } 
-  else
-	puts "no change!"
-  end
+	if $changed
+		$version=change_version { |a| a[-1]=(a.last.to_i+1) }  
+		sh "git commit VERSION -m update"
+		ruby "samples/make_doc.rb"
+		sh "git commit doc.html -m update"
+		changelog_push_currrent_versions {
+			sh "git commit CHANGELOG.txt -m update"
+			sh "git push"
+			puts "\n\nNew version is #{$version}\n"
+		} 
+	else
+		puts "no change!"
+	end
 end
 
 #############################################################
