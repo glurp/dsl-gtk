@@ -108,16 +108,16 @@ module Ruiby_dsl
   ############################ Slot : H/V Box or Frame
 
   # container : vertical box, take all space available, sloted in parent by default
-  def stack(config={},add1=true,&b)    		_cbox(true,Box.new(:vertical, 2),config,add1,&b) end
+  def stack(config={},add1=true,&b)       _cbox(true,Box.new(:vertical, 2),config,add1,&b) end
   # container : horizontal box, take all space available, sloted in parent by default
-  def flow(config={},add1=true,&b)	   		_cbox(true,Box.new(:horizontal, 2),config,add1,&b) end
+  def flow(config={},add1=true,&b)        _cbox(true,Box.new(:horizontal, 2),config,add1,&b) end
   # container : vertical or horizontal box (stack/flow, choice by first argument), 
   # sloted in parent by default
   def var_box(sens,config={},add1=true,&b) _cbox(true,Box.new(sens, 2),config,add1,&b) end
   # container : vertical box, take only necessary space , sloted in parent
-  def stacki(config={},add1=true,&b)    	_cbox(false,Box.new(:vertical, 2),config,add1,&b) end
+  def stacki(config={},add1=true,&b)      _cbox(false,Box.new(:vertical, 2),config,add1,&b) end
   # container : horizontal box, take only necessary space , sloted in parent
-  def flowi(config={},add1=true,&b)	   		_cbox(false,Box.new(:horizontal, 2),config,add1,&b) end
+  def flowi(config={},add1=true,&b)       _cbox(false,Box.new(:horizontal, 2),config,add1,&b) end
   # container : vertical or horizontal box (stacki/flowi, choice by first argument), 
   # sloted in parent by default
   def var_boxi(sens,config={},add1=true,&b) _cbox(false,Box.new(sens, 2),config,add1,&b) end
@@ -152,7 +152,7 @@ module Ruiby_dsl
   end
   
   # a box with border and texte title, take all space
-  def frame(t="",config={},add1=true,&b)  	
+  def frame(t="",config={},add1=true,&b)    
     w=_cbox(true,Frame.new(t),config,add1) { s=stack { b.call } ; s.set_border_width(5) } 
   end
   # a box with border and texte title, take only necessary space
@@ -198,7 +198,7 @@ module Ruiby_dsl
   # append the result of bloc parameter to a contener (stack or flow)
   # thread protected
   # Usage : 
-  #	 @stack= stack {}
+  #  @stack= stack {}
   #    . . . . 
   #    append_to(@stack) { button("Hello") }
   def append_to(cont,&blk)
@@ -386,8 +386,8 @@ module Ruiby_dsl
   #   :font=> "Tahoma bold 32"
   # )
   def apply_options(w,options)
-      w.set_size_request(*options[:size])                                 if options[:size]	
-      w.set_border_width(options[:margins])                               if options[:margins]	
+      w.set_size_request(*options[:size])                                 if options[:size] 
+      w.set_border_width(options[:margins])                               if options[:margins]  
       w.width_request=(options[:width].to_i)                              if options[:width]
       w.height_request=(options[:height].to_i)                            if options[:height]
       w.override_background_color(:normal,color_conversion(options[:bg])) if options[:bg] 
@@ -492,7 +492,7 @@ module Ruiby_dsl
           but.set_tooltip_text(tooltip) if tooltip
         }
       elsif name=~/^sep/i
-        Gtk::SeparatorToolItem.new				
+        Gtk::SeparatorToolItem.new        
       elsif name=~/^right-(.*)/i
         Gtk::ToolButton.new(:stock_id => get_icon($1)).tap { |but|
           but.signal_connect("clicked") { v.call rescue error($!) } if v
@@ -566,7 +566,7 @@ module Ruiby_dsl
       w.append_text(text) 
     end
     w.set_active(default) if default>=0
-    attribs(w,option)		
+    attribs(w,option)   
     w
   end
 
@@ -582,7 +582,7 @@ module Ruiby_dsl
     end
     b.set_active(value)
     b.label= value ? text2.to_s : text1.to_s 
-    attribs(b,option)		
+    attribs(b,option)   
     b
   end
   # create a checked button
@@ -671,7 +671,7 @@ module Ruiby_dsl
       after(1) { blk.call(w.value) }
       false
     end if block_given?
-    attribs(w,option)		
+    attribs(w,option)   
     w
   end
 
@@ -685,7 +685,7 @@ module Ruiby_dsl
       after(1) { blk.call(w.value) rescue error($!)  }
       false
     end if block_given?
-    attribs(w,option)		
+    attribs(w,option)   
     w
   end
   
@@ -723,7 +723,7 @@ module Ruiby_dsl
   def islider(value,option={},&b)
     w=Scale.new(:horizontal,option[:min].to_i,option[:max].to_i,option[:by])
       .set_value(value ? value.to_i : 0)
-    attribs(w,option)		
+    attribs(w,option)   
     w.signal_connect(:value_changed) { || b.call(w.value)  rescue error($!) } if block_given?
     w
   end
@@ -741,7 +741,7 @@ module Ruiby_dsl
       end
       lab=label("  c    ")
     }
-    attribs(but,options)		
+    attribs(but,options)    
     def out.get_color()
        chilldren[1].get_color()
     end
@@ -785,8 +785,8 @@ module Ruiby_dsl
     w.signal_connect('button_release_event') { |wi,e| (option[:mouse_up].call(wi,e,@do)  rescue error($!)) if @do ; @do=nil ; force_update(wi) if @do }  if option[:mouse_up]
     w.signal_connect('motion_notify_event')  { |wi,e| (@do = option[:mouse_move].call(wi,e,@do) rescue error($!)) if @do     ; force_update(wi) if @do }  if option[:mouse_move]
     w.signal_connect('key_press_event')  { |wi,e| (option[:key_press].call(wi,e) rescue error($!)) ; force_update(wi) }  if option[:key_press]
-    attribs(w,option)	
-    def	w.redraw() 
+    attribs(w,option) 
+    def w.redraw() 
       self.queue_draw_area(0,0,1000,1000)
     end
     w
@@ -807,7 +807,7 @@ module Ruiby_dsl
     @lcur.pop
     attribs(table,config)
   end
-  # create a row. must be defined in a table closure	
+  # create a row. must be defined in a table closure  
   # Closure argment should only contain cell(s) call.
   # many cell type are disponibles : cell cell_bottom cell_hspan cell_hspan_left 
   # cell_hspan_right cell_left cell_pass cell_right cell_span cell_top cell_vspan 
@@ -820,9 +820,9 @@ module Ruiby_dsl
     @ltable.last[:col]=0 # will be increment by cell..()
     yield
     @ltable.last[:row]+=1
-  end	
+  end 
   # a cell in a row/table. take all space, centered
-  def  cell(w) 	cell_hspan(1,w)	  end
+  def  cell(w)  cell_hspan(1,w)   end
   # a cell in a row/table. take space of n cells, horizontaly
   def  cell_hspan(n,w) cell_hvspan(n,0,w) end 
   # a cell in a row/table. take space of n cells, verticaly
@@ -927,9 +927,9 @@ module Ruiby_dsl
           end
         }
      }
-    }	
-    widget.instance_variable_set(:@prop_current,prop_current)	  
-    widget.instance_variable_set(:@hash_initial,hash)	  
+    } 
+    widget.instance_variable_set(:@prop_current,prop_current)   
+    widget.instance_variable_set(:@hash_initial,hash)   
     def widget.set_data(newh)
     newh.each { |k,v| @prop_current[k].text=v.to_s }
   end
@@ -985,7 +985,7 @@ module Ruiby_dsl
     @lcur << ppmenu 
     yield
     @lcur.pop
-    ppmenu.show_all		
+    ppmenu.show_all   
     w.add_events(Gdk::Event::Mask::BUTTON_PRESS_MASK)
     w.signal_connect("button_press_event") do |widget, event|
       ppmenu.popup(nil, nil, event.button, event.time) if (event.button == 3)
@@ -1052,7 +1052,7 @@ module Ruiby_dsl
 
   ############################## Accordion
 
-  # create a accordion menu. 	
+  # create a accordion menu.  
   # must contain aitem() which must containe alabel() :
   # accordion { aitem(txt) { alabel(lib) { code }; ...} ... }
   def accordion() 
@@ -1063,7 +1063,7 @@ module Ruiby_dsl
     separator
     w
   end
-  # create a horizontral accordion menu. 	
+  # create a horizontral accordion menu.  
   # must contain aitem() which must containe alabel() :
   # accordion { aitem(txt) { alabel(lib) { code }; ...} ... }
   def haccordion() 
@@ -1172,7 +1172,7 @@ module Ruiby_dsl
     cb.set_shadow_type(:in)
     cb.add(sv)
     cb.show_all
-    attribs(cb,{})	
+    attribs(cb,{})  
   end
 
   # multiline entry
@@ -1203,16 +1203,16 @@ module Ruiby_dsl
       eb.show_all
       args.delete(:text)
       args.delete(:font)
-      attribs(eb,args)	
-  end	
+      attribs(eb,args)  
+  end 
 
   ############################# calendar
 
   # Month Calendar with callback on month/year move and day selection :
   # calendar(Time.now-24*3600, :selection => proc {|day| } , :changed => proc {|widget| }
   # calendar respond to
-  # *	set_time(time)  ; set a selected date from a Time object
-  # *	get_time()		  ; return Time of selected day
+  # * set_time(time)  ; set a selected date from a Time object
+  # * get_time()      ; return Time of selected day
   def calendar(time=Time.now,options={})
     c = Calendar.new
     #c.display_options(Calendar::SHOW_HEADING | Calendar::SHOW_DAY_NAMES |  
@@ -1236,7 +1236,7 @@ module Ruiby_dsl
 
   ############################# Video
   # from: green shoes plugin
-  # **  not tested!	**
+  # **  not tested! **
   def video(uri,w=300,h=200)
     wid=DrawingArea.new()
     wid.set_size_request(w,h)
@@ -1252,7 +1252,7 @@ module Ruiby_dsl
         v.video_sink.xwindow_id = handle
     
     wid.events |= ( ::Gdk::Event::Mask::BUTTON_PRESS_MASK | ::Gdk::Event::Mask::POINTER_MOTION_MASK | ::Gdk::Event::Mask::BUTTON_RELEASE_MASK)
-    wid.signal_connect('expose_event') do |w1,e| 		
+    wid.signal_connect('expose_event') do |w1,e|    
     end
     def wid.video() v end
     wid.video.play
@@ -1267,19 +1267,19 @@ module Ruiby_dsl
   def vbox_scrolled(width,height,&b)
     sw=ScrolledWindow.new()
     slot(sw)
-    sw.set_width_request(width)		if width>0 
-    sw.set_height_request(height)	if height>0
+    sw.set_width_request(width)   if width>0 
+    sw.set_height_request(height) if height>0
     sw.set_policy(:automatic, :always)
     ret= box(&b) if  block_given? 
     sw.add_with_viewport(ret)
     class << sw
-    ;  def scroll_to_top()    vadjustment.set_value( 0 ) 					; vadjustment.value_changed ; end
+    ;  def scroll_to_top()    vadjustment.set_value( 0 )          ; vadjustment.value_changed ; end
     ;  def scroll_to_bottom() vadjustment.set_value( vadjustment.upper - 100); vadjustment.value_changed ; end
       #def scroll_to_left()   hadjustment.set_value( 0 ) end
       #def scroll_to_right()  hadjustment.set_value( hadjustment.upper-1 ) end
     end
     attribs(sw,{})
-  end	
+  end 
 
   # specific to gtk : some widget like label can't support click event, so they must
   # be contained in a clickable parent (EventBox)
@@ -1335,8 +1335,8 @@ module Ruiby_dsl
   def list(title,w=0,h=0)
     scrolled_win = Gtk::ScrolledWindow.new
     scrolled_win.set_policy(:automatic ,:automatic )
-    scrolled_win.set_width_request(w)	if w>0
-    scrolled_win.set_height_request(h)	if h>0
+    scrolled_win.set_width_request(w) if w>0
+    scrolled_win.set_height_request(h)  if h>0
     model = Gtk::ListStore.new(String)
     column = Gtk::TreeViewColumn.new(title.to_s,Gtk::CellRendererText.new, {:text => 0})
     treeview = Gtk::TreeView.new(model)
@@ -1344,7 +1344,7 @@ module Ruiby_dsl
       treeview.signal_connect("row-activated") do |view, path, column|
         iter = view.model.get_iter(path)
         yield iter[0]
-      end		
+      end   
     end
     treeview.append_column(column)
     treeview.selection.set_mode(:single)
@@ -1374,8 +1374,8 @@ module Ruiby_dsl
   def grid(names,w=0,h=0)
     scrolled_win = Gtk::ScrolledWindow.new
     scrolled_win.set_policy(:automatic,:automatic)
-    scrolled_win.set_width_request(w)	if w>0
-    scrolled_win.set_height_request(h)	if h>0
+    scrolled_win.set_width_request(w) if w>0
+    scrolled_win.set_height_request(h)  if h>0
     
     model = Gtk::ListStore.new(*([String]*names.size))
     treeview = Gtk::TreeView.new(model)
@@ -1389,7 +1389,7 @@ module Ruiby_dsl
       treeview.signal_connect("row-activated") do |view, path, column|
         iter = view.model.get_iter(path)
         yield(names.size.times.map { |i| iter[i] })
-      end		
+      end   
     end
     
     def scrolled_win.grid() children[0].children[0] end
@@ -1399,11 +1399,11 @@ module Ruiby_dsl
       words.each_with_index { |w,i| l[i] = w.to_s }
     end
     $ici=self
-    def scrolled_win.get_data()	
+    def scrolled_win.get_data() 
       raise("grid.get_data() out of main thread!")if $__mainthread__ != Thread.current
       @ruiby_data
     end
-    def scrolled_win.set_data(data)	
+    def scrolled_win.set_data(data) 
       @ruiby_data=data
       raise("grid.set_data() out of main thread!")if $__mainthread__ != Thread.current
       grid().model.clear() ; data.each { |words| add_row(words) }
@@ -1423,12 +1423,12 @@ module Ruiby_dsl
   # <li>  raster image if name start with  a '#'
   # <li>  checkbutton  if name start with  a '?'
   # <li>  Integer      if name start with  a '0'
-  # <li>  String 		else
+  # <li>  String    else
   def tree_grid(names,w=0,h=0,options={})
     scrolled_win = Gtk::ScrolledWindow.new
     scrolled_win.set_policy(:automatic,:automatic)
-    scrolled_win.set_width_request(w)	if w>0
-    scrolled_win.set_height_request(h)	if h>0
+    scrolled_win.set_width_request(w) if w>0
+    scrolled_win.set_height_request(h)  if h>0
     scrolled_win.shadow_type = :etched_in
     
     types=names.map do |name|
@@ -1445,10 +1445,10 @@ module Ruiby_dsl
     treeview.selection.set_mode(:single)
     names.each_with_index do  |name,i|
       renderer,symb= *(
-        if    types[i]==TrueClass then	 [Gtk::CellRendererToggle.new().tap { |r| r.signal_connect('toggled') { } },:window]
+        if    types[i]==TrueClass then   [Gtk::CellRendererToggle.new().tap { |r| r.signal_connect('toggled') { } },:window]
         elsif types[i]==Gdk::Pixbuf then [Gtk::CellRendererPixbuf.new,:active]
-        elsif types[i]==Numeric then	 [Gtk::CellRendererText.new,:text]
-        else 							 [Gtk::CellRendererText.new,:text]
+        elsif types[i]==Numeric then   [Gtk::CellRendererText.new,:text]
+        else               [Gtk::CellRendererText.new,:text]
         end
       )
       treeview.append_column(
@@ -1463,11 +1463,11 @@ module Ruiby_dsl
     def scrolled_win.tree() children[0].children[0] end
     def scrolled_win.model() tree().model end
     $ici=self
-    def scrolled_win.get_data()	
+    def scrolled_win.get_data() 
       raise("tree.get_data() out of main thread!")if $__mainthread__ != Thread.current
       @ruiby_data
     end
-    def scrolled_win.set_data(hdata,parent=nil,first=true)	
+    def scrolled_win.set_data(hdata,parent=nil,first=true)  
       raise("tree.set_data() out of main thread!")if $__mainthread__ != Thread.current
       if parent==nil && first
         @ruiby_data=hdata
@@ -1542,7 +1542,7 @@ module Ruiby_dsl
         dialog.destroy if rep
       end
     end
-    dialog.show_all	
+    dialog.show_all 
   end
   
   # Dialog contents is build with bloc parameter.
@@ -1565,7 +1565,7 @@ module Ruiby_dsl
     @lcur.pop
     
     dialog.set_window_position(:center)
-    dialog.show_all	
+    dialog.show_all 
     rep=dialog.run  #  blocked
     dialog.destroy
     dialog
@@ -1598,14 +1598,14 @@ module Ruiby_dsl
     @loglabel=TextView.new(logBuffer)
     @loglabel.override_font(  Pango::FontDescription.new("Courier new 10")) 
     sw=ScrolledWindow.new()
-    sw.set_width_request(800)	
-    sw.set_height_request(200)	
+    sw.set_width_request(800) 
+    sw.set_height_request(200)  
     sw.set_policy(:automatic, :always)
     
     sw.add_with_viewport(@loglabel)
     wdlog.child.pack_start(sw, :expand => true, :fill => true, :padding => 3)
     wdlog.signal_connect('response') { wdlog.destroy }
-    wdlog.show_all	
+    wdlog.show_all  
     @loglabel
   end
 
@@ -1627,6 +1627,20 @@ module Ruiby_dsl
       error "Error loading style : #{e}\n#{string_style}"
     end
   end
+  def snapshot(filename=nil)
+     return unless  RUBY_PLATFORM =~ /in.*32/
+     require 'win32/screenshot'
+     require 'win32ole'
+		 
+     filename=Time.now.strftime("%D-%H%m%s.png").gsub('/','-') unless filename
 
+     if ! self.title || self.title.size<3
+        self.title=Time.now.to_f.to_s.gsub('.','')
+     end
+		File.delete(filename) if File.exists?(filename)
+    puts "generated  for title '#{self.title}' ==> #{filename} ..."
+    Win32::Screenshot::Take.of(:window,:title => /#{self.title}/, :context => :window).write(filename)
+    puts "done #{File.size(filename)} B"
+  end
 end
 
