@@ -20,7 +20,7 @@ class Win < Gtk::Window
 					add_a_ruiby_button() 
 				})
 				if ARGV.any? { |a| =~/take-a-snapshot/} 
-					after(1000) { snapshot("snapshot_test_include.rb.png") exit!(0) }
+					after(1000) { snapshot("snapshot_test_include.rb.png") ; exit!(0) }
 				end
 			end
 		end
