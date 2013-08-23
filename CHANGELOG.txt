@@ -1,4 +1,11 @@
-0.120.3
+0.120.4
+    test_systray.rb : no style
+    table2.rb : stack false obsolete
+    make_doc.rb : create and include base64 image osnapshot of each exemple
+    animtext.rb : snapshot
+    windows.rb : create snapshot and exit of option take-a-snapshot exists
+    ruiby_dsl3.rb : snapshot creation
+    doc.html : d
     doc.html : doc
     Rakefile.rb : make_doc on each commit
     README.md : make_doc
