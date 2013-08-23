@@ -19,7 +19,7 @@ class Ruiby_gtk < Gtk::Window
 				Gtk.main_quit
 			end
 		end
-        set_window_position Gtk::Window::Position::CENTER  # default, can be modified by window_position(x,y)
+    set_window_position Gtk::Window::Position::CENTER  # default, can be modified by window_position(x,y)
 		@lcur=[self]
 		@ltable=[]
 		@current_widget=nil
@@ -30,10 +30,13 @@ class Ruiby_gtk < Gtk::Window
 			error("COMPONENT() : "+$!.to_s + " :\n     " +  $!.backtrace[0..10].join("\n     "))
 			exit!
 		end
-        begin
+    begin
 			show_all 
 		rescue
 			puts "Error in show_all : illegal state of some widget? "+ $!.to_s
+		end
+		if ARGV.any? {|v| v=="take-a-snapshot" }
+			after(3000) { snapshot("snapshot_#{File.basename($0)}.png") ; after(100) { exit!(0)  } }
 		end
 	end
 	def on_destroy(&blk) 
