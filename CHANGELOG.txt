@@ -1,4 +1,5 @@
-0.120.5
+0.120.6
+    test_include.rb : snapshot
     make_doc.rb : order ex
     README.md : doc via rawgithub
     test_systray.rb : no style
