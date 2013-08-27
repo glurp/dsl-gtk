@@ -146,7 +146,25 @@ module Ruiby_dsl
     autoslot()
     @lcur.pop
   end
-  
+  # TODO : not tested!
+  def left(&blk) 
+    autoslot()
+    w=yield
+    halign = Gtk::Alignment.new(0,0,0,0)
+    halign.add(w)
+    @lcur.last.pack_start(halign, :expand => false, :fill => false, :padding => 3)
+    razslot()
+  end
+  # TODO : not tested!
+  def right(&blk) 
+    autoslot()
+    w=yield
+    halign = Gtk::Alignment.new(1,0,0,0)
+    halign.add(w)
+    @lcur.last.pack_start(halign, :expand => false, :fill => false, :padding => 3)
+    razslot()
+  end
+	def update() Ruiby.update() end
   def style(options) 
     apply_options(@lcur.last,options) if @lcur.size>0  # not working ...
   end
