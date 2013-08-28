@@ -1321,22 +1321,24 @@ module Ruiby_dsl
   # Exemple: pclickable(proc { alert true}) { label(" click me! ") }
   #
   # bloc is evaluated in a stack container
-  def pclickable(aproc,&b) 
+  def pclickable(aproc,options={},&b) 
     eventbox = Gtk::EventBox.new
     eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
     ret=_cbox(true,eventbox,{},true,&b) 
     eventbox.realize
-    eventbox.signal_connect('button_press_event') { |w, e| aproc.call(w,e)  rescue error($!)  }
+    eventbox.signal_connect('button_press_event') { |w, e| aproc.call(w,e)  rescue error($!)  } if aproc
+		apply_options(eventbox,options)
     ret
   end
   # as pclickable, but container is a stacki
   # pclickablei(proc { alert("e") }) { label("click me!") }
-  def pclickablie(aproc,&b) 
+  def pclickablie(aproc,options={},&b) 
     eventbox = Gtk::EventBox.new
     eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
     ret=_cbox(false,eventbox,{},true,&b) 
     eventbox.realize
-    eventbox.signal_connect('button_press_event') { |w, e| aproc.call(w,e)  rescue error($!)  }
+    eventbox.signal_connect('button_press_event') { |w, e| aproc.call(w,e)  rescue error($!)  } if aproc
+		apply_options(options)
     ret
   end
 
