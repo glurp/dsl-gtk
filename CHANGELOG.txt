@@ -1,4 +1,6 @@
-0.121.2
+0.121.3
+    windows.rb : n
+    ruiby_dsl3.rb : background container
     marianne.rb : white background, news separator
     ruiby_dsl3.rb : options on pclickable
     test_include.rb : correction take-a-snapshot
