@@ -52,6 +52,6 @@ def feed_update(win,st)
 end
 
  Ruiby.app width:400,height:700,title: "Marianne" do
-  scrolled(500,700)  do pclickable(nil,{bg: "#FFFFFF"}) do @st=stacki do label("wait...",font: "Arial bold 33") end end end
+  scrolled(500,700)  do backgroundi("#FFFFFF") do @st=stacki do label("wait...",font: "Arial bold 33") end end end
   Thread.new { feed_update(self,@st)  }
  end
