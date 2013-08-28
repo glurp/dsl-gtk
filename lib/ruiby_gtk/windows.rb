@@ -36,7 +36,7 @@ class Ruiby_gtk < Gtk::Window
 			puts "Error in show_all : illegal state of some widget? "+ $!.to_s
 		end
 		if ARGV.any? {|v| v=="take-a-snapshot" }
-			after(3000) { snapshot("snapshot_#{File.basename($0)}.png") ; after(100) { exit!(0)  } }
+			after(100) { snapshot("snapshot_#{File.basename($0)}.png") ; after(100) { exit!(0)  } }
 		end
 	end
 	def on_destroy(&blk) 
