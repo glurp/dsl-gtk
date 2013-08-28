@@ -164,7 +164,7 @@ module Ruiby_dsl
     @lcur.last.pack_start(halign, :expand => false, :fill => false, :padding => 3)
     razslot()
   end
-	def update() Ruiby.update() end
+  def update() Ruiby.update() end
   def style(options) 
     apply_options(@lcur.last,options) if @lcur.size>0  # not working ...
   end
@@ -1317,28 +1317,44 @@ module Ruiby_dsl
 
   # specific to gtk : some widget like label can't support click event, so they must
   # be contained in a clickable parent (EventBox)
-  #  
+  #
   # Exemple: pclickable(proc { alert true}) { label(" click me! ") }
   #
   # bloc is evaluated in a stack container
-  def pclickable(aproc,options={},&b) 
+  def pclickable(aproc=nil,options={},&b) 
     eventbox = Gtk::EventBox.new
     eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
     ret=_cbox(true,eventbox,{},true,&b) 
     eventbox.realize
     eventbox.signal_connect('button_press_event') { |w, e| aproc.call(w,e)  rescue error($!)  } if aproc
-		apply_options(eventbox,options)
+    apply_options(eventbox,options)
+    ret
+  end
+  # set a background to contaned container
+  # Usage : stack {  background("#FF0000")  { flow { ...} } }
+  def background(color,options={},&b) 
+    eventbox = Gtk::EventBox.new
+    ret=_cbox(true,eventbox,{},true,&b) 
+    eventbox.realize
+    apply_options(eventbox,{bg: color}.merge(options))
+    ret
+  end
+  def backgroundi(color,options={},&b) 
+    eventbox = Gtk::EventBox.new
+    ret=_cbox(false,eventbox,{},true,&b) 
+    eventbox.realize
+    apply_options(eventbox,{bg: color}.merge(options))
     ret
   end
   # as pclickable, but container is a stacki
   # pclickablei(proc { alert("e") }) { label("click me!") }
-  def pclickablie(aproc,options={},&b) 
+  def pclickablie(aproc=nil,options={},&b) 
     eventbox = Gtk::EventBox.new
     eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
     ret=_cbox(false,eventbox,{},true,&b) 
     eventbox.realize
     eventbox.signal_connect('button_press_event') { |w, e| aproc.call(w,e)  rescue error($!)  } if aproc
-		apply_options(options)
+    apply_options(eventbox,options)
     ret
   end
 
@@ -1651,13 +1667,13 @@ module Ruiby_dsl
      return unless  RUBY_PLATFORM =~ /in.*32/
      require 'win32/screenshot'
      require 'win32ole'
-		 
+     
      filename=Time.now.strftime("%D-%H%m%s.png").gsub('/','-') unless filename
 
      if ! self.title || self.title.size<3
         self.title=Time.now.to_f.to_s.gsub('.','')
      end
-		File.delete(filename) if File.exists?(filename)
+    File.delete(filename) if File.exists?(filename)
     puts "generated  for title '#{self.title}' ==> #{filename} ..."
     Win32::Screenshot::Take.of(:window,:title => /#{self.title}/, :context => :window).write(filename)
     puts "done #{File.size(filename)} B"
