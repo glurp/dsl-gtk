@@ -578,12 +578,27 @@ module Ruiby_dsl
   ############### Inputs widgets
 
   #combo box, decribe  with a Hash choice-text => value-of-choice
-  def combo(choices,default=-1,option={})
+  # choices: array of text choices
+  # dfault : text activate or index of text in array
+  # bloc ! called when a choice is selected
+  #
+  # Usage :  combo(%w{aa bb cc},"bb") { |text;index| alert("the choice is #{text} at #{index}") }
+  #
+  def combo(choices,default=nil,option={},&blk)
     w=ComboBoxText.new()
     choices.each do |text,indice|  
       w.append_text(text) 
     end
-    w.set_active(default) if default>=0
+    if default
+        if String==default
+          w.set_active(choice[default]) 
+        else
+          w.set_active(default) 
+        end
+    end
+    w.signal_connect(:changed) { |w,evt|
+      blk.call(w.active_text,choices[w.active_text])
+    } if blk    
     attribs(w,option)   
     w
   end
@@ -1335,14 +1350,12 @@ module Ruiby_dsl
   def background(color,options={},&b) 
     eventbox = Gtk::EventBox.new
     ret=_cbox(true,eventbox,{},true,&b) 
-    eventbox.realize
     apply_options(eventbox,{bg: color}.merge(options))
     ret
   end
   def backgroundi(color,options={},&b) 
     eventbox = Gtk::EventBox.new
     ret=_cbox(false,eventbox,{},true,&b) 
-    eventbox.realize
     apply_options(eventbox,{bg: color}.merge(options))
     ret
   end
