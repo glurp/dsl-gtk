@@ -94,7 +94,7 @@ describe Ruiby do
   it "create a image from file" do
 		w=nil
 		@win.create { stack {   w=image("../samples/media/angel.png") } }
-		w.should be_a_kind_of(Gtk::Label)
+		w.should be_a_kind_of(Gtk::Image)
  end
 
  it "create fields" do
