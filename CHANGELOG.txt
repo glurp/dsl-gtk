@@ -1,4 +1,6 @@
-0.122.3
+0.122.4
+    test_composites.rb : selection in list
+    test_basics_widget.rb : image test
     doc.html : u
     test.rb : poup test
     make_doc.rb : nop
