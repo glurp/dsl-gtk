@@ -1270,25 +1270,30 @@ module Ruiby_dsl
   ############################# Video
   # from: green shoes plugin
   # **  not tested! **
-  def video(uri,w=300,h=200)
+  def video(uri,w=300,h=200,options={})
     wid=DrawingArea.new()
     wid.set_size_request(w,h)
     uri = File.join('file://', uri.gsub("\\", '/').sub(':', '')) unless uri =~ /^(\w\w+):\/\//
     require('gst')
-    require('win32api') rescue nil
-    v = Gst::ElementFactory.make('playbin2')
+    v =            Gst::ElementFactory.make('playbin')
     v.video_sink = Gst::ElementFactory.make('dshowvideosink')
+    v.video_sink = Gst::ElementFactory.make('directdrawsink') unless v.video_sink
     v.uri = uri
-    args[:real], args[:app] = v, self
-        handle = wid.window.class.method_defined?(:xid) ? @app.win.window.xid : 
-          Win32API.new('user32', 'GetForegroundWindow', [], 'N').call
+    show_methods v.video_sink
+    if wid.window.class.method_defined?(:xid)
+        handle = win.window.xid ;
         v.video_sink.xwindow_id = handle
+    else
+       require('win32api'); 
+    end
     
     wid.events |= ( ::Gdk::Event::Mask::BUTTON_PRESS_MASK | ::Gdk::Event::Mask::POINTER_MOTION_MASK | ::Gdk::Event::Mask::BUTTON_RELEASE_MASK)
-    wid.signal_connect('expose_event') do |w1,e|    
+    wid.signal_connect('draw') do |w1,e|  
+       handle = Win32API.new('user32', 'GetForegroundWindow', [], 'N').call
+       v.video_sink.xwindow_id=handle
+       v.play
     end
-    def wid.video() v end
-    wid.video.play
+    attribs(wid,options)
   end
 
   ######### Scrollable stack container
@@ -1379,8 +1384,16 @@ module Ruiby_dsl
   # *  model() : get (gtk) model of the list widget
   # *  clear()  clear content of the list
   # *  set_data(array) : clear and put new data in the list
-  # *  selected() : get the selected item (or nil)
-  # *  index() : get the index  of selected item (or nil)
+  # *  selected() : get the selected items (or [])
+  # *  index() : get the index  of selected item (or [])
+  # * set_selection(index) : force current selection do no item in data
+  # * set_selctions(i0,i1) : force multiple consecutives selection from i1 to i2
+  #
+  # if bloc is given, it is called on each  selection, with array 
+  # of index of item selectioned
+  # 
+  # Usage :  list("title",100,200) { |li| alert("Selections is : #{i.join(',')}") }.set_data(%w{a b c d})
+  #
   def list(title,w=0,h=0)
     scrolled_win = Gtk::ScrolledWindow.new
     scrolled_win.set_policy(:automatic ,:automatic )
@@ -1390,13 +1403,13 @@ module Ruiby_dsl
     column = Gtk::TreeViewColumn.new(title.to_s,Gtk::CellRendererText.new, {:text => 0})
     treeview = Gtk::TreeView.new(model)
     if block_given?
-      treeview.signal_connect("row-activated") do |view, path, column|
-        iter = view.model.get_iter(path)
-        yield iter[0]
+      treeview.selection.signal_connect("changed") do |selection, path, column|
+        li=[];i=0;selection.selected_each {|model, path, iter|  li << path.to_s.to_i; i+=1 }
+        yield(li) 
       end   
     end
     treeview.append_column(column)
-    treeview.selection.set_mode(:single)
+    treeview.selection.set_mode(:multiple)
     scrolled_win.add_with_viewport(treeview)
     def scrolled_win.list() children[0].children[0] end
     def scrolled_win.model() list().model end
@@ -1410,8 +1423,36 @@ module Ruiby_dsl
       list().model.clear
       words.each { |w| list().model.append[0]=w }
     end
-    def scrolled_win.selection() a=list().selection.selected ; a ? a[0] : nil ; end
-    def scrolled_win.index() list().selection.selected end
+    def scrolled_win.selection() 
+      li=[];i=0;list().selection.selected_each {|model, path, iter|  li << path.to_s.to_i; i+=1 }
+      li 
+    end
+    def scrolled_win.index() 
+      li=[];i=0;list().selection.selected_each {|model, path, iter|  li << path.to_s.to_i; i+=1 }
+      li 
+    end
+    def scrolled_win.set_selections(istart,istop) 
+      spath,epath=nil,nil
+      i=0;model().each {|model, path, iter| 
+          if i==istart
+            spath=path  
+          elsif i==istop
+            epath=path  
+          end
+          list().selection.unselect_path(path)
+          i+=1
+      } 
+      list().selection.select_range(spath,epath) if spath && epath
+    end
+    def scrolled_win.set_selection(index) 
+      model().each {|model, path, iter|  list().selection.unselect_path(path) } 
+      i=0;model().each {|model, path, iter| 
+          if i==index 
+            list().selection.select_path(path)  
+          end
+          i+=1
+      } 
+    end
     autoslot(scrolled_win)
     scrolled_win
   end
@@ -1435,9 +1476,8 @@ module Ruiby_dsl
       )
     end
     if block_given?
-      treeview.signal_connect("row-activated") do |view, path, column|
-        iter = view.model.get_iter(path)
-        yield(names.size.times.map { |i| iter[i] })
+      treeview.signal_connect("changed") do |view, path, column|
+        # TODO
       end   
     end
     
@@ -1459,7 +1499,6 @@ module Ruiby_dsl
     end
     def scrolled_win.selection() a=grid().selection.selected ; a ? a[0] : nil ; end
     def scrolled_win.index() grid().selection.selected end
-    
     scrolled_win.add_with_viewport(treeview)
     autoslot(nil)
     slot(scrolled_win)
