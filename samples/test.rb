@@ -173,7 +173,14 @@ end
    end
    def test_list_grid()
       flow {
-        frame("List") {
+        frame("CB on List") {
+          stacki{
+            @list0=list("callback on selection",100,200) { |li| alert("Selections are : #{li.join(',')}") } 
+            @list0.set_data((0..1000).to_a.map(&:to_s))
+            buttoni("set selection no2") { @list0.set_selection(1) }
+          }
+        }
+        frame("List with getter") {
           stack {
             @list=list("Demo",0,100)
             flow {
