@@ -202,7 +202,7 @@ def make_example(hdoc,filename)
   code=code.gsub(/\w+/) { |word| (hdoc[word]) ? make_popup(word) : word}
 	count-=$hexample.size
 	puts " #{filename} : #{-count}"
-	ifn="snapshot_#{filename}.png"
+	ifn="media/snapshot_#{filename}.png"
 	img=if File.exists?(ifn)
 			icontent=open(ifn,"rb") do |f|
 				Base64.encode64(f.read(File.size(ifn)))
