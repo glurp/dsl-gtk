@@ -422,6 +422,9 @@ module Ruiby_dsl
         raise "unknown color : #{color.inspect}"
     end
   end
+  # parse color from #RRggBB html format
+  def html_color(str) ::Gdk::Color.parse(str) end
+   
   def widget_properties(title=nil,w=nil) 
     widg=w||@current_widget||@lcur.last
     p get_config(widg)
@@ -1021,7 +1024,7 @@ module Ruiby_dsl
     ppmenu.show_all   
     w.add_events(Gdk::Event::Mask::BUTTON_PRESS_MASK)
     w.signal_connect("button_press_event") do |widget, event|
-      ppmenu.popup(nil, nil, event.button, event.time) if (event.button == 3)
+      ( ppmenu.popup(nil, nil, event.button, event.time) { |menu, x, y, push_in| [event.x_root,event.y_root] } ) if (event.button == 3)
     end
     ppmenu
   end
