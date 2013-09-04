@@ -223,7 +223,7 @@ end
 		} }
 		w.set_data(%w{a b c d e f g h})
 		w.should be_a_kind_of( Gtk::ScrolledWindow )
-		w.selection.should == nil
+		w.selection.should == []
  end
  it "create a accordion menu" do
 		w=nil
