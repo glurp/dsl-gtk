@@ -1,4 +1,7 @@
-0.122.1
+0.122.2
+    test.rb : poup test
+    make_doc.rb : nop
+    ruiby_dsl3.rb : popup position, html_color
     test.rb : list callback test
     all.rb : Gui for the script
     windows.rb : snapshot in subdir
