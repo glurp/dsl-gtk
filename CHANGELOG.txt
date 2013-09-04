@@ -1,4 +1,5 @@
-0.122.2
+0.122.3
+    doc.html : u
     test.rb : poup test
     make_doc.rb : nop
     ruiby_dsl3.rb : popup position, html_color
