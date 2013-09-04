@@ -102,7 +102,7 @@ end
         sloti(label('Epaisseur'))
         @epaisseur=sloti(islider(1,{:min=>1,:max=>30,:by=>1}))
         }
-        @ldraw=[] ; @color=  ::Gdk::Color.parse("#33EEFF");
+        @ldraw=[] ; @color= html_color("#FF4422");
         cv=canvas(300,200,{ 
           :expose     => proc { |w,cr|  
               @ldraw.each do |line|
@@ -125,13 +125,16 @@ end
               no= [e.x,e.y] ; (@ldraw.last << no) ; no
           }
       })
-      popup {
-        pp_item("copy") 	{ alert 1 }
-        pp_item("cut") 		{ alert 2 }
-        pp_item("past")		{ alert 3 }
-        pp_item("duplicate"){ alert 4 }
+      stacki {
+        label("Popup test...")
+        popup(canvas(50,200)) {
+            pp_item("copy")     { alert "copy.." }
+            pp_item("cut") 	    { alert "cut..." }
+            pp_item("past")	    { alert "pasting.." }
+            pp_separator
+            pp_item("Save")	    { alert "Saving.." }            
+        }
       }
-
       end 
    end
    def test_treeview()
