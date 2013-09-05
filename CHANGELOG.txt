@@ -1,4 +1,5 @@
-0.122.5
+0.122.6
+    animtext.rb : initial size
     README.md : doc ref
     test_composites.rb : selection in list
     test_basics_widget.rb : image test
