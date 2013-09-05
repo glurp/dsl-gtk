@@ -211,6 +211,6 @@ LGPL, CC BY-SA
 Exemples
 ========
 see samples in "./samples" directory
-See ar end of Doc reference : [Ref](https://rawgithub.com/raubarede/Ruiby/master/doc.html) 
+See ar end of Doc reference : [Ex.](https://rawgithub.com/raubarede/Ruiby/master/doc.html#code) 
 
 
