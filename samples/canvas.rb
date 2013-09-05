@@ -2,7 +2,7 @@
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
 #####################################################################
-#  canvas.rb : edit/test drowing code
+#  canvas.rb : edit/test drawing code
 #####################################################################
 # encoding: utf-8
 require 'timeout'
