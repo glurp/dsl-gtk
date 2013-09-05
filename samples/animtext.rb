@@ -7,11 +7,11 @@ require_relative '../lib/Ruiby'
 #require 'Ruiby'
 
 Ruiby.app(title: "Text Animation", width: 900, height: 300) do
-	l,size=nil,3
-	stack  { l=label("Hello Ruiby...",font: "Arial bold #{size}",bg: "#05A") }
+	l,size=nil,40
+	stack  { l=label("Hello Ruiby...",font: "Arial bold #{1}",bg: "#05A") }
 	after(500) do
 		anim(20) do
-			 size=size>130 ? 30 : size+0.2
+			 size=size>100 ? 10 : size+0.2
 			 options={
 					font: 	"Arial bold #{size}", 
 					fg: 	"#%02X%02X%02X" % [50+(200-size%200),50+size%200,50+size%200]
