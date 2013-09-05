@@ -792,7 +792,6 @@ module Ruiby_dsl
   def canvas(width,height,option={})
     autoslot()
     w=DrawingArea.new()
-    w.set_size_request(width,height)
     w.width_request=width
     w.height_request=height
     w.events |=  ( ::Gdk::Event::Mask::BUTTON_PRESS_MASK | ::Gdk::Event::Mask::POINTER_MOTION_MASK | ::Gdk::Event::Mask::BUTTON_RELEASE_MASK)
@@ -823,7 +822,7 @@ module Ruiby_dsl
     w.signal_connect('key_press_event')  { |wi,e| (option[:key_press].call(wi,e) rescue error($!)) ; force_update(wi) }  if option[:key_press]
     attribs(w,option) 
     def w.redraw() 
-      self.queue_draw_area(0,0,1000,1000)
+      self.queue_draw_area(0,0,self.width_request,self.height_request)
     end
     w
   end
