@@ -42,6 +42,10 @@ class Ruiby_gtk < Gtk::Window
       }
     end
   end
+  def on_resize(&blk)
+    self.resizable=true
+    signal_connect("configure_event") { blk.call } if blk
+  end
   def on_destroy(&blk) 
         signal_connect("destroy") { blk.call }
   end
