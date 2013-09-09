@@ -1011,7 +1011,7 @@ module Ruiby_dsl
 
   ############################## Popup
   # create a dynamic popup. (shoud by calling in a closure)
-  # opup block can be composed by pp_item and pp_separator
+  # popup block can be composed by pp_item and pp_separator
   # Exemple :
   # popup { pp_item("text") { } ; pp_seperator ; pp_item('Exit") { exit!(0)} ; ....}
   def popup(w=nil)
@@ -1396,7 +1396,7 @@ module Ruiby_dsl
   # 
   # Usage :  list("title",100,200) { |li| alert("Selections is : #{i.join(',')}") }.set_data(%w{a b c d})
   #
-  def list(title,w=0,h=0)
+  def list(title,w=0,h=0,options={})
     scrolled_win = Gtk::ScrolledWindow.new
     scrolled_win.set_policy(:automatic ,:automatic )
     scrolled_win.set_width_request(w) if w>0
@@ -1455,6 +1455,7 @@ module Ruiby_dsl
           i+=1
       } 
     end
+    apply_options(treeview,options)
     autoslot(scrolled_win)
     scrolled_win
   end
@@ -1463,7 +1464,7 @@ module Ruiby_dsl
   # use set_data() to put a 2 dimensions array of text
   # same methods as list widget
   # all columnes are String type
-  def grid(names,w=0,h=0)
+  def grid(names,w=0,h=0,options={})
     scrolled_win = Gtk::ScrolledWindow.new
     scrolled_win.set_policy(:automatic,:automatic)
     scrolled_win.set_width_request(w) if w>0
@@ -1591,6 +1592,7 @@ module Ruiby_dsl
     def scrolled_win.index() tree().selection.selected end
     
     scrolled_win.add_with_viewport(treeview)
+    apply_options(treeview,options)
     autoslot(nil)
     slot(scrolled_win)
   end
@@ -1621,7 +1623,7 @@ module Ruiby_dsl
     )
             
 
-    dialog.set_window_position(:center)
+    dialog.set_window_position(:center) if ! config[:position]
     
     @lcur << dialog.child
     hbox=stack { yield }
