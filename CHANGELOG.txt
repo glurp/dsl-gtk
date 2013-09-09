@@ -1,4 +1,12 @@
-0.122.8
+0.122.9
+    test_basics_widget.rb : label for a image
+    test_systray.rb : nop
+    test_include.rb : Box
+    make_doc.rb : nop
+    windows.rb : gravity gtk3
+    ruiby_dsl3.rb : list improve
+    doc.html : nop
+    Rakefile.rb : nop
     Rakefile.rb : transfer make_doc to gem task
     freedom.rb : GPL text animation al la 'star-wars'
     canvas.rb : nothing
