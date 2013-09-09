@@ -9,7 +9,7 @@ class Win < Gtk::Window
 	include Ruiby
     def initialize(t,w,h)
         super()
-		add(@vb=VBox.new(false, 2)) 
+		add(@vb=Gtk::Box.new(:vertical, 3))
 		show_all
 		add_a_ruiby_button()
     signal_connect "destroy" do  Gtk.main_quit ; end
