@@ -63,13 +63,13 @@ class Ruiby_gtk < Gtk::Window
       set_window_position Window::POS_CENTER
       return
     elsif     x>=0 && y>=0
-      gravity= Gdk::Window::GRAVITY_NORTH_WEST
+      gravity= Gdk::Window::Gravity::NORTH_WEST
     elsif   x<0 && y>=0
-      gravity= Gdk::Window::GRAVITY_NORTH_EAST
+      gravity= Gdk::Window::Gravity::NORTH_EAST
     elsif   x>=0 && y<0
-      gravity= Gdk::Window::GRAVITY_SOUTH_WEST
+      gravity= Gdk::Window::Gravity::SOUTH_WEST
     elsif   x<0 && y<0
-      gravity= Gdk::Window::GRAVITY_SOUTH_EAST
+      gravity= Gdk::Window::Gravity::SOUTH_EAST
     end
     move(x.abs,y.abs)
   end
@@ -101,7 +101,7 @@ module Ruiby
       error("ruiby_component block : "+$!.to_s + " :\n     " +  $!.backtrace[0..10].join("\n     "))
       exit!
     end
-        show_all
+     show_all
   end
 end
 
