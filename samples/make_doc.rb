@@ -62,6 +62,8 @@ function doSearch(text) {
             document.execCommand("HiliteColor", false, "pink");
             //sel.collapseToEnd();
         }
+        sel.collapse(document.body, 0);
+        window.find(text)
         document.designMode = "off";
     } else if (document.body.createTextRange) {
         var textRange = document.body.createTextRange();
@@ -69,6 +71,7 @@ function doSearch(text) {
             textRange.execCommand("BackColor", false, "pink");
             textRange.collapse(false);
         }
+        document.body.createTextRange().findText(text)
     }
 }
 //================== popup data
@@ -251,4 +254,4 @@ content=html % [
 
 output="#{File.dirname(__FILE__)}/../doc.html"
 File.open(output,"wb") { |f| f.write( content ) }
-system("start",Dir.pwd+"/"+output)
+system("start",output)
