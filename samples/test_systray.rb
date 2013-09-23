@@ -32,7 +32,7 @@ class Application < Ruiby_gtk
       chrome(true)
       update()
       # component()
-      systray(1000,850) do
+      systray(1000,850, icon: "media/angel.png") do
         syst_icon  HAPPY_ICON
         syst_add_button "Reload"        do |state| load(__FILE__) rescue log $! ; end
         syst_add_button "Execute Test"  do |state|  move(100,100);show; update() end
