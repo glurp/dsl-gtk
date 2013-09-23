@@ -756,12 +756,11 @@ module Ruiby_dsl
   # option must define :min :max :by for spin button
   # current value can be read by w.value
   # if bloc is given, it with be call on each change, with new value as parameter
-  def islider(value,option={},&b)
+  def islider(value=0,option={},&b)
     w=Scale.new(:horizontal,option[:min].to_i,option[:max].to_i,option[:by])
-      .set_value(value ? value.to_i : 0)
-    attribs(w,option)   
+    w.set_value(value ? value.to_i : 0)
     w.signal_connect(:value_changed) { || b.call(w.value)  rescue error($!) } if block_given?
-    w
+    attribs(w,option)   
   end
 
   # create a button wich will show a dialog for color choice
@@ -1268,34 +1267,37 @@ module Ruiby_dsl
     attribs(c,options)
 
   end
-
-  ############################# Video
-  # from: green shoes plugin
-  # **  not tested! **
-  def video(uri,w=300,h=200,options={})
-    wid=DrawingArea.new()
-    wid.set_size_request(w,h)
-    uri = File.join('file://', uri.gsub("\\", '/').sub(':', '')) unless uri =~ /^(\w\w+):\/\//
-    require('gst')
-    v =            Gst::ElementFactory.make('playbin')
-    v.video_sink = Gst::ElementFactory.make('dshowvideosink')
-    v.video_sink = Gst::ElementFactory.make('directdrawsink') unless v.video_sink
-    v.uri = uri
-    show_methods v.video_sink
-    if wid.window.class.method_defined?(:xid)
-        handle = win.window.xid ;
-        v.video_sink.xwindow_id = handle
-    else
-       require('win32api'); 
+  
+  # Show a video in a gtk widget.
+  # * if block is defined, it is invoked on each video progression (from 0 to 1.0)
+  # * w.play
+  # * w.stop
+  # * w.url=
+  # *.progress=n    fore current position in video
+  #
+  #  video() need the gems clutter, GStreamer, and glues Clutter<=>Gtk : "clutter-gtk" and "clutter-gst" 
+  #  * gem install clutter-gtk 
+  #  * gem install clutter-gstreamer
+  #
+  def video(url=nil,w=300,h=200)
+    require "clutter-gtk"  
+    require "clutter-gst"  # gem install clutter-gstreamer
+    clutter = ClutterGtk::Embed.new
+    video=ClutterGst::VideoTexture.new
+    clutter.stage.add_child(video)
+    video.width=w
+    video.height=h
+    video.uri = url if url
+    video.playing = false
+    isNotify=false
+    clutter.define_singleton_method(:url=) { |u| video.url = url }
+    clutter.define_singleton_method(:play) { video.playing = true }
+    clutter.define_singleton_method(:stop) { video.playing = false }
+    clutter.define_singleton_method(:progress=) { |pp|  video.progress=(pp) unless isNotify }
+    if block_given?
+      video.signal_connect("notify") { |o,v,param|  isNotify=true ; yield(video.progress()) rescue p $! ; isNotify=false }
     end
-    
-    wid.events |= ( ::Gdk::Event::Mask::BUTTON_PRESS_MASK | ::Gdk::Event::Mask::POINTER_MOTION_MASK | ::Gdk::Event::Mask::BUTTON_RELEASE_MASK)
-    wid.signal_connect('draw') do |w1,e|  
-       handle = Win32API.new('user32', 'GetForegroundWindow', [], 'N').call
-       v.video_sink.xwindow_id=handle
-       v.play
-    end
-    attribs(wid,options)
+    attribs(clutter,{})
   end
 
   ######### Scrollable stack container
@@ -1320,7 +1322,30 @@ module Ruiby_dsl
     end
     attribs(sw,{})
   end 
-
+  
+  # Create a horizontal bar with a stick which can be moved.
+  # block (if defined) is invoked on each value changed
+  # w.proess=n can force current position at n
+  #
+  def slider(start=0.0,min=0.0,max=1.0,options={})
+   w=Gtk::Scale.new(:horizontal)
+   w.set_range min,max
+   w.set_size_request 160, 35
+   w.set_value start
+   w.signal_connect("value-changed") { |w| yield(w.value) } if block_given?
+   w.define_singleton_method(:progress=) { |value| w.set_value(value) }
+   attribs(w,{})
+  end
+  
+  # Show the evolution if a numeric value. Evolution is a number between 0 and 1.0
+  # w.progress=n  force current evolution 
+  def progress_bar(start=0,options)
+   w=Gtk::ProgressBar.new
+   w.define_singleton_method(:progress=) { |fract| w.fraction=fract }
+   w.fraction=start
+   attribs(w,{})
+  end
+  
   # specific to gtk : some widget like label can't support click event, so they must
   # be contained in a clickable parent (EventBox)
   #  
@@ -1330,7 +1355,7 @@ module Ruiby_dsl
   # see pclickable for callback by closure.
   def clickable(method_name,&b) 
     eventbox = Gtk::EventBox.new
-    eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
+    eventbox.events =Gdk::Event::Mask::BUTTON_PRESS_MASK
     ret=_cbox(true,eventbox,{},true,&b) 
     eventbox.realize
     eventbox.signal_connect('button_press_event') { |w, e| self.send(method_name,ret)  rescue error($!) }
@@ -1345,7 +1370,7 @@ module Ruiby_dsl
   # bloc is evaluated in a stack container
   def pclickable(aproc=nil,options={},&b) 
     eventbox = Gtk::EventBox.new
-    eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
+    eventbox.events = Gdk::Event::Mask::BUTTON_PRESS_MASK
     ret=_cbox(true,eventbox,{},true,&b) 
     eventbox.realize
     eventbox.signal_connect('button_press_event') { |w, e| aproc.call(w,e)  rescue error($!)  } if aproc
