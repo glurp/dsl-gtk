@@ -1,4 +1,6 @@
-0.126.1
+0.127.1
+    test_basics_widget.rb : video test
+0.127.0 : 2013-09-24 00:18:05 +0200
     ruiby_dsl3.rb : uri
 0.126.0 : 2013-09-24 00:14:00 +0200
     ruiby_dsl3.rb : uri / url
