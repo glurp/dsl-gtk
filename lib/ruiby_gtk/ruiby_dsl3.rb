@@ -1272,14 +1272,14 @@ module Ruiby_dsl
   # * if block is defined, it is invoked on each video progression (from 0 to 1.0)
   # * w.play
   # * w.stop
-  # * w.url=
-  # *.progress=n    fore current position in video
+  # * w.uri= "foo.avi"
+  # *.progress=n    force current position in video (0..1)
   #
   #  video() need the gems clutter, GStreamer, and glues Clutter<=>Gtk : "clutter-gtk" and "clutter-gst" 
   #  * gem install clutter-gtk 
   #  * gem install clutter-gstreamer
   #
-  def video(url=nil,w=300,h=200)
+  def video(uri=nil,w=300,h=200,&blk)
     require "clutter-gtk"  
     require "clutter-gst"  # gem install clutter-gstreamer
     clutter = ClutterGtk::Embed.new
@@ -1287,10 +1287,10 @@ module Ruiby_dsl
     clutter.stage.add_child(video)
     video.width=w
     video.height=h
-    video.uri = url if url
+    video.uri = uri if uri
     video.playing = false
     isNotify=false
-    clutter.define_singleton_method(:url=) { |u| video.url = url }
+    clutter.define_singleton_method(:uri=) { |u| video.uri = url }
     clutter.define_singleton_method(:play) { video.playing = true }
     clutter.define_singleton_method(:stop) { video.playing = false }
     clutter.define_singleton_method(:progress=) { |pp|  video.progress=(pp) unless isNotify }
