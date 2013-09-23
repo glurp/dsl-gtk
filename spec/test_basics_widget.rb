@@ -9,6 +9,22 @@ describe Ruiby do
  after(:each) do
 	destroy_window(@win)
  end
+ it "video" do
+  @win.create do
+    video() rescue nil
+    video_file="d:/usr/XT.avi"
+    video_url="file:///#{video_file}"
+    stack do
+      @v=video(video_url,600,400-40)  {|progress| @prog && @prog.progress=progress*100 }
+      flowi {
+        buttoni("  Start  ") {  @v.play }
+        buttoni("  Stop  ") {  @v.stop }
+        @prog=slider(0,0,100.0) { |pos| @v && @v.progress= pos/100.0}
+      }
+      @v.play
+    end 
+  end
+  end
  it "create a button" do
 		s=nil;@win.create { s=stack {  } }
 		@win.append_to(s) { @win.button("CouCou") { puts "coucou" } }
