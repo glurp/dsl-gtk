@@ -21,8 +21,7 @@ Status
 
 NEW : 0.121.0 !!  04-09-2013
 - containers left and right for align widget (todo: top/bottom ?)
-- combobox with callback on selection
-- list : callback on selection, set selected(s); test.rb updated
+- video() , with Clutter and GStreamer, ok on windows!
 
 TODO for 1.0 :
 - resolve 100% gtk3 deprecated warning
