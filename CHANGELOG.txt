@@ -1,4 +1,5 @@
-0.123.1
+0.123.2
+    Gemfile : clutter-gtk and clutter-gst for test
     test_systray.rb : message
     systray.rb : debug
     ruiby_dsl3.rb : video reation with CLutter GSrteamer
