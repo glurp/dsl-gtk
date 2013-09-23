@@ -1290,7 +1290,7 @@ module Ruiby_dsl
     video.uri = uri if uri
     video.playing = false
     isNotify=false
-    clutter.define_singleton_method(:uri=) { |u| video.uri = url }
+    clutter.define_singleton_method(:uri=) { |uri| video.uri = uri }
     clutter.define_singleton_method(:play) { video.playing = true }
     clutter.define_singleton_method(:stop) { video.playing = false }
     clutter.define_singleton_method(:progress=) { |pp|  video.progress=(pp) unless isNotify }
