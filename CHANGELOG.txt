@@ -1,4 +1,9 @@
-0.122.9
+0.123.1
+    test_systray.rb : message
+    systray.rb : debug
+    ruiby_dsl3.rb : video reation with CLutter GSrteamer
+    README.md : video news
+0.123.0 : 2013-09-09 21:44:15 +0200
     test_basics_widget.rb : label for a image
     test_systray.rb : nop
     test_include.rb : Box
