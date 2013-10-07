@@ -57,10 +57,8 @@ function doSearch(text) {
         document.designMode = "on";
         var sel = window.getSelection();
         sel.collapse(document.body, 0);
-
         while (window.find(text)) {
             document.execCommand("HiliteColor", false, "pink");
-            //sel.collapseToEnd();
         }
         sel.collapse(document.body, 0);
         window.find(text)
