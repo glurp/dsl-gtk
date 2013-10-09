@@ -23,8 +23,8 @@ describe Ruiby do
       }
       @v.play
     end 
-  end
-  end
+   end
+  end if defined?(Gst)
  it "create a button" do
 		s=nil;@win.create { s=stack {  } }
 		@win.append_to(s) { @win.button("CouCou") { puts "coucou" } }
