@@ -12,6 +12,12 @@ Ruiby.app width: 900, height: 800, title: "Game of Life" do
   @run=false
   
   stack do
+    @formula = "new_ =  old ?  (relatives == 2 || relatives == 3) : ( relatives == 3 )"
+    flowi {
+      labeli "Life Formula : "
+      @edit=entry(@formula) 
+      buttoni("enter")  { instance_eval "def formula(old,relatives) ; #{@edit.text} ; end" }
+    }
     @cv=canvas(self.default_width,self.default_height-80,
           :mouse_down => proc do |w,e|   
               no= [e.x/PASX,e.y/PASY] ;  @mat[no.first][no.last]=! @mat[no.first][no.last]; no    
@@ -45,13 +51,12 @@ Ruiby.app width: 900, height: 800, title: "Game of Life" do
               next if col+col_off < 0 || li+li_off < 0
               next if col+col_off >= MAXC || li+li_off >= MAXL
               relatives += 1 if @mat[col + col_off][li + li_off]
-          } }
-          
-          old= @mat[col][li]
-          new_ =  old ?  (relatives == 2 || relatives == 3) : ( relatives == 3 )
-          mat2[col][li]=new_
-          
+          } }          
+          mat2[col][li]= formula(@mat[col][li],relatives)          
     end  end
     @mat=mat2 if @run    # seem that GTK:Timer use threading...?
+  end
+  def formula(old,relatives)
+     new_ =  old ?  (relatives == 2 || relatives == 3) : ( relatives == 3 )
   end
 end
