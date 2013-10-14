@@ -1,4 +1,6 @@
-0.128.1
+0.128.2
+    gol.rb : entry for modify life formula online
+    canvas.rb : animation, polygons, scale, rotation, translation
     test_basics_widget.rb : video test only if gstereamer is loaded
     Gemfile : no gst
 0.128.0 : 2013-09-24 00:47:41 +0200
