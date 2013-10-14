@@ -14,10 +14,11 @@ class RubyApp < Ruiby_gtk
     def initialize
       @blk=nil
       @redraw_error=false
+      @dde_animation= 0
       super("Canvas",800,900)
       @filedef=Dir.tmpdir+"/canvas_default.rb"
       if  File.exists?(@filedef)
-        load(@filedef,nil)
+        fload(@filedef,nil)
       else
         @edit.buffer.text=<<-EEND
 def exp(z,d,a)
@@ -43,7 +44,7 @@ end
 		stack do
 			sloti(htoolbar(
 				"open/Open file..."=> proc {
-					load(ask_file_to_read(".","*.rb"),nil)
+					fload(ask_file_to_read(".","*.rb"),nil)
 				},
 				"Save/Save buffer to file..."=> proc {
 					@file=ask_file_to_write(".","*.rb") unless File.exists?(@file)
@@ -70,13 +71,24 @@ end
 					page("Canvas Help") { make_help(slot(text_area(600,100,{:font=>"Courier new 10"}))) }
 				end
 			}
+      buttoni("reload canvas.rb...") do 
+        begin
+          load (__FILE__)
+        rescue StandardError => e
+          error(e)
+        end
+      end
 		end
 	end
   def redraw(w,ctx)
     return if @redraw_error
     $ctx=ctx
     begin
-      timeout(10) { @blk.call(w,ctx) if @blk }
+      timeout(1) do
+        @dde_animation= 0
+        @blk.call(w,ctx) if @blk 
+        GLib::Timeout.add(@dde_animation) { @canvas.redraw ; false } if @dde_animation>0
+      end
     rescue Exception => e
       @redraw_error=true
       trace(e)
@@ -93,7 +105,9 @@ end
 	rescue Exception => e
 		trace(e)
 	end
-  
+  def def_animate(ms)
+   @dde_animation= ms
+  end
   
 	def log(*e)
 		@error_log.text+=e.join("    ")+"\n"
@@ -109,12 +123,22 @@ end
 	def make_help(ta)
 		ta.text=<<EEND
 
-pt([x,y],color,width) 
+pt(x,y,color,width) 
   draw a point at x,y. color and stroke width optional
 
 line([ [x,y],....],color,width)
   draw a polyline. color and stroke width optional
+fill([ [x,y],....],color,width)
+  draw a polygone. color and stroke width optional
 
+tradu(l)          [0,1,2,..] ===> [[0,1],[2,3],...]
+scale(l,sx,sy=nil) scale by (sx,sy), form 0,0
+trans(l,dx,dy)     transmate by dx, dy
+rotat(l,angle)     rotation by angle from 0,0
+crotat(l,x,y,angle)  rotation by angle from cener x,y  
+cscale(l,x,y,cx,xy=nil)  scake by cx,cy from center c,y
+rotation(cx,cy,a) { instr } execute instr in rotated context (for text/image)
+def_animate( n ) ask to reexecute this script n millisencondes forward
 axes((xy0,maxx,maxy,stepx,stepy)
   draw plotter"s axes
   
@@ -126,6 +150,8 @@ plot_xyft(t0,step) { |t| t=Math::PI/(t/700) ; [fx(x),fy(t)] }
 text(x,y,"Hello")
   draw a text
 
+def_animation( ms ) 
+  ask to rexecute this script aech ms millisecondes
 Examples
 
 0.step(100,10) { |x| pt( rand*x, rand*x ,"#000",4)
@@ -142,7 +168,7 @@ EEND
 		content=File.read(src)
 		ta.text=content.split(/(def component)|(end # endcomponent)/)[2]
 	end
-	def load(file,content)
+	def fload(file,content)
 		if File.exists?(file) && content==nil
 			content=File.read(file)
 		end
@@ -163,7 +189,33 @@ EEND
     poly.each {|px| $ctx.line_to(*px) } 
     $ctx.stroke  
   end
-
+  def fill(li,color="#000000",ep=2)
+    color=::Gdk::Color.parse(color)
+    $ctx.set_line_width(ep)
+    $ctx.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
+    pt0,*poly=*li
+    $ctx.move_to(*pt0)
+    poly.each {|px| $ctx.line_to(*px) } 
+    $ctx.fill
+  end
+  def update(ms=20) @canvas.redraw ; sleep(ms*0.001) end
+  def tradu(l) l.each_slice(2).to_a end
+  def scale(l,sx,sy=nil) l.map {|(x,y)| [x*sx,y*(sy||sx)]}                                        end
+  def trans(l,dx,dy) l.map {|(x,y)| [x+dx,y+dy]}                                                  end
+  def rotat(l,angle) sa,ca=Math.sin(angle),Math.cos(angle); l.map {|(x,y)| [x*ca-y*sa,x*sa+y*ca]} end
+  def crotat(l,x,y,angle) trans(rotat(trans(l,-x,-y),angle),x,y)                                  end
+  def cscale(l,x,y,cx,xy=nil) trans(scale(trans(l,-x,-y),cx,cy),x,y)                              end
+  def rotation(cx,cy,a,&blk) 
+     if a==0
+      yield
+      return
+     end
+     $ctx.translate(cx,cy)
+     $ctx.rotate(a)
+     yield rescue p $!
+     $ctx.rotate(-a)
+     $ctx.translate(-cx,-cy)
+  end
   def pt(x,y,color="#000000",ep=2)
     line([[x,y-ep/4],[x,y+ep/4]],color,ep)
   end
