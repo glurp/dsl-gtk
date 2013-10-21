@@ -1,4 +1,6 @@
-0.128.2
+0.128.3
+    gol.rb : speedy
+    ruiby_threader.rb : anim
     gol.rb : entry for modify life formula online
     canvas.rb : animation, polygons, scale, rotation, translation
     test_basics_widget.rb : video test only if gstereamer is loaded
