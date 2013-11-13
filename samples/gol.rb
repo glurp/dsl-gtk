@@ -2,13 +2,13 @@
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
 
-require_relative  '../lib/Ruiby'
+require  'Ruiby'
 
-Ruiby.app width: 900, height: 800, title: "Game of Life" do
+Ruiby.app width: 400, height: 300, title: "Game of Life" do
   def freemap() l=[]; MAXC.times { l << [[false]*MAXL] } ; l end
   MAXC=MAXL=100
   PASX=default_width/MAXC
-  PASY=(default_width-50)/MAXL
+  PASY=(default_width)/MAXL
   @mat=freemap()
   @run=false
   
@@ -17,9 +17,9 @@ Ruiby.app width: 900, height: 800, title: "Game of Life" do
     flowi {
       labeli "Life Formula : "
       @edit=entry(@formula) 
-      buttoni("enter")  { instance_eval "def formula(old,relatives) ; #{@edit.text} ; end" }
+      buttoni("enter")  { instance_eval "def formula(old,nb_neighboring) ; #{@edit.text} ; end" }
     }
-    @cv=canvas(self.default_width,self.default_height-50,
+    @cv=canvas(self.default_width,self.default_height,
           :mouse_down => proc do |w,e|   
             no= [e.x/PASX,e.y/PASY] ;  @mat[no.first][no.last]=! @mat[no.first][no.last]; no    
           end,
