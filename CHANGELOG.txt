@@ -1,4 +1,8 @@
-0.128.3
+0.128.4
+    video.rb : no check file
+    gol.rb : some mod
+    canvas.rb : best
+    ruiby_dsl3.rb : api n combo box
     gol.rb : speedy
     ruiby_threader.rb : anim
     gol.rb : entry for modify life formula online
