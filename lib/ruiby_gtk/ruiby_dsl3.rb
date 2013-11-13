@@ -589,6 +589,7 @@ module Ruiby_dsl
   #
   def combo(choices,default=nil,option={},&blk)
     w=ComboBoxText.new()
+    choices=choices.inject({}) { |h,k| h[k]=h.size ; h} if Array===choices
     choices.each do |text,indice|  
       w.append_text(text) 
     end
@@ -603,6 +604,15 @@ module Ruiby_dsl
       blk.call(w.active_text,choices[w.active_text])
     } if blk    
     attribs(w,option)   
+    class << w
+      def choices()
+          []
+      end
+      def choices=(h)
+         clear
+         h.keys.each { |k| append_text(k) }
+      end
+    end
     w
   end
 
