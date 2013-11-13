@@ -8,6 +8,22 @@
 require 'timeout'
 require_relative '../lib/Ruiby'
 
+# Usage
+# CanvasBinding.eval_in(cv) {}
+
+module DrawPrimitive end
+class CanvasBinding
+  include DrawPrimitive
+  def self.eval_in(canvas,ctx=nil,blk)
+     @dde_animation= 0
+     @cv=canvas
+     $ctx=ctx if ctx
+     (p=new).instance_eval(blk,"<script>",1)
+     p.dde_animation
+  end
+  def dde_animation() @dde_animation end
+end
+
 class RubyApp < Ruiby_gtk
     include Math 
 
@@ -82,32 +98,31 @@ end
 	end
   def redraw(w,ctx)
     return if @redraw_error
-    $ctx=ctx
+    return unless  @blk
     begin
-      timeout(1) do
-        @dde_animation= 0
-        @blk.call(w,ctx) if @blk 
-        GLib::Timeout.add(@dde_animation) { @canvas.redraw ; false } if @dde_animation>0
-      end
+        @redraw_error=false
+        @error_log.text=""
+        begin
+         dde_animation=CanvasBinding.eval_in(@cv,ctx,@blk)  
+         GLib::Timeout.add([dde_animation,50].max) { @canvas.redraw ; false } if dde_animation && dde_animation>0
+        rescue Exception => e
+          @redraw_error=true
+          error("Error in evaluate script :\n",e)
+        end
     rescue Exception => e
       @redraw_error=true
       trace(e)
     end
   end
 	def execute()
-		@error_log.text=""
-		@content=@edit.buffer.text
-    cv=@canvas
-    cv.redraw
+		content=@edit.buffer.text    
+	  @blk= content
+		File.open(@filedef,"w") {|f| f.write(content)} if content.size>30
     @redraw_error=false
-	  @blk=proc { |x,ctx| eval(@content,binding() ,"<script>",1) } 
-		File.open(@filedef,"w") {|f| f.write(@content)} if @content.size>30
+    @canvas.redraw
 	rescue Exception => e
 		trace(e)
 	end
-  def def_animate(ms)
-   @dde_animation= ms
-  end
   
 	def log(*e)
 		@error_log.text+=e.join("    ")+"\n"
@@ -121,48 +136,8 @@ end
 		ta.text=content.split(/\r?\n\s*/).grep(/^def[\s\t]+[^_]/).map {|line| (line.split(/\)/)[0]+")").gsub(/\s*def\s/,"")}.sort.join("\n")
 	end
 	def make_help(ta)
-		ta.text=<<EEND
-
-pt(x,y,color,width) 
-  draw a point at x,y. color and stroke width optional
-
-line([ [x,y],....],color,width)
-  draw a polyline. color and stroke width optional
-fill([ [x,y],....],color,width)
-  draw a polygone. color and stroke width optional
-
-tradu(l)          [0,1,2,..] ===> [[0,1],[2,3],...]
-scale(l,sx,sy=nil) scale by (sx,sy), form 0,0
-trans(l,dx,dy)     transmate by dx, dy
-rotat(l,angle)     rotation by angle from 0,0
-crotat(l,x,y,angle)  rotation by angle from cener x,y  
-cscale(l,x,y,cx,xy=nil)  scake by cx,cy from center c,y
-rotation(cx,cy,a) { instr } execute instr in rotated context (for text/image)
-def_animate( n ) ask to reexecute this script n millisencondes forward
-axes((xy0,maxx,maxy,stepx,stepy)
-  draw plotter"s axes
-  
-plot_yfx(x0,step) { |x| f(x) }
-  draw a funtion y=f(x)
-
-plot_xyft(t0,step) { |t| t=Math::PI/(t/700) ; [fx(x),fy(t)] }
-  draw a parametric curve 
-text(x,y,"Hello")
-  draw a text
-
-def_animation( ms ) 
-  ask to rexecute this script aech ms millisecondes
-Examples
-
-0.step(100,10) { |x| pt( rand*x, rand*x ,"#000",4)
-line([ [0,0],[100,0],[100,100],[0,1000],[50,50],[0,0]],"#FF0000",4)
-
-axes(20,800,800,20,10)
-plot_yfx(10,3) { |x| 20+100+100*Math.sin(Math::PI*x/40)}
-  
-  
-EEND
-	end
+		ta.text=DrawPrimitive.help_text
+  end
 	def make_example(ta)
 		src=File.dirname(__FILE__)+"/test.rb"
 		content=File.read(src)
@@ -178,6 +153,14 @@ EEND
 		@content=content
 		@edit.buffer.text=content
 	end
+end
+
+#=====================================================================================
+#     Draw Primitives
+#=====================================================================================
+
+module DrawPrimitive
+  def error(*t) Message.error(*t) end
   ####################################### Simple drawing  
   
   def line(li,color="#000000",ep=2)
@@ -204,16 +187,28 @@ EEND
   def trans(l,dx,dy) l.map {|(x,y)| [x+dx,y+dy]}                                                  end
   def rotat(l,angle) sa,ca=Math.sin(angle),Math.cos(angle); l.map {|(x,y)| [x*ca-y*sa,x*sa+y*ca]} end
   def crotat(l,x,y,angle) trans(rotat(trans(l,-x,-y),angle),x,y)                                  end
-  def cscale(l,x,y,cx,xy=nil) trans(scale(trans(l,-x,-y),cx,cy),x,y)                              end
-  def rotation(cx,cy,a,&blk) 
+  def cscale(l,x,y,cx,cy=nil) trans(scale(trans(l,-x,-y),cx,cy),x,y)                              end
+  def rotation(cx,cy,a,&blk) grotation(cx,cy,a,&blk) end
+  def grotation(cx,cy,a,&blk) 
      if a==0
       yield
       return
      end
      $ctx.translate(cx,cy)
      $ctx.rotate(a)
-     yield rescue p $!
+     yield rescue error $!
      $ctx.rotate(-a)
+     $ctx.translate(-cx,-cy)
+  end
+  def gscale(cx,cy,a,&blk) 
+     if a==0
+      yield
+      return
+     end
+     $ctx.translate(cx,cy)
+     $ctx.scale(a,a)
+     yield rescue error $!
+     $ctx.scale(1.0/a,1.0/a)
      $ctx.translate(-cx,-cy)
   end
   def pt(x,y,color="#000000",ep=2)
@@ -249,12 +244,68 @@ EEND
     pt(*l.first,"#AAAAFF",4)
     pt(*l.last,"#FFAAAA",4)
   end
-  def text(x,y,text)
+  def text(x,y,text,scale=1)
     $ctx.set_line_width(1)
     $ctx.set_source_rgba(0, 0 ,0, 1)
-    $ctx.move_to(x,y)
-    $ctx.show_text(text)
+    if scale==1
+      $ctx.move_to(x,y)
+      $ctx.show_text(text)
+    else
+      gscale(x,y,scale) { $ctx.move_to(0,0); $ctx.show_text(text) }
+    end
   end
+  def def_animate(ms)
+   @dde_animation= ms
+  end
+  
+  def self.help_text()
+    h=<<EEND
+
+pt(x,y,color,width) 
+  draw a point at x,y. color and stroke width optional
+
+line([ [x,y],....],color,width)
+  draw a polyline. color and stroke width optional
+fill([ [x,y],....],color,width)
+  draw a polygone. color and stroke width optional
+
+tradu(l)          [0,1,2,..] ===> [[0,1],[2,3],...]
+scale(l,sx,sy=nil) scale by (sx,sy), form 0,0
+trans(l,dx,dy)     transmate by dx, dy
+rotat(l,angle)     rotation by angle from 0,0
+crotat(l,x,y,angle)  rotation by angle from cener x,y  
+cscale(l,x,y,cx,xy=nil)  scake by cx,cy from center c,y
+grotation(cx,cy,a) { instr } execute instr in rotated context (for text/image)
+gscale(cx,cy,a) { instr } execute instr in scaled context (for text/image)
+
+def_animate( n ) ask to reexecute this script n millisencondes forward
+axes((xy0,maxx,maxy,stepx,stepy)
+  draw plotter"s axes (to be well done...)
+  
+plot_yfx(x0,step) { |x| f(x) }
+  draw a funtion y=f(x)
+
+plot_xyft(t0,step) { |t| t=Math::PI/(t/700) ; [fx(x),fy(t)] }
+  draw a parametric curve 
+  
+text(x,y,"Hello")
+  draw a text
+text(x,y,"Hello",coef)
+  draw a text scaled by coef
+
+def_animation( ms ) 
+  ask to rexecute this script aech ms millisecondes
+Examples
+
+0.step(100,10) { |x| pt( rand*x, rand*x ,"#000",4)
+line([ [0,0],[100,0],[100,100],[0,1000],[50,50],[0,0]],"#FF0000",4)
+
+axes(20,800,800,20,10)
+plot_yfx(10,3) { |x| 20+100+100*Math.sin(Math::PI*x/40)}
+  
+  
+EEND
+	end
 end
 
 Ruiby.start_secure { RubyApp.new }
