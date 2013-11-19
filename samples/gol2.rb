@@ -5,18 +5,19 @@
 require  'Ruiby'
 require  'pp'
 
-Ruiby.app width: 800, height: 600, title: "Game of Life" do
+Ruiby.app width: 1000, height: 700, title: "Game of Life" do
   def freemap()  l=[]; MAXC.times { l << [0]*MAXL } ; l end
-  MAXC=MAXL=100
+  MAXC=MAXL=120
   PASX=default_width/MAXC
   PASY=(default_width)/MAXL
+  @oldmat=freemap()
   @mat=freemap()
   @run=false
   
   stack do
     def formula(opoids,poids)
          #--#
-        opoids>50 ?  (opoids<92 ? (poids*1.003) : 12 ) : ((opoids<10) ? (100-poids/2) : (poids*0.93))
+     opoids>30 ?  (opoids<82 ? (poids*1.0003) : poids*0.99 ) : ((opoids<10 && opoids>1) ? (100-poids/2) : (poids*0.93))
          #--#
     end
     @formula = File.read(__FILE__).split("#-"+"-#")[1].strip
@@ -29,21 +30,21 @@ Ruiby.app width: 800, height: 600, title: "Game of Life" do
           :mouse_down => proc do |w,e|   
             no= [e.x/PASX,e.y/PASY] ;  
             c=(@mat[no.first][no.last]>50 ? 0 : 100)            
-            [-2,-1, 0, 1+2].each { |col_off| [-2,-1, 0, 1,2].each { |li_off| @mat[no.first+col_off][no.last+li_off]=  c}}
+            [-2,-1, 0, 1,+2].each { |col_off| [-2,-1, 0, 1,2].each { |li_off| @mat[no.first+col_off][no.last+li_off]=  c}}
             no    
           end,
           :expose => proc do |w,ctx|  
             MAXC.times { |col| MAXL.times { |li| 
                coul=1.0-(@mat[col][li] / 100.0)
                r,g,b=coul,coul,coul
-               r*=2 if coul<0.4
+               r=coul*2 if coul<0.4
                g*=2 if coul>0.8
-               b*=2 if coul>0.2
+               b*=2 if coul>0.4
                ctx.set_source_rgba(r,g,b)
                ctx.rectangle(col*PASX,li*PASY,PASX,PASY)
                ctx.fill()  
            }}
-               p @mat[MAXC/2][MAXL/2]
+           p @mat[MAXC/2][MAXL/2]
           end
     )
     
@@ -58,12 +59,12 @@ Ruiby.app width: 800, height: 600, title: "Game of Life" do
     end    
   end
   
-  anim 200 do  game() if @run ; @cv.redraw  end
+  anim 100 do  game() if @run ; @cv.redraw  end
   def game()
-    mat2=freemap()
+    mat2=@oldmat
     MAXC.times do |col| MAXL.times do |li|
           poids= 0; n=0
-          [-2,-1, 0, 1+2].each { |col_off| [-2,-1, 0, 1,2].each { |li_off|
+          [-1, 0, 1].each { |col_off| [-1, 0, 1].each { |li_off|
               next if col_off == 0 && li_off == 0
               next if col+col_off < 0 || li+li_off < 0
               next if col+col_off >= MAXC || li+li_off >= MAXL
@@ -73,6 +74,6 @@ Ruiby.app width: 800, height: 600, title: "Game of Life" do
           c=formula(@mat[col][li],poids/n)
           mat2[col][li] = ((c<0) ? 0 : (c>100 ? 100 : c))
     end  end
-    @mat=mat2 if @run    # seem that GTK:Timer use threading...?
+    @oldmat,@mat=@mat,mat2 if @run    # seem that GTK:Timer use threading...?
   end
 end

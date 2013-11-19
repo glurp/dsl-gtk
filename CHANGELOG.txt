@@ -1,4 +1,4 @@
-0.128.4
+0.129.0 : 2013-11-13 22:20:06 +0100
     video.rb : no check file
     gol.rb : some mod
     canvas.rb : best

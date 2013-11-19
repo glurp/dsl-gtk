@@ -9,6 +9,7 @@ Ruiby.app width: 400, height: 300, title: "Game of Life" do
   MAXC=MAXL=100
   PASX=default_width/MAXC
   PASY=(default_width)/MAXL
+  @oldmat=freemap()
   @mat=freemap()
   @run=false
   
@@ -42,7 +43,7 @@ Ruiby.app width: 400, height: 300, title: "Game of Life" do
   
   anim 50 do  game() if @run ; @cv.redraw  end
   def game()
-    mat2=freemap()
+    mat2=@oldmat
     MAXC.times do |col| MAXL.times do |li|
           nb_neighboring= 0
           [-1, 0, 1].each { |col_off| [-1, 0, 1].each { |li_off|
@@ -53,7 +54,7 @@ Ruiby.app width: 400, height: 300, title: "Game of Life" do
           } }          
           mat2[col][li]= formula(@mat[col][li],nb_neighboring)          
     end  end
-    @mat=mat2 if @run    # seem that GTK:Timer use threading...?
+    @oldmat,@mat=@mat,mat2 if @run    # seem that GTK:Timer use threading...?
   end
   def formula(old,nb_neighboring)
      old ?  (nb_neighboring == 2 || nb_neighboring == 3) : ( nb_neighboring == 3 )
