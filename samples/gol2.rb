@@ -44,7 +44,7 @@ Ruiby.app width: 1000, height: 700, title: "Game of Life" do
                ctx.rectangle(col*PASX,li*PASY,PASX,PASY)
                ctx.fill()  
            }}
-           p @mat[MAXC/2][MAXL/2]
+           #p @mat[MAXC/2][MAXL/2]
           end
     )
     
@@ -56,10 +56,12 @@ Ruiby.app width: 1000, height: 700, title: "Game of Life" do
       end
       button " start  " do @run=true ;end
       button " stop   " do  @run=false ; end
+      button " 3D   " do do_timeline(@mat) end
     end    
   end
   
-  anim 100 do  game() if @run ; @cv.redraw  end
+  anim 200 do  game() if @run ; @cv.redraw  ; (make_curve() ; @ccc.redraw) if @ccc  end
+  
   def game()
     mat2=@oldmat
     MAXC.times do |col| MAXL.times do |li|
@@ -76,4 +78,44 @@ Ruiby.app width: 1000, height: 700, title: "Game of Life" do
     end  end
     @oldmat,@mat=@mat,mat2 if @run    # seem that GTK:Timer use threading...?
   end
+  # end component()
+  
+  def do_timeline(mat)
+    return unless mat
+    dialog_async("3D view",response: proc  { |w,e| @ccc=false ; false }) do
+      make_curve()
+      @ccc=canvas(1000,800,{ 
+          :expose     => proc do |w,cr|  
+            color=::Gdk::Color.parse("#774433")
+            color1=::Gdk::Color.parse("#334477")
+            cr.set_line_width(2)
+            @ll.reverse.each_with_index do |line,i|
+              cr.set_source_rgba((color.red-i*200)/65000.0, (color.green+i*200)/65000.0, color.blue/65000.0, 1)
+              pt0,*poly=*line
+              cr.move_to(*pt0)
+              poly.each {|px| cr.line_to(*px) } 
+              cr.fill 
+              cr.set_source_rgba((color1.red)/65000.0, (color1.green+i)/65000.0, (color1.blue-i*200)/65000.0, 1)
+              pt0,*poly=*line
+              cr.move_to(*pt0)
+              poly.each {|px| cr.line_to(*px) } 
+              cr.stroke 
+            end
+          end
+      })
+    end
+  end
+  def make_curve()
+       mat=@mat
+       @ll=[]
+       0.step(MAXL-1,5).each_with_index do |l,ic| 
+        lline=[]
+        0.step(MAXC-1,1).each do |c|
+           value=mat[c][l]
+           lline << [(c+ic*3)*5,400+(value*4-ic*10)] 
+        end
+        @ll << [lline[0].tap {|pt| pt[1]=800}]+lline+[lline[-1].tap {|pt| pt[1]=800}]
+      end
+  end
 end
+

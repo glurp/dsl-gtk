@@ -160,7 +160,7 @@ module Ruiby_default_dialog
 	end
 end
 
-#  common dialog to be use for direct  call in none Ruiby context class. :
+#  common dialog to be use for direct  call in none Ruiby context classe :
 #  Message.alert("ddde",'eee')
 class Message
 	class Embbeded  < ::Gtk::Window
