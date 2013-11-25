@@ -1,3 +1,7 @@
+0.129.1
+    draw.png : t
+    make_doc.rb : opt
+    gol2.rb : opt
 0.129.0 : 2013-11-13 22:20:06 +0100
     video.rb : no check file
     gol.rb : some mod
