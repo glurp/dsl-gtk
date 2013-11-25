@@ -5,7 +5,7 @@
 require  'Ruiby'
 require  'pp'
 
-Ruiby.app width: 1000, height: 700, title: "Game of Life" do
+Ruiby.app width: 1000, height: 700, title: "Game of Analogic Life" do
   def freemap()  l=[]; MAXC.times { l << [0]*MAXL } ; l end
   MAXC=MAXL=120
   PASX=default_width/MAXC
@@ -112,7 +112,7 @@ Ruiby.app width: 1000, height: 700, title: "Game of Life" do
         lline=[]
         0.step(MAXC-1,1).each do |c|
            value=mat[c][l]
-           lline << [(c+ic*3)*5,400+(value*4-ic*10)] 
+           lline << [(c+ic*3)*5,400+(400-value*4-ic*10)] 
         end
         @ll << [lline[0].tap {|pt| pt[1]=800}]+lline+[lline[-1].tap {|pt| pt[1]=800}]
       end
