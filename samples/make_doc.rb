@@ -193,27 +193,28 @@ end
 def make_example(hdoc,filename)
   count= $hexample.size
   src=File.dirname(__FILE__)+"/"+filename
-	system('ruby',src,"take-a-snapshot")
+  system('ruby',src,"take-a-snapshot")
   content=File.read(src).gsub('<','&lt;')
-	code= if content =~ /component\(\)/
-		'def component()' + content.split('component()')[1]
-	else
-	  content
-	end
+  code= if content =~ /component\(\)/
+    'def component()' + content.split('component()')[1]
+  else
+    content
+  end
   code=code.gsub(/\w+/) { |word| (hdoc[word]) ? make_popup(word) : word}
-	count-=$hexample.size
-	puts " #{filename} : #{-count}"
-	ifn="media/snapshot_#{filename}.png"
-	img=if File.exists?(ifn)
-			icontent=open(ifn,"rb") do |f|
-				Base64.encode64(f.read(File.size(ifn)))
-			end
-			File.delete(ifn)
-			'<br/><center><img src="data:image/gif;base64,'+icontent+'"></center><br/>'
-	else
-	  puts "no snapshot"
-	  ""
-	end
+  count-=$hexample.size
+  puts " #{filename} : #{-count}"
+  ifn="media/snapshot_#{filename}.png"
+  img=if File.exists?(ifn)
+      system('imagemagick","-crop","200x150")
+      icontent=open(ifn,"rb") do |f|
+        Base64.encode64(f.read(File.size(ifn)))
+      end
+      File.delete(ifn)
+      '<br/><center><img src="data:image/gif;base64,'+icontent+'"></center><br/>'
+  else
+    puts "no snapshot"
+    ""
+  end
   '<div class="title2">Code of <a href="https://github.com/raubarede/Ruiby/blob/master/samples/%s">samples/%s</a></div>%s<div class="code"><pre><code>%s</code></pre><br></div><br>' % [filename,filename,img,code]
 end
 
