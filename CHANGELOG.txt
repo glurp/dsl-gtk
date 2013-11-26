@@ -1,4 +1,5 @@
-0.129.2
+0.129.3
+    draw.svg : c
     sketchi.rb : indentations
     draw.png : t
     make_doc.rb : opt
