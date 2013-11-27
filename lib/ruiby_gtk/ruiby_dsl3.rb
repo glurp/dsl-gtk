@@ -865,11 +865,10 @@ module Ruiby_dsl
         c[:xminmax] ||= [c[:data].first[1],c[:data].last[1]]
         c[:yminmax] ||= [0,100]
         c[:style] ||= :linear
-        c[:xa] = width_request/(c[:xminmax][1]-c[:xminmax][0])
-        c[:xb] = 0    -c[:xminmax][0]*c[:xa]
-        c[:ya] = height_request/(c[:yminmax][0]-c[:yminmax][1])
-        c[:yb] = height_request+c[:yminmax][0]*c[:xa]
-        
+        c[:xa] = 1.0*width_request/(c[:xminmax][1]-c[:xminmax][0])
+        c[:xb] = 0.0    -c[:xminmax][0]*c[:xa]
+        c[:ya] = 1.0*height_request/(c[:yminmax][0]-c[:yminmax][1])
+        c[:yb] = 1.0*height_request+c[:yminmax][0]*c[:xa]
         @curves||={}
         @curves[name]=c
      end
