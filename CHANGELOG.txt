@@ -1,4 +1,5 @@
-0.129.7
+0.129.8
+    ruiby_dsl3.rb : presentation
     ruiby_dsl3.rb : add plot word
     ruiby_default_dialog3.rb : indentations
     draw.svg : c
