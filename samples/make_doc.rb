@@ -236,7 +236,7 @@ lapis=hdoc.keys.sort.select {|a| (a !~ /\./) }.map {  |k|
 }
 dico_hdoc=make_hdoc(hdoc)
 
-lscript=%w{canvas.rb table2.rb testth.rb animtext.rb  test_systray.rb  multi_window_threading.rb test_include.rb netprog.rb test.rb }
+lscript=%w{canvas.rb table2.rb testth.rb animtext.rb  test_systray.rb  multi_window_threading.rb test_include.rb netprog.rb test.rb plot.rb}
 test=lscript.map { |file| make_example(hdoc,file) }.join("<hr>")
 puts "\n\n no exemples for : #{hdoc.size - $hexample.size} words\n"
 eend="<hr><br><p><b>No example for</b> : %s" % [(hdoc.keys - $hexample.keys- %w{initialize component}).join(', ')]
