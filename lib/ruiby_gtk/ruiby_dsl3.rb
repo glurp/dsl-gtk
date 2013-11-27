@@ -842,17 +842,13 @@ module Ruiby_dsl
   #  pl=plot(400,200,{
   #      "curve1" => {
   #         data:[[0,1],[110,1],[20,1],[30,1],[10,1],[22,1],[55,1],[77,1]],
-  #         color: '#FF0000',
-  #         xminmax:[0,100],
-  #         yminmax:[0,100],
-  #         style: :linear,
-  #       },
+  #         color: '#FF0000', xminmax:[0,100], yminmax:[0,100], style: :linear,},...})
   #  }
   #
   # this methods are added :
-  # * pl.set_data(name,data) : replace current vlues par a new list of poit [ [y,x],....] for curve named 'name'
+  # * pl.set_data(name,data) : replace current values par a new list of point [ [y,x],....] for curve named 'name'
   # * pl.get_data(name) 
-  # * pl.add_data(name,pt)  : add a point a the end of the curve
+  # * pl.add_data(name,pt)  : add a point at the end of the curve
   # * pl.scroll_data(name,value)  : add a point at last and scroll if necessary (act as oscilloscope)
   # see samples/plot.rb
   def plot(width,height,curves,config={})
