@@ -618,11 +618,12 @@ module Ruiby_dsl
 
   # to state button, with text for each state and a initiale value
   # value can be read by w.active?
+  # calue can be changed by w.set_active(true/false)
   # callback on state change with new value as argument
   def toggle_button(text1,text2=nil,value=false,option={},&blk)
     text2 = "- "+text1 unless text2
     b=ToggleButton.new(text1);
-    b.signal_connect("toggled") do |w,e| 
+    b.signal_connect("clicked") do |w,e| 
       w.label= w.active?() ? text2.to_s : text1.to_s 
       ( blk.call(w.active?()) rescue error($!) ) if blk
     end
@@ -632,11 +633,10 @@ module Ruiby_dsl
     b
   end
   # create a checked button
-  # no callback
   # state can be read by cb.active?
   def check_button(text="",value=false,option={})
     b=CheckButton.new(text)
-          .set_active(value)
+    b.set_active(value)
     attribs(b,option)
     b
   end
@@ -838,6 +838,83 @@ module Ruiby_dsl
   # update a canvas
   def force_update(canvas) canvas.queue_draw unless  canvas.destroyed?  end
 
+  #  define a plot zone, with several curves :
+  #  pl=plot(400,200,{
+  #      "curve1" => {
+  #         data:[[0,1],[110,1],[20,1],[30,1],[10,1],[22,1],[55,1],[77,1]],
+  #         color: '#FF0000',
+  #         xminmax:[0,100],
+  #         yminmax:[0,100],
+  #         style: :linear,
+  #       },
+  #  }
+  #
+  # this methods are added :
+  # * pl.set_data(name,data) : replace current vlues par a new list of poit [ [y,x],....] for curve named 'name'
+  # * pl.get_data(name) 
+  # * pl.add_data(name,pt)  : add a point a the end of the curve
+  # * pl.scroll_data(name,value)  : add a point at last and scroll if necessary (act as oscilloscope)
+  # see samples/plot.rb
+  def plot(width,height,curves,config={})
+     cv=canvas(width,height,
+          :mouse_down => proc do |w,e|   
+          end,
+          :expose => proc do |w,ctx|  cv.expose(ctx) end
+     )
+     def cv.add_curve(name,config) 
+        c=config.dup
+        c[:data] ||= [[0,0],[100,100]]
+        c[:maxlendata] ||= 100
+        c[:color] ||= "#003030"
+        c[:xminmax] ||= [c[:data].first[1],c[:data].last[1]]
+        c[:yminmax] ||= [0,100]
+        c[:style] ||= :linear
+        c[:xa] = width_request/(c[:xminmax][1]-c[:xminmax][0])
+        c[:xb] = 0    -c[:xminmax][0]*c[:xa]
+        c[:ya] = height_request/(c[:yminmax][0]-c[:yminmax][1])
+        c[:yb] = height_request+c[:yminmax][0]*c[:xa]
+        @curves||={}
+        @curves[name]=c
+     end
+     def cv.expose(ctx) 
+        @curves.values.each do |c|
+              next if c[:data].size<2
+              l=c[:data].map { |(y,x)|  [x*c[:xa]+c[:xb] , y*c[:ya]+c[:yb] ]  }
+              coul=c[:rgba]
+              ctx.set_source_rgba(coul.red,coul.green,coul.blue)
+              ctx.move_to(*l[0])
+              l[1..-1].each { |pt| ctx.line_to(*pt) }
+              ctx.stroke
+        end
+     end
+     
+     def cv.set_data(name,data) 
+       @curves[name][:data]=data
+       maxlen(name,@curves[name][:maxlendata])
+       redraw
+     end
+     def cv.get_data(name) 
+       @curves[name][:data]
+     end
+     def cv.add_data(name,pt) 
+       @curves[name][:data] << pt
+       maxlen(name,@curves[name][:maxlendata])
+       redraw
+     end
+     def cv.scroll_data(name,value) 
+        l=@curves[name][:data]
+        pas=width_request/l.size
+        l.each { |pt| pt[1]-=pas } 
+        l << [ value , @curves[name][:xminmax].last ]
+        maxlen(name,@curves[name][:maxlendata])
+        redraw
+     end
+     def cv.maxlen(name,len)
+       @curves[name][:data]=@curves[name][:data][-len..-1] if @curves[name][:data].size>len
+     end
+     curves.each { |name,descr| descr[:rgba]=color_conversion(descr[:color]||'#303030') ; cv.add_curve(name,descr) }
+     cv
+  end
   ############################ table
   # create a container for table-disposed widgets. this is not a grid!
   # table(r,c) { row { cell(w) ; .. } ; ... }
