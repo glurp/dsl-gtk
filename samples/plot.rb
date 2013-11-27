@@ -25,7 +25,11 @@ Ruiby.app width: 400, height: 300, title: "Ploter test" do
      b=plot(400,100,{"b"=> { data: aleac(20)}})
      c=plot(400,100,{"c"=> { data: alear(),xminmax: [0,100],yminmax: [0,100]}})
   end
-  anim(100) do 
+  t=3
+  i=0
+  anim(t) do 
+    i+=1
+    puts Time.now.to_f*1000  if i%(1000/t)==0
     a.scroll_data("a", [0,100,a.get_data("a").last[0]+rand(-5..5)].sort[1])
     a.scroll_data("b", [0,100,a.get_data("b").last[0]+rand(-10..10)].sort[1]) if Time.now.to_i%10<5
     b.get_data("b").each_cons(3) {|p0,p1,p2| p1[0]=(2*p1[0]+p0[0]+p2[0])/4 if p0 && p1 && p2}
