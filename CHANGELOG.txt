@@ -1,4 +1,6 @@
-0.129.9
+0.129.10
+    plot.rb : creation
+    ruiby_dsl3.rb : doc plot
     make_doc.rb : add plot.rb
     ruiby_dsl3.rb : presentation
     ruiby_dsl3.rb : add plot word
