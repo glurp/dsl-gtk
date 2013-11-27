@@ -873,6 +873,7 @@ module Ruiby_dsl
         c[:xb] = 0    -c[:xminmax][0]*c[:xa]
         c[:ya] = height_request/(c[:yminmax][0]-c[:yminmax][1])
         c[:yb] = height_request+c[:yminmax][0]*c[:xa]
+        
         @curves||={}
         @curves[name]=c
      end
