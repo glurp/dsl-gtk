@@ -1,4 +1,7 @@
-0.129.10
+0.130.1
+    make_doc.rb : abb plot.rb to examples
+    ruiby_dsl3.rb : float on plot scale caclulation
+0.130.0 : 2013-11-27 16:33:06 +0100
     plot.rb : creation
     ruiby_dsl3.rb : doc plot
     make_doc.rb : add plot.rb
