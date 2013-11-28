@@ -17,7 +17,7 @@ mlog 'require ruiby....'   ; require_relative '../lib/Ruiby' ; mlog 'require rui
 class RubyApp < Ruiby_gtk
     def initialize
 		mlog "befor init"
-        super("Testing Ruiby",900,0)
+        super("Testing Ruiby",600,0)
 		mlog 'after init'
 		after(1) { mlog("first update") }
     end
@@ -30,80 +30,89 @@ def component()
   mlog 'before Component'
   stack do
     htoolbar_with_icon_text(
-      "open/ouvrir..."=>proc { edit(__FILE__) },
-      "save/save.."=>nil,
+      "open/Open..."=>proc { edit(__FILE__) },
+      "save/Save.."=> proc { alert("Save what ?")},
       "sep" => nil,
-      "undo/undo"=>nil,
-      "redo/redo"=>proc { alert("e") }
+      "undo/Undo"=> proc { alert( "undo")} ,
+      "redo/Redo"=>proc { alert("redo") }
     )
     sloti(label( <<-EEND ,:font=>"Tahoma bold 12"))
-     This window is test & demo of Ruiby capacity.
-     Ruby = #{RUBY_VERSION}, Ruiby is #{Ruiby::VERSION}, Gtk is  #{Gtk::VERSION.join(".")}
-     HMI code =#{File.read(__FILE__).split("comp"+"onent"+"()")[1].split(/\r?\n/).select {|l| l.strip.size>3}.size} lines
+     This window is test & demo of Ruiby capacity. Ruby is #{RUBY_VERSION}, Ruiby is #{Ruiby::VERSION}, 
+     Gtk is  #{Gtk::VERSION.join(".")} HMI code take #{File.read(__FILE__).split("comp"+"onent"+"()")[1].split(/\r?\n/).select {|l| l !~ /\s*#/ && l.strip.size>3}.size} LOC (without blanc lines,comment line,'end' alone)
 	EEND
     separator
     flow {
-      @left=stack {
-    test_table
-    test_canvas
-     }
-  separator
-      notebook do
-        page("","#home") { label("A Notebook Page with icon as button-title",{font: "Arial 18"}) }
-        page("List & grids") { test_list_grid }		
-        page("Explorer") { test_treeview }
-        page("expander & dialog") { test_dialog }
-        page("Property Edit.") { test_properties(0) }
-        page("Big PropEditor") { test_properties(1) }
-        page("Source Editor") {
-          if ed=source_editor(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 8",:on_change=> proc { edit_change })
-            @editor=ed.editor
-            @editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
-          end
+       @left=stack {
+        test_table
+        test_canvas
+      }
+      separator
+      stack do
+        notebook do
+          page("","#home") { label("A Notebook Page with icon as button-title",{font: "Arial 18"}) }
+          page("List & grids") { test_list_grid }		
+          page("Explorer") { test_treeview }
+          page("ex&dia") { test_dialog }
+          page("Properties") { test_properties(0) }
+          page("Source Ed") {
+            if ed=source_editor(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 8",:on_change=> proc { edit_change })
+              @editor=ed.editor
+              @editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
+            end
+          }
+          page("Menu") { test_menu }
+          page("Accordion") { test_accordion }
+          page("Pan & Scrolled") { test_pan_scroll}
+        end # end notebook
+        frame("Buttons in frame") {
+          flow { sloti(button("packed with sloti()") {alert("button packed with sloti()")}) 
+            @bref=sloti(button("bb")) ;  button("packed with slot()") ; 
+          }
         }
-        page("Menu") { test_menu }
-        page("Accordion") { test_accordion }
-        page("Pan & Scrolled") { test_pan_scroll}
-    end # end notebook
+        frame("regular size sub-widget (homogeneous)") {
+          flow { 
+            regular
+            5.times { |i| button("**"*(1+i)) ; tooltip("button <b>#{i+1}</b>") }
+          }
+        }
+      end
     } # end flow
-    sloti(button("Test dialogs...") { do_special_actions() })
-    sloti( button("Exit") { ruiby_exit })
+    flowi { 
+      slot(button("Test dialogs...") { do_special_actions() })
+      slot( button("Exit") { ruiby_exit })
+    }
     mlog 'after Component'
   end
 end
 
   def test_table	
     frame("Forms",margins: 10,bg: "#FEE") { table(2,10,{set_column_spacings: 3}) do
-        row { cell_right(label  "mode de fontionnement"); cell(button("set") { alert("?") }) }
-        row { cell_right label  "vitesse"               ; cell(entry("aa"))  }
-        row { cell_right label  "size"                  ; cell ientry(11,{:min=>0,:max=>100,:by=>1})  }
-        row { cell_right label  "feeling"               ; cell islider(10,{:min=>0,:max=>100,:by=>1})  }
-        row { cell_right label  "speedy"                ; cell(toggle_button("on","off",false) {|ok| alert ok ? "Off": "On" })  }
-        row { cell       label  "acceleration type"     ; cell hradio_buttons(%w{aa bb cc},1)  }
-        row { cell      label  "mode on"               ; cell check_button("",false)  }
-        row { cell      label  "mode off"              ; cell check_button("",true)  }
-        row { cell_left label  "Variable"              ; cell combo({"aaa"=>1,"bbb"=>2,"ccc"=>3},1) }
-        row { cell_left label  "Couleur"               ; cell box { color_choice() {|c| alert(c.to_s)}  } }
+        row { cell_right(label  "state")             ; cell(button("set") { alert("?") }) }
+        row { cell_right label  "speed"              ; cell(entry("aa"))  }
+        row { cell_right label  "size"               ; cell ientry(11,{:min=>0,:max=>100,:by=>1})  }
+        row { cell_right label  "feeling"            ; cell islider(10,{:min=>0,:max=>100,:by=>1})  }
+        row { cell_right label  "speedy"             ; cell(toggle_button("on","off",false) {|ok| alert ok ? "Off": "On" })  }
+        row { cell       label  "acceleration type"  ; cell hradio_buttons(%w{aa bb cc},1)  }
+        row { cell      label  "mode on"             ; cell check_button("",false)  }
+        row { cell      label  "mode off"            ; cell check_button("",true)  }
+        row { cell_left label  "Attribute"           ; cell combo({"aaa"=>1,"bbb"=>2,"ccc"=>3},1) }
+        row { cell_left label  "Color"               ; cell box { color_choice() {|c| alert(c.to_s)}  } }
       end 
-    }
-    frame("Buttons in frame") {
-      flow { sloti(button("packed with sloti()") {alert("button packed with sloti()")}) 
-        @bref=sloti(button("bb")) ;  button("packed with slot()") ; 
-      }
     }
   end
   def test_canvas()
      flow do
-        stack {
-        button("Couleur") {
-          #alert("alert !") ; error("error !") ; ask("ask !") ;trace("trace !") ;
-          @color=ask_color()
-        }
-        sloti(label('Epaisseur'))
-        @epaisseur=sloti(islider(1,{:min=>1,:max=>30,:by=>1}))
-        }
+        stack do
+          button("Color") {
+            #alert("alert !") ; error("error !") ; ask("ask !") ;trace("trace !") ;
+            @color=ask_color()
+          }
+          tooltip("Please choose the <b>drawing</b> <i>color</i>...")
+          @epaisseur=islider(1,{:min=>1,:max=>30,:by=>1})
+          tooltip("Please choose the <b>drawing</b> pen <i>width</i>...")
+        end
         @ldraw=[] ; @color= html_color("#FF4422");
-        cv=canvas(300,200,{ 
+        cv=canvas(200,100,{ 
           :expose     => proc { |w,cr|  
               @ldraw.each do |line|
                 next if line.size<3
@@ -124,22 +133,22 @@ end
           :mouse_up   => proc { |w,e,o| 
               no= [e.x,e.y] ; (@ldraw.last << no) ; no
           }
-      })
-      stacki {
-        label("Popup test...")
-        popup(canvas(50,200)) {
-            pp_item("copy")     { alert "copy.." }
-            pp_item("cut") 	    { alert "cut..." }
-            pp_item("past")	    { alert "pasting.." }
-            pp_separator
-            pp_item("Save")	    { alert "Saving.." }            
+        })
+        stacki {
+          label("Popup test...")
+          popup(canvas(50,200)) {
+              pp_item("copy")     { alert "copy.." }
+              pp_item("cut") 	    { alert "cut..." }
+              pp_item("past")	    { alert "pasting.." }
+              pp_separator
+              pp_item("Save")	    { alert "Saving.." }            
+          }
         }
-      }
       end 
    end
    def test_treeview()
     stack do
-      tr=tree_grid(%w{month name prename 0age ?male})
+      tr=tree_grid(%w{month name prename 0age ?male},200,300)
       tr.set_data({
         janvier: {
           s1:["aaa","bbb",22,true],
@@ -157,77 +166,67 @@ end
    def test_dialog()
     stack do
       sloti(button_expand("Test button_expand()") {
-        stack { 5.times { |a| button("a#{a}",{font: "arial 8"}) } }
+       flow {  2.times { |c| stack { 5.times { |a| label("#{c}x#{a}",{font: "arial 33"}) } } } }
       })
-      buttoni("dailog...") {
+      buttoni("dailog...") do
         rep=dialog("modal window...") {
           label("eee")  
           list("aa",100,100)
         }
         alert("Response was "+rep.to_s)
-      }
-      buttoni("dailog async...") {
+      end
+      space
+      buttoni("dailog async...") do
         dialog_async("modal window...",{response: proc {|a| alert(a);true}}) {
           label("eee") 
           list("aa",100,100)
         }
-      }	 
+      end
+      buttoni("  Crud in memory ") { test_crud() }        
     end
    end
    def test_list_grid()
       flow {
-        frame("CB on List") {
-          stacki{
-            @list0=list("callback on selection",100,200) { |li| alert("Selections are : #{li.join(',')}") } 
-            @list0.set_data((0..1000).to_a.map(&:to_s))
-            buttoni("set selection no2") { @list0.set_selection(1) }
+        stack {
+          frame("CB on List") {
+            stacki{
+              @list0=list("callback on selection",100,200) { |li| alert("Selections are : #{li.join(',')}") } 
+              @list0.set_data((0..1000).to_a.map(&:to_s))
+              buttoni("set selection no2") { @list0.set_selection(1) }
+            }
+          }
+          frame("Grid") {
+            stack { stacki {
+              @grid=grid(%w{nom prenom age},100,150)
+              flow {
+                button("s.content") { alert("Selected= #{@grid.selection()}") }
+                button("s.index") { alert("iSelected= #{@grid.index()}") }
+              }
+            } }
           }
         }
         frame("List with getter") {
           stack {
             @list=list("Demo",0,100)
-            flow {
+            flowi {
               button("s.content") { alert("Selected= #{@list.selection()}") }
               button("s.index") { alert("iSelected= #{@list.index()}") }
             }
           }
-        }
-        frame("Grid") {
-          stack { stacki {
-            @grid=grid(%w{nom prenom age},100,150)
-            flow {
-              button("s.content") { alert("Selected= #{@grid.selection()}") }
-              button("s.index") { alert("iSelected= #{@grid.index()}") }
-            }
-          } }
         }
       }
       10.times { |i| @list.add_item("Hello #{i}") }
       @grid.set_data((1..30).map { |n| ["e#{n}",n,1.0*n]})
   end
   def test_properties(no)  
-    case no 
-       when 0
       flowi {
         sloti(button("#harddisk") { alert("image button!")})
         tt={int: 1,float: 1.0, array: [1,2,3], hash: {a:1, b:2}}
         properties("props editable",tt,{edit: true}) { |a| log(a.inspect);log(tt.inspect) }
         properties("props show",tt)
-        }
-      flow {
-        fn=File.join(Ruiby::DIR,"../samples/media/face_smile_big.png")
-        w=label( "#"+fn ) 
-        properties("pixbuf",get_config(w.pixbuf))  
-        properties("widget",get_config(w),{:scroll => [300,100]})			
       }
-      calendar()
-    when 1
       h={};70.times { |i| h[i]= "aaa#{i+100}" }
-      properties("very big propertys editable",h,{edit: true,scroll: [100,400]}) { |a| log(a.inspect);log(h.inspect) }
-      button("dialog grids & form") {
-        test_crud()
-      }
-    end
+      properties("very big propertys editable",h,{edit: true,scroll: [100,200]}) { |a| log(a.inspect);log(h.inspect) }
   end
   def test_crud()
     $gheader=%w{id first-name last-name age}
@@ -282,7 +281,7 @@ end
             menu_button("Copy") { alert("a") }
           }
         } 
-        @f=stacki { }				
+        @f=stacki {  regular ; space ; space ; calendar()  }
       }
   end
   def test_accordion()
@@ -302,8 +301,7 @@ end
   def test_pan_scroll()
       stack do
         sloti(label("Test scrolled zone"))
-        separator
-        stack_paned 600,0.5 do 
+        stack_paned 300,0.5 do 
           vbox_scrolled(-1,20) { 
             30.times { |i| 
               flow { sloti(button("eeee#{i}"));sloti(button("eeee")) }
