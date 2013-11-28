@@ -1,4 +1,9 @@
-0.130.1
+0.131.1
+    test.rb : reorganisation, more test
+    gol.rb : look
+    ruiby_dsl3.rb : regular , spacing tooltip creation
+    README.md : ipdated
+0.131.0 : 2013-11-27 17:41:41 +0100
     make_doc.rb : abb plot.rb to examples
     ruiby_dsl3.rb : float on plot scale caclulation
 0.130.0 : 2013-11-27 16:33:06 +0100
