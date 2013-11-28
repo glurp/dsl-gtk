@@ -2,7 +2,7 @@
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
 
-require  'Ruiby'
+require_relative  '../lib/Ruiby'
 
 Ruiby.app width: 400, height: 300, title: "Game of Life" do
   def freemap() l=[]; MAXC.times { l << [[false]*MAXL] } ; l end
@@ -32,11 +32,13 @@ Ruiby.app width: 400, height: 300, title: "Game of Life" do
     
     flowi do
       button " clear " do @mat=freemap() ; @cv.redraw end
+      tooltip("Hello <b>en gras</b> !")
       button " random " do 
         rand(MAXC*MAXL/10).times {  @mat[rand(MAXC)][rand(MAXL)]=true }
         @cv.redraw
       end
       button " start  " do @run=true ;end
+      tooltip("Hello <b>en gras</b> !")
       button " stop   " do  @run=false ; end
     end    
   end
