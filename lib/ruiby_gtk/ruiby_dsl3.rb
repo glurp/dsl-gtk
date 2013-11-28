@@ -27,6 +27,7 @@ module Ruiby_dsl
 
   # All Ruiby commands correspond of
   #   * a object creation (container, widget), see later,
+  #   * complement set propertie to current/alst widget created : css_name(), space(), tooltip()
   #   * a immediate dialog (modal) command : 
   #   <ul>
   #       alert  ask ask_color ask_dir_to_read ask_dir_to_write ask_file_to_read  
@@ -133,8 +134,17 @@ module Ruiby_dsl
     @lcur.pop
   end
   
+  # set homogeneous contrainte on current container :
+  # all chidren whill have same size
+  # * stack : children will have same height
+  # * flow :   children will have same width
+  def regular(on=true) @lcur.last.homogeneous=on end
+ 
+  # set space between each chidren of current box
+  def spacing(npixels=0) @lcur.last.spacing=npixels end
+    
   # center { }  container which center his content (auto-sloted)
-  # TODO : not tested!
+  # TODO : tested!
   def center() 
     autoslot()
     valign = Gtk::Alignment.new(0,0,0,0)
@@ -165,9 +175,6 @@ module Ruiby_dsl
     razslot()
   end
   def update() Ruiby.update() end
-  def style(options) 
-    apply_options(@lcur.last,options) if @lcur.size>0  # not working ...
-  end
   
   # a box with border and texte title, take all space
   def frame(t="",config={},add1=true,&b)    
@@ -329,6 +336,19 @@ module Ruiby_dsl
       h[meth]=data.inspect.gsub(/^#/,'')[0..32]  if data 
       h
     }
+  end
+  
+  # give a name to last widget created. Useful for css style declaration
+  def css_name(name)  @current_widget ? @current_widget.set_name(name) : error("cssname #{name}: there are no current widget!") end 
+
+  # give a tooltip to last widget created. 
+  def tooltip(value="?") 
+    if @current_widget && value && value.size>0
+      @current_widget.set_tooltip_markup(value) 
+      @current_widget.has_tooltip=true
+    else
+      error("tooltip #{value}: there are no current widget!") 
+    end
   end
 
   ########################### raster images access #############################
@@ -1705,7 +1725,7 @@ module Ruiby_dsl
     slot(scrolled_win)
   end
 
-  # TODO: test!
+  #a button which show a sub-frame on action
   def button_expand(text,initiale_state=false,options={},&b) 
     expander = Gtk::Expander.new(text)
     expander.expanded = initiale_state
