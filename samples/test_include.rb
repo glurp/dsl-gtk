@@ -6,26 +6,23 @@
 require_relative '../lib/Ruiby'
 
 class Win < Gtk::Window
-	include Ruiby
+  include Ruiby
     def initialize(t,w,h)
         super()
-		add(@vb=Gtk::Box.new(:vertical, 3))
-		show_all
-		add_a_ruiby_button()
+    add(@vb=Gtk::Box.new(:vertical, 3))
+    show_all
+    add_a_ruiby_button()
     signal_connect "destroy" do  Gtk.main_quit ; end
-	end
-	def add_a_ruiby_button() 
-		ruiby_component do
-			append_to(@vb) do 
-				button("Hello Word #{@vb.children.size}") {
-					add_a_ruiby_button() 
-				}
-				if ARGV.any? { |a| a=~/take-a-snapshot/} 
-					after(1000) { snapshot("snapshot_test_include.rb.png") ; exit!(0) }
-				end
-			end
-		end
-	end
+  end
+  def add_a_ruiby_button() 
+    ruiby_component do
+      append_to(@vb) do 
+        button("Hello Word #{@vb.children.size}") {
+          add_a_ruiby_button() 
+        }
+      end
+    end
+  end
 end
 
 
