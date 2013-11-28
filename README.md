@@ -19,15 +19,16 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 0.121.0 !!  04-09-2013
-- containers left and right for align widget (todo: top/bottom ?)
-- video() , with Clutter and GStreamer, ok on windows!
+NEW : 0.132.0 !!  28-11-2013
+- plot() canvas which show curve(s), with scale calculation
+- #regular for force homogeneous in current box
+- #spacing for force space in current box (n pixel inter children)
 
 TODO for 1.0 :
 - resolve 100% gtk3 deprecated warning
 - finish treeview and tree_grid,
 - corrections in ruiby_require
-- adk_file_for_read... do be remasterisez (default dir, file filter...)
+- ask_file_for_read... do be remasterisez (default dir, file filter...)
 - complete rspec => 99% ?
 - Easy Form : variables binding for entry/list/check-radio button...
 
