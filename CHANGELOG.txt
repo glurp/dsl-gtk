@@ -1,4 +1,5 @@
-0.131.1
+0.131.2
+    test_include.rb : suppress snapshot test
     test.rb : reorganisation, more test
     gol.rb : look
     ruiby_dsl3.rb : regular , spacing tooltip creation
