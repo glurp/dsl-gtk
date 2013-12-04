@@ -654,9 +654,12 @@ module Ruiby_dsl
   end
   # create a checked button
   # state can be read by cb.active?
-  def check_button(text="",value=false,option={})
+  def check_button(text="",value=false,option={},&blk)
     b=CheckButton.new(text)
     b.set_active(value)
+    b.signal_connect("clicked") do |w,e| 
+      ( blk.call(w.active?()) rescue error($!) ) if blk
+    end
     attribs(b,option)
     b
   end
@@ -1333,13 +1336,16 @@ module Ruiby_dsl
       eb.add(tv)
       eb.define_singleton_method(:text_area) { tv }
       class << eb
-      ; def text=(a)  self.children[0].buffer.text=a.to_s end
+      ; def text=(a)  self.children[0].buffer.text=a.to_s.encode("UTF-8") end
       ; def text()    self.children[0].buffer.text end
       ; def append(a) self.children[0].buffer.text+=a.to_s.encode("UTF-8") end
+      ; def buffer()  self.children[0].buffer end
+      ; def tv()      self.children[0] end
       end
       eb.show_all
       args.delete(:text)
       args.delete(:font)
+      attribs(tv,args)  
       attribs(eb,args)  
   end 
 
