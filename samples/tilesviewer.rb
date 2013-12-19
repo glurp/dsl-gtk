@@ -1,100 +1,186 @@
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
-
 ####################################################################################
-#   tilesviewer.rb : show Map type OSM raster tiles 
+#   tilesviewer.rb :  OSM  Map viewer,caching tiles in temporary directory
 ####################################################################################
 # Usage : 
-#    > ruby tilesviewer.rb dir_tiles_path zoom_exam zoom_show
-# Example :
-#  ruby tilesviewer.rb d:\tbf_2012\saiaEclairagePublic\www\webapps\default\tiles 18 15
-#    this show zomm level 18, with utilization of tiles raster of zoom level 15
-#
+#    > ruby tilesviewer2.rb [zoomLevel [lon lat]]
 ####################################################################################
 require_relative '../lib/Ruiby'
+require 'open-uri'
 
-if ARGV.size<3
-	Message.alert("Usage\n>ruby #{$0}.rb  pathToTiles zoomLevel-examine  zommLevel-show")
-	exit(0)
+$SHOW_TILES_BORDER=true
+
+class CacheTiles
+  DIR="#{Dir.tmpdir}/tiles"
+  TMPZ="#{DIR}/ZOOM"
+  TMPZL="#{TMPZ}/LON"
+  TMP="#{TMPZL}/LAT.png"
+  
+  URL='http://ns308363.ovh.net/tiles/ZOOM/LON/LAT.png'
+  
+  def initialize(app)
+     Dir.mkdir(DIR) unless Dir.exists?(DIR)
+     p DIR
+     @app=app
+     @current={}
+  end
+  def get_tile(z,lon,lat)
+     filename=TMP.gsub("LAT",lat.to_s).gsub("LON",lon.to_s).gsub("ZOOM",z.to_s)
+     if File.exists?(filename)  
+       return(filename)
+     else
+        if ! @current[filename]
+          @current[filename]=true
+          Thread.new { load_tile(z,lon,lat,filename) }
+        end
+       return(nil)
+     end
+  end
+  def load_tile(z,lon,lat,filename)
+    tmpz= TMPZ.gsub("LAT",lat.to_s).gsub("LON",lon.to_s).gsub("ZOOM",z.to_s)
+    Dir.mkdir(tmpz) unless Dir.exists?(tmpz)
+    tmpl= TMPZL.gsub("LAT",lat.to_s).gsub("LON",lon.to_s).gsub("ZOOM",z.to_s)
+    Dir.mkdir(tmpl) unless Dir.exists?(tmpl)
+    
+    url= URL.gsub("LAT",lat.to_s).gsub("LON",lon.to_s).gsub("ZOOM",z.to_s)
+    #puts "#{filename} delayed to #{url}"
+    resp=open(url,"rb") do |resp|
+      File.open(filename+".tmp","wb") { |f| f.write(resp.read) }
+      #puts "notif app #{filename}"
+      current=@current
+      File.rename(filename+".tmp",filename)
+      gui_invoke {  current.delete(filename) ; refresh }
+    end rescue (puts "unknown #{filename}")
+  end  
+end
+
+module Tools  
+  CROSSGAP=40
+  def draw_tile(ctx,f,x,y,pdx,pdy)
+    ctx.set_source_pixbuf(get_pixbuf(f),(x-pdx)*256,(y-pdy)*256)
+    ctx.paint
+    draw_border(ctx,x,y,pdx,pdy) if $SHOW_TILES_BORDER
+  end
+  def draw_border(ctx,x,y,pdx,pdy)
+    ctx.set_line_width(1)
+    ctx.set_source_rgba(0,0,0,0.4)    
+    ctx.move_to((x-pdx+1)*256,(y-pdy)*256).line_to((x-pdx)*256,(y-pdy)*256).line_to((x-pdx)*256,(y-pdy+1)*256)
+    ctx.stroke
+  end
+  def draw_cross(ctx,w,h)
+    ctx.set_line_width(2)
+    ctx.set_source_rgba(0,0,0,0.7)    
+    x0,y0=w/2.0,h/2.0
+    ctx.move_to(x0,y0)
+    ctx.line_to(x0-CROSSGAP,y0);ctx.line_to(x0+CROSSGAP,y0)
+    ctx.line_to(x0,y0);ctx.line_to(x0,y0-CROSSGAP);ctx.line_to(x0,y0+CROSSGAP)
+    ctx.stroke
+  end
 end
 
 module Ruiby_dsl
-	def radians(degrees) (Math::PI * degrees) / 180.0 end
-	def degrees(radians) (radians * 180.0) / Math::PI end
-	def tile_nums_2_lonlat(xtile, ytile, zoom)
-	  factor = 2.0 ** (zoom)
-	  lon = ((xtile * 360) / factor) - 180.0
-	  lat = Math.atan(Math.sinh(Math::PI * (1 - 2 * ytile / factor)))
-	  return  [lon,degrees(lat),zoom]
-	end
+  def radians(degrees) (Math::PI * degrees) / 180.0 end
+  def degrees(radians) (radians * 180.0) / Math::PI end
+  def tile_nums_2_lonlat(xtile, ytile, zoom)
+    factor = 2.0 ** (zoom)
+    lon = ((xtile * 360) / factor) - 180.0
+    lat = Math.atan(Math.sinh(Math::PI * (1 - 2 * ytile / factor)))
+    return  [lon,degrees(lat),zoom]
+  end
+  def lonlat_2_tilenums(lon,lat, zoom)
+    factor1 = 2**(zoom)
+    rlat = radians(lat)
+    rlon = radians(lon)
 
-	def img(filename,size)
-	  onclick=proc {|w,e| 
-		z,x,y=filename.split(/[\/.]/)[-4..-2].map(&:to_i)
-		lon,lat,z=tile_nums_2_lonlat(x,y,z)
-		lon1,lat1,z=tile_nums_2_lonlat(x+1,y+1,z)
-		w.children[0].hide
-		alert("#{filename.split("/")[-4..-1].join("/")}\n #{lon} / #{lat}\n #{lon1} / #{lat1}") 
-		w.children[0].show
-	  }
-	  box  { pclickable(onclick) { image( filename,{:size=>size}) } }
-	end
+    xtile = factor1 * (lon+180.0)/ 360.0
+
+    sec= (1 / Math.cos(rlat))
+    tan=Math.tan(rlat)
+    ytile = factor1 * (1 - (Math.log(tan + sec) / Math::PI) )/2.0
+    
+    ret=([xtile.to_i, ytile.to_i,zoom,xtile-xtile.to_i, ytile-ytile.to_i] rescue [1,1,zoom,0,0])
+  end
+
+  def refresh() @cv.redraw end
+  def expose(w,ctx)
+    @z=[1,@z,18].sort[1]
+    #puts "lon=#{@lon0} lat=#{@lat0} z=#{@z}"
+    xtile,ytile,bidon,pdx,pdy=lonlat_2_tilenums(@lon0,@lat0, @z)
+    w,h=*$app.size
+    nbx,nby=w/256,h/256
+    x0,y0=w/2.0,h/2.0
+    ((xtile-nbx/2)..(xtile+nbx/2+2)).each_with_index  do |xt,x| ((ytile-nby/2)..(ytile+nby/2+2)).each_with_index do |yt,y|
+        f=@ct.get_tile(@z,xt,yt)   
+        draw_tile(ctx,f,x,y,pdx,pdy)  if f
+    end end
+    draw_cross(ctx,w,h)
+    @wlon.text= "%3.5f" % @lon0
+    @wlat.text= "%3.5f" % @lat0
+  end
+  
+  def move_carto(dx,dy)
+    xtile,ytile,bidon,pdx,pdy=lonlat_2_tilenums(@lon0,@lat0, @z)
+    lon0,lat0=tile_nums_2_lonlat(xtile,ytile,@z)
+    lon1,lat1=tile_nums_2_lonlat(xtile-dx/256.0,ytile-dy/256.0,@z)
+    @lonRef+=lon1-lon0
+    @latRef+=lat1-lat0
+    refresh
+  end
 end
 
-Ruiby.app(:width=> 800, :height=>800, :title=> "Tiles on #{ARGV[0]}") do
-	dir="#{ARGV[0]}/#{ARGV[1]}".gsub('\\','/')
-	
-	z=ARGV[1].to_i
-	za=ARGV[2].to_i
-	sa=z-1 			if za<= z	
-	diz="#{ARGV[0]}/#{za}".gsub('\\','/').gsub('\\','/')
-	
-	diff=2**(z-za) # nb tiles in level z for one tile in za level; by axe
-	
-	raise ("tiles dir not exist !") unless File.exists?(dir);
-	raise ("tiles dir not exist !") unless File.exists?(diz);
-	
-	puts "scan dir X..."
-	ld=Dir.entries(dir+"/").select {|n| n =~ /^\d+$/}.map {|d| d.to_i}.sort
-	tab=Hash.new { |h,k| h[k]=Hash.new  }
-	thy={}
-	puts "scan dir Y..."
-	ld.each { |y|
-		ydir="#{dir}/#{y}"
-		xld=Dir.entries(ydir).select {|n| n =~ /^\d+.png$/}.map {|d| d.split('.').first.to_i}.sort
-		xld.each.each { |x|  
-		  tab[x][y]="#{dir}/#{y}/#{x}.png" 
-		  thy[y]=1
-		}
-	}
-	
-	minx,maxx= tab.keys.minmax
-	miny,maxy= thy.keys.minmax
-	nbtx,nbty=[maxx-minx,maxy-miny]
-	$SZ= [800/[nbtx,nbty].max, 2].max
-	#alert "nbx=%d nby=%d SZ=%d h=%d w=%d" % [nbtx,nbty,$SZ,nbtx*$SZ,nbty*$SZ]
-	puts "go tiles draw, size=#{$SZ} ..."
-	sx=(nbty+1)*$SZ
-	sy=(nbtx+1)*$SZ
-	
-	set_default_size(sx,sy)	
-	vbox_scrolled(sx,sy) do 
-		frame { table((maxy-miny),(maxx-minx)) do
-			(minx..maxx).each { |x|
-				next if (x % diff)!=0
-				p x
-				row { 
-					if tab[x].size>0
-				      (miny..maxy).each { |y|  
-						next if (y % diff)!=0
-						filename="#{diz}/#{y/diff}/#{x/diff}.png"
-					    cell( File.exists?(filename) ? img(filename,$SZ*diff)  : label("?") ) 
-				      }
-					else
-					 label("?")
-					end
-				}
-			 }
-		end } 
-	end
+Ruiby.app(:width=> 800, :height=>800, :title=> "Map") do
+  extend Tools
+  $app=self
+  @ct=CacheTiles.new(self)
+  @z=(ARGV[0]||"5").to_i
+  @lon0=(ARGV[1]||"2.3").to_f
+  @lat0=(ARGV[2]||"48.8").to_f
+  @lonRef=@lon0
+  @latRef=@lat0
+  @zRef=@z
+  stack {
+    @cv=canvas(self.default_width,self.default_height,{
+      :expose      => proc do |w,ctx|  expose(w,ctx)   end,
+      :mouse_down  => proc do |w,e|  [e.x,e.y]       end,
+      :mouse_move  => proc do |w,e,o| n=[e.x,e.y] ;$app.move_carto(n[0]-o[0],n[1]-o[1]);n end,
+      :mouse_up    => proc do |w,e,o| n=[e.x,e.y] ;$app.move_carto(n[0]-o[0],n[1]-o[1])   end,
+    })
+    flowi { 
+      regular
+      button("Zoom +") { @z+=1 }
+      button("Zoom -") { @z-=1 }
+      stacki { 
+          @wlon=entry("",20)
+          @wlat=entry("",20)
+      }
+      button("Goto...") { 
+        prompt("Longitude ?",@lon0.to_s) { |lon|  
+          prompt("Latitude  ?",@lat0.to_s) { |lat| 
+            if ask("#{lon.to_f} ; #{lat.to_f}\n Validation ?")
+              @lonRef,@latRef=lon.to_f,lat.to_f
+              puts "========> #{@lonRef} #{@latRef}"
+            end
+            true
+          } 
+          true
+        }
+      }
+      button("Exit") { ruiby_exit } 
+    }
+  }
+  anim(20) {
+    #@lon0+=0.001
+    if @lon0!=@lonRef || @lat0!=@latRef || @zRef!=@z
+      @lon0+= sqrs((@lonRef-@lon0))
+      @lat0+= sqrs((@latRef-@lat0))
+      @lon0,@lat0=@lonRef,@latRef if ((@lon0-@lonRef).abs+(@lat0-@latRef).abs) < 0.05/(2.0 ** @z)
+      @zRef=@z
+      refresh 
+    end
+  }
+  def sqrs(b) 
+    ret=b>0 ? b*b+b : -b*b+b 
+    ret=[0,b/10,ret].sort[1]
+  end
 end
