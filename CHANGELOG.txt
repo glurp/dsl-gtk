@@ -1,4 +1,8 @@
-0.132.3
+0.132.4
+    tilesviewer.rb : rerun
+    ruiby_dsl3.rb : data binding first step
+    Ruiby.rb : dy_var.rb added
+    README.md : data bnding news
     tilesviewer.rb : the best GIS of the world:)
     README.md : 0.133 comments
     tilesviewer.rb : refondation: sho web tiles with local cach
