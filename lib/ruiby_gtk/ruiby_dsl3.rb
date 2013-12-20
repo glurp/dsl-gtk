@@ -601,7 +601,7 @@ module Ruiby_dsl
         conf.each do |k,v|
            icon,text=k.split('/',2)
            if icon !~ /^sep/
-              spacie
+              spacei
               pclickablie(proc { v.call  }) { stacki { 
                   label("#"+icon,isize: :dialog) do v.call end 
                   label text[0,12] 
@@ -618,7 +618,7 @@ module Ruiby_dsl
   # option is label options and  isize ( option for icon size, see label())
   def button_icon_text(icon,text="",options={},&b)
        if icon !~ /^sep/
-          spacie
+          spacei
           pclickablie(proc { b.call  }) { stacki { 
               label("#"+icon,{isize: (options[:isize] || :dialog) }) 
               label(text[0,15],options)
