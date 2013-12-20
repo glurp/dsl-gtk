@@ -4,20 +4,23 @@
 #   tilesviewer.rb :  OSM  Map viewer,caching tiles in temporary directory
 ####################################################################################
 # Usage : 
-#    > ruby tilesviewer2.rb [zoomLevel [lon lat]]
+#    > ruby tilesviewer.rb [zoomLevel [lon lat]]
 ####################################################################################
 require_relative '../lib/Ruiby'
 require 'open-uri'
 
-$SHOW_TILES_BORDER=true
+ $URLTILES='http://otile4.mqcdn.com/tiles/1.0.0/osm/ZOOM/LON/LAT.jpg'
+#$URLTILES='http://otile4.mqcdn.com/tiles/1.0.0/sat/ZOOM/LON/LAT.jpg'
+$SHOW_TILES_BORDER=false
+
+######################################### Tiles cache ###############################
 
 class CacheTiles
   DIR="#{Dir.tmpdir}/tiles"
   TMPZ="#{DIR}/ZOOM"
   TMPZL="#{TMPZ}/LON"
-  TMP="#{TMPZL}/LAT.png"
-  
-  URL='http://ns308363.ovh.net/tiles/ZOOM/LON/LAT.png'
+  TMP="#{TMPZL}/LAT.jpg"
+  URL=$URLTILES
   
   def initialize(app)
      Dir.mkdir(DIR) unless Dir.exists?(DIR)
@@ -44,19 +47,19 @@ class CacheTiles
     Dir.mkdir(tmpl) unless Dir.exists?(tmpl)
     
     url= URL.gsub("LAT",lat.to_s).gsub("LON",lon.to_s).gsub("ZOOM",z.to_s)
-    #puts "#{filename} delayed to #{url}"
+    puts "#{filename} delayed to #{url}"
     resp=open(url,"rb") do |resp|
       File.open(filename+".tmp","wb") { |f| f.write(resp.read) }
-      #puts "notif app #{filename}"
+      puts "notif app for raster #{filename}"
       current=@current
       File.rename(filename+".tmp",filename)
       gui_invoke {  current.delete(filename) ; refresh }
     end rescue (puts "unknown #{filename}")
   end  
 end
-
+###################################### Tools carto ###########################################
 module Tools  
-  CROSSGAP=40
+  CROSSGAP=8
   def draw_tile(ctx,f,x,y,pdx,pdy)
     ctx.set_source_pixbuf(get_pixbuf(f),(x-pdx)*256,(y-pdy)*256)
     ctx.paint
@@ -79,7 +82,8 @@ module Tools
   end
 end
 
-module Ruiby_dsl
+#################################### Carto wiewer #############################################
+module Carto
   def radians(degrees) (Math::PI * degrees) / 180.0 end
   def degrees(radians) (radians * 180.0) / Math::PI end
   def tile_nums_2_lonlat(xtile, ytile, zoom)
@@ -102,7 +106,6 @@ module Ruiby_dsl
     ret=([xtile.to_i, ytile.to_i,zoom,xtile-xtile.to_i, ytile-ytile.to_i] rescue [1,1,zoom,0,0])
   end
 
-  def refresh() @cv.redraw end
   def expose(w,ctx)
     @z=[1,@z,18].sort[1]
     #puts "lon=#{@lon0} lat=#{@lat0} z=#{@z}"
@@ -115,8 +118,8 @@ module Ruiby_dsl
         draw_tile(ctx,f,x,y,pdx,pdy)  if f
     end end
     draw_cross(ctx,w,h)
-    @wlon.text= "%3.5f" % @lon0
-    @wlat.text= "%3.5f" % @lat0
+    @wlonlat.text= "%3.5f / %3.5f" % [@lon0,@lat0]
+    @wzoom.text= @z.to_s
   end
   
   def move_carto(dx,dy)
@@ -129,13 +132,29 @@ module Ruiby_dsl
   end
 end
 
+class Var
+  def initialize(v) @value=v ; @abo={} end
+  def svalue() @value.to_s end
+  def observ(&blk) @abo[caller] = blk  ; blk.call(@value) end
+  def eve() @abo.each { |a,&b|  &b.call(@value) }
+  def set(v) @value=v : eve() end
+end
+module Ruiby_gtk
+   def tentry(var) 
+      w=entry("") { |v| var.svalue=v }
+      var.observ { |v| w.text = v.to_s }
+   end
+end
+######################################## Ruiby App ############################################
+
 Ruiby.app(:width=> 800, :height=>800, :title=> "Map") do
   extend Tools
+  extend Carto
   $app=self
   @ct=CacheTiles.new(self)
-  @z=(ARGV[0]||"5").to_i
-  @lon0=(ARGV[1]||"2.3").to_f
-  @lat0=(ARGV[2]||"48.8").to_f
+  @z=(ARGV[0]||Ruiby.stock_get("Z","5")).to_i
+  @lon0=(ARGV[1]||Ruiby.stock_get("LON","2.0")).to_f
+  @lat0=(ARGV[2]||Ruiby.stock_get("LAT","48.0")).to_f
   @lonRef=@lon0
   @latRef=@lat0
   @zRef=@z
@@ -148,11 +167,9 @@ Ruiby.app(:width=> 800, :height=>800, :title=> "Map") do
     })
     flowi { 
       regular
-      button("Zoom +") { @z+=1 }
-      button("Zoom -") { @z-=1 }
-      stacki { 
-          @wlon=entry("",20)
-          @wlat=entry("",20)
+      table(0,0) { 
+          row { cell( label "Lon/Lat : " ) ; cell( @wlonlat=entry("",6) ) }
+         row  { cell( label "Zoom: "     ) ; cell( @wzoom=ientry(@z,min: 1,max: 18) { |v| @z=v.to_i })}
       }
       button("Goto...") { 
         prompt("Longitude ?",@lon0.to_s) { |lon|  
@@ -166,7 +183,10 @@ Ruiby.app(:width=> 800, :height=>800, :title=> "Map") do
           true
         }
       }
-      button("Exit") { ruiby_exit } 
+      flowi {
+        button("X") { begin load __FILE__ ; rescue Exception => e ; error(e) ; end} 
+        button("Exit") { ruiby_exit } 
+      }
     }
   }
   anim(20) {
@@ -174,7 +194,12 @@ Ruiby.app(:width=> 800, :height=>800, :title=> "Map") do
     if @lon0!=@lonRef || @lat0!=@latRef || @zRef!=@z
       @lon0+= sqrs((@lonRef-@lon0))
       @lat0+= sqrs((@latRef-@lat0))
-      @lon0,@lat0=@lonRef,@latRef if ((@lon0-@lonRef).abs+(@lat0-@latRef).abs) < 0.05/(2.0 ** @z)
+      if ((@lon0-@lonRef).abs+(@lat0-@latRef).abs) < 0.05/(2.0 ** @z)
+        Ruiby.stock_put("Z",@z)
+        Ruiby.stock_put("LON",@lon0)
+        Ruiby.stock_put("LAT",@lat0)
+        @lon0,@lat0=@lonRef,@latRef 
+      end
       @zRef=@z
       refresh 
     end
@@ -183,4 +208,5 @@ Ruiby.app(:width=> 800, :height=>800, :title=> "Map") do
     ret=b>0 ? b*b+b : -b*b+b 
     ret=[0,b/10,ret].sort[1]
   end
+  def refresh() @cv.redraw end
 end
