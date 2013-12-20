@@ -1,4 +1,9 @@
-0.131.4
+0.132.1
+    tilesviewer.rb : refondation: sho web tiles with local cach
+    windows.rb : suppress exit!
+    ruiby_dsl3.rb : pixbuf cach debug
+    Ruiby.rb : suppress exit!
+0.132.0 : 2013-12-09 20:14:06 +0100
     color.rb : indentations
     ruiby_dsl3.rb : check_button with bloc 
     test_include.rb : suppress snapshot test
