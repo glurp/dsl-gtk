@@ -1,4 +1,5 @@
-0.132.1
+0.132.2
+    README.md : 0.133 comments
     tilesviewer.rb : refondation: sho web tiles with local cach
     windows.rb : suppress exit!
     ruiby_dsl3.rb : pixbuf cach debug
