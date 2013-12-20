@@ -21,10 +21,12 @@ Status
 
 NEW : 0.133.0 !!  20-12-2013
 - bourrage() for force space(s) (with widget)
-- samples : dyn.rb and tilesviewer.rb
+- replace all exit!() by exit()
+- Data binding for entry/slider/check_button : see samples/dyn.rb
+- Data binding with stock capacity, save on exit()
 
 TODO for 1.0 :
-- Easy Form : almost done !!! : see samples/dyn.rb
+- Data binding for comboBox, radiobutton, text_area, list, grid ...
 - ask_file_for_read... do be refonding (default dir, file filter...)
 
 TODO  :
