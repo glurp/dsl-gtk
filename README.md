@@ -19,18 +19,20 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 0.132.0 !!  28-11-2013
-- plot() canvas which show curve(s), with scale calculation
-- #regular for force homogeneous in current box
-- #spacing for force space in current box (n pixel inter children)
+NEW : 0.133.0 !!  20-12-2013
+- bourrage() for force space(s) (with widget)
+- samples : dyn.rb and tilesviewer.rb
 
 TODO for 1.0 :
+- Easy Form : almost done !!! : see samples/dyn.rb
+- ask_file_for_read... do be refonding (default dir, file filter...)
+
+TODO  :
 - resolve 100% gtk3 deprecated warning
-- finish treeview and tree_grid,
-- corrections in ruiby_require
-- ask_file_for_read... do be remasterisez (default dir, file filter...)
+- corrections in ruiby_require(?)
+- complete treeview and tree_grid,
 - complete rspec => 99% ?
-- Easy Form : variables binding for entry/list/check-radio button...
+
 
 Installation
 ============
