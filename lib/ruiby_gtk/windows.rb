@@ -28,7 +28,7 @@ class Ruiby_gtk < Gtk::Window
       component  
     rescue
       error("COMPONENT() : "+$!.to_s + " :\n     " +  $!.backtrace[0..10].join("\n     "))
-      exit!
+      exit(1)
     end
     begin
       show_all 
@@ -38,7 +38,7 @@ class Ruiby_gtk < Gtk::Window
     if ARGV.any? {|v| v=="take-a-snapshot" }
       after(100) { 
         snapshot("#{Dir.exists?("media") ? "media/" : ""}snapshot_#{File.basename($0)}.png")
-        after(100) { exit!(0)  } 
+        after(100) { exit(0)  } 
       }
     end
   end
