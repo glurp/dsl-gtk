@@ -1,4 +1,5 @@
-0.132.2
+0.132.3
+    tilesviewer.rb : the best GIS of the world:)
     README.md : 0.133 comments
     tilesviewer.rb : refondation: sho web tiles with local cach
     windows.rb : suppress exit!
