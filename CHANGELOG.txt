@@ -1,4 +1,6 @@
-0.132.4
+0.133.1
+    ruiby_dsl3.rb : spacie become spacei
+0.133.0 : 2013-12-20 21:38:45 +0100
     tilesviewer.rb : rerun
     ruiby_dsl3.rb : data binding first step
     Ruiby.rb : dy_var.rb added
