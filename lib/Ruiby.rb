@@ -84,7 +84,7 @@ module Ruiby
     $stderr.sync=true 
     Thread.abort_on_exception = true  
     BasicSocket.do_not_reverse_lookup = true if defined?(BasicSocket)
-    trap("INT") { exit!(0) }
+    trap("INT") { exit(0) }
     Gtk.init
     yield
     secure_main()	
@@ -100,7 +100,7 @@ module Ruiby
     $stderr.sync=true 
     Thread.abort_on_exception = true  
     BasicSocket.do_not_reverse_lookup = true if defined?(BasicSocket)
-    trap("INT") { exit!(0) }
+    trap("INT") { exit(0) }
     Gtk.init
     yield
     secure_main()	
@@ -161,7 +161,7 @@ module Kernel
         require gem
       rescue LoadError => e
         rep=w.ask("Loading #{gems.join(', ')}\n\n'#{gem}' package is missing. Can I load it from internet ?")
-        exit! unless rep
+        exit(0) unless rep
         Ruiby.update
         require 'open3'
         w.log("gem install  #{gem} --no-ri --no-rdoc")
@@ -202,7 +202,7 @@ module Kernel
               Gtk::main_iteration
               EM.next_tick(give_tick); 
             rescue Exception => e
-              exit!(0) if e.to_s=="exit"
+              exit(0) if e.to_s=="exit"
               $__mainwindow__.error("Error GTK : "+e.to_s + " :\n     " +  e.backtrace[0..10].join("\n     "))
             end
           end
@@ -211,14 +211,11 @@ module Kernel
     else
       begin 
         Gtk.main 
-        exit!(0)
+        exit(0)
       rescue Exception => e
-        if e.to_s=="exit"
-          $__mainwindow__.error("Error, see STDERR in console...")
-        else
-          $__mainwindow__.error("Error GTK : "+e.to_s + " :\n     " +  e.backtrace[0..10].join("\n     "))
-        end
-      end while true
+        exit(0) if e.to_s=="exit"
+        puts("Error GTK : "+e.to_s + " :\n     " +  e.backtrace.join("\n     "))
+      end while ! eend
     end
   end
   
