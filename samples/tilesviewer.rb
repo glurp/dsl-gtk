@@ -131,20 +131,6 @@ module Carto
     refresh
   end
 end
-
-class Var
-  def initialize(v) @value=v ; @abo={} end
-  def svalue() @value.to_s end
-  def observ(&blk) @abo[caller] = blk  ; blk.call(@value) end
-  def eve() @abo.each { |a,&b|  &b.call(@value) }
-  def set(v) @value=v : eve() end
-end
-module Ruiby_gtk
-   def tentry(var) 
-      w=entry("") { |v| var.svalue=v }
-      var.observ { |v| w.text = v.to_s }
-   end
-end
 ######################################## Ruiby App ############################################
 
 Ruiby.app(:width=> 800, :height=>800, :title=> "Map") do
