@@ -386,6 +386,10 @@ module Ruiby_dsl
   end
   def get_pixbuf(name)
     @cach_pix={} unless defined?(@cach_pix)
+    if @cach_pix.size>100
+      puts "purge cach pixbuf"
+      @cach_pix={}
+    end
     filename,px,py,bidon,dim=name.split(/\[|,|(\]x)/)
     if filename && px && py && bidon && dim && File.exist?(filename)
       dim=dim.to_i
@@ -395,7 +399,10 @@ module Ruiby_dsl
       #p [x0,y0,"/",@cach_pix[filename].width,@cach_pix[filename].height]
       Gdk::Pixbuf.new(@cach_pix[filename],x0,y0,dim,dim)
     elsif File.exists?(name)
-      @cach_pix[name]=Gdk::Pixbuf.new(name) unless @cach_pix[name]
+      unless @cach_pix[name]
+        px=Gdk::Pixbuf.new(name) rescue error($!)
+        @cach_pix[name]=px if px
+      end
       @cach_pix[name]
     elsif ! name.index(".")
       get_stockicon_pixbuf(name)
@@ -491,7 +498,8 @@ module Ruiby_dsl
   end
   # create a one-character size space, (or n character x n line space)
   def space(n=1) label(([" "*n]*n).join("\n"))  end
-  def spacie(n=1) labeli(([" "*n]*n).join("\n"))  end
+  def spacei(n=1) labeli(([" "*n]*n).join("\n"))  end
+  def bourrage(n=1) n.times { sloti(labeli("    ")) }  end
 
   # create  button, with text (or image if txt start with a '#')
   # block argument is evaluate at button click
@@ -732,7 +740,7 @@ module Ruiby_dsl
   # create a integer text entry for keyboed input
   # option must define :min :max :by for spin button
   def ientry(value,option={},&blk)
-    w=SpinButton.new(option[:min].to_i,option[:max].to_i,option[:by])
+    w=SpinButton.new(option[:min].to_i,option[:max].to_i,option[:by]||1)
     w.set_numeric(true)
     w.set_value(value ? value.to_i : 0)
     
@@ -790,7 +798,7 @@ module Ruiby_dsl
   # current value can be read by w.value
   # if bloc is given, it with be call on each change, with new value as parameter
   def islider(value=0,option={},&b)
-    w=Scale.new(:horizontal,option[:min].to_i,option[:max].to_i,option[:by])
+    w=Scale.new(:horizontal,(option[:min]||0).to_i,(option[:max]||100).to_i,option[:by]||1)
     w.set_value(value ? value.to_i : 0)
     w.signal_connect(:value_changed) { || b.call(w.value)  rescue error($!) } if block_given?
     attribs(w,option)   
@@ -832,9 +840,9 @@ module Ruiby_dsl
       cr.save {
         cr.set_line_join(Cairo::LINE_JOIN_ROUND)
         cr.set_line_cap(Cairo::LINE_CAP_ROUND)
-            cr.set_line_width(2)
-            cr.set_source_rgba(1,1,1,1)
-            cr.paint
+        cr.set_line_width(2)
+        cr.set_source_rgba(1,1,1,1)
+        cr.paint
         if option[:expose]
           begin
             option[:expose].call(w1,cr) 
@@ -842,7 +850,7 @@ module Ruiby_dsl
            bloc=option[:expose]
            option.delete(:expose)
            after(1) { error(e) }
-           after(3000) {  puts "reset expose bloc" ;option[:expose] = bloc }
+           after(3000) {  puts "reset expose bloc" ;option[:expose] = nil }
           end  
         end
       }
