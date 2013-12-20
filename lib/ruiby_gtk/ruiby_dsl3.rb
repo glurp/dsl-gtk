@@ -50,7 +50,7 @@ module Ruiby_dsl
   #       accordion box  center flow flow_paned flowi frame framei  grid haccordion notebook  
   #       pclickable popup stack stack_paned stacki systray table var_box var_boxi vbox_scrolled 
   #    </ul>
-  #    Containers organize children widget, but show (almost) nothing.
+  #    Containers organyze children widget, but show (almost) nothing.
   #    Children must be created in container bloc, container can contains widget and container :
   #       <code><pre> 
   #       | stack do
@@ -61,7 +61,7 @@ module Ruiby_dsl
   #       </pre></code>
   # * widgets
   #   <ul>
-  #       accordion aitem alabel box button  calendar canvas cell* center check_button  combo  dialog
+  #       aitem alabel box button  calendar canvas cell* center check_button  combo  dialog
   #       dialog_async  edit entry fentry field fields grid  haccordion  hradio_buttons htoolbar ientry image  
   #       islider label labeli list menu menu_bar menu_button menu_checkbutton menu_separator   page  
   #       pp_item pp_separator  properties   row   scrolled separator  show_methods  source_editor space 
@@ -102,6 +102,18 @@ module Ruiby_dsl
   # <li> scoth xxxx in top of frame    : >stack { stacki { xxx } ; stack { } }
   # <li> scoth xxxx in bottom of frame : >stack {  stack { } ; stacki { xxx } }
   # <li> scoth xxxx in left of frame   : >flow { flowi { xxx } ; stack { } }
+  #
+  # Dynamique vaiables bindings
+  # The class  <code>::DynVar</code> support a sigle value and the observer patern.
+  # So for some widgets, whe can associate with an dyaque value :
+  # * if the value change, the widget chage the view, 
+  # * if the view change by operator action, the value change.
+  #
+  # Widgets which supports DynVar are : 
+  # * entry,ientry,
+  # * label,
+  # * islider,
+  # * check_button
   #
   def aaa_generalities()
   end
@@ -465,10 +477,19 @@ module Ruiby_dsl
       @lcur.last.orientation==Gtk::Orientation::VERTICAL ? 
         Gtk::Orientation::HORIZONTAL : Gtk::Orientation::VERTICAL))  
   end
+  
+  def _dyn_label(var,option={}) 
+    w=  label(var.value.to_s,option) 
+    var.observ { |v| w.text = v.to_s }
+    w
+  end
 
   # create  label, with text (or image if txt start with a '#')
   # spatial option : isize : icon size if image (menu,small_toolbar,large_toolbar,button,dnd,dialog)
   def label(text,options={})
+    if DynVar === text
+      return _dyn_label(text,options)
+    end
     l=_label(text,options)
     attribs(l,options)
   end
@@ -660,9 +681,19 @@ module Ruiby_dsl
     attribs(b,option)   
     b
   end
+  
+  def _dyn_check_button(text,var,option={}) 
+    w= block_given? ?  check_button(text,!! var.value,option) : check_button(text,!! var.value,option) { |v|  var.set_as_bool(v) }
+    var.observ { |v|  w.set_active(var.get_as_bool())  }
+    w
+  end
+  
   # create a checked button
   # state can be read by cb.active?
   def check_button(text="",value=false,option={},&blk)
+    if DynVar === value
+      return _dyn_check_button(text,value,option)
+    end
     b=CheckButton.new(text)
     b.set_active(value)
     b.signal_connect("clicked") do |w,e| 
@@ -725,9 +756,24 @@ module Ruiby_dsl
     end
     s
   end
+  
+ 
+  def _dyn_entry(var,size,options,slotied) 
+    w= unless slotied
+      (block_given? ? entry(var.value,size,options)  : entry(var.value,size,options) { |v| var.value=v })
+    else
+      (block_given? ? ientry(var.value,size,options)  : ientry(var.value,size,options) { |v| var.value=v })
+    end
+    var.observ { |v| w.text = v.to_s }
+    w
+  end
+   
   # create a text entry for keyboard input
   # if block defined, it while be trigger on eech of (character) change of the entry
   def entry(value,size=10,option={},&blk)
+    if DynVar === value
+       return _dyn_entry(value,size,option,false,&blk)       
+    end
     w=Entry.new().tap {|e| e.set_text(value ? value.to_s : "") }
     after(1) do
       w.signal_connect("key-press-event") do |en,e|
@@ -740,6 +786,9 @@ module Ruiby_dsl
   # create a integer text entry for keyboed input
   # option must define :min :max :by for spin button
   def ientry(value,option={},&blk)
+    if DynVar === value
+       return _dyn_entry(value,size,option,true,&blk)       
+    end
     w=SpinButton.new(option[:min].to_i,option[:max].to_i,option[:by]||1)
     w.set_numeric(true)
     w.set_value(value ? value.to_i : 0)
@@ -793,11 +842,22 @@ module Ruiby_dsl
     end
   end
   
+  def _dyn_islider(var,options={min:0,max:100,by:1}) 
+    w=  block_given? ?  islider(var.value.to_i,options) : islider(var.value.to_i,options) { |v| var.value=v }
+    var.observ { |v| w.set_value(v.to_i) }
+    w
+  end
+  
   # create a slider
   # option must define :min :max :by for spin button
   # current value can be read by w.value
   # if bloc is given, it with be call on each change, with new value as parameter
+  # if value is a DynVar, slider will be binded to the DynVar : each cahnge ofthe var will update the slider,
+  # each change of the slider is notifies to the DynVar.
   def islider(value=0,option={},&b)
+    if DynVar === value
+      return _dyn_islider(value,option,&b)
+    end
     w=Scale.new(:horizontal,(option[:min]||0).to_i,(option[:max]||100).to_i,option[:by]||1)
     w.set_value(value ? value.to_i : 0)
     w.signal_connect(:value_changed) { || b.call(w.value)  rescue error($!) } if block_given?
