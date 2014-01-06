@@ -96,9 +96,10 @@ module Ruiby_dsl
   #
   #    slot()  command is deprecated. sloti() command must be use if *i command 
   #    do not exist  :  w=sloti( widgetname() {...} )
-  #    space() can be used for slot a ampty space
+  #    space() can be used for slot a empty space.
   #
-  # Attachement :
+  # Attachement to a side of a container is not supported. You must put empty sloted widget
+  # in free space:
   # <li> scoth xxxx in top of frame    : >stack { stacki { xxx } ; stack { } }
   # <li> scoth xxxx in bottom of frame : >stack {  stack { } ; stacki { xxx } }
   # <li> scoth xxxx in left of frame   : >flow { flowi { xxx } ; stack { } }
@@ -116,16 +117,17 @@ module Ruiby_dsl
   # * islider,
   # * check_button
   #
-  # Will be extended to combo_button, toggle_button, list, grid ...
+  # This list will be extende to combo_button, toggle_button, list, grid ...
   #
-  # 'make_StockDynClass' and 'make_StockDynClass' can be use for creation of Class/object
-  # which contain DynVar : as OStrcut, but data member are DynVar.
+  # 'make_DynClass' and 'make_StockDynClass' can be use for creation of Class/object
+  # which contain DynVar : as OStruct, but data members are DynVar.
   #
   # <li>@calc=make_DynObject({"resultat"=> 0,"value" => "0" , "stack" => [] })
-  # @calc.resultat => @calc.resultat.value="X" ; x= @calc.resultat 
+  # @calc.resultat => @calc.resultat.value="X" ; x= @calc.resultat.value
   #
   # <li>@calc=make_StockDynObject("name",{"resultat"=> 0,"value" => "0" , "stack" => [] })
-  # create a object, name him for Stock, give default values if onject does not existe in current stock.
+  # create a object, name him for Stock, give default values if object does not exists
+  # in current stock.
   #
   
   def aaa_generalities()
