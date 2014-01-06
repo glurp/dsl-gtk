@@ -23,13 +23,14 @@ Status
 ======
 
 NEW : 0.135.0 !!  01-06-2014
+- EventMachine integration
 - Data binding for entry/slider/check_button : see samples/dyn.rb. Data are saved at exit() (with Ruiby stock capacity)
 - Object data binding ! : OStruct like composed of DynVar in place of ruiby values
 
 
 TODO for 1.0 :
 - Data binding for comboBox, radiobutton, text_area, list, grid ...
-- ask_file_for_read... do be refonding (default dir, file filter...)
+- ask_file_for_read... do be refactorized (default dir, file filter...)
 
 
 TODO  :
