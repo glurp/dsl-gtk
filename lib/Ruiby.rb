@@ -219,33 +219,4 @@ module Kernel
       end while ! eend
     end
   end
-  
-  #######################################
-  # C=hash_to_class({a: 11, b: 22})
-  # o=C.new ;
-  # p o.keys ;p o.a ; p o.b        # => 11,22
-  # o.a=1 ;o.b=2 ;p o.a ; p o.b    # => 1 ,2
-  #
-  # o=C.new  a: 10,b: 20
-  # o=C.new ;
-  # p o.keys ;p o.a ; p o.b        # => 10,20
-  #
-  # o=C.new  a: 10
-  # o=C.new ;
-  # p o.keys ;p o.a ; p o.b ;      # ==> 10,22
-  #
-  def hash_to_class(h)
-    Class.new() do
-      def initialize(x=nil)
-        self.def_init()
-        @values= @values.merge(x) if x
-      end
-      define_method(:def_init) { @values= h.dup } 
-      define_method(:keys) {  h.keys }
-      h.each do |key,value|
-        define_method(key) { @values[key] }
-        define_method("#{key}=") { |x| @values[key]=x }
-      end
-    end
-  end  
 end
