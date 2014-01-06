@@ -1,4 +1,5 @@
-0.134.1
+0.134.2
+    README.md : todo updated
     tilesviewer.rb : delete old DynClass test
     make_doc.rb : conditionaly regenerate snapshots
     dyn.rb : DynClass test and Stock test added
