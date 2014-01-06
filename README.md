@@ -4,6 +4,9 @@
 A DSL for building simple GUI ruby application.
 Based on gtk.
 
+Gui programming should be as simpler as in Tcl/Tk envirronement.
+Ruiby should be as easy..
+
 Resources
 ==========
 blog: http://raubarede.tumblr.com/post/19640720031/currents-work
@@ -19,21 +22,22 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 0.133.0 !!  20-12-2013
-- bourrage() for force space(s) (with widget)
-- replace all exit!() by exit()
-- Data binding for entry/slider/check_button : see samples/dyn.rb
-- Data binding with stock capacity, save on exit()
+NEW : 0.135.0 !!  01-06-2014
+- Data binding for entry/slider/check_button : see samples/dyn.rb. Data are saved at exit() (with Ruiby stock capacity)
+- Object data binding ! : OStruct like composed of DynVar in place of ruiby values
+
 
 TODO for 1.0 :
 - Data binding for comboBox, radiobutton, text_area, list, grid ...
 - ask_file_for_read... do be refonding (default dir, file filter...)
+
 
 TODO  :
 - resolve 100% gtk3 deprecated warning
 - corrections in ruiby_require(?)
 - complete treeview and tree_grid,
 - complete rspec => 99% ?
+
 
 
 Installation
