@@ -47,8 +47,7 @@ class DynVar
   class << self
     def stock(name,defv) 
       v= Ruiby.stock_get(name,defv)
-      var=DynVar.new(v)
-      var.set_name(name)
+      var=DynVar.new(v,name)
       if ! @ldyn
          @ldyn=[]    
          at_exit { DynVar.save_stock }
@@ -60,11 +59,15 @@ class DynVar
       (@ldyn||[]).each { |v| Ruiby.stock_put(v.name, v.value.to_s) if v.name }
     end
   end
-  def initialize(v) @value=v ; @abo={} ; @name=nil         end
+  def initialize(v,name="") @value=v ; @abo={} ; @name=name end
   def set_name(name) @name=name                            end
   def name() @name                                         end
   def observ(&blk)  @abo[caller] = blk  ; blk.call(@value) end
-  def event()       @abo.each { |a,b|  b.call(@value) }    end
+  def event()       
+    abo=@abo
+     value=@value
+     gui_invoke_wait { abo.each { |a,b|  b.call(value) } } if @abo.size>0  
+  end
   def value=(v)     @value=v ; event()                     end
   def value()       @value                                 end
   def set_as_bool(v) 
@@ -84,4 +87,39 @@ class DynVar
     end
   end
 end
+
+################################# Object binding
+# As Struct, but data member are all DynVar
+# see samples/dyn.rb
+def make_DynClass(h={"dummy"=>"?"})
+  Class.new() do
+    def initialize(x={})
+      @values=self.def_init().merge(x).each_with_object({}){ |(name,v),h|  h[name]=DynVar.new(v) }
+    end
+    define_method(:def_init) { h.dup } 
+    define_method(:keys) {  h.keys }
+    define_method(:to_h) {  @values.each_with_object({}) { |(k,v),h| h[k]=v.value} }
+    h.each do |key,value|
+      define_method(key) { @values[key] }
+    end
+  end
+end  
+
+# make_DynClass, but data are saved at exit time.
+# see samples/dyn.rb
+def make_StockDynClass(h={"dummy"=>"?"})
+  Class.new() do
+    def initialize(oname="",x={})
+      @values=self.def_init().merge(x).each_with_object({}){ |(name,v),h| h[name]=DynVar.stock(oname+"/"+name,v)}
+    end
+    define_method(:def_init) { h.dup } 
+    define_method(:keys) {  h.keys }
+    define_method(:to_h) {  @values.each_with_object({}) { |(k,v),h| h[k]=v.value} }
+    h.each do |key,value|
+      define_method(key) { @values[key] }
+    end
+  end
+end  
+def make_StockDynObject(oname,h) make_StockDynClass(h).new(oname) end
+
 
