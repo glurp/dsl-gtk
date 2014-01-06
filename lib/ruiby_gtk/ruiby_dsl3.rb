@@ -103,11 +103,12 @@ module Ruiby_dsl
   # <li> scoth xxxx in bottom of frame : >stack {  stack { } ; stacki { xxx } }
   # <li> scoth xxxx in left of frame   : >flow { flowi { xxx } ; stack { } }
   #
-  # Dynamique vaiables bindings
-  # The class  <code>::DynVar</code> support a sigle value and the observer patern.
-  # So for some widgets, whe can associate with an dyaque value :
-  # * if the value change, the widget chage the view, 
-  # * if the view change by operator action, the value change.
+  # Dynamique variables bindings
+  # The class  <code>::DynVar</code> support a single value and the observer pattern.
+  # So widgets can be associate with an dynamique value :
+  # * if the value change, the widget change the view accordingly to the new value, 
+  # * if the view change by operator action, the value change accordingly.
+  # * Threading is care : widget updates will be done in maint thread context
   #
   # Widgets which supports DynVar are : 
   # * entry,ientry,
@@ -115,6 +116,18 @@ module Ruiby_dsl
   # * islider,
   # * check_button
   #
+  # Will be extended to combo_button, toggle_button, list, grid ...
+  #
+  # 'make_StockDynClass' and 'make_StockDynClass' can be use for creation of Class/object
+  # which contain DynVar : as OStrcut, but data member are DynVar.
+  #
+  # <li>@calc=make_DynObject({"resultat"=> 0,"value" => "0" , "stack" => [] })
+  # @calc.resultat => @calc.resultat.value="X" ; x= @calc.resultat 
+  #
+  # <li>@calc=make_StockDynObject("name",{"resultat"=> 0,"value" => "0" , "stack" => [] })
+  # create a object, name him for Stock, give default values if onject does not existe in current stock.
+  #
+  
   def aaa_generalities()
   end
   
