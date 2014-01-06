@@ -4,8 +4,7 @@
 A DSL for building simple GUI ruby application.
 Based on gtk.
 
-Gui programming should be as simpler as in Tcl/Tk envirronement.
-Ruiby should be as easy..
+Gui programming should be as simpler as in Tcl/Tk environment.
 
 Resources
 ==========
@@ -25,7 +24,7 @@ Status
 NEW : 0.135.0 !!  01-06-2014
 - EventMachine integration
 - Data binding for entry/slider/check_button : see samples/dyn.rb. Data are saved at exit() (with Ruiby stock capacity)
-- Object data binding ! : OStruct like composed of DynVar in place of ruiby values
+- Object data binding ! : Struct like composed of DynVar in place of ruiby values
 
 
 TODO for 1.0 :
