@@ -1,4 +1,14 @@
-0.133.1
+0.134.1
+    tilesviewer.rb : delete old DynClass test
+    make_doc.rb : conditionaly regenerate snapshots
+    dyn.rb : DynClass test and Stock test added
+    ruiby_dsl3.rb : description updated for DynClass
+    dyn_var.rb : DynClass creation
+    Ruiby.rb : suppress hash_to_class
+    doc.html : conditionaly rerun snapshot generation
+    Ruiby.gemspec : update description
+    README.md : update
+0.134.0 : 2013-12-20 21:44:15 +0100
     ruiby_dsl3.rb : spacie become spacei
 0.133.0 : 2013-12-20 21:38:45 +0100
     tilesviewer.rb : rerun
