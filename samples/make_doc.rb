@@ -25,7 +25,7 @@ html=<<EEND
     background: #5e8077;
     color:white; padding:5px 10px 4px 5px;margin-bottom:20px;
     background: linear-gradient(to right, #606060 0%%,#808080 100%%);   
-    border-radius: 10px 10px ;
+    border-radius: 1px 1px ;
     box-shadow: 2px 2px 6px 1px #000; 
     margin-left:3px;margin-right:70px;
     padding-left: 30px
@@ -43,7 +43,7 @@ html=<<EEND
   a:active {color: #0000FF}
   .a {float: left;	width: 150px;}
   #popup-div {
-    border-radius: 20px 20px ;
+    border-radius: 5px 5px ;
     position: absolute;
     visibility:hidden;
     border : 2px solid black;
@@ -193,7 +193,8 @@ end
 def make_example(hdoc,filename)
   count= $hexample.size
   src=File.dirname(__FILE__)+"/"+filename
-  system('ruby',src,"take-a-snapshot")
+  ifn="media/snapshot_#{filename}.png"
+  system('ruby',src,"take-a-snapshot") if ARGV.size==0 || (! File.exists?(ifn))
   content=File.read(src).gsub('<','&lt;')
   code= if content =~ /component\(\)/
     'def component()' + content.split('component()')[1]
@@ -203,13 +204,12 @@ def make_example(hdoc,filename)
   code=code.gsub(/\w+/) { |word| (hdoc[word]) ? make_popup(word) : word}
   count-=$hexample.size
   puts " #{filename} : #{-count}"
-  ifn="media/snapshot_#{filename}.png"
   img=if File.exists?(ifn)
       system("imagemagick","-crop","200x150")
       icontent=open(ifn,"rb") do |f|
         Base64.encode64(f.read(File.size(ifn)))
       end
-      File.delete(ifn)
+      #File.delete(ifn)
       '<br/><center><img src="data:image/gif;base64,'+icontent+'"></center><br/>'
   else
     puts "no snapshot"
@@ -236,8 +236,7 @@ lapis=hdoc.keys.sort.select {|a| (a !~ /\./) }.map {  |k|
 }
 dico_hdoc=make_hdoc(hdoc)
 
-lscript=%w{canvas.rb table2.rb testth.rb animtext.rb  test_systray.rb  multi_window_threading.rb test_include.rb netprog.rb test.rb plot.rb}
-p lscript
+lscript=%w{canvas.rb table2.rb testth.rb animtext.rb  test_systray.rb  multi_window_threading.rb test_include.rb netprog.rb test.rb plot.rb dyn.rb minicalc.rb}
 test=lscript.map { |file| make_example(hdoc,file) }.join("<hr>")
 puts "\n\n no exemples for : #{hdoc.size - $hexample.size} words\n"
 eend="<hr><br><p><b>No example for</b> : %s" % [(hdoc.keys - $hexample.keys- %w{initialize component}).join(', ')]
