@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.authors  = ["Regis d'Aubarede"]
   s.summary  = "A  DSL for building simple GUI ruby/gtk application"
   s.description = <<EEND
-A DSL for building simple GUI ruby application rapidly.
+A DSL for building simple GUI ruby application, based on Gtk.
 EEND
   
   dependencies = [
