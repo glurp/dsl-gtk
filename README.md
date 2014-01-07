@@ -300,7 +300,7 @@ instantiate with an object persistant ID
   ....
 ```
 
-```make_StockDynClass``` do both : Class creation **and** class instanciation.
+```make_StockDynObject``` do both : Class creation **and** class instanciation.
 
 
 License
