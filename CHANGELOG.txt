@@ -1,4 +1,3 @@
-0.135.6
     README.md : ex
     simplissime.rb : creation
     simplissime.rb : comments
