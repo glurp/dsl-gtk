@@ -211,11 +211,12 @@ Ruiby.start { App.new }
 
 ```
 
-Dynamic variable, Dynamic objects
-================================
+Observed Object/Variable
+========================
+
 Dynamic variable
 ----------------
-Offten, a widtget (an entry, by exemple) show the value of a ruby variable.
+Often, a widget (an entry, a label, a slider...) show the value of a ruby variable.
 each time a code mofify this variable, it must modify the widget :
 
 ```ruby
@@ -256,6 +257,9 @@ if you want to be notified for your own traitment, you can observ a DynVar :
 Here, a modification of foo variable will be send on the network...
 
 Warning !! the block will be executed in the main thread context (mainloop gtk context)
+Widget which accesp DynVar are : entry, islider, label
+
+```to be exend to button,togglebutton... list, grid, video, ...)```
 
 
 Dynamic Object
