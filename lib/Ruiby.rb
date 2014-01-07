@@ -210,6 +210,7 @@ module Kernel
           give_tick.call
         end
     else
+      eend=false
       begin 
         Gtk.main 
         exit(0)
