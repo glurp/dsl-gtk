@@ -222,5 +222,6 @@ see samples in "./samples" directory
 See at end of Doc reference : [Ex.](https://rawgithub.com/raubarede/Ruiby/master/doc.html#code) 
 
 ![](http://raw.github.com/raubarede/Ruiby/master/samples/media/snapshot_simplissime.png)
+
 https://github.com/raubarede/Ruiby/blob/master/samples/simplissime.rb
 
