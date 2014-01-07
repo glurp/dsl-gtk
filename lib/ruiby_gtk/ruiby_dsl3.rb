@@ -535,7 +535,7 @@ module Ruiby_dsl
   # create a one-character size space, (or n character x n line space)
   def space(n=1) label(([" "*n]*n).join("\n"))  end
   def spacei(n=1) labeli(([" "*n]*n).join("\n"))  end
-  def bourrage(n=1) n.times { sloti(labeli("    ")) }  end
+  def bourrage(n=1) n.times { slot(label(" ")) }  end
 
   # create  button, with text (or image if txt start with a '#')
   # block argument is evaluate at button click
