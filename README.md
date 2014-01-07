@@ -211,6 +211,87 @@ Ruiby.start { App.new }
 
 ```
 
+Dynamic variable, Dynamic objects
+================================
+Dynamic variable
+----------------
+Offten, a widtget (an entry, by exemple) show the value of a ruby vaiable.
+each tile code mofify this variable, it must modufy the object :
+```ruby
+  label(" foo: ") ; e=entry("0")
+  is=islider(0)
+  ....
+  foo=43
+  e.value=foo.to_s # here!
+  is.value=foo     # and there!
+  ....
+```
+This is very tyring :)
+So ```DynVar``` can be  use for represnting a variable which is dynmaics, ie. 
+which must notify widgets which show the variable state.
+
+So we can do :
+```ruby
+  foo=DynVar.new(0)
+  label(" foo: ") ; entry(foo)
+  islider(foo)
+  ....
+  foo.value=43
+  ....
+```
+
+That works ! the entry and the slider will be updated
+a move on slider will update foo.value and the entry
+idem for a key in the entry : slider and foo.value will be updated
+
+if you want to be notify for your own traitment, you can obeserv a DynVar :
+```ruby
+  foo.observ { |v| socket.write(v.to_s) if socket && socket.openned }
+```
+
+Here, a modification of foo variable will be send on the network...
+
+Warning !! the block will be executed in the main thread context (mainloop gtk context)
+
+
+Dynamic Object
+--------------
+
+Often, this kind of Dyn variables are members of a 'packet', which should be organised by an
+Ruby Object (a Struct...)
+
+So ```DynObject``` create a class, which is organised by a hash  :
+* packet of variable name 
+* initiale values for each
+* each variable will be a DynVar
+
+```ruby 
+  FooClass=make_DynObject("v1=> 1 , "v2" => 2, "s1" => 'Hello...')
+  foo=FooClass.new( "s1" => Time.now.to_s )
+  ...
+  label(" foo: ") ; entry(foo.s1)
+  islider(foo.v1)
+  ....
+  foo.s1.value="43"
+  foo.v1.value=2
+  ....
+```
+
+Dynamic Stock Object
+--------------------
+DynObject can be persisted to filesystem : use ```make_StockDynObject```, and
+instantiate with an object persistant ID
+
+```ruby 
+  FooClass=make_StockDynObject("v1=> 1 , "v2" => 2, "s1" => 'Hello...')
+  foo1=FooClass.new( "foo1" , "s1" => Time.now.to_s )
+  foo2=FooClass.new( "foo2" , "s1" => (Time.now+10).to_s )
+  ....
+  button("Exit") { ruiby_exit} # on exit, Stocks objects will been saved to /tmp/<$0>.data  
+  ....
+```
+
+
 
 License
 =======
