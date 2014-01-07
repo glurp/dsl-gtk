@@ -1,4 +1,5 @@
-0.135.5
+0.135.6
+    README.md : ex
     simplissime.rb : creation
     simplissime.rb : comments
     ruiby_dsl3.rb : bourrage bug
