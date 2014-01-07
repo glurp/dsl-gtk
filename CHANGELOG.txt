@@ -1,4 +1,6 @@
-0.135.14
+0.135.15
+    README.md : Dyn
+    Gemfile : add gtk2
     README.md : dyn
     README.md : dyn
     README.md : Dyn
