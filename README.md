@@ -256,7 +256,8 @@ if you want to be notified for your own traitment, you can observ a DynVar :
 
 Here, a modification of foo variable will be send on the network...
 
-Warning !! the block will be executed in the main thread context (mainloop gtk context)
+Warning !! the block will be executed in the main thread context (mainloop gtk context).
+
 Widget which accesp DynVar are : entry, islider, label
 
 ```to be exend to button,togglebutton... list, grid, video, ...)```
@@ -291,7 +292,7 @@ DynObject can be persisted to filesystem : use ```make_StockDynObject```, and
 instantiate with an object persistant ID
 
 ```ruby 
-  FooClass=make_StockDynObject("v1=> 1 , "v2" => 2, "s1" => 'Hello...')
+  FooClass=make_StockDynObject("v1"=> 1 , "v2" => 2, "s1" => 'Hello...')
   foo1=FooClass.new( "foo1" , "s1" => Time.now.to_s )
   foo2=FooClass.new( "foo2" , "s1" => (Time.now+10).to_s )
   ....
@@ -309,6 +310,11 @@ Exemples
 ========
 see samples in "./samples" directory
 See at end of Doc reference : [Ex.](https://rawgithub.com/raubarede/Ruiby/master/doc.html#code) 
+
+A little one
+------------
+
+ScreenShot:
 
 ![](http://raw.github.com/raubarede/Ruiby/master/samples/media/snapshot_simplissime.png)
 
@@ -342,7 +348,7 @@ Ruiby.app width: 300,height: 200,title:"UpCase" do
   def validation(ctx) # a method appended to current class (private)
     Thread.new do
       sleep 1 # long time traitment...
-      ctx.res.value= ctx.value.value.upcase # DynObject automaticly notify in main thread context
+      ctx.res.value= ctx.value.value.upcase 
       ctx.len.value= ctx.res.value.size
     end
   end
