@@ -275,7 +275,7 @@ So ```DynObject``` create a class, which is organised by a hash  :
 * each variable will be a DynVar
 
 ```ruby 
-  FooClass=make_DynObject("v1" => 1 , "v2" => 2, "s1" => 'Hello...')
+  FooClass=make_DynClass("v1" => 1 , "v2" => 2, "s1" => 'Hello...')
   foo=FooClass.new( "s1" => Time.now.to_s )
   ...
   label(" foo: ") ; entry(foo.s1)
@@ -292,7 +292,7 @@ DynObject can be persisted to filesystem : use ```make_StockDynObject```, and
 instantiate with an object persistant ID
 
 ```ruby 
-  FooClass=make_StockDynObject("v1"=> 1 , "v2" => 2, "s1" => 'Hello...')
+  foo1=make_StockDynClass("v1"=> 1 , "v2" => 2, "s1" => 'Hello...')
   foo1=FooClass.new( "foo1" , "s1" => Time.now.to_s )
   foo2=FooClass.new( "foo2" , "s1" => (Time.now+10).to_s )
   ....
@@ -300,6 +300,7 @@ instantiate with an object persistant ID
   ....
 ```
 
+```make_StockDynClass``` do both : Class creation **and** class instanciation.
 
 
 License
