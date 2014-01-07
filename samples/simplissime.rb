@@ -1,11 +1,8 @@
-# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
-# LGPL
-
-require_relative 'Ruiby'
-
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com> LGPL
+require 'Ruiby'
 
 Ruiby.app width: 300,height: 200,title:"UpCase" do
-  chrome(false) # fun
+  chrome(false)
   # create a class from a hash, instanciate on object which will save/restor at each stop/start of the script
   # structure of class and initale values are in the hash
   ctx=make_StockDynObject("simpl1",{"value" => "0" , "len" => 10, "res"=> ""})
@@ -23,16 +20,16 @@ Ruiby.app width: 300,height: 200,title:"UpCase" do
        flowi { labeli "Resultat: " ,width: 200 ;  entry(ctx.res)  }
       end
     }
-    flowi {  regular  # tool bar of buttons, each must have same size (flow => width)
+    flowi {  regular  # tool bar of buttons, each must have same size (regular on flow => same width)
       button("Validation") {  validation(ctx) }    
       button("Exit") { ruiby_exit } 
     }
   end
-  def validation(ctx)  # a method appendd to current class (private)
-    Thread.new {
-      sleep 3                             # long time traitment...
-      ctx.len.value= ctx.res.value.size   # DynObject automaticly notify with good thread context
-      ctx.res.value= ctx.value.value.upcase ; 
-    }
+  def validation(ctx)  # a method appended to current class (private)
+    Thread.new do
+      sleep 1                               # long time traitment...
+      ctx.res.value= ctx.value.value.upcase # DynObject automaticly notify in main thread context 
+      ctx.len.value= ctx.res.value.size   
+    end
   end
 end
