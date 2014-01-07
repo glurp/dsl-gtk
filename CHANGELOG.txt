@@ -1,4 +1,6 @@
-0.135.2
+0.135.3
+    ruiby_dsl3.rb : bourrage bug
+    Ruiby.rb : eend
     ruiby_dsl3.rb : presentation update
     doc.html : generation
     Rakefile.rb : snapshot generation conditionaly execute
