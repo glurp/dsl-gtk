@@ -507,7 +507,7 @@ module Ruiby_dsl
       end
       w
   end
-  def color_conversion(color)
+  def self.color_conversion(color)
     case color 
       when ::Gdk::RGBA then color
       when String then color_conversion(::Gdk::Color.parse(color))
@@ -516,7 +516,7 @@ module Ruiby_dsl
         raise "unknown color : #{color.inspect}"
     end
   end
-  def color_html(color,opacity=1)
+  def self.color_html(color,opacity=1)
     c=color_conversion(color)
     [c.red,c.green,c.blue,opacity>1 ? 1 : opacity<0 ? 0 : opacity]
   end
@@ -1007,26 +1007,28 @@ module Ruiby_dsl
 
     attribs(w,option) 
     def w.set_memo(memo) @memo=memo end
-    def w.get_memo(memo) @memo end
+    def w.get_memo() @memo end
     w.set_memo(nil)    
     
     def w.redraw() 
       self.queue_draw_area(0,0,self.width_request,self.height_request)
     end
-    def w.init_ctx(color1="#000000",color2="#FFFFFF",width=2)
-        cr=@currentCanvasCtx.last
+    def w.init_ctx(color1="#000000",color2="#FFFFFF",width=1)
+        w,cr=*@currentCanvasCtx 
         cr.set_line_join(Cairo::LINE_JOIN_ROUND)
         cr.set_line_cap(Cairo::LINE_CAP_ROUND)
         cr.set_line_width(width)
-        c=color_html(color2)
-        cr.set_source_rgba(c.red,c.green,c.blue,1)
+        c=Ruiby_dsl.color_html(color2)
+        cr.set_source_rgba(*c)
         cr.paint
-        @default_paint_color=color_html(color1)
+        @default_paint_color=Ruiby_dsl.color_html(color1)
         @default_paint_width=width
     end
     
     # TODO canvas draw primitives...  to be taken from draw/canvas.rb
     def w.draw_line(lxy,color=nil,width=nil) 
+        w,cr=@currentCanvasCtx
+       
     end
     def w.draw_point(x,y,color=nil,width=nil)
     end
@@ -1049,16 +1051,16 @@ module Ruiby_dsl
   # define action on button_press
   def on_canvas_button_press(&blk)
     _accept?(:handler)
-    @currentCanvas.signal_connect('button_press_event')   { |wi,e| 
-      w.set_memo(blk.call(wi,e))  rescue error($!)
-      force_update(wi) 
+    @currentCanvas.signal_connect('button_press_event')   { |w,e| 
+      w.set_memo(blk.call(w,e))  rescue error($!)
+      force_update(w) 
     }  
   end
   # define action on mouse button press on current canvas definition
   def on_canvas_button_release(&blk)
     _accept?(:handler)
     @currentCanvas.signal_connect('button_release_event') { |w,e| 
-      blk.call(w,e,w.get_memo) rescue error($!))
+      blk.call(w,e,w.get_memo) rescue error($!)
       w.set_memo(nil)
       force_update(w) 
     }  
@@ -1067,23 +1069,23 @@ module Ruiby_dsl
   def on_canvas_button_motion(&blk )
     _accept?(:handler)
     @currentCanvas.signal_connect('motion_notify_event')  { |w,e| 
-      w.set_memo(blk.call(wi,e,w.get_memo) rescue error($!)  
-      force_update(wi)
+      w.set_memo(blk.call(w,e,w.get_memo)) rescue error($!)
+      force_update(w)
     }
   end
   # define action on  keyboard press on current canvas definition
   def on_canvas_key_press(&blk)
     _accept?(:handler)
-    @currentCanvas.signal_connect('key_press_event')  { |wi,e| 
-    w.set_memo(blk.call(wi,e) rescue error($!)
-    force_update(wi) 
+    @currentCanvas.signal_connect('key_press_event')  { |w,e| 
+      w.set_memo(blk.call(w,e)) rescue error($!)
+      force_update(w) 
+    }
   end
   
   # define the drawing on current canvas definition
   def on_canvas_draw(&blk)
     _accept?(:handler)
-    @currentCanvas.signal_connect(  'draw' ) do |w1,cr| 
-      @currentCanvasCtx=[w1,cr]
+    @currentCanvas.signal_connect(  'draw' ) do |w,cr| 
       cr.save do
         cr.set_line_join(Cairo::LINE_JOIN_ROUND)
         cr.set_line_cap(Cairo::LINE_CAP_ROUND)
@@ -1091,12 +1093,11 @@ module Ruiby_dsl
         cr.set_source_rgba(1,1,1,1)
         cr.paint
         begin
-          yield(w1,cr) 
+           w.instance_eval { @currentCanvasCtx=[w,cr] }
+           blk.call(w,cr) 
+           w.instance_eval { @currentCanvasCtx=nil }
         rescue Exception => e
-         bloc=option[:expose]
-         option.delete(:expose)
          after(1) { error(e) }
-         after(3000) {  puts "reset expose bloc" ;option[:expose] = nil }
         end  
       end
     end
