@@ -146,12 +146,12 @@ Ruiby.app(:width=> 800, :height=>800, :title=> "Map") do
   @latRef=@lat0
   @zRef=@z
   stack {
-    @cv=canvas(self.default_width,self.default_height,{
-      :expose      => proc do |w,ctx|  expose(w,ctx)   end,
-      :mouse_down  => proc do |w,e|  [e.x,e.y]       end,
-      :mouse_move  => proc do |w,e,o| n=[e.x,e.y] ;$app.move_carto(n[0]-o[0],n[1]-o[1]);n end,
-      :mouse_up    => proc do |w,e,o| n=[e.x,e.y] ;$app.move_carto(n[0]-o[0],n[1]-o[1])   end,
-    })
+    @cv=canvas(self.default_width,self.default_height) {
+      on_canvas_draw { |w,ctx|  expose(w,ctx) }
+      on_canvas_button_press {|w,e|  [e.x,e.y]  }
+      on_canvas_button_motion {|w,e,o| n=[e.x,e.y] ;$app.move_carto(n[0]-o[0],n[1]-o[1]);n }
+      on_canvas_button_release {|w,e,o| n=[e.x,e.y] ;$app.move_carto(n[0]-o[0],n[1]-o[1]) }
+    }
     flowi { 
       regular
       table(0,0) { 
