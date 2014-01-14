@@ -1,4 +1,8 @@
-0.135.16
+0.135.17
+    test_basics_widget.rb : update for new canvas syntaxe
+    testth.rb : nop
+    ruiby_dsl3.rb : check dsl syntax, canvas ant toolbars closurified, canvas tool
+    README.md : update
     test_composites.rb : presentation
     test_basics_widget.rb : canvas rspec update
     tilesviewer.rb : nex canvas command
