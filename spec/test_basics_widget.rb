@@ -110,7 +110,7 @@ describe Ruiby do
   it "create a image from file" do
     w=nil
     @win.create { stack {   w=image("../samples/media/angel.png") } }
-    w.should be_a_kind_of(Gtk::Label)
+    w.should be_a_kind_of(Gtk::Image)
  end
 
  it "create fields" do
@@ -143,21 +143,21 @@ describe Ruiby do
     @win.create { stack {   w=canvas(100,100) do
           on_canvas_draw { |w,cr|  
             w.init_ctx
-            w.draw_line(0,0 ,100,100, 100,0  0,0  0,100,  100,100)
+            w.draw_line([0,0, 100,100, 100,0,  0,0,  0,100,  100,100])
           }
           on_canvas_button_press{ |w,e|   
-            alert("button press !")
-            1
+            puts "button press !"
+            [e.x,e.y]
           }
           on_canvas_button_motion { |w,e,o| 
-            p "motion #{ex} #{e.y}  with memo=#{o}"
-            2
+            puts "motion #{e.x} #{e.y}  with memo=#{o.inspect}\n"
+            [e.x,e.y]
           }
           on_canvas_button_release  { |w,e,o| 
-            alert("button release ! with memo=#{o}")
+            puts "button release ! with memo=#{o.inspect}"
           }
     end    } }
-    @win.sleeping(1000,"Verify canvas")
+    @win.sleeping(3000,"Verify canvas")
  end
  it "create a combo box" do
     w=nil
