@@ -1,4 +1,6 @@
-0.135.17
+0.135.18
+    test_basics_widget.rb : image/label test : test file exists
+    README.md : todo
     test_basics_widget.rb : update for new canvas syntaxe
     testth.rb : nop
     ruiby_dsl3.rb : check dsl syntax, canvas ant toolbars closurified, canvas tool
