@@ -45,48 +45,48 @@ end
 
 z,d=1000,[200,400] ; 10000.times do
     a,dist=rand*360, exp(z,0,rand)
-	pt(d[0]+dist*Math.cos(a),d[1]+dist*Math.sin(a) ,"#000",1)
+  pt(d[0]+dist*Math.cos(a),d[1]+dist*Math.sin(a) ,"#000",1)
 end if true
 
 if true 
-	axes(20,800,800,20,10)
-	plot_yfx(10,3) { |x| 20+100+100*Math.sin(Math::PI*x/40)}
+  axes(20,800,800,20,10)
+  plot_yfx(10,3) { |x| 20+100+100*Math.sin(Math::PI*x/40)}
 end
 
           EEND
       end
     end
-	def component()
-		stack do
-			sloti(htoolbar(
-				"open/Open file..."=> proc {
-					fload(ask_file_to_read(".","*.rb"),nil)
-				},
-				"Save/Save buffer to file..."=> proc {
-					@file=ask_file_to_write(".","*.rb") unless File.exists?(@file)
-					@title.text=@file
-					content=@edit.buffer.text
-					File.open(@file,"wb") { |f| f.write(content) } if @file && content && content.size>2
-				}
-			)) 
-			stack_paned(800,0.7) {
-				flow_paned(900,0.4) do 
-				  stack {
-						@title=sloti(label("Edit"))
-						@edit=source_editor(:lang=> "ruby", :font=> "Courier new 12").editor
-						sloti(button("Test...") { execute() })
-					}
+  def component()
+    stack do
+      htoolbar {
+        toolbar_button("open","Open file...") {
+          fload(ask_file_to_read(".","*.rb"),nil)
+        }
+        toolbar_button("Save","Save buffer to file...") {
+          @file=ask_file_to_write(".","*.rb") unless File.exists?(@file)
+          @title.text=@file
+          content=@edit.buffer.text
+          File.open(@file,"wb") { |f| f.write(content) } if @file && content && content.size>2
+        }
+      }
+      stack_paned(800,0.7) {
+        flow_paned(900,0.4) do 
+          stack {
+            @title=sloti(label("Edit"))
+            @edit=source_editor(:lang=> "ruby", :font=> "Courier new 12").editor
+            sloti(button("Test...") { execute() })
+          }
           stack { 
               @canvas= canvas(400,400,{ 
                 :expose     => proc { |w,cr|   redraw(w,cr) }
               }) 
            }           
-				end
-				notebook do 
-					page("Error") { @error_log=slot(text_area(600,100,{:font=>"Courier new 10"})) }
-					page("Canvas Help") { make_help(slot(text_area(600,100,{:font=>"Courier new 10"}))) }
-				end
-			}
+        end
+        notebook do 
+          page("Error") { @error_log=slot(text_area(600,100,{:font=>"Courier new 10"})) }
+          page("Canvas Help") { make_help(slot(text_area(600,100,{:font=>"Courier new 10"}))) }
+        end
+      }
       buttoni("reload canvas.rb...") do 
         begin
           load (__FILE__)
@@ -94,8 +94,8 @@ end
           error(e)
         end
       end
-		end
-	end
+    end
+  end
   def redraw(w,ctx)
     return if @redraw_error
     return unless  @blk
@@ -114,45 +114,45 @@ end
       trace(e)
     end
   end
-	def execute()
-		content=@edit.buffer.text    
-	  @blk= content
-		File.open(@filedef,"w") {|f| f.write(content)} if content.size>30
+  def execute()
+    content=@edit.buffer.text    
+    @blk= content
+    File.open(@filedef,"w") {|f| f.write(content)} if content.size>30
     @redraw_error=false
     @canvas.redraw
-	rescue Exception => e
-		trace(e)
-	end
-  
-	def log(*e)
-		@error_log.text+=e.join("    ")+"\n"
-	end
-	def trace(e)
-		@error_log.text=e.to_s + " : \n   "+ e.backtrace[0..3].join("\n   ")
-	end
-	def make_api(ta)
-		src=File.dirname(__FILE__)+"/../lib/ruiby_gtk/ruiby_dsl.rb"
-		content=File.read(src)
-		ta.text=content.split(/\r?\n\s*/).grep(/^def[\s\t]+[^_]/).map {|line| (line.split(/\)/)[0]+")").gsub(/\s*def\s/,"")}.sort.join("\n")
-	end
-	def make_help(ta)
-		ta.text=DrawPrimitive.help_text
+  rescue Exception => e
+    trace(e)
   end
-	def make_example(ta)
-		src=File.dirname(__FILE__)+"/test.rb"
-		content=File.read(src)
-		ta.text=content.split(/(def component)|(end # endcomponent)/)[2]
-	end
-	def fload(file,content)
-		if File.exists?(file) && content==nil
-			content=File.read(file)
-		end
-		return unless content!=nil 
-		@file=file
-		@mtime=File.exists?(file) ? File.mtime(@file) : 0
-		@content=content
-		@edit.buffer.text=content
-	end
+  
+  def log(*e)
+    @error_log.text+=e.join("    ")+"\n"
+  end
+  def trace(e)
+    @error_log.text=e.to_s + " : \n   "+ e.backtrace[0..3].join("\n   ")
+  end
+  def make_api(ta)
+    src=File.dirname(__FILE__)+"/../lib/ruiby_gtk/ruiby_dsl.rb"
+    content=File.read(src)
+    ta.text=content.split(/\r?\n\s*/).grep(/^def[\s\t]+[^_]/).map {|line| (line.split(/\)/)[0]+")").gsub(/\s*def\s/,"")}.sort.join("\n")
+  end
+  def make_help(ta)
+    ta.text=DrawPrimitive.help_text
+  end
+  def make_example(ta)
+    src=File.dirname(__FILE__)+"/test.rb"
+    content=File.read(src)
+    ta.text=content.split(/(def component)|(end # endcomponent)/)[2]
+  end
+  def fload(file,content)
+    if File.exists?(file) && content==nil
+      content=File.read(file)
+    end
+    return unless content!=nil 
+    @file=file
+    @mtime=File.exists?(file) ? File.mtime(@file) : 0
+    @content=content
+    @edit.buffer.text=content
+  end
 end
 
 #=====================================================================================
@@ -305,7 +305,7 @@ plot_yfx(10,3) { |x| 20+100+100*Math.sin(Math::PI*x/40)}
   
   
 EEND
-	end
+  end
 end
 
 Ruiby.start_secure { RubyApp.new }
