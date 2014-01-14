@@ -109,7 +109,9 @@ describe Ruiby do
  end
   it "create a image from file" do
     w=nil
-    @win.create { stack {   w=image("../samples/media/angel.png") } }
+    filename="../samples/media/angel.png"
+    filename="samples/media/angel.png" unless File.exists?(filename)
+    @win.create { stack {   w=image(filename) } }
     w.should be_a_kind_of(Gtk::Image)
  end
 
