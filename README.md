@@ -27,8 +27,8 @@ NEW : 0.135.0 !!  01-06-2014
 - Object data binding ! : Struct like composed of DynVar in place of ruiby values
 
 Current:
-- check dsl syntaxe : chack each dsl command validity in  his closure context
-- canvas 'closurifier' : callback dsl command, in canvas closure
+- check dsl syntaxe : check that each dsl command is valid on  his closure context
+- canvas 'closurifier' : callback dsl command in canvas closure
 - toolbar 'closurifier' 
 - canvas instruments : draw primitives,  move/scale/rotate vector
 
