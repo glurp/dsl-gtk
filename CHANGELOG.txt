@@ -1,4 +1,14 @@
-0.135.15
+0.135.16
+    test_composites.rb : presentation
+    test_basics_widget.rb : canvas rspec update
+    tilesviewer.rb : nex canvas command
+    test.rb : new ccanvas, new toolbar
+    simplissime.rb : tootip test
+    draw.rb : not working
+    canvas.rb : adapt to new canvas
+    ruiby_dsl3.rb : check dsl syntax, canvas ant toolbars closurified, canvas tool
+    doc.html : update
+    README.md : comment for currents changes
     README.md : Dyn
     Gemfile : add gtk2
     README.md : dyn
