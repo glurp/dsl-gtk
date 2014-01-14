@@ -20,8 +20,33 @@ require_relative 'ruiby_default_dialog3'
 module Ruiby_dsl
   include ::Gtk
   include ::Ruiby_default_dialog
-
-
+  
+  class WidgetContainer ; def accept?(t) raise("no widget accepted here : #{self.class}") unless t==:widdget || t==:layout  end end
+  class CallbackContainer ; def accept?(t) raise("no widget accepted here : #{self.class}") end end
+  class HandlerContainer ; def accept?(t) raise("no widget accepted here : #{self.class}") unless t==:handler end end
+  class TableContainer ; def accept?(t) raise("no widget accepted here : #{self.class}") unless t==:row end end
+  class RowContainer ; def accept?(t) raise("no widget accepted here : #{self.class}") unless t==:cell end end
+  class TabContainer ; def accept?(t) raise("no widget accepted here : #{self.class}") unless t==:tab end end
+  def _set_accepter(layout,*types)
+    if types.size==1
+      layout.define_singleton_method(:accept?) do |type|  
+         raise("no widget accepted here : #{types} / #{type}") unless types.first==type 
+      end
+    elsif types.size==2
+      layout.define_singleton_method(:accept?) do |type|  
+        raise("no widget accepted here  #{types} / #{type}") unless types.first==type || types.last==type 
+      end
+    else
+      layout.define_singleton_method(:accept?) do |type| 
+        raise("no widget accepted here  #{types} / #{type}") unless types.any? { |a| a==type }
+      end
+    end
+  end
+  def _accept?(type)
+    w=@lcur.last
+    w.accept?(type) if w.respond_to?(:accept?)
+  end  
+  
   def _nocodeeeeeeeeeee() end
 
 
@@ -155,6 +180,7 @@ module Ruiby_dsl
   # Use it for cell in table, notebook  : table { row { cell(box { });... }; ... }
   def box() 
     box=Gtk::Box.new(:vertical,2)
+    _set_accepter(box,:layout,:widget)
     @lcur << box
     yield
     autoslot()
@@ -177,6 +203,7 @@ module Ruiby_dsl
     valign = Gtk::Alignment.new(0,0,0,0)
     @lcur.last.pack_start(valign, :expand => true, :fill => false, :padding => 0)
     vbox=Box.new(:vertical, 0)
+    _set_accepter(vbox,:layout,:widget)
     valign.add(vbox)
     @lcur << vbox
     yield
@@ -219,6 +246,7 @@ module Ruiby_dsl
     if add1
      _pack(parent,box,expand)
     end
+    _set_accepter(box,:layout,:widget)
     @lcur << box
     yield
     autoslot() # pack last widget before closing box
@@ -370,11 +398,11 @@ module Ruiby_dsl
 
   # give a tooltip to last widget created. 
   def tooltip(value="?") 
-    if @current_widget && value && value.size>0
+    if @current_widget && @current_widget.respond_to?(:set_tooltip_markup)
       @current_widget.set_tooltip_markup(value) 
       @current_widget.has_tooltip=true
     else
-      error("tooltip #{value}: there are no current widget!") 
+      error("tooltip : '#{value[0..30]}' : there are no current widget or it cannot contain ToolTip !") 
     end
   end
 
@@ -437,12 +465,18 @@ module Ruiby_dsl
       raise("file #{name} not exist");
     end
   end
-
+  def set_accepter(layout,*types)
+    layout.define_singleton_method(:accept?) do |type| 
+      types.any? { |a| a==type }
+    end
+  end
+  
   ############### Commands
 
   # common widget property  applied for (almost) all widget. 
   # options are last argument of every dsl command, see apply_options
   def attribs(w,options)
+      _accept?(:widget) 
       #p options if options && options.size>0
       apply_options(w,options)
       autoslot(w)  # slot() precedent widget if exist and not already sloted, and declare this one as the precedent
@@ -454,7 +488,9 @@ module Ruiby_dsl
   #   :size=> [10,10], 
   #   :width=>100, :heigh=>200,
   #   :margins=> 10
-  #   :bg=>'#FF00AA",:fg=> Gdk::Color:RED,
+  #   :bg=>'#FF00AA",
+  #   :fg=> Gdk::Color:RED,
+  #   :tooltip=> "Hello...",
   #   :font=> "Tahoma bold 32"
   # )
   def apply_options(w,options)
@@ -465,6 +501,10 @@ module Ruiby_dsl
       w.override_background_color(:normal,color_conversion(options[:bg])) if options[:bg] 
       w.override_color(:normal,color_conversion(options[:fg]))            if options[:fg] 
       w.override_font(Pango::FontDescription.new(options[:font]))         if options[:font]
+      if options[:tooltip]
+        w.set_tooltip_markup(options[:tooltip])
+        w.has_tooltip=true
+      end
       w
   end
   def color_conversion(color)
@@ -475,6 +515,10 @@ module Ruiby_dsl
       else
         raise "unknown color : #{color.inspect}"
     end
+  end
+  def color_html(color,opacity=1)
+    c=color_conversion(color)
+    [c.red,c.green,c.blue,opacity>1 ? 1 : opacity<0 ? 0 : opacity]
   end
   # parse color from #RRggBB html format
   def html_color(str) ::Gdk::Color.parse(str) end
@@ -559,74 +603,53 @@ module Ruiby_dsl
   # horizontal toolbar of icon button and/or separator
   # if icon name contain a '/', second last is  tooltip text
   # Usage: 
-  #   htoolbar(["text/tooltip", proc { },"separator" => "", ....]
-  def htoolbar(items,options={})
+  #   htoolbar { toolbat_button("text/tooltip" { } ; toolbar_separator ; ... } 
+  def htoolbar(options={})
     b=Toolbar.new
     b.set_toolbar_style(Toolbar::Style::ICONS)
-    i=0
-    items.each {|name_tooltip,v| 
-      name,tooltip=name_tooltip,nil
-      if ((ar=name_tooltip.split('/')).size>1)
-        name,tooltip=*ar
-        tooltip="  #{tooltip.capitalize}  "
-      end
-      iname=get_icon(name)
-      w=if iname
-        Gtk::ToolButton.new(:stock_id => iname).tap { |but|
-          but.signal_connect("clicked") { v.call rescue error($!) } if v
-          but.set_tooltip_text(tooltip) if tooltip
-        }
-      elsif name=~/^sep/i
-        Gtk::SeparatorToolItem.new        
-      elsif name=~/^right-(.*)/i
-        Gtk::ToolButton.new(:stock_id => get_icon($1)).tap { |but|
-          but.signal_connect("clicked") { v.call rescue error($!) } if v
-          but.set_tooltip_text(tooltip) if tooltip
-        }
-      else
-        puts "=======================\nUnknown icone : #{name}\n====================="
-          puts "Icones dispo: #{Stock.constants.map { |ii| ii.downcase }.join(", ")}"
-        Gtk::ToolButton.new(:stock_id => Stock::MISSING_IMAGE)
-      end
-      if w
-        b.insert(w,i)
-      end
-      i+=1
-     }
+    _set_accepter(b,:toolb)
+    @toolbarIndex=0
+    @lcur << b
+    yield
+    @lcur.pop
+    i=0    
     attribs(b,options)
+    sloti(b)
   end 
   
+  def toolbar_button(name,tooltip=nil,&blk)
+      _accept?(:toolb)
+      iname=get_icon(name)
+      
+      w=Gtk::ToolButton.new(:stock_id => iname)
+      w.signal_connect("clicked") { blk.call rescue error($!) } if blk
+      w.set_tooltip_text(tooltip) if tooltip
+      
+      @lcur.last.insert(w,@toolbarIndex)
+      @toolbarIndex+=1
+  end
+  def toolbar_separator()
+      _accept?(:toolb)
+      w=Gtk::SeparatorToolItem.new        
+      @lcur.last.insert(w,@toolbarIndex)
+      @toolbarIndex+=1
+  end
+ 
+  
   # horizontal toolbar of (icone+text)
-  # Usage 1:
-  # htoolbar_with_icontext("dialog_info/text info" => proc {alert(1)},"dialog_error/text error" => proc {alert(2)} )
-  # Usage 2 :
+  #
   # htoolbar_with_icon_text do
   #  button_icon_text "dialog_info","text info" do alert(1) end
-  #  button_icon_text "dialog_error","text error" do alert(2) end
+  #  button_icon_text "sep"
   # end
+  #
   # if icone name start with 'sep' : a vertical separator is drawn in place of touch
   # see sketchi
+  #
   def htoolbar_with_icon_text(conf={})
-    if  block_given?
-      flowi {
-        yield
-      }
-    else
-      flowi {
-        conf.each do |k,v|
-           icon,text=k.split('/',2)
-           if icon !~ /^sep/
-              spacei
-              pclickablie(proc { v.call  }) { stacki { 
-                  label("#"+icon,isize: :dialog) do v.call end 
-                  label text[0,12] 
-             } }
-           else
-              separator
-           end
-        end
-      }
-    end
+    flowi {
+      yield
+    }
   end
   # a button with icon+text vertivcaly aligned,
   # can be call anywhere, and in htool_bar_with_icon_text
@@ -644,7 +667,7 @@ module Ruiby_dsl
   end
   ############### Inputs widgets
 
-  #combo box, decribe  with a Hash choice-text => value-of-choice
+  # combo box, decribe  with a Hash choice-text => value-of-choice
   # choices: array of text choices
   # dfault : text activate or index of text in array
   # bloc ! called when a choice is selected
@@ -652,6 +675,7 @@ module Ruiby_dsl
   # Usage :  combo(%w{aa bb cc},"bb") { |text;index| alert("the choice is #{text} at #{index}") }
   #
   def combo(choices,default=nil,option={},&blk)
+    # TODO Dyn
     w=ComboBoxText.new()
     choices=choices.inject({}) { |h,k| h[k]=h.size ; h} if Array===choices
     choices.each do |text,indice|  
@@ -685,6 +709,7 @@ module Ruiby_dsl
   # calue can be changed by w.set_active(true/false)
   # callback on state change with new value as argument
   def toggle_button(text1,text2=nil,value=false,option={},&blk)
+    # TODO Dyn
     text2 = "- "+text1 unless text2
     b=ToggleButton.new(text1);
     b.signal_connect("clicked") do |w,e| 
@@ -720,6 +745,7 @@ module Ruiby_dsl
   # create a liste of radio button, horizontaly disposed
   # value is the indice of active item (0..(n-1)) at creation time
   def hradio_buttons(ltext=["empty!"],value=-1)
+    # TODO Dyn
     flow(false) {
       b0=nil
       ltext.each_with_index {|t,i|
@@ -746,6 +772,7 @@ module Ruiby_dsl
   def hradio_buttons(ltext=["empty!"],value=-1) _radio_buttons(:horizontal,ltext,value) end
   
   def _radio_buttons(sens,ltext=["empty!"],value=-1)
+    # TODO Dyn
     b0=nil
     s=var_box(sens,{},false) {
       ltext.each_with_index {|t,i|
@@ -819,6 +846,7 @@ module Ruiby_dsl
   # create a integer text entry for keyboed input
   # option must define :min :max :by for spin button
   def fentry(value,option={},&blk)
+    # TODO Dyn
     w=SpinButton.new(option[:min].to_f,option[:max].to_f,option[:by].to_f)
     w.set_numeric(true)
     w.set_value(value ? value.to_f : 0.0)
@@ -830,7 +858,7 @@ module Ruiby_dsl
     w
   end
   
-  # show a label and a entry in a  flow. entrey widget is returned
+  # show a label and a entry in a  flow. entry widget is returned
   # see fields()
   def field(tlabel,width,value,option={},&blk)
     e=nil
@@ -857,8 +885,8 @@ module Ruiby_dsl
     end
   end
   
-  def _dyn_islider(var,options={min:0,max:100,by:1}) 
-    w=  block_given? ?  islider(var.value.to_i,options) : islider(var.value.to_i,options) { |v| var.value=v }
+  def _dyn_islider(var,options={min:0,max:100,by:1},&blk) 
+    w=  block_given? ?  islider(var.value.to_i,options,&blk) : islider(var.value.to_i,options) { |v| var.value=v }
     var.observ { |v| w.set_value(v.to_i) }
     w
   end
@@ -867,8 +895,9 @@ module Ruiby_dsl
   # option must define :min :max :by for spin button
   # current value can be read by w.value
   # if bloc is given, it with be call on each change, with new value as parameter
-  # if value is a DynVar, slider will be binded to the DynVar : each cahnge ofthe var will update the slider,
-  # each change of the slider is notifies to the DynVar.
+  # if value is a DynVar, slider will be binded to the DynVar : each change of the var value will update the slider,
+  # of no block given,each change of the slider is notifies to the DynVar, else change will
+  # only call the block.
   def islider(value=0,option={},&b)
     if DynVar === value
       return _dyn_islider(value,option,&b)
@@ -904,7 +933,8 @@ module Ruiby_dsl
   # for interactive actions
   # See test.rb fo little example.
   # See samples/draw.rb for a little vector editor...
-  def canvas(width,height,option={})
+  def canvasOld(width,height,option={})
+    # TODO on_handlers
     autoslot()
     w=DrawingArea.new()
     w.width_request=width
@@ -941,9 +971,137 @@ module Ruiby_dsl
     end
     w
   end
+  
+  # Create a drawing area, for pixel/vectoriel draw
+  # for interactive actions see test.rb fo little example.
+  #
+  # @cv=canvas(width,height,opt) do
+  #    on_canvas_draw { |w,ctx|  myDraw(w,ctx) }
+  #    on_canvas_button_press {|w,e|  [e.x,e.y]  } # must return a object which will given to next move/release callback
+  #    on_canvas_button_motion {|w,e,o| n=[e.x,e.y] ; ... ; n }
+  #    on_canvas_button_release {|w,e,o| ... }
+  # end
+  # def myDraw(w,ctx)
+  #     w.init_ctx
+  #     w.draw_line([x1,y1,....],color,width)
+  #     w.draw_point(x1,y1,color,width)
+  #     w.draw_polygon([x,y,...],colorFill,colorStroke,widthStroke)
+  #     w.draw_circle(x,y,r,colorFill,colorStroke,widthStroke)
+  #     w.draw_image(x,y,filename)
+  #     .... any gtk Cairo drawing commands...
+  # end
+
+  def canvas(width,height,option={})
+    # TODO on_handlers
+    autoslot()
+    w=DrawingArea.new()
+    w.width_request=width
+    w.height_request=height
+    w.events |=  ( ::Gdk::Event::Mask::BUTTON_PRESS_MASK | ::Gdk::Event::Mask::POINTER_MOTION_MASK | ::Gdk::Event::Mask::BUTTON_RELEASE_MASK)
+    
+    @currentCanvas=w
+    @lcur << HandlerContainer.new
+    yield
+    @lcur.pop
+    @currentCanvas=nil
+
+    attribs(w,option) 
+    def w.set_memo(memo) @memo=memo end
+    def w.get_memo(memo) @memo end
+    w.set_memo(nil)    
+    
+    def w.redraw() 
+      self.queue_draw_area(0,0,self.width_request,self.height_request)
+    end
+    def w.init_ctx(color1="#000000",color2="#FFFFFF",width=2)
+        cr=@currentCanvasCtx.last
+        cr.set_line_join(Cairo::LINE_JOIN_ROUND)
+        cr.set_line_cap(Cairo::LINE_CAP_ROUND)
+        cr.set_line_width(width)
+        c=color_html(color2)
+        cr.set_source_rgba(c.red,c.green,c.blue,1)
+        cr.paint
+        @default_paint_color=color_html(color1)
+        @default_paint_width=width
+    end
+    
+    # TODO canvas draw primitives...  to be taken from draw/canvas.rb
+    def w.draw_line(lxy,color=nil,width=nil) 
+    end
+    def w.draw_point(x,y,color=nil,width=nil)
+    end
+    def w.draw_polygon(lxy,colorFill=nil,colorStroke=nil,widthStroke=nil)
+    end
+    def w.draw_circle(x,y,r,colorFill=nil,colorStroke=nil,widthStroke=nil)
+    end
+    def w.draw_image(x,y,filename,sx=1,sy=1)
+    end
+    def w.rotate(lxy,x,y,angle)
+    end
+    def w.scale(lxy,x,y,cx,cy=nil)
+    end
+    w
+  end
+  
   # update a canvas
   def force_update(canvas) canvas.queue_draw unless  canvas.destroyed?  end
-
+  
+  # define action on button_press
+  def on_canvas_button_press(&blk)
+    _accept?(:handler)
+    @currentCanvas.signal_connect('button_press_event')   { |wi,e| 
+      w.set_memo(blk.call(wi,e))  rescue error($!)
+      force_update(wi) 
+    }  
+  end
+  # define action on mouse button press on current canvas definition
+  def on_canvas_button_release(&blk)
+    _accept?(:handler)
+    @currentCanvas.signal_connect('button_release_event') { |w,e| 
+      blk.call(w,e,w.get_memo) rescue error($!))
+      w.set_memo(nil)
+      force_update(w) 
+    }  
+  end
+  # define action on mouse button motion on current canvas definition
+  def on_canvas_button_motion(&blk )
+    _accept?(:handler)
+    @currentCanvas.signal_connect('motion_notify_event')  { |w,e| 
+      w.set_memo(blk.call(wi,e,w.get_memo) rescue error($!)  
+      force_update(wi)
+    }
+  end
+  # define action on  keyboard press on current canvas definition
+  def on_canvas_key_press(&blk)
+    _accept?(:handler)
+    @currentCanvas.signal_connect('key_press_event')  { |wi,e| 
+    w.set_memo(blk.call(wi,e) rescue error($!)
+    force_update(wi) 
+  end
+  
+  # define the drawing on current canvas definition
+  def on_canvas_draw(&blk)
+    _accept?(:handler)
+    @currentCanvas.signal_connect(  'draw' ) do |w1,cr| 
+      @currentCanvasCtx=[w1,cr]
+      cr.save do
+        cr.set_line_join(Cairo::LINE_JOIN_ROUND)
+        cr.set_line_cap(Cairo::LINE_CAP_ROUND)
+        cr.set_line_width(2)
+        cr.set_source_rgba(1,1,1,1)
+        cr.paint
+        begin
+          yield(w1,cr) 
+        rescue Exception => e
+         bloc=option[:expose]
+         option.delete(:expose)
+         after(1) { error(e) }
+         after(3000) {  puts "reset expose bloc" ;option[:expose] = nil }
+        end  
+      end
+    end
+  end  
+  
   #  define a plot zone, with several curves :
   #  pl=plot(400,200,{
   #      "curve1" => {
@@ -954,15 +1112,16 @@ module Ruiby_dsl
   # this methods are added :
   # * pl.set_data(name,data) : replace current values par a new list of point [ [y,x],....] for curve named 'name'
   # * pl.get_data(name) 
+  # * pl.add_curve(name,{data:...}) : add a curve
+  # * pl.delete_curve(name) : delete a curve  
   # * pl.add_data(name,pt)  : add a point at the end of the curve
   # * pl.scroll_data(name,value)  : add a point at last and scroll if necessary (act as oscilloscope)
   # see samples/plot.rb
   def plot(width,height,curves,config={})
-     cv=canvas(width,height,
-          :mouse_down => proc do |w,e|   
-          end,
-          :expose => proc do |w,ctx|  cv.expose(ctx) end
-     )
+     cv=canvas(width,height) do
+       on_canvas_draw { |w,ctx| w.expose(ctx) }
+       on_canvas_button_press { |w,event| }
+     end
      def cv.add_curve(name,config) 
         c=config.dup
         c[:data] ||= [[0,0],[100,100]]
@@ -977,6 +1136,10 @@ module Ruiby_dsl
         c[:yb] = 1.0*height_request+c[:yminmax][0]*c[:xa]
         @curves||={}
         @curves[name]=c
+     end
+     def cv.delete_curve(name) 
+        @curves.delete(name)
+        redraw
      end
      def cv.expose(ctx) 
         @curves.values.each do |c|
@@ -1020,9 +1183,12 @@ module Ruiby_dsl
   ############################ table
   # create a container for table-disposed widgets. this is not a grid!
   # table(r,c) { row { cell(w) ; .. } ; ... }
-  def table(nb_col,nb_row,config={})
+  # or this form :
+  # table { cell(w) ; cell(w2) ; next_row ; cell(w3), cell(w4) }
+  def table(nb_col=0,nb_row=0,config={})
     table = Gtk::Table.new(nb_row,nb_col,false)
     table.set_column_spacings(config[:set_column_spacings]) if config[:set_column_spacings]
+    _set_accepter(table,:row,:cell,:widget)
     @lcur << table
     @ltable << { :row => 0, :col => 0}
     yield
@@ -1040,10 +1206,15 @@ module Ruiby_dsl
   # end
   def row()
     autoslot()
+    _accept?(:row)
     @ltable.last[:col]=0 # will be increment by cell..()
     yield
     @ltable.last[:row]+=1
   end 
+  def next_row()
+    @ltable.last[:col]=0 # will be increment by cell..()
+    @ltable.last[:row]+=1
+  end
   # a cell in a row/table. take all space, centered
   def  cell(w)  cell_hspan(1,w)   end
   # a cell in a row/table. take space of n cells, horizontaly
@@ -1052,6 +1223,7 @@ module Ruiby_dsl
   def  cell_vspan(n,w) cell_hvspan(0,n,w) end 
   # a cell in a row/table. take space of n x m cells, horizontaly x verticaly 
   def  cell_hvspan(n,m,w) 
+    _accept?(:cell)
     razslot();
     @lcur.last.attach(w,
        @ltable.last[:col],@ltable.last[:col]+n,
@@ -1181,6 +1353,7 @@ module Ruiby_dsl
   def notebook() 
     nb = Notebook.new()
     slot(nb)
+    _set_accepter(nb,:tab)
     @lcur << nb
     yield
     @lcur.pop
@@ -1189,6 +1362,7 @@ module Ruiby_dsl
   # a page widget. only for notebook container.
   # button can be text or icone (if startin by '#', as label)
   def page(title,icon=nil)
+    _accept?(:tab)
     if icon && icon[0,1]=="#" 
       l = Image.new(:stock => get_icon(icon[1..-1]),:size => :button); 
     else
@@ -1205,6 +1379,7 @@ module Ruiby_dsl
   def popup(w=nil)
     w ||= @lcur.last() 
     ppmenu = Gtk::Menu.new
+    _set_accepter(ppmenu,:popupitem)
     @lcur << ppmenu 
     yield
     @lcur.pop
@@ -1217,12 +1392,14 @@ module Ruiby_dsl
   end
   # a button in a popup
   def pp_item(text,&blk)
+    _accept?(:popupitem)
     item = Gtk::MenuItem.new(text)
     item.signal_connect('activate') { |w| blk.call() }
     @lcur.last.append(item)
   end
   # a bar separator in a popup
   def pp_separator()
+    _accept?(:popupitem)
     item = Gtk::SeparatorMenuItem.new()
     @lcur.last.append(item)
   end
@@ -1232,46 +1409,51 @@ module Ruiby_dsl
   # create a application menu. must contain menu() {} :
   # menu_bar {menu("F") {menu_button("a") { } ; menu_separator; menu_checkbutton("b") { |w|} ...}}
   def menu_bar()
-    @menuBar= MenuBar.new
-    ret=@menuBar
+    menuBar= MenuBar.new
+    _set_accepter(menuBar,:menu)
+    @lcur << menuBar
     yield
-    sloti(@menuBar)
-    @menuBar=nil
-    ret
+    @lcur.pop
+    sloti(menuBar)
+    menuBar
   end
 
   # a vertial drop-down menu, only for menu_bar container
   def menu(text)
-    raise("menu(#{text}) without menu_bar {}") unless @menuBar
-    @filem = MenuItem.new(text.to_s)
-    @menuBar.append(@filem)
-    @mmenu = Menu.new()
+    _accept?(:menu)
+    filem = MenuItem.new(text.to_s)
+    mmenu = Menu.new()
+    _set_accepter(mmenu,:menuitem)
+    @lcur << mmenu
     yield
-    @filem.submenu=@mmenu
-    show_all_children(@mmenu)
-    @filem=nil
-    @mmenu=nil
+    @lcur.pop
+    filem.submenu=mmenu
+    show_all_children(mmenu)
+    mmenu
   end
 
   # create an text entry in a menu
   def menu_button(text="?",&blk)
-    raise("menu_button(#{text}) without menu('ee') {}") unless @mmenu
+    _accept?(:menuitem)
     item = MenuItem.new(text.to_s)
-    @mmenu.append(item)
+    @lcur.last.append(item)
     item.signal_connect("activate") { blk.call(text)  rescue error($!) }
   end
 
   # create an checkbox  entry in a menu
   def menu_checkbutton(text="?",state=false,&blk)
-    raise("menu_button(#{text}) without menu('ee') {}") unless @mmenu
+    _accept?(:menuitem)
     item = CheckMenuItem.new(text,false)
     item.active=state
-    @mmenu.append(item)
+    @lcur.last.append(item)
     item.signal_connect("activate") {
       blk.call(item,text) rescue error($!.to_s)
     } 
   end
-  def menu_separator() @mmenu.append( SeparatorMenuItem.new ) end
+  def menu_separator() 
+    _accept?(:menuitem)
+    @lcur.last.append( SeparatorMenuItem.new ) 
+  end
 
   ############################## Accordion
 
@@ -1279,8 +1461,10 @@ module Ruiby_dsl
   # must contain aitem() which must containe alabel() :
   # accordion { aitem(txt) { alabel(lib) { code }; ...} ... }
   def accordion() 
+    _accept?(:layout)
     @slot_accordion_active=nil #only one accordion active by window!
     w=stack { stacki {
+      _set_accepter(@lcur.last,:aitem,:layout,:widget)
       yield
     }}
     separator
@@ -1290,8 +1474,10 @@ module Ruiby_dsl
   # must contain aitem() which must containe alabel() :
   # accordion { aitem(txt) { alabel(lib) { code }; ...} ... }
   def haccordion() 
+    _accept?(:layout)
     @slot_accordion_active=nil #only one accordion active by window!
     w=flow { flowi {
+      _set_accepter(@lcur.last,:aitem,:layout,:widget)
       yield
     }}
     separator
@@ -1301,6 +1487,7 @@ module Ruiby_dsl
   #  bloc is evaluate for create/view a list of alabel :
   #  aitem(txt) { alabel(lib) { code }; ...}
   def aitem(txt,&blk) 
+    _accept?(:aitem)
     b2=nil
     b=button(txt) {
           clear_append_to(@slot_accordion_active) {} if @slot_accordion_active
@@ -1316,6 +1503,7 @@ module Ruiby_dsl
   # bloc is evaluate on user click. must be in aitem() bloc :
   # accordion { aitem(txt) { alabel(lib) { code }; ...} ... }
   def alabel(txt,&blk)
+    _accept?(:aitem)
     l=nil
     pclickable(proc { blk.call(l) if blk} ) { l=label(txt) }
   end
@@ -1372,6 +1560,7 @@ module Ruiby_dsl
       puts '******** gtksourceview3 not installed!, please use text_area ************' 
       return
     end
+    _accept?(:widget)    
     args[:width]  = 400 unless args[:width]
     args[:height] = 300 unless args[:height]
     change_proc = proc { }
@@ -1457,7 +1646,6 @@ module Ruiby_dsl
     end
     c.set_time(time)
     attribs(c,options)
-
   end
   
   # Show a video in a gtk widget.
@@ -1546,6 +1734,7 @@ module Ruiby_dsl
   # click callback  is definied by a method name.
   # see pclickable for callback by closure.
   def clickable(method_name,&b) 
+    _accept?(:layout)
     eventbox = Gtk::EventBox.new
     eventbox.events =Gdk::Event::Mask::BUTTON_PRESS_MASK
     ret=_cbox(true,eventbox,{},true,&b) 
@@ -1561,6 +1750,7 @@ module Ruiby_dsl
   #
   # bloc is evaluated in a stack container
   def pclickable(aproc=nil,options={},&b) 
+    _accept?(:layout)
     eventbox = Gtk::EventBox.new
     eventbox.events = Gdk::Event::Mask::BUTTON_PRESS_MASK
     ret=_cbox(true,eventbox,{},true,&b) 
@@ -1569,15 +1759,17 @@ module Ruiby_dsl
     apply_options(eventbox,options)
     ret
   end
-  # set a background to contaned container
+  # set a background color to current container
   # Usage : stack {  background("#FF0000")  { flow { ...} } }
   def background(color,options={},&b) 
+    _accept?(:layout)
     eventbox = Gtk::EventBox.new
     ret=_cbox(true,eventbox,{},true,&b) 
     apply_options(eventbox,{bg: color}.merge(options))
     ret
   end
   def backgroundi(color,options={},&b) 
+    _accept?(:layout)
     eventbox = Gtk::EventBox.new
     ret=_cbox(false,eventbox,{},true,&b) 
     apply_options(eventbox,{bg: color}.merge(options))
@@ -1586,6 +1778,7 @@ module Ruiby_dsl
   # as pclickable, but container is a stacki
   # pclickablei(proc { alert("e") }) { label("click me!") }
   def pclickablie(aproc=nil,options={},&b) 
+    _accept?(:layout)
     eventbox = Gtk::EventBox.new
     eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
     ret=_cbox(false,eventbox,{},true,&b) 
@@ -1920,6 +2113,7 @@ module Ruiby_dsl
 
   ############################ define style !! Warning: specific to gtk
   #
+  
   # not ready!!!
   def def_style(string_style=nil)
     unless string_style
@@ -1936,6 +2130,11 @@ module Ruiby_dsl
       error "Error loading style : #{e}\n#{string_style}"
     end
   end
+  
+  # make a snapshot raster file of current window
+  # can be called by user. 
+  # Is called by mainloop if string 'take-a-snapshot' is present in ARGV
+  # only for Windows !!!
   def snapshot(filename=nil)
      return unless  RUBY_PLATFORM =~ /in.*32/
      require 'win32/screenshot'
