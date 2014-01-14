@@ -26,6 +26,11 @@ NEW : 0.135.0 !!  01-06-2014
 - Data binding for entry/slider/check_button : see samples/dyn.rb. Data are saved at exit() (with Ruiby stock capacity)
 - Object data binding ! : Struct like composed of DynVar in place of ruiby values
 
+Current:
+- check dsl syntaxe : chack each dsl command validity in  his closure context
+- canvas 'closurifier' : callback dsl command, in canvas closure
+- toolbar 'closurifier' 
+- canvas instruments : draw primitives,  move/scale/rotate vector
 
 TODO for 1.0 :
 - Data binding for comboBox, radiobutton, text_area, list, grid ...
