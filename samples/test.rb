@@ -29,13 +29,13 @@ def component()
   after(1000) {puts "\n\n\n"  ; Gem.loaded_specs.each {|name,gem| puts "  #{gem.name}-#{gem.version}"} }
   mlog 'before Component'
   stack do
-    htoolbar_with_icon_text(
-      "open/Open..."=>proc { edit(__FILE__) },
-      "save/Save.."=> proc { alert("Save what ?")},
-      "sep" => nil,
-      "undo/Undo"=> proc { alert( "undo")} ,
-      "redo/Redo"=>proc { alert("redo") }
-    )
+    htoolbar_with_icon_text do
+      button_icon_text("open","Open...") { edit(__FILE__) }
+      button_icon_text("save","Save.."){ alert("Save what ?")}
+      button_icon_text("sep")
+      button_icon_text("undo","Undo") { alert( "undo")} 
+      button_icon_text("redo","Redo") { alert("redo") }
+    end
     sloti(label( <<-EEND ,:font=>"Tahoma bold 12"))
      This window is test & demo of Ruiby capacity. Ruby is #{RUBY_VERSION}, Ruiby is #{Ruiby::VERSION}, 
      Gtk is  #{Gtk::VERSION.join(".")} HMI code take #{File.read(__FILE__).split("comp"+"onent"+"()")[1].split(/\r?\n/).select {|l| l !~ /\s*#/ && l.strip.size>3}.size} LOC (without blanc lines,comment line,'end' alone)
@@ -112,8 +112,8 @@ end
           tooltip("Please choose the <b>drawing</b> pen <i>width</i>...")
         end
         @ldraw=[] ; @color= html_color("#FF4422");
-        cv=canvas(200,100,{ 
-          :expose     => proc { |w,cr|  
+        cv=canvas(200,100) do
+          on_canvas_draw { |w,cr|  
               @ldraw.each do |line|
                 next if line.size<3
                 color,ep,pt0,*poly=*line
@@ -123,17 +123,17 @@ end
                 poly.each {|px|    cr.line_to(*px) } 
                 cr.stroke  
               end
-          },          
-          :mouse_down => proc { |w,e|   
-              no= [e.x,e.y] ;  @ldraw << [@color,@epaisseur.value,no] ;  no    
-          },
-          :mouse_move => proc { |w,e,o| 
-              no= [e.x,e.y] ; (@ldraw.last << no) if no[0]!=o[0] || no[1]!=o[1] ; no 
-          },
-          :mouse_up   => proc { |w,e,o| 
-              no= [e.x,e.y] ; (@ldraw.last << no) ; no
           }
-        })
+          on_canvas_button_press{ |w,e|   
+              pt= [e.x,e.y] ;  @ldraw << [@color,@epaisseur.value,pt] ;  pt
+          }
+          on_canvas_button_motion { |w,e,o| 
+              pt= [e.x,e.y] ; (@ldraw.last << pt) if pt[0]!=o[0] || no[1]!=o[1] ; no 
+          }
+          on_canvas_button_release  { |w,e,o| 
+              pt= [e.x,e.y] ; (@ldraw.last << pt)
+          }
+        end
         stacki {
           label("Popup test...")
           popup(canvas(50,200)) {
