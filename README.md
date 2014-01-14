@@ -31,6 +31,7 @@ Current:
 - canvas 'closurifier' : callback dsl command in canvas closure
 - toolbar 'closurifier' 
 - canvas instruments : draw primitives,  move/scale/rotate vector
+- TODO : update all canvas,toolbar uses in samples and rspec 
 
 TODO for 1.0 :
 - Data binding for comboBox, radiobutton, text_area, list, grid ...
