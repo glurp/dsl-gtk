@@ -1,5 +1,6 @@
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com> LGPL
-require 'Ruiby'
+#require 'Ruiby'
+require_relative '../lib/Ruiby'
 
 Ruiby.app width: 300,height: 200,title:"UpCase" do
   chrome(false)
@@ -8,14 +9,14 @@ Ruiby.app width: 300,height: 200,title:"UpCase" do
   ctx=make_StockDynObject("simpl1",{"value" => "0" , "len" => 10, "res"=> ""})
   stack do
     flowi {
-      sloti(toggle_button("D",false) {|v| chrome(v)})
+      sloti(toggle_button("D","ND",false,tooltip: "Window Frame border..." ) {|v| chrome(v)})
       frame("Convertissor",margins: 20) do
        flowi { 
-         labeli "Value: " ,width: 200    
-         entry(ctx.value)  
+         labeli "Value: " ,width: 200 
+         entry(ctx.value,30,tooltip: "String to convert ro Upcase...")  
          button("reset") { ctx.value.value="" }}
        separator
-       flowi { labeli "len: " ,width: 200    ;    entry(ctx.len)  }
+       flowi { labeli "len: " ,width: 200    ;    entry(ctx.len,10,tooltip: "String length value")  }
        flowi { labeli " " ,width: 200        ;    islider(ctx.len)  }
        flowi { labeli "Resultat: " ,width: 200 ;  entry(ctx.res)  }
       end
