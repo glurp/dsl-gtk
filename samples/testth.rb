@@ -16,13 +16,6 @@ class RubyApp < Ruiby_gtk
 	
 	def component()        
 	  stack do
-		sloti(htoolbar({"open/ourir fichier"=>nil,"close/fermer le fichier"=>nil,
-			"undo/defaire"=>nil,"redo/refaire"=>proc { alert("e") },"ee"=>nil }))
-		sloti(label( <<-EEND
-		 Hello, this is Thread test !         
-		EEND
-		))
-		separator
 		flow {
 		  stack { @lab=stacki { } }
 		  separator
