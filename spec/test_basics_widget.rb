@@ -135,32 +135,6 @@ describe Ruiby do
     @win.sleeping(100,"Verify islider")
     w.should be_a_kind_of(Gtk::Scale)
  end
- it "create a canvas" do
-    w=nil
-    @win.create { stack {   w=canvas(100,100) {} } }
-    w.should be_a_kind_of(Gtk::DrawingArea)
- end
- it "create a canvas with handlers" do
-    w=nil
-    @win.create { stack {   w=canvas(100,100) do
-          on_canvas_draw { |w,cr|  
-            w.init_ctx
-            w.draw_line([0,0, 100,100, 100,0,  0,0,  0,100,  100,100])
-          }
-          on_canvas_button_press{ |w,e|   
-            puts "button press !"
-            [e.x,e.y]
-          }
-          on_canvas_button_motion { |w,e,o| 
-            puts "motion #{e.x} #{e.y}  with memo=#{o.inspect}\n"
-            [e.x,e.y]
-          }
-          on_canvas_button_release  { |w,e,o| 
-            puts "button release ! with memo=#{o.inspect}"
-          }
-    end    } }
-    @win.sleeping(3000,"Verify canvas")
- end
  it "create a combo box" do
     w=nil
     @win.create { stack {    
