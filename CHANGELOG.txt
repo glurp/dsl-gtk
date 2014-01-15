@@ -1,4 +1,12 @@
-0.135.18
+0.135.19
+    test_composites.rb : nop
+    test_basics_widget.rb : move canvas tests
+    test_all.rb : add canvas test
+    ruiby_dsl3.rb : debug draw primitives
+    rspec_helper.rb : windows size
+    gol2.rb : pld
+    gol.rb : old
+    canvas.rb : old
     test_basics_widget.rb : image/label test : test file exists
     README.md : todo
     test_basics_widget.rb : update for new canvas syntaxe
