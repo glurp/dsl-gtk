@@ -15,7 +15,7 @@ describe Ruiby do
       row { cell(button("ee")) ; cell(button("ee"))}
       row { cell(button("ee")) ; cell(button("ee"))}
     } } }
-    @win.sleeping(100,"Verify canvas")
+    @win.sleeping(100,"Verify table")
      w.should be_a_kind_of(Gtk::Table)
  end
   it "create a table with  cell h/v span" do
