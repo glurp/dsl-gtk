@@ -37,7 +37,7 @@ class TestRuibyWindows < Ruiby_gtk
 end
 
 def make_window
-	w=TestRuibyWindows.new("RSpec",300,400)
+	w=TestRuibyWindows.new("RSpec",400,500)
 	Ruiby.update
 	w
 end
