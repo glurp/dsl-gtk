@@ -26,7 +26,7 @@ Ruiby.app width: 1000, height: 700, title: "Game of Analogic Life" do
       @edit=entry(@formula) 
       buttoni("enter")  { instance_eval "  def formula(opoids,poids)  #{@edit.text} ; end" }
     }
-    @cv=canvas(self.default_width,self.default_height,
+    @cv=canvasOld(self.default_width,self.default_height,
           :mouse_down => proc do |w,e|   
             no= [e.x/PASX,e.y/PASY] ;  
             c=(@mat[no.first][no.last]>50 ? 0 : 100)            
