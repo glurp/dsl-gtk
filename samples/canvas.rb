@@ -77,7 +77,7 @@ end
             sloti(button("Test...") { execute() })
           }
           stack { 
-              @canvas= canvas(400,400,{ 
+              @canvas= canvasOld(400,400,{ 
                 :expose     => proc { |w,cr|   redraw(w,cr) }
               }) 
            }           
