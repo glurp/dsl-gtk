@@ -20,7 +20,7 @@ Ruiby.app width: 400, height: 300, title: "Game of Life" do
       @edit=entry(@formula) 
       buttoni("enter")  { instance_eval "def formula(old,nb_neighboring) ; #{@edit.text} ; end" }
     }
-    @cv=canvas(self.default_width,self.default_height,
+    @cv=canvasOld(self.default_width,self.default_height,
           :mouse_down => proc do |w,e|   
             no= [e.x/PASX,e.y/PASY] ;  @mat[no.first][no.last]=! @mat[no.first][no.last]; no    
           end,
