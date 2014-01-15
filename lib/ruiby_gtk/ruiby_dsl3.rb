@@ -507,7 +507,7 @@ module Ruiby_dsl
       end
       w
   end
-  def self.color_conversion(color)
+  def color_conversion(color)
     case color 
       when ::Gdk::RGBA then color
       when String then color_conversion(::Gdk::Color.parse(color))
@@ -516,8 +516,11 @@ module Ruiby_dsl
         raise "unknown color : #{color.inspect}"
     end
   end
-  def self.color_html(color,opacity=1)
-    c=color_conversion(color)
+  # parse html color ( "#FF00AA" ) to rgba array, useful
+  # for canvas vectors styles
+  def self.cv_color_html(html_color,opacity=1)
+    c=::Gdk::Color.parse(html_color)
+    #::Gdk::RGBA.new(c.red/65000.0,c.green/65000.0,c.blue/65000.0,1)
     [c.red,c.green,c.blue,opacity>1 ? 1 : opacity<0 ? 0 : opacity]
   end
   # parse color from #RRggBB html format
@@ -1013,36 +1016,106 @@ module Ruiby_dsl
     def w.redraw() 
       self.queue_draw_area(0,0,self.width_request,self.height_request)
     end
-    def w.init_ctx(color1="#000000",color2="#FFFFFF",width=1)
+    def w.app_window()  @app_window end
+    def w.set_window(r) @app_window=r end
+    w.set_window(self)
+    def w.init_ctx(color_fg="#000000",color_bg="#FFFFFF",width=1)
         w,cr=*@currentCanvasCtx 
         cr.set_line_join(Cairo::LINE_JOIN_ROUND)
         cr.set_line_cap(Cairo::LINE_CAP_ROUND)
         cr.set_line_width(width)
-        c=Ruiby_dsl.color_html(color2)
-        cr.set_source_rgba(*c)
+        cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color_bg))
         cr.paint
-        @default_paint_color=Ruiby_dsl.color_html(color1)
-        @default_paint_width=width
+        cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color_fg))
+        @currentWidth=width
+        @currentColorFg=color_fg
+        @currentColorBg=color_bg
     end
     
-    # TODO canvas draw primitives...  to be taken from draw/canvas.rb
     def w.draw_line(lxy,color=nil,width=nil) 
+        if lxy.size==2 
+          return draw_point(lxy.first,lxy.last,color,width)
+        end
+        _draw_poly(lxy,color|| @currentColorFg,nil,width)
+    end
+    def w.draw_polygon(lxy,colorStroke=nil,colorFill=nil,widthStroke=nil)
+        if lxy.size==2 
+          return draw_point(lxy.first,lxy.last,colorStroke,widthStroke)
+        end
+       colorStroke=@currentColorFg if colorFill.nil? && colorStroke.nil?
+        _draw_poly(lxy,colorStroke,colorFill,widthStroke)
+    end
+    def w._draw_poly(lxy,color_fg,color_bg,width)
         w,cr=@currentCanvasCtx
-       
+        cr.set_line_width(width) if width
+        x0,y0,*poly=*lxy
+        if color_bg
+          cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color_bg))
+          cr.move_to(x0,y0)
+          poly.each_slice(2) {|x,y| cr.line_to(x,y) } 
+          cr.fill
+        end
+        if color_fg
+          cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color_fg))
+          cr.move_to(x0,y0)
+          poly.each_slice(2) {|x,y| cr.line_to(x,y) } 
+          cr.stroke  
+        end
     end
     def w.draw_point(x,y,color=nil,width=nil)
+      width||=@currentWidth
+      draw_line([x,y-width/4, x,y+width/4],color,width)
     end
-    def w.draw_polygon(lxy,colorFill=nil,colorStroke=nil,widthStroke=nil)
+    def w.draw_text(x,y,text,scale=1,color=nil)
+      w,cr=@currentCanvasCtx
+      cr.set_line_width(1)
+      cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color || @currentColorFg ))
+      scale(x,y,scale) {  cr.move_to(0,0); cr.show_text(text) }
     end
-    def w.draw_circle(x,y,r,colorFill=nil,colorStroke=nil,widthStroke=nil)
+    def w.draw_rectangle(x0,y0,w,h,r=0,colorStroke=nil,colorFill=nil,widthStroke=nil)
+      x1, y1 = x0+w, y0+h
+      colorStroke=@currentColorFg if colorFill.nil? && colorStroke.nil?
+      _draw_poly([x0,y0, x1,y0, x1,y1, x0,y1, x0,y0],colorStroke,colorFill,widthStroke)
     end
-    def w.draw_image(x,y,filename,sx=1,sy=1)
+    def w.draw_circle(x0,y0,r,color_bg=nil,color_fg=nil,width=nil)
+        w,cr=@currentCanvasCtx
+        cr.set_line_width(width || @currentWidth )
+        if color_bg
+          color=::Gdk::Color.parse(color_bg)
+          cr.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
+          cr.arc(x0,y0, r, width || @currentWidth , 2*Math::PI)
+          cr.fill
+        end
+        if color_fg
+          color=::Gdk::Color.parse(color_fg)
+          cr.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
+          cr.arc(x0,y0, r, 0 , 2*Math::PI)
+          cr.stroke
+        end
     end
-    def w.rotate(lxy,x,y,angle)
+    def w.draw_image(x,y,filename,sx=1,sy=sx)
+      w,cr=@currentCanvasCtx
+      pxb=w.app_window.get_pixbuf(filename)
+      scale(x,y,sx,sy) { cr.set_source_pixbuf(pxb,0,0) ; cr.paint}
+      [pxb.width,pxb.height]
     end
-    def w.scale(lxy,x,y,cx,cy=nil)
+    def w.scale(cx,cy,ax,ay=nil)
+     ay=ax unless ay
+     w,cr=@currentCanvasCtx
+     cr.translate(cx,cy)
+     cr.scale(ax,ay)
+     yield rescue error $!
+     cr.scale(1.0/ax,1.0/ay)
+     cr.translate(-cx,-cy)
     end
-    w
+    def w.translate(l,dx=0,dy=0) 
+      l.each_slice(2).inject([]) {|l,(x,y)| l <<x+dx; l <<y+dy}
+    end
+    def w.rotate(lxy,x0,y0,angle)
+      sa,ca=Math.sin(angle),Math.cos(angle)
+      l.each_slice(2).inject([]) {|l,(x,y)| l << ((x-x0)*ca-(y-y0)*sa)+x0 ; l << ((x-x0)*sa+(y-y0)*ca)+y0}
+    end
+    
   end
   
   # update a canvas
