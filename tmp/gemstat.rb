@@ -1,6 +1,11 @@
 ﻿# encoding: utf-8
-
-$authors= %w{wycats markbates jimweirich rdaubarede} # seems the most productives...
+# Usage:
+#   update $authors list, and LOCAL_HDOCS (where to put html file generated)
+#   run this on time by hour/days
+#   it create mstat directory and memorise commits counts by project (one file by project)
+#   it create the html file withe webglcode, jquiry code,  3d matrix data (no dependency) ...
+#
+$authors= %w{wycats markbates jimweirich} # seems the most productives...
 $authors1= %w{rdaubarede}
 
 LOCAL_HTDOCS="d:/usr/"
