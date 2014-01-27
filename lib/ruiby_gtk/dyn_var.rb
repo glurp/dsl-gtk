@@ -63,12 +63,12 @@ class DynVar
   def set_name(name) @name=name                            end
   def name() @name                                         end
   def observ(&blk)  @abo[caller] = blk  ; blk.call(@value) end
-  def event()       
+  def do_notification()
     abo=@abo
      value=@value
      gui_invoke_wait { abo.each { |a,b|  b.call(value) } } if @abo.size>0  
   end
-  def value=(v)     @value=v ; event()                     end
+  def value=(v)     @value=v ; do_notification()           end
   def value()       @value                                 end
   def set_as_bool(v) 
     @value=case  @value
@@ -76,7 +76,7 @@ class DynVar
          when String then v ? "1" : ""
          else !!v
     end
-    event()
+    do_notification()
   end
   def get_as_bool() 
     case @value
@@ -98,7 +98,7 @@ def make_DynClass(h={"dummy"=>"?"})
     end
     define_method(:def_init) { h.dup } 
     define_method(:keys) {  h.keys }
-    define_method(:to_h) {  @values.each_with_object({}) { |(k,v),h| h[k]=v.value} }
+    define_method(:to_h) {  @values.each_with_object({}) { |(k,v),h1| h1[k]=v.value} }
     h.each do |key,value|
       define_method(key) { @values[key] }
     end
@@ -114,7 +114,7 @@ def make_StockDynClass(h={"dummy"=>"?"})
     end
     define_method(:def_init) { h.dup } 
     define_method(:keys) {  h.keys }
-    define_method(:to_h) {  @values.each_with_object({}) { |(k,v),h| h[k]=v.value} }
+    define_method(:to_h) {  @values.each_with_object({}) { |(k,v),h1| h1[k]=v.value} }
     h.each do |key,value|
       define_method(key) { @values[key] }
     end
