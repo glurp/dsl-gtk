@@ -17,7 +17,7 @@ class Ruiby_gtk
 		%x{tasklist}.split(/\r?\n/).each { |line| 
 		  ll=line.chomp.split(/\s+/) 
 		  next if ll.length<5
-		  prog,pid,x,y,*l=ll
+		  prog,pid,_,_,*l=ll
 		  hpid[pid]= [prog,l.join(" ")]
 		}
 		hpid
@@ -26,7 +26,7 @@ class Ruiby_gtk
 		hpid=make_list_process()
 		ret=[]
 		%x{netstat -ano}.split(/^/).each { |line|
-		 proto,src,dst,flag,pid=line.chomp.strip.split(/\s+/)  
+		 _,src,dst,flag,pid=line.chomp.strip.split(/\s+/)  
 		 prog,s = hpid[pid]||["?","?"]
 		 ret << [flag,src,dst,prog,pid.to_i,s] if [flag,src,dst,prog,pid,s].inspect =~  filtre	 
 		}
