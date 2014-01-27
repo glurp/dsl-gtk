@@ -112,7 +112,7 @@ end
           tooltip("Please choose the <b>drawing</b> pen <i>width</i>...")
         end
         @ldraw=[] ; @color= html_color("#FF4422");
-        cv=canvas(200,100) do
+        canvas(200,100) do
           on_canvas_draw { |w,cr|  
               @ldraw.each do |line|
                 next if line.size<3
@@ -128,7 +128,9 @@ end
               pt= [e.x,e.y] ;  @ldraw << [@color,@epaisseur.value,pt] ;  pt
           }
           on_canvas_button_motion { |w,e,o| 
-              pt= [e.x,e.y] ; (@ldraw.last << pt) if pt[0]!=o[0] || no[1]!=o[1] ; no 
+              if  o
+                pt= [e.x,e.y] ; (@ldraw.last << pt) if pt[0]!=o[0] || pt[1]!=o[1] ; pt 
+              end
           }
           on_canvas_button_release  { |w,e,o| 
               pt= [e.x,e.y] ; (@ldraw.last << pt)
@@ -136,7 +138,7 @@ end
         end
         stacki {
           label("Popup test...")
-          popup(canvas(50,200)) {
+          popup(canvas(50,200) { }) {
               pp_item("copy")     { alert "copy.." }
               pp_item("cut") 	    { alert "cut..." }
               pp_item("past")	    { alert "pasting.." }
@@ -145,47 +147,47 @@ end
           }
         }
       end 
-   end
-   def test_treeview()
-    stack do
-      tr=tree_grid(%w{month name prename 0age ?male},200,300)
-      tr.set_data({
-        janvier: {
-          s1:["aaa","bbb",22,true],
-          s2:["aaa","bbb",33,false],
-          s3:["aaa","bbb",111,true],
-          s4:["aaa","bbb",0xFFFF,true],
-        },
-        fevrier: {
-          s1:["aaa","bbb",22,true],
-          s2:["aaa","bbb",33,false],
-        },
-      })
-    end
-   end
-   def test_dialog()
-    stack do
-      sloti(button_expand("Test button_expand()") {
-       flow {  2.times { |c| stack { 5.times { |a| label("#{c}x#{a}",{font: "arial 33"}) } } } }
-      })
-      buttoni("dailog...") do
-        rep=dialog("modal window...") {
-          label("eee")  
-          list("aa",100,100)
-        }
-        alert("Response was "+rep.to_s)
-      end
-      space
-      buttoni("dailog async...") do
-        dialog_async("modal window...",{response: proc {|a| alert(a);true}}) {
-          label("eee") 
-          list("aa",100,100)
-        }
-      end
-      buttoni("  Crud in memory ") { test_crud() }        
-    end
-   end
-   def test_list_grid()
+  end
+  def test_treeview()
+	stack do
+	  tr=tree_grid(%w{month name prename 0age ?male},200,300)
+	  tr.set_data({
+	    janvier: {
+	      s1:["aaa","bbb",22,true],
+	      s2:["aaa","bbb",33,false],
+	      s3:["aaa","bbb",111,true],
+	      s4:["aaa","bbb",0xFFFF,true],
+	    },
+	    fevrier: {
+	      s1:["aaa","bbb",22,true],
+	      s2:["aaa","bbb",33,false],
+	    },
+	  })
+	end
+  end
+  def test_dialog()
+	stack do
+	  sloti(button_expand("Test button_expand()") {
+	   flow {  2.times { |c| stack { 5.times { |a| label("#{c}x#{a}",{font: "arial 33"}) } } } }
+	  })
+	  buttoni("dailog...") do
+	    rep=dialog("modal window...") {
+	      label("eee")  
+	      list("aa",100,100)
+	    }
+	    alert("Response was "+rep.to_s)
+	  end
+	  space
+	  buttoni("dailog async...") do
+	    dialog_async("modal window...",{response: proc {|a| alert(a);true}}) {
+	      label("eee") 
+	      list("aa",100,100)
+	    }
+	  end
+	  buttoni("  Crud in memory ") { test_crud() }        
+	end
+  end
+  def test_list_grid()
       flow {
         stack {
           frame("CB on List") {
@@ -381,7 +383,7 @@ end
         ot=time
       }
       labeli("Total time : #{xmax} milliseconds")
-      canvas(500,200,{ 
+      canvasOld(500,200,{ 
           :expose     => proc { |w,cr|  
             color=::Gdk::Color.parse("#774433")
             ep=2
@@ -405,5 +407,5 @@ end
 Exemple.new
 
 Ruiby.start do
-    window = RubyApp.new
+    RubyApp.new
 end
