@@ -48,7 +48,7 @@ class CacheTiles
     
     url= URL.gsub("LAT",lat.to_s).gsub("LON",lon.to_s).gsub("ZOOM",z.to_s)
     puts "#{filename} delayed to #{url}"
-    resp=open(url,"rb") do |resp|
+    open(url,"rb") do |resp|
       File.open(filename+".tmp","wb") { |f| f.write(resp.read) }
       puts "notif app for raster #{filename}"
       current=@current
@@ -95,7 +95,6 @@ module Carto
   def lonlat_2_tilenums(lon,lat, zoom)
     factor1 = 2**(zoom)
     rlat = radians(lat)
-    rlon = radians(lon)
 
     xtile = factor1 * (lon+180.0)/ 360.0
 
@@ -103,7 +102,7 @@ module Carto
     tan=Math.tan(rlat)
     ytile = factor1 * (1 - (Math.log(tan + sec) / Math::PI) )/2.0
     
-    ret=([xtile.to_i, ytile.to_i,zoom,xtile-xtile.to_i, ytile-ytile.to_i] rescue [1,1,zoom,0,0])
+    ([xtile.to_i, ytile.to_i,zoom,xtile-xtile.to_i, ytile-ytile.to_i] rescue [1,1,zoom,0,0])
   end
 
   def expose(w,ctx)
@@ -149,7 +148,7 @@ Ruiby.app(:width=> 800, :height=>800, :title=> "Map") do
     @cv=canvas(self.default_width,self.default_height) {
       on_canvas_draw { |w,ctx|  expose(w,ctx) }
       on_canvas_button_press {|w,e|  [e.x,e.y]  }
-      on_canvas_button_motion {|w,e,o| n=[e.x,e.y] ;$app.move_carto(n[0]-o[0],n[1]-o[1]);n }
+      on_canvas_button_motion {|w,e,o| n=[e.x,e.y] ;$app.move_carto(n[0]-o[0],n[1]-o[1]) if o ;n }
       on_canvas_button_release {|w,e,o| n=[e.x,e.y] ;$app.move_carto(n[0]-o[0],n[1]-o[1]) }
     }
     flowi { 
