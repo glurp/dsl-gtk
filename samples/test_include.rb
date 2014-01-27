@@ -7,8 +7,8 @@ require_relative '../lib/Ruiby'
 
 class Win < Gtk::Window
   include Ruiby
-    def initialize(t,w,h)
-        super()
+  def initialize(t,w,h)
+    super()
     add(@vb=Gtk::Box.new(:vertical, 3))
     show_all
     add_a_ruiby_button()
