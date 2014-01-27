@@ -21,16 +21,17 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 0.135.0 !!  01-06-2014
+NEW : 0.135.19 !!  01-15-2014
 - EventMachine integration
 - Data binding for entry/slider/check_button : see samples/dyn.rb. Data are saved at exit() (with Ruiby stock capacity)
 - Object data binding ! : Struct like composed of DynVar in place of ruiby values
+- canvas 'closurifier' : callback dsl command in canvas closure
+- canvas instruments : draw primitives,  move/scale/rotate vector
+- check dsl syntaxe : check that each dsl command is valid on  his closure context
 
 Current:
-- check dsl syntaxe : check that each dsl command is valid on  his closure context
-- canvas 'closurifier' : callback dsl command in canvas closure
-- toolbar 'closurifier' 
-- canvas instruments : draw primitives,  move/scale/rotate vector
+- test all ... issue with some samples
+- split ruiby_dsl3 source...
 - TODO : update all canvas,toolbar uses in samples and rspec 
 
 TODO for 1.0 :
