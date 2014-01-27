@@ -38,7 +38,7 @@ Ruiby.app width: 300,height: 200,title:"Calc" do
      
      (ope.size==1 ? dvRes : dvVal).value=res.to_s 
      #dvVal.value=""
-  rescue Exception => e
+  rescue Exception
     alert("Expretion exotique : #{expr}")
   end
 end
