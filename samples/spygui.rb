@@ -71,7 +71,7 @@ def run(wspy,wtarget)
         area "Starting..."
         # modify / process request stream
         conn.on_data do |data|
-          area "="*(SLINE/2) + " "+data +" "+ ("="*(SLINE/2)) if data=~/GET|PUT|POST|HEAD.*HTTP.1/
+          area "#{"="*(SLINE/2)} #{data} #{("="*(SLINE/2))}" if data=~/GET|PUT|POST|HEAD.*HTTP.1/
           area "#{datelog()}|__data__: " +  sdata(">>:",data)
           Log.debug "#{datelog()}|__data__: " +  sdata(">>:",data)
           data
@@ -104,7 +104,6 @@ end
 Ruiby.app width: 800,height: 400,title: "Proxy" do
   wspy={}
   wtarget={}
-  ta=nil
   style={:font=>"Arial bold 12"}
   stack do
     stacki do
