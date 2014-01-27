@@ -131,13 +131,13 @@ module Ruiby_default_dialog
           [Gtk::Stock::CANCEL, Ruiby.gtk_version(3) ? :cancel : Gtk::Dialog::RESPONSE_CANCEL],
           [button, Gtk::Dialog::RESPONSE_ACCEPT]
         )
-    end
-		dialog.set_window_position(Window::POS_CENTER)
-		yield(dialog) if block_given?
-	    ret = ( dialog.run == Gtk::Dialog::RESPONSE_ACCEPT ? dialog.filename : nil )rescue false
-	    dialog.destroy
+      end
+      dialog.set_window_position(Window::POS_CENTER)
+	yield(dialog) if block_given?
+	ret = ( dialog.run == Gtk::Dialog::RESPONSE_ACCEPT ? dialog.filename : nil )rescue false
+	dialog.destroy
 	    ret ? ret.gsub('\\','/') : ""
-	end
+      end
 end
 
 #  To be use for direct  call (blocing) of common dialog :
