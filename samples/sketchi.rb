@@ -72,7 +72,7 @@ EEND
     end
   end
   def dialog_icones
-    dia=dialog "Ruiby Predefined icones" do
+    dialog "Ruiby Predefined icones" do
         stack do
           labeli <<-EEND
           
@@ -90,12 +90,11 @@ EEND
     end
   end
   def dialog_font
-    dia=dialog "Ruiby Predefined icones" do
+    dialog "Ruiby Predefined icones" do
         conf={typo: "Arial", type: "bold", size: 12}
         we=entry("text...",300)
-        properties("attributes",conf,edit: true) { |conf|
-          p conf
-          apply_options(we,font: conf.values.join(" "))
+        properties("attributes",conf,edit: true) { |confpp|
+          apply_options(we,font: confpp.values.join(" "))
         }
     end
   end
@@ -118,7 +117,7 @@ EEND
   def make_api(ta)
     src=File.dirname(__FILE__)+"/../lib/ruiby_gtk/ruiby_dsl.rb"
     content=File.read(src)
-    ta.text=content.split(/\r?\n\s*/).grep(/^def[\s\t]+[^_]/).map {|line| (line.split(/\)/)[0]+")").gsub(/\s*def\s/,"")}.sort.join("\n")
+    ta.text=content.split(/\r?\n\s*/).grep(/^def[\s]+[^_]/).map {|line| (line.split(/\)/)[0]+")").gsub(/\s*def\s/,"")}.sort.join("\n")
   end
   def make_help(ta)
     src=File.dirname(__FILE__)+"/../lib/ruiby_gtk/ruiby_dsl.rb"
@@ -126,7 +125,7 @@ EEND
     comment=""
     hdoc=content.split(/\r?\n\s*/).inject({}) {|h,line|
       ret=nil
-      if a=/^def[\s\t]+([^_].*)/.match(line)
+      if a=/^def[\s]+([^_].*)/.match(line)
         name=a[1].split('(')[0]
         ret="#{a[1].split(')')[0]+")"} :\n\n#{comment.gsub('#',"")}\n#{'-'*50}\n"
         comment=""
