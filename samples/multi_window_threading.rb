@@ -42,5 +42,5 @@ class RubyApp3 < RubyApp ; end
 Ruiby.start do
 	l=[RubyApp1.new("1",400,100),RubyApp2.new("2",300,100),RubyApp3.new("3",200,100)]
 	Ruiby.update
-    Thread.new(l) { |lapp| run(lapp)  }
+	Thread.new(l) { |lapp| run(lapp)  }
 end
