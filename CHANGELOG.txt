@@ -1,4 +1,26 @@
-0.135.19
+0.135.20
+    video.rb : unused var , indentations
+    tree.rb : unused var , indentations
+    tilesviewer.rb : unused var , indentations
+    testth.rb : unused var , indentations
+    test_systray.rb : unused var , indentations
+    test_include.rb : unused var , indentations
+    test.rb : unused var , indentations
+    table2.rb : indentation
+    spygui.rb : unused var
+    sketchi.rb : unused var
+    paned.rb : unused var
+    netprog.rb : unused var
+    multi_window_threading.rb : unused var
+    minicalc.rb : unused var
+    ruiby_dsl3.rb : refactoring dsl
+    ruiby_dsl.rb : unused var
+    ruiby_default_dialog.rb : unused var
+    editor.rb : unused var
+    dyn_var.rb : unused var
+    Ruiby.rb : unused var
+    doc.html : tobe regenerated
+    README.md : point
     test_composites.rb : nop
     test_basics_widget.rb : move canvas tests
     test_all.rb : add canvas test
@@ -478,19 +500,3 @@
 0.44.0 : 2012-10-02 17:27:52 +0200
     samples/netprog.rb : threading netstat
     lib/ruiby_gtk/ruiby_threader.rb : anim() an after correction for delete
-    lib/ruiby_gtk/ruiby_dsl.rb : delete(timer) correction
-0.43.0 : 2012-10-02 16:08:53 +0200
-    samples/netprog.rb : correction run by bin
-0.42.0 : 2012-10-02 15:51:37 +0200
-    samples/netprog.rb : creation, for windows only
-    lib/ruiby_gtk/ruiby_dsl.rb : nothing
-    lib/ruiby.rb : sleeping and return, for test
-    spec/test_thread.rb : creation
-    spec/test_table.rb : creation
-    spec/test_notepad.rb : creation
-    spec/test_layout.rb : creation
-    spec/test_dialogs.rb : creation
-    spec/test_basics_widget.rb : creation
-    spec/test_all.rb : creation
-    spec/rspec_helper.rb : creation
-    Rakefile.rb : travis
