@@ -4,19 +4,19 @@
 # text is colorize for ruby lang
 class Editor < Ruiby_gtk 
     def initialize(w,filename,width=350)
-		@filename=filename
-        super("Edit #{filename[0..40]}",width,0)
-		transient_for=w
+	@filename=filename
+	super("Edit #{filename[0..40]}",width,0)
+	transient_for=w
     end	
-	def component()
-	  stack do
-    if ed=source_editor()
-      @edit=slot(ed).editor
-      @edit.buffer.text=File.exists?(@filename) ? File.read(@filename) : @filename
-    end
-		sloti( button("Exit") { destroy() })
-	  end
-	end # endcomponent
+    def component()
+	stack do
+	    if ed=source_editor()
+		@edit=slot(ed).editor
+		@edit.buffer.text=File.exists?(@filename) ? File.read(@filename) : @filename
+	    end
+	    sloti( button("Exit") { destroy() })
+	end
+    end # endcomponent
 
 end
 # create a dialogue which sho data in a grid
