@@ -160,7 +160,7 @@ module Kernel
     gems.flatten.each do|gem| 
       begin
         require gem
-      rescue LoadError => e
+      rescue LoadError 
         rep=w.ask("Loading #{gems.join(', ')}\n\n'#{gem}' package is missing. Can I load it from internet ?")
         exit(0) unless rep
         Ruiby.update
