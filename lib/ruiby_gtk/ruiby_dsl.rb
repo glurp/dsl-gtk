@@ -217,7 +217,7 @@ module Ruiby_dsl
 
   def get_icon(name)
     return name if name.index('.') && File.exists?(name)
-    iname=eval("Gtk::Stock::"+name.upcase) rescue nil
+    eval("Gtk::Stock::"+name.upcase) rescue nil
   end
   def get_stockicon_pixbuf(name)
     Image.new(eval("Gtk::Stock::"+name.upcase),IconSize::BUTTON).pixbuf
@@ -304,7 +304,7 @@ module Ruiby_dsl
   end
   def labeli(text,options={}) sloti(label(text,options)) end 
   def _label(text,options={})
-    l=if text && text[0,1]=="#"
+    if text && text[0,1]=="#"
       get_image_from(text[1..-1]);
     else
       Label.new(text);
@@ -685,7 +685,6 @@ module Ruiby_dsl
       @prop_index+=1
     end
     prop_current=(@prop_hash[@prop_index]={})
-    value={}
     widget=stacki {
     framei(title.to_s) {
        stack {
@@ -721,24 +720,24 @@ module Ruiby_dsl
     widget.instance_variable_set(:@prop_current,prop_current)	  
     widget.instance_variable_set(:@hash_initial,hash)	  
     def widget.set_data(newh)
-    newh.each { |k,v| @prop_current[k].text=v.to_s }
-  end
-  def widget.get_data()
-  @prop_current.inject({}) {|nhash,(k,w)| 
-    v_old=@hash_initial[k]
-    v_new=w.text
-    vbin=case v_old 
-      when String then v_new
-      when Fixnum then v_new.to_i
-      when Float  then v_new.to_f
-      when /^(\[.*\])|(\{.*\})$/ then eval( v_new ) rescue error($!)
-      else v_new.to_s
+      newh.each { |k,v| @prop_current[k].text=v.to_s }
     end
-    nhash[k]=vbin
-    nhash
-  }
-  end
-  widget
+    def widget.get_data()
+    @prop_current.inject({}) {|nhash,(k,w)| 
+      v_old=@hash_initial[k]
+      v_new=w.text
+      vbin=case v_old 
+        when String then v_new
+        when Fixnum then v_new.to_i
+        when Float  then v_new.to_f
+        when /^(\[.*\])|(\{.*\})$/ then eval( v_new ) rescue error($!)
+        else v_new.to_s
+      end
+      nhash[k]=vbin
+      nhash
+    }
+    end
+    widget
   end
 
   ###################################### notebooks
@@ -858,7 +857,7 @@ module Ruiby_dsl
   #  a button menu in accordion
   def aitem(txt,&blk) 
     b2=nil
-    b=button(txt) {
+    button(txt) {
           clear_append_to(@slot_accordion_active) {} if @slot_accordion_active
           @slot_accordion_active=b2
           clear_append_to(b2) { 
@@ -910,10 +909,9 @@ module Ruiby_dsl
   # @edit=source_editor().editor
   # @edit.buffer.text=File.read(@filename)
   def source_editor(args={}) # from green_shoes plugin
-  return
     begin
       require 'gtksourceview2'
-    rescue Exception => e
+    rescue Exception
       log('gtksourceview2 not installed!, please use text_area')
       return
     end
@@ -1092,7 +1090,7 @@ module Ruiby_dsl
     column = Gtk::TreeViewColumn.new(title.to_s,Gtk::CellRendererText.new, {:text => 0})
     treeview = Gtk::TreeView.new(model)
     if block_given?
-      treeview.signal_connect("row-activated") do |view, path, column|
+      treeview.signal_connect("row-activated") do |view, path, _|
         iter = view.model.get_iter(path)
         yield iter[0]
       end		
@@ -1283,7 +1281,7 @@ module Ruiby_dsl
     dialog.set_window_position(Window::POS_CENTER)
     
     @lcur << dialog.vbox
-    hbox=stack { yield }
+    stack { yield }
     @lcur.pop
 
     dialog.signal_connect('response') do |w,e|
@@ -1307,7 +1305,7 @@ module Ruiby_dsl
             [Gtk::Stock::CANCEL, Gtk::Dialog::RESPONSE_REJECT])
       
     @lcur << dialog.vbox
-    hbox=stack { yield }
+    stack { yield }
     @lcur.pop
     
     dialog.set_window_position(Window::POS_CENTER)
