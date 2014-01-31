@@ -2,7 +2,7 @@
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
 
-require  'Ruiby'
+require_relative  '../lib/Ruiby'
 require  'pp'
 
 Ruiby.app width: 1000, height: 700, title: "Game of Analogic Life" do
@@ -26,28 +26,26 @@ Ruiby.app width: 1000, height: 700, title: "Game of Analogic Life" do
       @edit=entry(@formula) 
       buttoni("enter")  { instance_eval "  def formula(opoids,poids)  #{@edit.text} ; end" }
     }
-    @cv=canvasOld(self.default_width,self.default_height,
-          :mouse_down => proc do |w,e|   
-            no= [e.x/PASX,e.y/PASY] ;  
-            c=(@mat[no.first][no.last]>50 ? 0 : 100)            
-            [-2,-1, 0, 1,+2].each { |col_off| [-2,-1, 0, 1,2].each { |li_off| @mat[no.first+col_off][no.last+li_off]=  c}}
-            no    
-          end,
-          :expose => proc do |w,ctx|  
+    @cv=canvas(self.default_width,self.default_height) do
+      on_canvas_draw { |w,cr|  
             MAXC.times { |col| MAXL.times { |li| 
                coul=1.0-(@mat[col][li] / 100.0)
                r,g,b=coul,coul,coul
                r=coul*2 if coul<0.4
                g*=2 if coul>0.8
                b*=2 if coul>0.4
-               ctx.set_source_rgba(r,g,b)
-               ctx.rectangle(col*PASX,li*PASY,PASX,PASY)
-               ctx.fill()  
+               cr.set_source_rgba(r,g,b)
+               cr.rectangle(col*PASX,li*PASY,PASX,PASY)
+               cr.fill()  
            }}
-           #p @mat[MAXC/2][MAXL/2]
-          end
-    )
-    
+      }
+      on_canvas_button_press{ |w,e|   
+            no= [e.x/PASX,e.y/PASY] ;  
+            c=(@mat[no.first][no.last]>50 ? 0 : 100)            
+            [-2,-1, 0, 1,+2].each { |col_off| [-2,-1, 0, 1,2].each { |li_off| @mat[no.first+col_off][no.last+li_off]=  c}}
+            no    
+      }
+    end
     flowi do
       button " clear " do @mat=freemap() ; @cv.redraw end
       button " random " do 
@@ -84,8 +82,8 @@ Ruiby.app width: 1000, height: 700, title: "Game of Analogic Life" do
     return unless mat
     dialog_async("3D view",response: proc  { |w,e| @ccc=false ; false }) do
       make_curve()
-      @ccc=canvas(1000,800,{ 
-          :expose     => proc do |w,cr|  
+      @ccc=canvas(1000,800) do
+          on_canvas_draw do |w,cr|  
             color=::Gdk::Color.parse("#774433")
             color1=::Gdk::Color.parse("#334477")
             cr.set_line_width(2)
@@ -102,7 +100,7 @@ Ruiby.app width: 1000, height: 700, title: "Game of Analogic Life" do
               cr.stroke 
             end
           end
-      })
+      end
     end
   end
   def make_curve()
