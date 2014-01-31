@@ -46,7 +46,7 @@ module Ruiby_dsl
     @lcur << menuBar
     yield
     @lcur.pop
-    sloti(menuBar)
+    slot(menuBar)
     menuBar
   end
 
@@ -54,6 +54,7 @@ module Ruiby_dsl
   def menu(text)
     _accept?(:menu)
     filem = MenuItem.new(text.to_s)
+    @lcur.last.append(filem)
     mmenu = Menu.new()
     _set_accepter(mmenu,:menuitem)
     @lcur << mmenu
