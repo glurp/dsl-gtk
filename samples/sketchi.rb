@@ -115,9 +115,7 @@ EEND
     @error_log.text=e.to_s + " : \n   "+ e.backtrace[0..3].join("\n   ")
   end
   def make_api(ta)
-    src=File.dirname(__FILE__)+"/../lib/ruiby_gtk/ruiby_dsl.rb"
-    content=File.read(src)
-    ta.text=content.split(/\r?\n\s*/).grep(/^def[\s]+[^_]/).map {|line| (line.split(/\)/)[0]+")").gsub(/\s*def\s/,"")}.sort.join("\n")
+    ta.text=::Ruiby.make_doc_api().join("\n")
   end
   def make_help(ta)
     src=File.dirname(__FILE__)+"/../lib/ruiby_gtk/ruiby_dsl.rb"
