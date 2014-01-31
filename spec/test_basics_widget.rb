@@ -180,6 +180,36 @@ describe Ruiby do
     w.children[0].should be_a_kind_of(Gtk::TextView)
     content=%w{a b c d e f}.join("\n")
     w.text=content
-    w.text.size.should ==  content.size
+    w.text.size.should eq(content.size)
  end
+ it "create a Dyn slider" do
+    v=DynVar.new(22)
+    @win.create {   w=islider(v,min: 0, max: 100,by: 1) } 
+    v.value=33.0
+    v.value=44.0
+    v.value.should eq(44.0)
+ end
+ it "create a Dyn ientry" do
+    v=DynVar.new(22)
+    @win.create {   w=ientry(v) } 
+    v.value=33
+    v.value=44
+    v.value.should eq(44)
+ end
+ it "create a Dyn entry" do
+    v=DynVar.new("eeee")
+    @win.create {   w=entry(v) } 
+    v.value="33"
+    v.value="44"
+    v.value.should eq("44")
+ end
+ it "create a Dyn entry" do
+    v=DynVar.new(false)
+    w=nil
+    @win.create {   w=check_button("ee",v) } 
+    v.value=true
+    v.value=false
+    v.value.should eq(false)
+ end
+ 
 end
