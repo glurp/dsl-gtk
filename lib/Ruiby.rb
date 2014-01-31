@@ -41,6 +41,14 @@ module Ruiby
   def self.gtk_version(major)
     Gtk.check_version(major, 0, 0)==nil
   end
+  def self.make_doc_api()
+      lfile=Dir.glob(DIR+"/**/*dsl*.rb")
+      ret=lfile.map do |src|
+        File.read(src).split(/\r?\n/).grep(/^\s*def[\s\t]+[^_]/).map {|a|a.strip.gsub(/def\s+/,"").split(')')[0]+")"}
+      end
+      ret.flatten.sort
+  end
+
   ###########################################################
   #                S t o r a g e 
   ###########################################################
