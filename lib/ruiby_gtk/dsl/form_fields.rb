@@ -138,10 +138,11 @@ module Ruiby_dsl
   
  
   def _dyn_entry(var,size,options,slotied) 
+    size= var.value.to_s.size*2 unless size
     w= unless slotied
       (block_given? ? entry(var.value,size,options)  : entry(var.value,size,options) { |v| var.value=v })
     else
-      (block_given? ? ientry(var.value,size,options)  : ientry(var.value,size,options) { |v| var.value=v })
+      (block_given? ? entry(var.value,size,options)  : entry(var.value,size,options) { |v| var.value=v })
     end
     var.observ { |v| w.text = v.to_s }
     w
@@ -162,11 +163,22 @@ module Ruiby_dsl
     end if block_given?
     attribs(w,option)
   end
+  
+  def _dyn_ientry(var,options,slotied) 
+    w= unless slotied
+      (block_given? ? ientry(var.value,options)  : ientry(var.value,options) { |v| var.value=v })
+    else
+      (block_given? ? ientry(var.value,options)  : ientry(var.value,options) { |v| var.value=v })
+    end
+    var.observ { |v| w.text = v.to_s }
+    w
+  end
+  
   # create a integer text entry for keyboed input
   # option must define :min :max :by for spin button
   def ientry(value,option={},&blk)
     if DynVar === value
-       return _dyn_entry(value,size,option,true,&blk)       
+       return _dyn_entry(value,value.value.to_s.size*4,option,true,&blk)       
     end
     w=SpinButton.new(option[:min].to_i,option[:max].to_i,option[:by]||1)
     w.set_numeric(true)
@@ -222,9 +234,10 @@ module Ruiby_dsl
     end
   end
   
-  def _dyn_islider(var,options={min:0,max:100,by:1},&blk) 
-    w=  block_given? ?  islider(var.value.to_i,options,&blk) : islider(var.value.to_i,options) { |v| var.value=v }
+  def _dyn_islider(var,option,&blk) 
+    w=  block_given? ?  islider(var.value.to_i,option,&blk) : islider(var.value.to_i,option) { |v| var.value=v }
     var.observ { |v| w.set_value(v.to_i) }
+    attribs(w,option)   
     w
   end
   
