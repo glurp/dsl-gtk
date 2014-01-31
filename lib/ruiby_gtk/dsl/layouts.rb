@@ -44,21 +44,21 @@ module Ruiby_dsl
   def _set_accepter(layout,*types)
     if types.size==1
       layout.define_singleton_method(:accept?) do |type|  
-         raise("no widget accepted here : #{types} / #{type}") unless types.first==type 
+         raise("No command   #{type} accepted here, accept=#{types}/") unless types.first==type 
       end
     elsif types.size==2
       layout.define_singleton_method(:accept?) do |type|  
-        raise("no widget accepted here  #{types} / #{type}") unless types.first==type || types.last==type 
+        raise("No command #{type} accepted here, accept=#{types}/") unless types.first==type || types.last==type 
       end
     else
       layout.define_singleton_method(:accept?) do |type| 
-        raise("no widget accepted here  #{types} / #{type}") unless types.any? { |a| a==type }
+        raise("No command  #{type}  accepted here, accept=#{types}/") unless types.any? { |a| a==type }
       end
     end
   end
   def _accept?(type)
     w=@lcur.last
-    w.accept?(type) if w.respond_to?(:accept?)
+    w.respond_to?(:accept?) ? w.accept?(type) : true
   end  
   
   ################################ Some other layouts
@@ -252,22 +252,21 @@ module Ruiby_dsl
   #  aitem(txt) { alabel(lib) { code }; ...}
   def aitem(txt,&blk) 
     _accept?(:aitem)
-    b2=nil
+    b2=Gtk::Box.new(:vertical,2)
+    _set_accepter(b2,:alabel,:layout,:widget)
     b=button(txt) {
           clear_append_to(@slot_accordion_active) {} if @slot_accordion_active
           @slot_accordion_active=b2
-          clear_append_to(b2) { 
-            blk.call()
-          }
+          clear_append_to(b2) {  blk.call() }
+          slot_append_after(b2,b)
     }
-    b2=stacki { }
   end
 
   # create a button-entry  in a  accordion menu
   # bloc is evaluate on user click. must be in aitem() bloc :
   # accordion { aitem(txt) { alabel(lib) { code }; ...} ... }
   def alabel(txt,&blk)
-    _accept?(:aitem)
+    _accept?(:alabel)
     l=nil
     pclickable(proc { blk.call(l) if blk} ) { l=label(txt) }
   end
