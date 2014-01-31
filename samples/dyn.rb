@@ -9,13 +9,12 @@ require_relative '../lib/Ruiby.rb'
 Ruiby.app do
   stacki {
      labeli( <<-EEND ,font: "Arial 14",bg: "#004455", fg: "#CCCCCC")
-     Testing variables binding for entry/slider/CheckButton/label. 
+     Test variables binding for entry/slider/CheckButton/label. 
      
      Observer patern : Variables are Value Object,
      widget can be observer of a variable,
-     so variable modification whill be showing in all widger observer,
-     and a edition by a observer widger will be  notified to value object
-     (like TkVariable)
+     so variable modification will be showing in all widget observer,
+     and a edition by a observer widget will be  notified to value object
      EEND
      
      v1=DynVar.stock("v1",1)
