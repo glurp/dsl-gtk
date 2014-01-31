@@ -21,7 +21,9 @@ describe Ruiby do
             w.draw_text(10,200 ,"Test Text write 5",7,"#0000AA")
           }
     end    } }
+    w.redraw
     @win.sleeping(100,"Verify canvas : text")
+    
  end
  it "draw vectors in a canvas" do
     w=nil
@@ -31,8 +33,12 @@ describe Ruiby do
             w.draw_text(10,10,"Test points :")
             w.draw_point(70,10)
             w.draw_point(90,10,"#AA4444",10)
+            w.rotation(0,0,0.1) { w.draw_text(70,70,"eeee") }
+            l=w.rotate([1,1,2,3,3,3,4,4],10,10,0.1)
+            l=w.translate([1,1,2,3,3,3,4,4],70,10)
           }
     end    } }
+    w.redraw
     @win.sleeping(100,"Verify canvas : points")
  end
  it "draw vectors in a canvas" do
@@ -45,6 +51,33 @@ describe Ruiby do
             w.draw_rectangle(120,50, 40,10,0,"#FF0000","#00FFFF",2)
           }
     end    } }
+    @win.sleeping(100,"Verify canvas : rectangle")
+ end
+ it "draw vectors in a canvas" do
+    pl=nil
+    @win.create { 
+      pl=plot(400,200,{
+        "curve1" => {
+          data:[[0,1],[110,1],[20,1],[30,1],[10,1],[22,1],[55,1],[77,1]],
+          color: '#FF0000', 
+          xminmax:[0,100], 
+          yminmax:[0,100], 
+          style: :linear
+        }
+      })
+    }
+    pl.get_data("curve1").size.should eq(8)
+    pl.delete_curve("curve1")
+ end
+ 
+ it "draw vectors in a canvasOld" do
+    w=nil
+    @win.create { stack {   w=canvasOld(150,250,
+          :expose => proc { |w,cr|  
+             cr.set_source_rgba(0,0,0,1)
+             cr.rectangle(0,0,12,33)
+          })
+    } }
     @win.sleeping(100,"Verify canvas : rectangle")
  end
  it "draw vectors in a canvas" do
