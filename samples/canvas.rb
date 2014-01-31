@@ -77,9 +77,9 @@ end
             sloti(button("Test...") { execute() })
           }
           stack { 
-              @canvas= canvasOld(400,400,{ 
-                :expose     => proc { |w,cr|   redraw(w,cr) }
-              }) 
+              @canvas= canvas(400,400) { 
+                on_canvas_draw { |w,cr| redraw(w,cr) }
+              } 
            }           
         end
         notebook do 
@@ -129,11 +129,6 @@ end
   end
   def trace(e)
     @error_log.text=e.to_s + " : \n   "+ e.backtrace[0..3].join("\n   ")
-  end
-  def make_api(ta)
-    src=File.dirname(__FILE__)+"/../lib/ruiby_gtk/ruiby_dsl.rb"
-    content=File.read(src)
-    ta.text=content.split(/\r?\n\s*/).grep(/^def[\s\t]+[^_]/).map {|line| (line.split(/\)/)[0]+")").gsub(/\s*def\s/,"")}.sort.join("\n")
   end
   def make_help(ta)
     ta.text=DrawPrimitive.help_text
