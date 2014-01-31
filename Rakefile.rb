@@ -168,7 +168,7 @@ task :gem => :commit do
        make gem, test it localy, and push gem #{NAME} to gemcutter
 --------------------------------------------------------------------
 EEND
-  ruby "samples/make_doc.rb" "1"
+  ruby "samples/make_doc.rb","1"
   sh "git commit doc.html -m update"
   sh "git push"
   $version=change_version { |a| 
