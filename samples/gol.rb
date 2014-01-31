@@ -20,15 +20,15 @@ Ruiby.app width: 400, height: 300, title: "Game of Life" do
       @edit=entry(@formula) 
       buttoni("enter")  { instance_eval "def formula(old,nb_neighboring) ; #{@edit.text} ; end" }
     }
-    @cv=canvasOld(self.default_width,self.default_height,
-          :mouse_down => proc do |w,e|   
+    @cv=canvas(self.default_width,self.default_height) {
+          on_canvas_button_press { |w,e|    
             no= [e.x/PASX,e.y/PASY] ;  @mat[no.first][no.last]=! @mat[no.first][no.last]; no    
-          end,
-          :expose => proc do |w,ctx|  
+          }
+          on_canvas_draw { |w,ctx|  
             ctx.set_source_rgba(0,0.5,0.5)
             MAXC.times { |col| MAXL.times { |li| (ctx.rectangle(col*PASX,li*PASY,PASX,PASY); ctx.fill())  if @mat[col][li] }}
-          end
-    )
+          }
+    }
     
     flowi do
       button " clear " do @mat=freemap() ; @cv.redraw end
