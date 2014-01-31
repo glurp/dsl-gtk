@@ -32,29 +32,29 @@ module Ruiby_dsl
 
   def canvas(width,height,option={})
     autoslot()
-    w=DrawingArea.new()
-    w.width_request=width
-    w.height_request=height
-    w.events |=  ( ::Gdk::Event::Mask::BUTTON_PRESS_MASK | ::Gdk::Event::Mask::POINTER_MOTION_MASK | ::Gdk::Event::Mask::BUTTON_RELEASE_MASK)
+    cv=DrawingArea.new()
+    cv.width_request=width
+    cv.height_request=height
+    cv.events |=  ( ::Gdk::Event::Mask::BUTTON_PRESS_MASK | ::Gdk::Event::Mask::POINTER_MOTION_MASK | ::Gdk::Event::Mask::BUTTON_RELEASE_MASK)
     
-    @currentCanvas=w
+    @currentCanvas=cv
     @lcur << HandlerContainer.new
     yield
     @lcur.pop
     @currentCanvas=nil
 
-    attribs(w,option) 
-    def w.set_memo(memo) @memo=memo end
-    def w.get_memo() @memo end
-    w.set_memo(nil)    
+    attribs(cv,option) 
+    def cv.set_memo(memo) @memo=memo end
+    def cv.get_memo() @memo end
+    cv.set_memo(nil)    
     
-    def w.redraw() 
+    def cv.redraw() 
       self.queue_draw_area(0,0,self.width_request,self.height_request)
     end
-    def w.app_window()  @app_window end
-    def w.set_window(r) @app_window=r end
-    w.set_window(self)
-    def w.init_ctx(color_fg="#000000",color_bg="#FFFFFF",width=1)
+    def cv.app_window()  @app_window end
+    def cv.set_window(r) @app_window=r end
+    cv.set_window(self)
+    def cv.init_ctx(color_fg="#000000",color_bg="#FFFFFF",width=1)
         w,cr=*@currentCanvasCtx 
         cr.set_line_join(Cairo::LINE_JOIN_ROUND)
         cr.set_line_cap(Cairo::LINE_CAP_ROUND)
@@ -67,14 +67,14 @@ module Ruiby_dsl
         @currentColorBg=color_bg
     end
     
-    def w.draw_line(lxy,color=nil,width=nil) 
+    def cv.draw_line(lxy,color=nil,width=nil) 
         raise("odd number of coord for lxy") if !lxy || lxy.size==0 || lxy.size%2==1
         if lxy.size==2 
           return draw_point(lxy.first,lxy.last,color,width)
         end
         _draw_poly(lxy,color|| @currentColorFg,nil,width)
     end
-    def w.draw_polygon(lxy,colorStroke=nil,colorFill=nil,widthStroke=nil)
+    def cv.draw_polygon(lxy,colorStroke=nil,colorFill=nil,widthStroke=nil)
         raise("odd number of coord for lxy") if !lxy || lxy.size==0 || lxy.size%2==1
         if lxy.size==2 
           return draw_point(lxy.first,lxy.last,colorStroke,widthStroke)
@@ -82,7 +82,7 @@ module Ruiby_dsl
        colorStroke=@currentColorFg if colorFill.nil? && colorStroke.nil?
         _draw_poly(lxy,colorStroke,colorFill,widthStroke)
     end
-    def w._draw_poly(lxy,color_fg,color_bg,width)
+    def cv._draw_poly(lxy,color_fg,color_bg,width)
         raise("odd number of coord for lxy") if !lxy || lxy.size==0 || lxy.size%2==1
         w,cr=@currentCanvasCtx
         cr.set_line_width(width) if width
@@ -100,22 +100,22 @@ module Ruiby_dsl
           cr.stroke  
         end
     end
-    def w.draw_point(x,y,color=nil,width=nil)
+    def cv.draw_point(x,y,color=nil,width=nil)
       width||=@currentWidth
       draw_line([x,y-width/4, x,y+width/4],color,width)
     end
-    def w.draw_text(x,y,text,scale=1,color=nil)
+    def cv.draw_text(x,y,text,scale=1,color=nil)
       w,cr=@currentCanvasCtx
       cr.set_line_width(1)
       cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color || @currentColorFg ))
       scale(x,y,scale) {  cr.move_to(0,0); cr.show_text(text) }
     end
-    def w.draw_rectangle(x0,y0,w,h,r=0,colorStroke=nil,colorFill=nil,widthStroke=nil)
+    def cv.draw_rectangle(x0,y0,w,h,r=0,colorStroke=nil,colorFill=nil,widthStroke=nil)
       x1, y1 = x0+w, y0+h
       colorStroke=@currentColorFg if colorFill.nil? && colorStroke.nil?
       _draw_poly([x0,y0, x1,y0, x1,y1, x0,y1, x0,y0],colorStroke,colorFill,widthStroke)
     end
-    def w.draw_circle(x0,y0,r,color_bg=nil,color_fg=nil,width=nil)
+    def cv.draw_circle(x0,y0,r,color_bg=nil,color_fg=nil,width=nil)
         w,cr=@currentCanvasCtx
         cr.set_line_width(width || @currentWidth )
         if color_bg
@@ -131,7 +131,7 @@ module Ruiby_dsl
           cr.stroke
         end
     end
-    def w.draw_image(x,y,filename,sx=1,sy=sx)
+    def cv.draw_image(x,y,filename,sx=1,sy=sx)
       w,cr=@currentCanvasCtx
       pxb=w.app_window.get_pixbuf(filename)
       scale(x,y,sx,sy) { cr.set_source_pixbuf(pxb,0,0) ; cr.paint}
@@ -141,7 +141,7 @@ module Ruiby_dsl
     # scale(20,100,2,4) { w.draw_line(10,10,20,20) ; ... } 
     # the line will be scaling by x/y factor 2 and 4 relative to center
     # point x=10 y=100
-    def w.scale(cx,cy,ax,ay=nil,&blk)
+    def cv.scale(cx,cy,ax,ay=nil,&blk)
      ay=ax unless ay
      w,cr=@currentCanvasCtx
      cr.translate(cx,cy)
@@ -150,7 +150,7 @@ module Ruiby_dsl
      cr.scale(1.0/ax,1.0/ay)
      cr.translate(-cx,-cy)
     end
-    def w.rotation(cx,cy,a,&blk) 
+    def cv.rotation(cx,cy,a,&blk) 
      w,cr=@currentCanvasCtx
      cr.translate(cx,cy)
      cr.rotate(a)
@@ -158,14 +158,14 @@ module Ruiby_dsl
      cr.rotate(-a)
      cr.translate(-cx,-cy)
     end
-    def w.translate(l,dx=0,dy=0) 
-      l.each_slice(2).inject([]) {|l,(x,y)| l <<x+dx; l <<y+dy}
+    def cv.translate(lxy,dx=0,dy=0) 
+      lxy.each_slice(2).inject([]) {|l,(x,y)| l <<x+dx; l <<y+dy}
     end
-    def w.rotate(lxy,x0,y0,angle)
+    def cv.rotate(lxy,x0,y0,angle)
       sa,ca=Math.sin(angle),Math.cos(angle)
-      l.each_slice(2).inject([]) {|l,(x,y)| l << ((x-x0)*ca-(y-y0)*sa)+x0 ; l << ((x-x0)*sa+(y-y0)*ca)+y0}
+      lxy.each_slice(2).inject([]) {|l,(x,y)| l << ((x-x0)*ca-(y-y0)*sa)+x0 ; l << ((x-x0)*sa+(y-y0)*ca)+y0}
     end
-    w
+    cv
   end
   
   # update a canvas
@@ -231,10 +231,8 @@ module Ruiby_dsl
   # DEPRECATED; Create a drawing area, for pixel draw
   # option can define closure :mouse_down :mouse_up :mouse_move
   # for interactive actions
-  # See test.rb fo little example.
-  # See samples/draw.rb for a little vector editor...
   def canvasOld(width,height,option={})
-    puts "*** DEPRCATED: use canvas do end in place of canvasOld ***"
+    puts "*** DEPRECATED: use canvas do end in place of canvasOld ***"
     autoslot()
     w=DrawingArea.new()
     w.width_request=width
@@ -288,11 +286,11 @@ module Ruiby_dsl
   # * pl.scroll_data(name,value)  : add a point at last and scroll if necessary (act as oscilloscope)
   # see samples/plot.rb
   def plot(width,height,curves,config={})
-     cv=canvas(width,height) do
+     plot=canvas(width,height) do
        on_canvas_draw { |w,ctx| w.expose(ctx) }
        on_canvas_button_press { |w,event| }
      end
-     def cv.add_curve(name,config) 
+     def plot.add_curve(name,config) 
         c=config.dup
         c[:data] ||= [[0,0],[100,100]]
         c[:maxlendata] ||= 100
@@ -307,11 +305,11 @@ module Ruiby_dsl
         @curves||={}
         @curves[name]=c
      end
-     def cv.delete_curve(name) 
+     def plot.delete_curve(name) 
         @curves.delete(name)
         redraw
      end
-     def cv.expose(ctx) 
+     def plot.expose(ctx) 
         @curves.values.each do |c|
               next if c[:data].size<2
               l=c[:data].map { |(y,x)|  [x*c[:xa]+c[:xb] , y*c[:ya]+c[:yb] ]  }
@@ -323,20 +321,20 @@ module Ruiby_dsl
         end
      end
      
-     def cv.set_data(name,data) 
+     def plot.set_data(name,data) 
        @curves[name][:data]=data
        maxlen(name,@curves[name][:maxlendata])
        redraw
      end
-     def cv.get_data(name) 
+     def plot.get_data(name) 
        @curves[name][:data]
      end
-     def cv.add_data(name,pt) 
+     def plot.add_data(name,pt) 
        @curves[name][:data] << pt
        maxlen(name,@curves[name][:maxlendata])
        redraw
      end
-     def cv.scroll_data(name,value) 
+     def plot.scroll_data(name,value) 
         l=@curves[name][:data]
         pas=width_request/l.size
         l.each { |pt| pt[1]-=pas } 
@@ -344,11 +342,11 @@ module Ruiby_dsl
         maxlen(name,@curves[name][:maxlendata])
         redraw
      end
-     def cv.maxlen(name,len)
+     def plot.maxlen(name,len)
        @curves[name][:data]=@curves[name][:data][-len..-1] if @curves[name][:data].size>len
      end
-     curves.each { |name,descr| descr[:rgba]=color_conversion(descr[:color]||'#303030') ; cv.add_curve(name,descr) }
-     cv
+     curves.each { |name,descr| descr[:rgba]=color_conversion(descr[:color]||'#303030') ; plot.add_curve(name,descr) }
+     plot
   end
 end
 
