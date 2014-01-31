@@ -418,6 +418,7 @@ module Ruiby_dsl
   #  * gem install clutter-gstreamer
   #
   def video(uri=nil,w=300,h=200,&blk)
+    return label("< no video !>")  # not work since gtk 2.1 .... :(
     require "clutter-gtk"  
     require "clutter-gst"  # gem install clutter-gstreamer
     clutter = ClutterGtk::Embed.new
