@@ -141,14 +141,14 @@ EEND
 
 
 def extract_doc_dsl() 
-	glob=File.dirname(__FILE__)+"/../lib/ruiby_gtk/*.rb"
+	glob=File.dirname(__FILE__)+"/../lib/ruiby_gtk/**/*.rb"
   hdoc={}
   Dir[glob].each do |src| next if src =~ /dsl.rb/
     content=File.read(src)
     comment=""
     hdoc=content.split(/\r?\n\s*/).inject(hdoc) {|h,line|
       ret=nil
-      if a=/^\s*def\s+([^_][a-z0-9_]*)/.match(line)
+      if a=/^\s*def\s+([^_][a-zA-Z0-9_]*)/.match(line)
         name=a[1].split('(')[0]
         api=line.split(')')[0]+")"
         descr=comment.gsub('#\s*',"")
