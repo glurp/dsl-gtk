@@ -383,22 +383,13 @@ end
         ot=time
       }
       labeli("Total time : #{xmax} milliseconds")
-      canvasOld(500,200,{ 
-          :expose     => proc { |w,cr|  
-            color=::Gdk::Color.parse("#774433")
-            ep=2
-            pt0,*poly=*lline
-            cr.set_line_width(ep)
-            cr.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
-            cr.move_to(*pt0)
-            poly.each {|px| cr.line_to(*px) } 
-            cr.stroke  
-            ltext.each { |(pos,text)| 
-              cr.move_to(*pos)
-              cr.show_text(text) 
-            }
+      canvas(500,200) {
+          on_canvas_draw { |w,cr|  
+            w.init_ctx("#774433","#FFFFFF",2)
+            w.draw_line(lline.flatten)
+            ltext.each { |(pos,text)|  w.draw_text(*pos,text) }
           }
-      });          
+      }
     end
   end
 # end component()
