@@ -23,11 +23,13 @@ Status
 
 NEW : 1.1.0  !!   02-01-2014
 
-- composition checking : whan a ruiby commands is done, check if current contaxt (stack/flow/…) authorise this command,
-- Plot, Canvas, toolbar refactorized for to be more DSL
+- composition checking : when a ruiby commands is done, check if current context (stack/flow/…) authorise this command,
+- Plot, Canvas, toolbar refactorized for to be more DSL (old canvas command become canvasOld() )
+
 - Data Variable binding for entry/slider/check_button
 - Object data binding  : Struct like composed of DynVar
 - Stock DynVar and DynObject : data persistence to file on exit
+
 - better test (77% coverage)
 
 TODO  :
