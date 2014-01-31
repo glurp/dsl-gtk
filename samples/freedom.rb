@@ -77,22 +77,24 @@ Ruiby.app width: 1200,height: 800, title: "GPL "*50 do
     space 20
     stack do
       space 4
-      @cv=canvas(self.default_width,self.default_height,:expose     => proc do |w,ctx|  
-        y=10
-        12.times { |noline| 
-            avance=(1.0*(12-noline))/12.0
-            ctx.set_source_rgba(0.4,1-avance,avance,1-avance/4)
-            decl=@decl.floor
-            frac=@decl-decl
-            t=@lt[(noline+decl) % @lt.size]
-            fs=4+((noline+1-frac)*10).floor
-            
-            tw=get_text_size(ctx,fs,t)[0]
-            x=[0,(default_width()-tw)/2].max
-            text(ctx,fs,x,y,t) 
-            y+=fs
-          }
-      end)
+      @cv=canvas(self.default_width,self.default_height) {
+         on_canvas_draw do |w,ctx|  
+            y=10
+            12.times do |noline| 
+              avance=(1.0*(12-noline))/12.0
+              ctx.set_source_rgba(0.4,1-avance,avance,1-avance/4)
+              decl=@decl.floor
+              frac=@decl-decl
+              t=@lt[(noline+decl) % @lt.size]
+              fs=4+((noline+1-frac)*10).floor
+              
+              tw=get_text_size(ctx,fs,t)[0]
+              x=[0,(default_width()-tw)/2].max
+              text(ctx,fs,x,y,t) 
+              y+=fs
+          end
+       end
+     }
      space 4
     end
     space 20
