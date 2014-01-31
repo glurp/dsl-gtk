@@ -41,11 +41,6 @@ TODO  :
 - complete rspec => 99% ?
 
 
-TODO  :
-- resolve 100% gtk3 deprecated warning
-- corrections in ruiby_require(?)
-- complete treeview and tree_grid,
-- complete rspec => 99% ?
 
 
 
