@@ -21,22 +21,22 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 0.135.19 !!  01-15-2014
-- EventMachine integration
-- Data binding for entry/slider/check_button : see samples/dyn.rb. Data are saved at exit() (with Ruiby stock capacity)
-- Object data binding ! : Struct like composed of DynVar in place of ruiby values
-- canvas 'closurifier' : callback dsl command in canvas closure
-- canvas instruments : draw primitives,  move/scale/rotate vector
-- check dsl syntaxe : check that each dsl command is valid on  his closure context
+NEW : 1.1.0  !!   02-01-2014
 
-Current:
-- test all ... issue with some samples
-- split ruiby_dsl3 source...
-- TODO : update all canvas,toolbar uses in samples and rspec 
+- composition checking : whan a ruiby commands is done, check if current contaxt (stack/flow/…) authorise this command,
+- Plot, Canvas, toolbar refactorized for to be more DSL
+- Data Variable binding for entry/slider/check_button
+- Object data binding  : Struct like composed of DynVar
+- Stock DynVar and DynObject : data persistence to file on exit
+- better test (77% coverage)
 
-TODO for 1.0 :
-- Data binding for comboBox, radiobutton, text_area, list, grid ...
-- ask_file_for_read... do be refactorized (default dir, file filter...)
+TODO  :
+
+
+- resolve 100% gtk3 deprecated warning
+- corrections in ruiby_require(?)
+- complete treeview and tree_grid,
+- complete rspec => 99% ?
 
 
 TODO  :
