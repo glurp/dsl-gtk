@@ -1,4 +1,23 @@
-0.135.20
+0.135.21
+    test_layout.rb : to 1.0
+    test_canvas.rb : to 1.0
+    test_basics_widget.rb : to 1.0
+    test.rb : to 1.0
+    sketchi.rb : to 1.0
+    paned.rb : to 1.0
+    make_doc.rb : to 1.0
+    gol2.rb : to 1.0
+    gol.rb : to 1.0
+    freedom.rb : to 1.0
+    editor.rb : to 1.0
+    dyn.rb : to 1.0
+    canvas.rb : to 1.0
+    ruiby_dsl3.rb : to 1.0
+    menus_popup.rb : to 1.0
+    layouts.rb : to 1.0
+    form_fields.rb : to 1.0
+    canvas.rb : to 1.0
+    Ruiby.rb : to 1.0
     video.rb : unused var , indentations
     tree.rb : unused var , indentations
     tilesviewer.rb : unused var , indentations
@@ -481,22 +500,3 @@
 0.48.0 : 2012-10-26 20:41:00 +0200
     lib/ruiby_gtk/ruiby_threader.rb : p traces
 0.47.0 : 2012-10-26 19:57:42 +0200
-    samples/monitoring.rb : systray and thread and fugitive dialog with hthread tes
-    lib/ruiby_gtk/windows.rb : on_destroy creation
-    lib/ruiby_gtk/ruiby_threader.rb : qui_invoke_in_window creation
-0.46.0 : 2012-10-26 16:23:05 +0200
-    spec/rspec_helper.rb : nop
-    samples/dialogs.rb : nop
-    lib/ruiby_gtk/ruiby_default_dialog.rb : center windows
-    lib/ruiby_gtk/editor.rb : corect PopupGird and PopupForm
-0.45.0 : 2012-10-09 19:26:30 +0200
-    spec/test_layout.rb : complete
-    spec/test_composites.rb : creation tests for tapble,notebook,scrollable...
-    spec/test_basics_widget.rb : complete
-    spec/test_all.rb : append test_composites
-    spec/rspec_helper.rb : sleeping variations
-    lib/ruiby_gtk/ruiby_dsl.rb : some bug corrections / reurn widgets value
-    lib/ruiby.rb : sleeping
-0.44.0 : 2012-10-02 17:27:52 +0200
-    samples/netprog.rb : threading netstat
-    lib/ruiby_gtk/ruiby_threader.rb : anim() an after correction for delete
