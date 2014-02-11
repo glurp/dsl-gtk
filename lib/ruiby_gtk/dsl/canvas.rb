@@ -35,8 +35,8 @@ module Ruiby_dsl
     cv=DrawingArea.new()
     cv.width_request=width
     cv.height_request=height
-    cv.events |=  ( ::Gdk::Event::Mask::BUTTON_PRESS_MASK | ::Gdk::Event::Mask::POINTER_MOTION_MASK | ::Gdk::Event::Mask::BUTTON_RELEASE_MASK)
-    
+    cv.add_events(Gdk::Event::BUTTON_PRESS_MASK  | Gdk::Event::BUTTON_MOTION_MASK | Gdk::Event::KEY_PRESS_MASK)
+    cv.can_focus = true
     @currentCanvas=cv
     @lcur << HandlerContainer.new
     yield
@@ -201,7 +201,9 @@ module Ruiby_dsl
   # define action on  keyboard press on current **window** definition
   def on_canvas_key_press(&blk)
     _accept?(:handler)
-    signal_connect('key_press_event')  { |w,e| 
+    p "signal key press"    
+    @currentCanvas.signal_connect('key_press_event')  { |w,e| 
+      p "signal key press  ok #{e}"    
       blk.call(w,e,Gdk::Keyval.to_name(e.keyval)) rescue error($!)
       force_update(w) 
     }
