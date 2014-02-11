@@ -8,6 +8,7 @@ Gui programming should be as simpler as in Tcl/Tk environment.
 
 Resources
 ==========
+
 blog: http://raubarede.tumblr.com/post/19640720031/currents-work
 
 Code: http://github.com/raubarede/Ruiby
@@ -57,14 +58,11 @@ Install Ruby 1.9 or 2.0.x
 ```
 > gem update --system    # gem 2.0.3
 > gem install Ruiby
+
 > ruiby_demo             # check good installation with gtk3 (default)
 > ruiby_sketchi          # write and test ruiby code
 ```
 
-NOTA
-GTK3 give some instability : 
-*  window resize scratch on MSWindows, sometime...
-*  many deprecated messages on stdout
 
 
 Usage
@@ -143,7 +141,7 @@ Simple usage with gtk3 :
 require 'Ruiby'
 ```
 
-Usage with gtk2 : 
+Usage with gtk2 (obsollete) : 
 
 ```ruby 
 require 'gtk2'
@@ -221,19 +219,10 @@ Observed Object/Variable
 Dynamic variable
 ----------------
 Often, a widget (an entry, a label, a slider...) show the value of a ruby variable.
-each time a code mofify this variable, it must modify the widget :
-
-```ruby
-  label(" foo: ") ; e=entry("0")
-  is=islider(0)
-  ....
-  foo=43
-  e.value=foo.to_s # here!
-  is.value=foo     # and there!
-  ....
-```
-
+each time a code mofify this variable, it must modify the widget, and vice-versa...
 This is very tyring :)
+
+With data binding, this notifications are done by the framework
 
 So ```DynVar``` can be  used for representing a value variable which is dynamics, ie. 
 which must notify widgets which show the variable state.
@@ -244,7 +233,7 @@ So we can do :
   entry(foo)
   islider(foo)
   ....
-  foo.value=43
+  foo.value=43  ## entry and slider will be updated
   ....
 ```
 
@@ -260,27 +249,28 @@ if you want to be notified for your own traitment, you can observ a DynVar :
 
 Here, a modification of foo variable will be send on the network...
 
-Warning !! the block will be executed in the main thread context (mainloop gtk context).
+Warning !! the block will always be executed in the main thread context (mainloop gtk context).
+So DynVar is a ressource internal to Ruiby framework.
 
-Widget which accesp DynVar are : entry, islider, label
+Widget which accept DynVar are : entry, ientry, islider, label, check_button, 
 
-```to be exend to button,togglebutton... list, grid, video, ...)```
+```must be exend to button, togglebutton, combo, radio_button ... list, grid,...```
 
 
 Dynamic Object
 --------------
 
-Often, this kind of Dyn variables are members of a 'packet', which should be organised by an
+Often, this kind of Dyn variables are members of a 'record', which should be organised by an
 Ruby Object (a Struct...)
 
 So ```DynObject``` create a class, which is organised by a hash  :
 * packet of variable name 
-* initiale values for each
+* put initial value for each
 * each variable will be a DynVar
 
 ```ruby 
   FooClass=make_DynClass("v1" => 1 , "v2" => 2, "s1" => 'Hello...')
-  foo=FooClass.new( "s1" => Time.now.to_s )
+  foo=FooClass.new( "s1" => Time.now.to_s ) # default value of s1 variable is replaced 
   ...
   label(" foo: ") ; entry(foo.s1)
   islider(foo.v1)
