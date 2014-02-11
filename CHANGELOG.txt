@@ -1,4 +1,10 @@
-1.1
+1.1.1
+    test.rb : ruiby icon
+    label_button_image.rb : levelbar creation
+    form_fields.rb : get/set selection mthods
+    canvas.rb : key-press handler correction, but still no good
+    README.md : update DynVar
+2.0 : 2014-02-01 00:47:17 +0100
     Rakefile.rb : make_doc
     doc.html : 1.0 docs
     test_layout.rb : to 1.0
@@ -494,9 +500,3 @@
     editor.rb : mgrid field for test
     README.md : test coverage
     Rakefile.rb : list of ignored file
-    Rakefile.rb : commit with git-status data
-    generate_source_icons : debug
-    Rakefile.rb : commit2
-    Gemfile : creation
-    testth.rb : thread
-0.48.0 : 2012-10-26 20:41:00 +0200
