@@ -111,7 +111,11 @@ module Ruiby_dsl
    w.fraction=start
    attribs(w,{})
   end
-  
+  def levelbar(start=0,options)
+   w=Gtk::LevelBar.new
+   # TODO set value/progress/BynVar
+   attribs(w,{})
+  end
   # specific to gtk : some widget like label can't support click event, so they must
   # be contained in a clickable parent (EventBox)
   #  
