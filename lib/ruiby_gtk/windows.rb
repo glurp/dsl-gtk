@@ -19,6 +19,9 @@ class Ruiby_gtk < Gtk::Window
         Gtk.main_quit
       end
     end
+    iconfn=Ruiby::DIR+"/../media/ruiby.png"
+    set_icon(iconfn) if File.exists?(iconfn)
+    p iconfn
     set_window_position Gtk::Window::Position::CENTER  # default, can be modified by window_position(x,y)
     @lcur=[self]
     @ltable=[]

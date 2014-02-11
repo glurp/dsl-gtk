@@ -1,4 +1,3 @@
-1.1.1
     test.rb : ruiby icon
     label_button_image.rb : levelbar creation
     form_fields.rb : get/set selection mthods
