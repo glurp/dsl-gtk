@@ -36,10 +36,12 @@ def component()
       button_icon_text("undo","Undo") { alert( "undo")} 
       button_icon_text("redo","Redo") { alert("redo") }
     end
-    sloti(label( <<-EEND ,:font=>"Tahoma bold 12"))
-     This window is test & demo of Ruiby capacity. Ruby is #{RUBY_VERSION}, Ruiby is #{Ruiby::VERSION}, 
-     Gtk is  #{Gtk::VERSION.join(".")} HMI code take #{File.read(__FILE__).split("comp"+"onent"+"()")[1].split(/\r?\n/).select {|l| l !~ /\s*#/ && l.strip.size>3}.size} LOC (without blanc lines,comment line,'end' alone)
-	EEND
+    flowi do
+      sloti(label( <<-EEND ,:font=>"Tahoma bold 12"))
+       This window is test & demo of Ruiby capacity. Ruby is #{RUBY_VERSION}, Ruiby is #{Ruiby::VERSION}, 
+       Gtk is  #{Gtk::VERSION.join(".")} HMI code take #{File.read(__FILE__).split("comp"+"onent"+"()")[1].split(/\r?\n/).select {|l| l !~ /\s*#/ && l.strip.size>3}.size} LOC (without blanc lines,comment line,'end' alone)
+      EEND
+    end
     separator
     flow {
        @left=stack {
@@ -49,7 +51,12 @@ def component()
       separator
       stack do
         notebook do
-          page("","#home") { label("A Notebook Page with icon as button-title",{font: "Arial 18"}) }
+          page("","#home") { 
+             stack(margins: 40){
+                image(Ruiby::DIR+"/../media/ruiby.png")
+                label("A Notebook Page with icon as button-title",{font: "Arial 18"}) 
+             }
+          }
           page("List & grids") { test_list_grid }		
           page("Explorer") { test_treeview }
           page("ex&dia") { test_dialog }
