@@ -9,7 +9,7 @@ module Ruiby_dsl
   # dfault : text activate or index of text in array
   # bloc ! called when a choice is selected
   #
-  # Usage :  combo(%w{aa bb cc},"bb") { |text;index| alert("the choice is #{text} at #{index}") }
+  # Usage :  combo(%w{aa bb cc},"bb") { |text,index| alert("the choice is #{text} at #{index}") }
   #
   def combo(choices,default=nil,option={},&blk)
     # TODO Dyn
@@ -26,8 +26,10 @@ module Ruiby_dsl
         end
     end
     w.signal_connect(:changed) { |w,evt|
-      blk.call(w.active_text,choices[w.active_text])
-    } if blk    
+        indice=choices[w.active_text]
+        w.set_selection(w.active_text,indice)
+        blk.call(w.active_text,indice) if blk    
+    }
     attribs(w,option)   
     class << w
       def choices()
@@ -37,6 +39,8 @@ module Ruiby_dsl
          clear
          h.keys.each { |k| append_text(k) }
       end
+      def set_selection(t,i) @selection=[t,i] end
+      def get_selection()   (@selection||["",-1]) end
     end
     w
   end
