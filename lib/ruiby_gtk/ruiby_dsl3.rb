@@ -183,6 +183,7 @@ module Ruiby_dsl
       #p options if options && options.size>0
       apply_options(w,options)
       autoslot(w)  # slot() precedent widget if exist and not already sloted, and declare this one as the precedent
+      def w.options(config) $__mainwindow__.apply_options(self,config) end
       w
   end
   # apply some styles  property  to an existing widget. 
@@ -210,6 +211,7 @@ module Ruiby_dsl
       end
       w
   end
+  def _() @current_widget end
   def color_conversion(color)
     case color 
       when ::Gdk::RGBA then color
