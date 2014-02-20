@@ -1,4 +1,5 @@
-1.1.2
+1.1.3
+    README.md : update 
     sketchi.rb : dynamic editor execution
     windows.rb : indentation
     ruiby_dsl3.rb : alias for currnt widget : '_'
@@ -499,4 +500,3 @@
     test_composites.rb : list, htoolbar
     test_basics_widget.rb : complete
     test_all.rb : test_dialogs appended
-    rspec_helper.rb : rcov if global run
