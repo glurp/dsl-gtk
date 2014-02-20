@@ -1,3 +1,9 @@
+1.1.2
+    sketchi.rb : dynamic editor execution
+    windows.rb : indentation
+    ruiby_dsl3.rb : alias for currnt widget : '_'
+    list_grid.rb : list: get_data, closure on selection
+    editors.rb : closure for on-change
     test.rb : ruiby icon
     label_button_image.rb : levelbar creation
     form_fields.rb : get/set selection mthods
@@ -494,8 +500,3 @@
     test_basics_widget.rb : complete
     test_all.rb : test_dialogs appended
     rspec_helper.rb : rcov if global run
-    windows.rb : corrections for tests
-    ruiby_dsl.rb : corrections for tests
-    editor.rb : mgrid field for test
-    README.md : test coverage
-    Rakefile.rb : list of ignored file
