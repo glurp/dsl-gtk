@@ -10,14 +10,14 @@ class Ruiby_gtk < Gtk::Window
   def initialize(title,w,h)
     super()
     init_threader()
-        #threader(10) # must be call by user window, if necessary
-        set_title(title)
-        set_default_size(w,h)
-        signal_connect "destroy" do 
-      if @is_main_window
-        @is_main_window=false
-        Gtk.main_quit
-      end
+    #threader(10) # must be call by user window, if necessary
+    set_title(title)
+    set_default_size(w,h)
+    signal_connect "destroy" do 
+        if @is_main_window
+          @is_main_window=false
+          Gtk.main_quit
+        end
     end
     iconfn=Ruiby::DIR+"/../media/ruiby.png"
     set_icon(iconfn) if File.exists?(iconfn)
