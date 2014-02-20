@@ -31,18 +31,30 @@ module Ruiby_dsl
     if block_given?
       treeview.selection.signal_connect("changed") do |selection, path, column1|
         li=[];i=0;selection.selected_each {|model1, path1, iter|  li << path1.to_s.to_i; i+=1 }
-        yield(li) 
+        ldata=[];model.each {|model, path, iter|  ldata << iter.get_value(0) }
+        ld=li.map { |idx| ldata[idx] }
+        yield(li,ld) rescue error($!)
       end   
     end
     treeview.append_column(column)
     treeview.selection.set_mode(:multiple)
     scrolled_win.add_with_viewport(treeview)
+    
+    def scrolled_win.options(c) $__mainwindow__.apply_options(children[0].children[0],c) end
     def scrolled_win.list() children[0].children[0] end
     def scrolled_win.model() list().model end
     def scrolled_win.clear() list().model.clear end
     def scrolled_win.add_item(word)
       raise("list.add_item() out of main thread!") if $__mainthread__ != Thread.current
       list().model.append[0]=word  
+    end
+    def scrolled_win.get_data()
+      raise("list.get_data() out of main thread!") if $__mainthread__ != Thread.current
+      puts 
+      l=[];list().model.each {|model, path, iter| 
+          l << iter.get_value(0)
+      }
+      l
     end
     def scrolled_win.set_data(words)
       raise("list.set_data() out of main thread!") if $__mainthread__ != Thread.current
