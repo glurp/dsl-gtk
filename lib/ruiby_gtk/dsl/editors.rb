@@ -10,7 +10,7 @@ module Ruiby_dsl
   # options= :width  :height :on_change :lang :font
   # @edit=source_editor().editor
   # @edit.buffer.text=File.read(@filename)
-  def source_editor(args={}) 
+  def source_editor(args={},&blk) 
     #return(nil) # loading gtksourceview3 scratch application...
     begin
       require 'gtksourceview3'
@@ -23,7 +23,6 @@ module Ruiby_dsl
     args[:width]  = 400 unless args[:width]
     args[:height] = 300 unless args[:height]
     change_proc = proc { }
-    (change_proc = args[:on_change]; args.delete :on_change) if args[:on_change]
     sv = GtkSource::View.new
     sv.show_line_numbers = true
     sv.insert_spaces_instead_of_tabs = false
@@ -37,7 +36,14 @@ module Ruiby_dsl
     cb.define_singleton_method(:editor) { sv }
     cb.define_singleton_method(:text=) { |t| sv.buffer.text=t }
     cb.define_singleton_method(:text) {  sv.buffer.text }
-
+    
+    if block_given?
+      sv.signal_connect('key_press_event') { |w,evt|
+          blk.call(w,w.buffer.text) rescue error($!)
+          false
+      }
+    end
+    
     cb.set_size_request(args[:width], args[:height])
     cb.set_policy(:automatic, :automatic)
     cb.set_shadow_type(:in)
