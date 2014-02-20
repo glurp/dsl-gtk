@@ -22,20 +22,13 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 1.1.0  !!   02-01-2014
+NEW : 1.1.2  !!   20-02-2014
 
-- composition checking : when a ruiby commands is done, check if current context (stack/flow/…) authorise this command,
-- Plot, Canvas, toolbar refactorized for to be more DSL (old canvas command become canvasOld() )
-
-- Data Variable binding for entry/slider/check_button
-- Object data binding  : Struct like composed of DynVar
-- Stock DynVar and DynObject : data persistence to file on exit
-
-- better test (77% coverage)
+- list: get_data, closure on-selection, with ndex(s) and data(s) selected
 
 TODO  :
 
-
+- css style for windows !
 - resolve 100% gtk3 deprecated warning
 - corrections in ruiby_require(?)
 - complete treeview and tree_grid,
