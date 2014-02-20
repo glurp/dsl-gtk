@@ -26,11 +26,10 @@ end
 stack {
    stacki { b ; b ; b}
    stack { flow { 
-		stacki { b;b;b}; 
-		f=frame("Eeedddddddd") { b;b;w=b ; } ; 
-		f.set_border_width(30)
-	 } 
-   } 
+    stacki { b;b;b}; 
+    f=frame("Eeedddddddd") { b;b;w=b ; } ; 
+    f.set_border_width(30)
+   } } 
    buttoni("eeeeeeeee")
 }
 EEND
@@ -57,8 +56,8 @@ EEND
         flow_paned(1200,0.5) do 
           stack {
             @title=sloti(label("Edit"))
-            @edit=slot(source_editor(:lang=> "ruby", :font=> "Courier new 12")).editor
-            sloti(button("Test...") { execute() })
+            @edit=(source_editor(:lang=> "ruby", :font=> "Courier new 12") {|w,t| source_changed(t) }).editor
+            @bt=buttoni("Test...") { execute() }
           }
           stack { @demo=stack {label("empty...")} }
         end
@@ -70,7 +69,19 @@ EEND
         end
       end
     end
+    @last_text_changed=false
+    anim(10) {
+      if Array===@last_text_changed && @last_text_changed.last<Time.now-0.3
+          @last_text_changed=false
+          old=@content
+          ok=execute(false)
+          execute(false,old) unless ok
+          @bt.options(bg: ok ?  "#C0C0C0" : "#FFAAAA") 
+          @bt.label= ok ? "Test" : "Test (currently, error)"
+      end
+    } 
   end
+  
   def dialog_icones
     dialog "Ruiby Predefined icones" do
         stack do
@@ -98,20 +109,22 @@ EEND
         }
     end
   end
-  def execute()
-    @content=@edit.buffer.text
+  def source_changed(t) @last_text_changed=[t,Time.now] end
+  def execute(err=true,text=nil)
+    @content= text ? text : @edit.buffer.text
     clear_append_to(@demo) {
       frame { stack {
       eval(@content,binding() ,"<script>",1) 
       @error_log.text="ok." 
       } }
     }
-    File.open(@filedef,"w") {|f| f.write(@content)} if @content.size>30
+    File.open(@filedef,"w") {|f| f.write(@content)} if @content.size>30 && ! text
+    true
   rescue Exception => e
-    trace(e)
+    trace(e) if err
+    false
   end
   def trace(e)
-    @error_log.text="eeeee"
     @error_log.text=e.to_s + " : \n   "+ e.backtrace[0..3].join("\n   ")
   end
   def make_api(ta)
