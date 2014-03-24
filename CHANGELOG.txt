@@ -1,4 +1,7 @@
-1.1.3
+1.1.4
+    spygui.rb : net slow simulation
+    systray.rb : window position
+    canvas.rb : test
     README.md : update 
     sketchi.rb : dynamic editor execution
     windows.rb : indentation
@@ -497,6 +500,3 @@
 0.49.0 : 2012-11-05 19:05:45 +0100
     test_layout.rb : complete
     test_dialogs.rb : creation
-    test_composites.rb : list, htoolbar
-    test_basics_widget.rb : complete
-    test_all.rb : test_dialogs appended
