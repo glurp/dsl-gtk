@@ -114,7 +114,6 @@ hdoc['spacei']= '<div class="api"><br>def spacei(n=1)</div><div></div>';
 hdoc['bourrage']= '<div class="api"><br>def bourrage(n=1)</div><div></div>';
 hdoc['button']= '<div class="api"><br>def button(text,option={},&blk)</div><div>create  button, with text (or <a href=#image>image</a> if txt start with a )<br>block argument is evaluate at button click<br></div>';
 hdoc['buttoni']= '<div class="api"><br>def buttoni(text,option={},&blk)</div><div>create  <a href=#button>button</a>, with text (or <a href=#image>image</a> if txt start with a )<br>block argument is evaluate at <a href=#button>button</a> click, slotied :<br>packed without expand for share free place<br></div>';
-hdoc['button_icon_text']= '<div class="api"><br>def button_icon_text(icon,text="",options={},&b)</div><div>a <a href=#button>button</a> with icon+text vertivcaly aligned,<br>can be call anywhere, and in htool_bar_with_icon_text<br>option is <a href=#label>label</a> options and  isize ( option for icon size, see <a href=#label>label</a>())<br></div>';
 hdoc['slider']= '<div class="api"><br>def slider(start=0.0,min=0.0,max=1.0,options={})</div><div>Create a horizontal bar with a stick which can be moved.<br>block (if defined) is invoked on each <a href=#value>value</a> changed<br><a href=#w>w</a>.proess=n can force current position at n<br><br></div>';
 hdoc['progress_bar']= '<div class="api"><br>def progress_bar(start=0,options)</div><div>Show the evolution if a numeric <a href=#value>value</a>. Evolution is a number between 0 and 1.0<br><a href=#w>w</a>.progress=n  force current evolution <br></div>';
 hdoc['levelbar']= '<div class="api"><br>def levelbar(start=0,options)</div><div></div>';
@@ -232,6 +231,7 @@ hdoc['htoolbar']= '<div class="api"><br>def htoolbar(options={})</div><div>horiz
 hdoc['toolbar_button']= '<div class="api"><br>def toolbar_button(name,tooltip=nil,&blk)</div><div></div>';
 hdoc['toolbar_separator']= '<div class="api"><br>def toolbar_separator()</div><div></div>';
 hdoc['htoolbar_with_icon_text']= '<div class="api"><br>def htoolbar_with_icon_text(conf={})</div><div>horizontal toolbar of (icone+text)<br><br>htoolbar_with_icon_text do<br><a href=#button_icon_text>button_icon_text</a> "dialog_info","text info" do <a href=#alert>alert</a>(1) end<br><a href=#button_icon_text>button_icon_text</a> "sep"<br>end<br><br>if icone <a href=#name>name</a> start with sep : a vertical <a href=#separator>separator</a> is drawn in place of touch<br>see sketchi<br><br></div>';
+hdoc['button_icon_text']= '<div class="api"><br>def button_icon_text(icon,text="",options={},&b)</div><div>a <a href=#button>button</a> with icon+text verticaly aligned,<br>can be call anywhere, and in htool_bar_with_icon_text<br>option is <a href=#label>label</a> options and  isize ( option for icon size, see <a href=#label>label</a>())<br></div>';
 hdoc['show_methods']= '<div class="api"><br>def show_methods(obj=nil,filter=nil)</div><div>show methods of a object/class in <a href=#log>log</a> window<br></div>';
 hdoc['propertys']= '<div class="api"><br>def propertys(title,hash,options={:edit=>false, :scroll=>[0,0]},&b)</div><div>deprecated: see <a href=#properties>properties</a><br></div>';
 hdoc['properties']= '<div class="api"><br>def properties(title,hash,options={:edit=>false, :scroll=>[0,0]})</div><div>create a property shower/editor : vertical liste of <a href=#label>label</a>/<a href=#entry>entry</a> representing the ruby Hash content<br>Edition: Option: use :<a href=#edit>edit</a> => true for show <a href=#value>value</a> in text <a href=#entry>entry</a>, and a validate <a href=#button>button</a>, <br>on <a href=#button>button</a> action, yield of bloc parameter is done with modified Hash as argument<br><a href=#widget>widget</a> define set_data()methods for changing current <a href=#value>value</a><br></div>';
@@ -282,8 +282,8 @@ function popup(word) {
  </head>
 <body>
 <div class='title'>Ruiby DSL Documentation</div>
-Ruiby Version: 1.1.5<br>
-Generated at : 2014-03-24 16:48:58 +0100<br>
+Ruiby Version: 1.2.0<br>
+Generated at : 2014-04-18 21:01:48 +0200<br>
 <a href="#code">See code example</a>
 <hr>
 <center>Search : <input type='input' value="" size='80' onchange='doSearch(this.value);'></center>
@@ -390,7 +390,7 @@ Generated at : 2014-03-24 16:48:58 +0100<br>
 
 <div class='atitle'><a name='button_icon_text'>button icon text</a></div>
 <div class='api'>def button_icon_text(icon,text="",options={},&b)</div>
-<div class='descr'>a <a href='#button'>button</a> with icon+text vertivcaly aligned,<br>can be call anywhere, and in htool_bar_with_icon_text<br>option is <a href='#label'>label</a> options and  isize ( option for icon size, see <a href='#label'>label</a>())<br> <a href='#ex_button_icon_text'>ex</a></div>
+<div class='descr'>a <a href='#button'>button</a> with icon+text verticaly aligned,<br>can be call anywhere, and in htool_bar_with_icon_text<br>option is <a href='#label'>label</a> options and  isize ( option for icon size, see <a href='#label'>label</a>())<br> <a href='#ex_button_icon_text'>ex</a></div>
 
 <div class='atitle'><a name='button_list'>button list</a></div>
 <div class='api'>def button_list()</div>
@@ -5891,7 +5891,7 @@ MjAxNC0wMS0wNlQyMToxMDoyNSswMTowMIYhEJgAAAAASUVORK5CYII=
   end
 end
 
-  def test_table	
+  def test_table
     <a href='javascript:popup("frame");'>frame</a>("Forms",margins: 10,bg: "#FEE") { <a href='javascript:popup("table");'>table</a>(2,10,{set_column_spacings: 3}) do
         <a href='javascript:popup("row");'>row</a> { <a href='javascript:popup("cell_right");'>cell_right</a>(<a href='javascript:popup("label");'>label</a>  "state")             ; <a href='javascript:popup("cell");'>cell</a>(<a href='javascript:popup("button");'>button</a>("set") { <a href='javascript:popup("alert");'>alert</a>("?") }) }
         <a href='javascript:popup("row");'>row</a> { <a href='javascript:popup("cell_right");'>cell_right</a> <a href='javascript:popup("label");'>label</a>  "speed"              ; <a href='javascript:popup("cell");'>cell</a>(<a name='ex_entry'></a><a href='javascript:popup("entry");'>entry</a>("aa"))  }
@@ -5955,43 +5955,43 @@ end
       end 
   end
   def test_treeview()
-	<a href='javascript:popup("stack");'>stack</a> do
-	  tr=<a name='ex_tree_grid'></a><a href='javascript:popup("tree_grid");'>tree_grid</a>(%<a href='javascript:popup("w");'>w</a>{month <a href='javascript:popup("name");'>name</a> prename 0age ?male},200,300)
-	  tr.set_data({
-	    janvier: {
-	      s1:["aaa","bbb",22,true],
-	      s2:["aaa","bbb",33,false],
-	      s3:["aaa","bbb",111,true],
-	      s4:["aaa","bbb",0xFFFF,true],
-	    },
-	    fevrier: {
-	      s1:["aaa","bbb",22,true],
-	      s2:["aaa","bbb",33,false],
-	    },
-	  })
-	end
+  <a href='javascript:popup("stack");'>stack</a> do
+    tr=<a name='ex_tree_grid'></a><a href='javascript:popup("tree_grid");'>tree_grid</a>(%<a href='javascript:popup("w");'>w</a>{month <a href='javascript:popup("name");'>name</a> prename 0age ?male},200,300)
+    tr.set_data({
+      janvier: {
+        s1:["aaa","bbb",22,true],
+        s2:["aaa","bbb",33,false],
+        s3:["aaa","bbb",111,true],
+        s4:["aaa","bbb",0xFFFF,true],
+      },
+      fevrier: {
+        s1:["aaa","bbb",22,true],
+        s2:["aaa","bbb",33,false],
+      },
+    })
+  end
   end
   def test_dialog()
-	<a href='javascript:popup("stack");'>stack</a> do
-	  <a href='javascript:popup("sloti");'>sloti</a>(<a name='ex_button_expand'></a><a href='javascript:popup("button_expand");'>button_expand</a>("Test <a href='javascript:popup("button_expand");'>button_expand</a>()") {
-	   <a href='javascript:popup("flow");'>flow</a> {  2.times { |c| <a href='javascript:popup("stack");'>stack</a> { 5.times { |a| <a href='javascript:popup("label");'>label</a>("#{c}x#{a}",{font: "arial 33"}) } } } }
-	  })
-	  <a href='javascript:popup("buttoni");'>buttoni</a>("dailog...") do
-	    rep=<a name='ex_dialog'></a><a href='javascript:popup("dialog");'>dialog</a>("modal window...") {
-	      <a href='javascript:popup("label");'>label</a>("eee")  
-	      <a href='javascript:popup("list");'>list</a>("aa",100,100)
-	    }
-	    <a href='javascript:popup("alert");'>alert</a>("Response was "+rep.to_s)
-	  end
-	  <a name='ex_space'></a><a href='javascript:popup("space");'>space</a>
-	  <a href='javascript:popup("buttoni");'>buttoni</a>("dailog async...") do
-	    <a name='ex_dialog_async'></a><a href='javascript:popup("dialog_async");'>dialog_async</a>("modal window...",{response: proc {|a| <a href='javascript:popup("alert");'>alert</a>(a);true}}) {
-	      <a href='javascript:popup("label");'>label</a>("eee") 
-	      <a href='javascript:popup("list");'>list</a>("aa",100,100)
-	    }
-	  end
-	  <a href='javascript:popup("buttoni");'>buttoni</a>("  Crud in memory ") { test_crud() }        
-	end
+  <a href='javascript:popup("stack");'>stack</a> do
+    <a href='javascript:popup("sloti");'>sloti</a>(<a name='ex_button_expand'></a><a href='javascript:popup("button_expand");'>button_expand</a>("Test <a href='javascript:popup("button_expand");'>button_expand</a>()") {
+     <a href='javascript:popup("flow");'>flow</a> {  2.times { |c| <a href='javascript:popup("stack");'>stack</a> { 5.times { |a| <a href='javascript:popup("label");'>label</a>("#{c}x#{a}",{font: "arial 33"}) } } } }
+    })
+    <a href='javascript:popup("buttoni");'>buttoni</a>("dailog...") do
+      rep=<a name='ex_dialog'></a><a href='javascript:popup("dialog");'>dialog</a>("modal window...") {
+        <a href='javascript:popup("label");'>label</a>("eee")  
+        <a href='javascript:popup("list");'>list</a>("aa",100,100)
+      }
+      <a href='javascript:popup("alert");'>alert</a>("Response was "+rep.to_s)
+    end
+    <a name='ex_space'></a><a href='javascript:popup("space");'>space</a>
+    <a href='javascript:popup("buttoni");'>buttoni</a>("dailog async...") do
+      <a name='ex_dialog_async'></a><a href='javascript:popup("dialog_async");'>dialog_async</a>("modal window...",{response: proc {|a| <a href='javascript:popup("alert");'>alert</a>(a);true}}) {
+        <a href='javascript:popup("label");'>label</a>("eee") 
+        <a href='javascript:popup("list");'>list</a>("aa",100,100)
+      }
+    end
+    <a href='javascript:popup("buttoni");'>buttoni</a>("  Crud in memory ") { test_crud() }        
+  end
   end
   def test_list_grid()
       <a href='javascript:popup("flow");'>flow</a> {
