@@ -54,15 +54,13 @@ class SysTray < StatusIcon
   #self.tooltip=title
   self.signal_connect('activate'){ 
     if window.visible? 
-      $wposition=window.position
       window.hide
     else
-      window.move(*$wposition)
       window.show 
     end
   }
   self.signal_connect('popup-menu'){|tray, button, time|
-    @popup_tray.popup(nil, nil, button, time) #{|menu, x, y, push_in| [(x0||x),(y0||y)] }
+    @popup_tray.popup(nil,nil, button, time) #{|menu, x, y, push_in| [(x0||x),(y0||y)] }
   }
   end
 end

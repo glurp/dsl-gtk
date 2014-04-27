@@ -32,7 +32,7 @@ class Proxy
   def self.stop
     puts "Terminating ProxyServer.."
     if @proxy
-      EventMachine.stop_server(@proxy)  rescue area "Issue stoping proxy : #{$!}"
+      EventMachine.stop_server(@proxy)  rescue puts "Issue stoping proxy : #{$!}"
       @proxy=nil
     end
   end
@@ -56,11 +56,19 @@ def sdata(prefix,str0)
   ($glob ? prefix+sout(str.gsub(/\r?\n/," <//> ")) : str.split(/\r?\n/).map {|l| prefix+sout(l)}.join("\n")).chomp
 end
 
-def area(t)  $ta.text=$ta.text+t+"\n" end
+def area(t)  
+  $ta.text=$ta.text+t+"\n" 
+rescue Exception => e
+$ta.text=$ta.text + "???\n"
+end
+
 def stop()    Proxy.stop              end
 def taclear() $ta.text="cleared!"     end
 
-def run(wspy,wtarget) 
+def run(wspy,wtarget,stempo,str_size) 
+  tempo= (stempo.size>0) ? (stempo.to_f)/1000.0 : nil
+  tr_size=(str_size.size>0) ? str_size.to_i : nil
+  tempo=22 if tr_size && ! tempo
   raise("missing proxy port number") if wspy[:port].text.size==0 || wspy[:port].text.to_i<=0
   raise("missing target host") if wtarget[:host].text.size==0 
   raise("missong target port") if wtarget[:port].text.size==0 || wtarget[:port].text.to_i<=0
@@ -71,17 +79,41 @@ def run(wspy,wtarget)
         area "Starting..."
         # modify / process request stream
         conn.on_data do |data|
-          area "#{"="*(SLINE/2)} #{data} #{("="*(SLINE/2))}" if data=~/GET|PUT|POST|HEAD.*HTTP.1/
-          area "#{datelog()}|__data__: " +  sdata(">>:",data)
+          area "#{"="*(SLINE/2)} #{data.split("\r\n")[0]} #{("="*(SLINE/2))}" if data=~/GET|PUT|POST|HEAD.*HTTP.1/
+          #area "#{datelog()}|__data__: " +  sdata(">>:",data)
           Log.debug "#{datelog()}|__data__: " +  sdata(">>:",data)
-          data
+          if tr_size
+            it=1
+            data.chars.each_slice(tr_size/2) { |ld| 
+              s=ld.join("")
+              tt=(tempo*it).to_i
+              EM.add_timer( tt ) { 
+                 p [tt,s]
+                 @servers.values.first.send_data(s)  if @servers.values.size>0
+              }
+              it+=1
+             }
+             nil
+          else
+            data
+          end
         end
 
         # modify / process response stream
         conn.on_response do |backend, data|
-          area "#{datelog()}|response: "  + sdata("<<:",data)
+          #area "#{datelog()}|response: "  + sdata("<<:",data)
           Log.debug "#{datelog()}|response: "  + sdata("<<:",data)
-          data
+          if tr_size
+            it=1
+            data.chars.each_slice(tr_size) { |ld| 
+              s=ld.join("")
+              EM.add_timer( (tempo*it).to_i) { send_data(s) ; area "  #{it} #{s.gsub(/\r?\n/," ")[0..100]}..."}
+              it+=1
+           }
+           nil
+          else
+           data
+          end
         end
 
         # termination logic
@@ -117,17 +149,26 @@ Ruiby.app width: 800,height: 400,title: "Proxy" do
           cell(box {
               label("target: host port")
               wtarget[:host]=entry("localhost")
-              wtarget[:port]=entry("80")
+              wtarget[:port]=entry("7070")
           }) 
         }
         row {cell(label("")) ;cell(label("")) ;cell(label("")) ;cell(label("  |  ")) ;}        
         row {cell(label("")) ;cell(label("")) ;cell(label("")) ;cell(label("  |  ")) ;}        
         row {cell(label("")) ;cell(label("")) ;cell(label("")) ;cell(label("  V  ")) ;}        
         row {
-          cell(label("")) ;cell(label("")) ;cell(label("")) ;cell(label("  Screen ")) ;
+          cell_hspan_right(2,label("tempo tronconnage : ")) 
+          cell(@et=entry("55",5,width: 40)) 
+          cell(label("  Screen ")) ;
+        }        
+        row {
+          cell_hspan_right(2,label("taille Tronconnage: ")) 
+          cell(@st=entry("200",5,width: 40)) 
         }        
       end
-      flowi { button("Run") {run(wspy,wtarget)}; button("Stop") {stop()}; button("Clear") {taclear()}; button("Logs..") {consult_log()}}
+      flowi { button("Run") {run(wspy,wtarget,@et.text,@st.text)} 
+      button("Stop") {stop()}; 
+      button("Clear") {taclear()}
+      button("Logs..") {consult_log()}}
     end
     $ta=text_area(0,0,{font: "Courier bold 10"})
     buttoni("Exit") { exit!(0)}

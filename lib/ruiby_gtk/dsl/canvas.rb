@@ -24,6 +24,7 @@ module Ruiby_dsl
   #     w.draw_circle(cx,cy,rayon,colorFill,colorStroke,widthStroke)
   #     w.draw_recangle(x0,y0,w,h,colorFill,colorStroke,widthStroke)
   #     w.draw_image(x,y,filename)
+  #     w.draw_text(x,y,text,scale,color)
   #     lxy=w.translate(lxy,dx=0,dy=0) # move a list of points
   #     lxy=w.rotate(lxy,x0,y0,angle)  # rotate a list of points
   #     w.scale(10,20,2) { w.draw_image(3,0,filename) } # draw in a transladed/scaled coord system
