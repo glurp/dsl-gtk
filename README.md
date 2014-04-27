@@ -295,7 +295,7 @@ LGPL, CC BY-SA
 Exemples
 ========
 see samples in "./samples" directory
-See at end of Doc reference : [Ex.](https://rawgithub.com/raubarede/Ruiby/master/doc.html#code) 
+See at end of Doc reference : [Ex.](https://rawgithub.com/glurp/Ruiby/master/doc.html#code) 
 
 A little one
 ------------
