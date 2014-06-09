@@ -1,4 +1,4 @@
-# Ruiby [![Build Status](https://secure.travis-ci.org/raubarede/Ruiby.png?branch=master)](http://travis-ci.org/raubarede/Ruiby) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/raubarede/Ruiby) [![Dependency Status](http://www.versioneye.com/package/Ruiby/badge.png)](http://www.versioneye.com/package/Ruiby)
+# Ruiby [![Dependency Status](http://www.versioneye.com/package/Ruiby/badge.png)](http://www.versioneye.com/package/Ruiby)
 [![Gem Version](https://badge.fury.io/rb/Ruiby.png)](http://badge.fury.io/rb/Ruiby)
 
 A DSL for building simple GUI ruby application.
@@ -9,12 +9,10 @@ Gui programming should be as simpler as in Tcl/Tk environment.
 Resources
 ==========
 
-blog: http://raubarede.tumblr.com/post/19640720031/currents-work
 
-Code: http://github.com/raubarede/Ruiby
+Code: http://github.com/glurp/Ruiby
 
-Doc: [Ref.](https://rawgithub.com/raubarede/Ruiby/master/doc.html)   
-
+Doc: [Ref.](https://rawgithub.com/glurp/Ruiby/master/doc.html)   
 
 Gem : https://rubygems.org/gems/Ruiby
 
@@ -22,7 +20,7 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 1.1.2  !!   20-02-2014
+NEW : 1.3.0  !!   20-02-2014
 
 - list: get_data, closure on-selection, with ndex(s) and data(s) selected
 
@@ -69,7 +67,7 @@ class Application < Ruiby_gtk
     def initialize(t,w,h)
         super(t,w,h)
     end	
-	def component()        
+	def component()
 	  stack do
 		...
 	  end
@@ -297,7 +295,7 @@ LGPL, CC BY-SA
 Exemples
 ========
 see samples in "./samples" directory
-See at end of Doc reference : [Ex.](https://rawgithub.com/raubarede/Ruiby/master/doc.html#code) 
+See at end of Doc reference : [Ex.](https://rawgithub.com/glurp/Ruiby/master/doc.html#code) 
 
 A little one
 ------------
