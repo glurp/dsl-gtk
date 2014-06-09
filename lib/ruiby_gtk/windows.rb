@@ -33,6 +33,7 @@ class Ruiby_gtk < Gtk::Window
       error("COMPONENT() : "+$!.to_s + " :\n     " +  $!.backtrace[0..10].join("\n     "))
       exit(1)
     end
+	Ruiby.apply_provider(self)
     begin
       show_all 
     rescue
@@ -104,7 +105,8 @@ module Ruiby
       error("ruiby_component block : "+$!.to_s + " :\n     " +  $!.backtrace[0..10].join("\n     "))
       exit!
     end
-     show_all
+	Ruiby.apply_provider(self)
+	show_all
   end
 end
 
