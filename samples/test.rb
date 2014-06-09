@@ -16,14 +16,14 @@ mlog 'require ruiby....'   ; require_relative '../lib/Ruiby' ; mlog 'require rui
 
 class RubyApp < Ruiby_gtk
     def initialize
-		mlog "befor init"
-        super("Testing Ruiby",600,0)
-		mlog 'after init'
-		after(1) { mlog("first update") }
+      mlog "befor init"
+          super("Testing Ruiby",600,0)
+      mlog 'after init'
+      after(1) { mlog("first update") }
     end
-	
-	
+
 def component()   
+  (puts "\n\n####define style...####\n\n" ; def_style "* { background-image:  -gtk-gradient(linear, left top, left bottom, from(#AAA), to(@888));border-width: 3;}") if ARGV.size>0 && ARGV[0]=~/css/i
   self.override_font(Pango::FontDescription.new("Tahoma 10")) 
   #def_style3("* { font_name :  Courier }")
   after(1000) {puts "\n\n\n"  ; Gem.loaded_specs.each {|name,gem| puts "  #{gem.name}-#{gem.version}"} }
@@ -55,6 +55,13 @@ def component()
              stack(margins: 40){
                 image(Ruiby::DIR+"/../media/ruiby.png")
                 label("A Notebook Page with icon as button-title",{font: "Arial 18"}) 
+				buttoni("Test css defininition...") {
+					ici=self
+					dialog_async("Edit Css style...",:response => proc {def_style(@css_editor.editor.buffer.text);false}) {
+					   @css_editor=source_editor(:width=>300,:height=>200,:lang=> "css", :font=> "Courier new 12")
+					   @css_editor.editor.buffer.text="* { background-image:  -gtk-gradient(linear, left top, left bottom, \nfrom(#AAA), to(@888));\nborder-width: 3;}"
+					}
+				}
              }
           }
           page("List & grids") { test_list_grid }		
@@ -92,7 +99,7 @@ def component()
   end
 end
 
-  def test_table	
+  def test_table
     frame("Forms",margins: 10,bg: "#FEE") { table(2,10,{set_column_spacings: 3}) do
         row { cell_right(label  "state")             ; cell(button("set") { alert("?") }) }
         row { cell_right label  "speed"              ; cell(entry("aa"))  }
@@ -156,43 +163,43 @@ end
       end 
   end
   def test_treeview()
-	stack do
-	  tr=tree_grid(%w{month name prename 0age ?male},200,300)
-	  tr.set_data({
-	    janvier: {
-	      s1:["aaa","bbb",22,true],
-	      s2:["aaa","bbb",33,false],
-	      s3:["aaa","bbb",111,true],
-	      s4:["aaa","bbb",0xFFFF,true],
-	    },
-	    fevrier: {
-	      s1:["aaa","bbb",22,true],
-	      s2:["aaa","bbb",33,false],
-	    },
-	  })
-	end
+  stack do
+    tr=tree_grid(%w{month name prename 0age ?male},200,300)
+    tr.set_data({
+      janvier: {
+        s1:["aaa","bbb",22,true],
+        s2:["aaa","bbb",33,false],
+        s3:["aaa","bbb",111,true],
+        s4:["aaa","bbb",0xFFFF,true],
+      },
+      fevrier: {
+        s1:["aaa","bbb",22,true],
+        s2:["aaa","bbb",33,false],
+      },
+    })
+  end
   end
   def test_dialog()
-	stack do
-	  sloti(button_expand("Test button_expand()") {
-	   flow {  2.times { |c| stack { 5.times { |a| label("#{c}x#{a}",{font: "arial 33"}) } } } }
-	  })
-	  buttoni("dailog...") do
-	    rep=dialog("modal window...") {
-	      label("eee")  
-	      list("aa",100,100)
-	    }
-	    alert("Response was "+rep.to_s)
-	  end
-	  space
-	  buttoni("dailog async...") do
-	    dialog_async("modal window...",{response: proc {|a| alert(a);true}}) {
-	      label("eee") 
-	      list("aa",100,100)
-	    }
-	  end
-	  buttoni("  Crud in memory ") { test_crud() }        
-	end
+  stack do
+    sloti(button_expand("Test button_expand()") {
+     flow {  2.times { |c| stack { 5.times { |a| label("#{c}x#{a}",{font: "arial 33"}) } } } }
+    })
+    buttoni("dailog...") do
+      rep=dialog("modal window...") {
+        label("eee")  
+        list("aa",100,100)
+      }
+      alert("Response was "+rep.to_s)
+    end
+    space
+    buttoni("dailog async...") do
+      dialog_async("modal window...",{response: proc {|a| alert(a);true}}) {
+        label("eee") 
+        list("aa",100,100)
+      }
+    end
+    buttoni("  Crud in memory ") { test_crud() }        
+  end
   end
   def test_list_grid()
       flow {
