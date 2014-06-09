@@ -1,4 +1,17 @@
-1.1.5
+1.3.1
+    tilesviewer.rb : tiles on f4map
+    test.rb : test style edition
+    css.rb : traces
+    windows.rb : apply_provider on each window creation
+    ruiby_dsl3.rb : set_name in options
+    pixmap.rb : traces
+    layouts.rb : apply_provider on each new window
+    label_button_image.rb : image.new gtk3
+    commands.rb : def_style working
+    Ruiby.rb : memo and apply style provider
+    Rakefile.rb : no giti
+1.3.0 : 2014-04-18 21:01:51 +0200
+1.2.0 : 2014-03-24 16:48:59 +0100
     spygui.rb : net slow simulation
     systray.rb : window position
     canvas.rb : test
@@ -487,16 +500,3 @@
     ruiby_default_dialog.rb : ask_dir_to_write and ask_dir_to read creation
     test_thread.rb : gui_invoke test
     test_layout.rb : licenses
-    test_dialogs.rb : licenses
-    test_composites.rb : properties test
-    test_basics_widget.rb : image tests
-    rspec_helper.rb : destroy
-    ruiby_dsl.rb : haccordeon return value
-    Rakefile.rb : show diff
-    README.md : rspec stae
-    Rakefile.rb :  verification licenses sources files
-    test.rb : popup test
-    ruiby_dsl.rb : popup creation
-0.49.0 : 2012-11-05 19:05:45 +0100
-    test_layout.rb : complete
-    test_dialogs.rb : creation
