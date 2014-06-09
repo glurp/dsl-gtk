@@ -9,8 +9,8 @@
 require_relative '../lib/Ruiby'
 require 'open-uri'
 
- $URLTILES='http://otile4.mqcdn.com/tiles/1.0.0/osm/ZOOM/LON/LAT.jpg'
-#$URLTILES='http://otile4.mqcdn.com/tiles/1.0.0/sat/ZOOM/LON/LAT.jpg'
+#$URLTILES='http://otile4.mqcdn.com/tiles/1.0.0/osm/ZOOM/LON/LAT.jpg'
+$URLTILES='http://localhost:7707/tiles/ZOOM/LON/LAT.png'
 $SHOW_TILES_BORDER=false
 
 ######################################### Tiles cache ###############################
@@ -132,31 +132,28 @@ module Carto
 end
 
 ######################################## Ruiby App ############################################
-
-Ruiby.app(:width=> 800, :height=>800, :title=> "Map") do
+$w= (ARGV.shift || "800").to_i
+$h= (ARGV.shift || "800").to_i
+Ruiby.app(:width=> $w, :height=>$h, :title=> "Map") do
   extend Tools
   extend Carto
   $app=self
   @ct=CacheTiles.new(self)
-  @z=(ARGV[0]||Ruiby.stock_get("Z","5")).to_i
-  @lon0=(ARGV[1]||Ruiby.stock_get("LON","2.0")).to_f
-  @lat0=(ARGV[2]||Ruiby.stock_get("LAT","48.0")).to_f
+  idx= (ARGV[0] && ARGV[0]=="take-a-snapshot") ? 1 : 0
+  @z=(ARGV[idx]||Ruiby.stock_get("Z","5")).to_i
+  @lon0=(ARGV[idx+1]||Ruiby.stock_get("LON","2.0")).to_f
+  @lat0=(ARGV[idx+2]||Ruiby.stock_get("LAT","48.0")).to_f
   @lonRef=@lon0
   @latRef=@lat0
   @zRef=@z
   stack {
-    @cv=canvas(self.default_width,self.default_height) {
-      on_canvas_draw { |w,ctx|  expose(w,ctx) }
-      on_canvas_button_press {|w,e|  [e.x,e.y]  }
-      on_canvas_button_motion {|w,e,o| n=[e.x,e.y] ;$app.move_carto(n[0]-o[0],n[1]-o[1]) if o ;n }
-      on_canvas_button_release {|w,e,o| n=[e.x,e.y] ;$app.move_carto(n[0]-o[0],n[1]-o[1]) }
-    }
     flowi { 
       regular
       table(0,0) { 
           row { cell( label "Lon/Lat : " ) ; cell( @wlonlat=entry("",6) ) }
-         row  { cell( label "Zoom: "     ) ; cell( @wzoom=ientry(@z,min: 1,max: 18) { |v| @z=v.to_i })}
+          row  { cell( label "Zoom: "     ) ; cell( @wzoom=ientry(@z,min: 1,max: 18) { |v| @z=v.to_i })}
       }
+      button("snapshot") { snapshot("snapshot.png") } 
       button("Goto...") { 
         prompt("Longitude ?",@lon0.to_s) { |lon|  
           prompt("Latitude  ?",@lat0.to_s) { |lat| 
@@ -173,6 +170,13 @@ Ruiby.app(:width=> 800, :height=>800, :title=> "Map") do
         button("X") { begin load __FILE__ ; rescue Exception => e ; error(e) ; end} 
         button("Exit") { ruiby_exit } 
       }
+    }
+  
+    @cv=canvas(self.default_width,self.default_height) {
+      on_canvas_draw { |w,ctx|  expose(w,ctx) }
+      on_canvas_button_press {|w,e|  [e.x,e.y]  }
+      on_canvas_button_motion {|w,e,o| n=[e.x,e.y] ;$app.move_carto(n[0]-o[0],n[1]-o[1]) if o ;n }
+      on_canvas_button_release {|w,e,o| n=[e.x,e.y] ;$app.move_carto(n[0]-o[0],n[1]-o[1]) }
     }
   }
   anim(20) {
