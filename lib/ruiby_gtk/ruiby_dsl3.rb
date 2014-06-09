@@ -205,6 +205,7 @@ module Ruiby_dsl
       w.override_background_color(:normal,color_conversion(options[:bg])) if options[:bg] 
       w.override_color(:normal,color_conversion(options[:fg]))            if options[:fg] 
       w.override_font(Pango::FontDescription.new(options[:font]))         if options[:font]
+	  w.set_name(options[:id]) if options[:id]
       if options[:tooltip]
         w.set_tooltip_markup(options[:tooltip])
         w.has_tooltip=true
@@ -288,6 +289,21 @@ module Ruiby_dsl
       yield
     }
   end
+  # a button with icon+text verticaly aligned,
+  # can be call anywhere, and in htool_bar_with_icon_text
+  # option is label options and  isize ( option for icon size, see label())
+  def button_icon_text(icon,text="",options={},&b)
+       if icon !~ /^sep/
+          spacei
+          pclickablie(proc { b.call  }) { stacki { 
+              label("#"+icon,{isize: (options[:isize] || :dialog) }) 
+              label(text[0,15],options)
+         } }
+       else
+          separator
+       end
+  end
+  
   # show methods of a object/class in log window
   def show_methods(obj=nil,filter=nil)
     obj=self unless obj
