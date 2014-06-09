@@ -109,26 +109,26 @@ module Ruiby_dsl
   end
   
 
-  ############################ define style !! Warning: specific to gtk
+  ############################ define style 
   #
   
-  # not ready!!!
-  def def_style(string_style=nil)
-    unless string_style
-       fn=caller[0].gsub(/.rb$/,".rc")
-       raise "Style: no ressource (#{fn} not-exist)" if !File.exists?(fn)
-       string_style=File.read(fn)
-    end
-    begin
-      css=Gtk::CssProvider.new
-      css.load(data: string_style)
-      self.style_context.add_provider(css, 600)      
-      @style_loaded=true
-    rescue Exception => e
-      error "Error loading style : #{e}\n#{string_style}"
-    end
-  end
-  
+	def def_style(string_style=nil)
+		unless string_style
+		   fn=caller[0].gsub(/.rb$/,".rc")
+		   raise "Style: no ressource (#{fn} not-exist)" if !File.exists?(fn)
+		   string_style=File.read(fn)
+		end
+		begin
+		  css=Gtk::CssProvider.new
+		  css.load(data: string_style)
+		  Ruiby.set_style_provider(css)
+		  Ruiby.apply_provider(self)
+		rescue Exception => e
+		  error "Error loading style : #{e}\n#{string_style}"
+		end
+	end
+
+	 
   # make a snapshot raster file of current window
   # can be called by user. 
   # Is called by mainloop if string 'take-a-snapshot' is present in ARGV
@@ -139,14 +139,15 @@ module Ruiby_dsl
      require 'win32ole'
      
      filename=Time.now.strftime("%D-%H%m%s.png").gsub('/','-') unless filename
-
+     
+     # window must have a title...
      if ! self.title || self.title.size<3
         self.title=Time.now.to_f.to_s.gsub('.','')
      end
     File.delete(filename) if File.exists?(filename)
     puts "generated  for title '#{self.title}' ==> #{filename} ..."
     Win32::Screenshot::Take.of(:window,:title => /#{self.title}/, :context => :window).write(filename)
-    puts "done #{File.size(filename)} B"
+    puts "nsnapshot done, size= #{File.size(filename)/1024} KB, name=#{filename}"
   end  
 
   ###################################### Logs
