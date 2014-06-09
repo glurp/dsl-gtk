@@ -48,7 +48,20 @@ module Ruiby
       end
       ret.flatten.sort
   end
-
+  class << self
+	  def set_style_provider(provider)
+		@@provider=provider
+	  end
+	  def apply_provider(widget)
+		  return unless defined?(@@provider)
+		  widget.style_context.add_provider(@@provider, GLib::MAXUINT)
+		  if widget.is_a?(Gtk::Container)
+			widget.each_forall { |child| Ruiby.apply_provider(child) }
+		  elsif widget.respond_to?(:child)
+			Ruiby.apply_provider(widget.child) 
+		  end
+	  end
+  end
   ###########################################################
   #                S t o r a g e 
   ###########################################################
