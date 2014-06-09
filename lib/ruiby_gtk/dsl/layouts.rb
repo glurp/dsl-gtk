@@ -340,6 +340,7 @@ module Ruiby_dsl
     @lcur << dialog.child
     hbox=stack { yield }
     @lcur.pop
+	Ruiby.apply_provider(dialog.child)
     if config[:response]
       dialog.signal_connect('response') do |w,e|
         rep=config[:response].call(dialog,e) 
@@ -369,10 +370,11 @@ module Ruiby_dsl
     @lcur.pop
     
     dialog.set_window_position(:center)
+	Ruiby.apply_provider(dialog.child)
     dialog.show_all 
     rep=dialog.run  #  blocked
     dialog.destroy
-    dialog
+    rep==-3
   end
   
 end
