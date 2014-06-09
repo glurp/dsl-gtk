@@ -38,7 +38,7 @@ module Ruiby_dsl
   def get_pixbuf(name)
     @cach_pix={} unless defined?(@cach_pix)
     if @cach_pix.size>100
-      puts "purge cach pixbuf"
+      puts "purge cached pixbuf (>100)"
       @cach_pix={}
     end
     filename,px,py,bidon,dim=name.split(/\[|,|(\]x)/)
