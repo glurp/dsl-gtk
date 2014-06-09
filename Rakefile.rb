@@ -127,7 +127,7 @@ task :pre_commit do
 --------------------------------------------------------------------
 EEND2
   
-  #sh "giti"
+  sh "giti"
   $changed=false
 end
 
@@ -160,7 +160,7 @@ task :commit => [:pre_commit,"commit_status",:post_commit]
 #  gem build & push
 #############################################################
 desc "make a gem and push it to gemcutter"
-task :gem => :commit do
+task :gem  do
   puts <<EEND
 
 
@@ -170,7 +170,7 @@ task :gem => :commit do
 EEND
   ruby "samples/make_doc.rb","1"
   sh "git commit doc.html -m update"
-  sh "git push"
+  #sh "git push"
   $version=change_version { |a| 
       a[-2]=(a[-2].to_i+1) 
       a[-1]=0 
