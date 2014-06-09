@@ -43,7 +43,7 @@ module Ruiby_dsl
       pix=Gdk::Pixbuf.new(file) 
       pix=pix.scale(options[:width],options[:height],Gdk::Pixbuf::INTERP_BILINEAR) if options[:width] && options[:height]
       pix=pix.scale(options[:size],options[:size],Gdk::Pixbuf::INTERP_BILINEAR)  if options[:size] 
-      Image.new(pix)
+      Image.new(pixbuf: pix)
     else
       label("? "+file)
     end
@@ -74,20 +74,6 @@ module Ruiby_dsl
   #  packed without expand for share free place
   def buttoni(text,option={},&blk) sloti(button(text,option,&blk)) end 
   
-  # a button with icon+text vertivcaly aligned,
-  # can be call anywhere, and in htool_bar_with_icon_text
-  # option is label options and  isize ( option for icon size, see label())
-  def button_icon_text(icon,text="",options={},&b)
-       if icon !~ /^sep/
-          spacei
-          pclickablie(proc { b.call  }) { stacki { 
-              label("#"+icon,{isize: (options[:isize] || :dialog) }) 
-              label(text[0,15],options)
-         } }
-       else
-          separator
-       end
-  end
   
   # Create a horizontal bar with a stick which can be moved.
   # block (if defined) is invoked on each value changed
@@ -128,7 +114,7 @@ module Ruiby_dsl
     eventbox = Gtk::EventBox.new
     eventbox.events =Gdk::Event::Mask::BUTTON_PRESS_MASK
     ret=_cbox(true,eventbox,{},true,&b) 
-    eventbox.realize
+    #eventbox.realize
     eventbox.signal_connect('button_press_event') { |w, e| self.send(method_name,ret)  rescue error($!) }
     ret
   end
@@ -144,7 +130,7 @@ module Ruiby_dsl
     eventbox = Gtk::EventBox.new
     eventbox.events = Gdk::Event::Mask::BUTTON_PRESS_MASK
     ret=_cbox(true,eventbox,{},true,&b) 
-    eventbox.realize
+    #eventbox.realize
     eventbox.signal_connect('button_press_event') { |w, e| aproc.call(w,e)  rescue error($!)  } if aproc
     apply_options(eventbox,options)
     ret
@@ -156,7 +142,7 @@ module Ruiby_dsl
     eventbox = Gtk::EventBox.new
     eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
     ret=_cbox(false,eventbox,{},true,&b) 
-    eventbox.realize
+    #eventbox.realize
     eventbox.signal_connect('button_press_event') { |w, e| aproc.call(w,e)  rescue error($!)  } if aproc
     apply_options(eventbox,options)
     ret
