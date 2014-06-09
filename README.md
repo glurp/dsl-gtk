@@ -27,6 +27,7 @@ NEW : 1.4.0  !!   06-09-2014
 
 TODO  :
 
+- refactor samples demos with last improve
 - resolve 100% gtk3 deprecated warning
 - corrections in ruiby_require(?)
 - complete treeview and tree_grid,
