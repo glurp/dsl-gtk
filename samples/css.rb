@@ -54,7 +54,7 @@ Ruiby.app width: 400, height: 300, title: "Css test" do
           css= @ed.buffer.text 
           Ruiby.stock_put("css",css)
           def_style( @ed.buffer.text )
-          make_c()
+          #make_c()
         }
       end
       @c=stack do end
