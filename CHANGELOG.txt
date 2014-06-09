@@ -1,4 +1,3 @@
-1.3.1
     tilesviewer.rb : tiles on f4map
     test.rb : test style edition
     css.rb : traces

@@ -20,13 +20,13 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 1.3.0  !!   20-02-2014
+NEW : 1.4.0  !!   06-09-2014
 
-- list: get_data, closure on-selection, with ndex(s) and data(s) selected
+- def_style() working
+- some gtk3 complains corrected
 
 TODO  :
 
-- css style for windows !
 - resolve 100% gtk3 deprecated warning
 - corrections in ruiby_require(?)
 - complete treeview and tree_grid,
