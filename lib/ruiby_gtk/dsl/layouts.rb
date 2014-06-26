@@ -140,7 +140,7 @@ module Ruiby_dsl
   def slot(w)  @current_widget=nil; _pack(@lcur.last,w,true) ; w end
   
   # pack widget in parameter, take only necessary space
-  def sloti(w) @current_widget=nil; @lcur.last.pack_start(w, :expand => false, :fill => false, :padding => 3) ; w end
+  def sloti(w) @current_widget=nil; @lcur.last.pack_start(w, :expand => false, :fill => false, :padding => 0) ; w end
 
   # slot() precedently created widget if not sloted.
   # this is done by attribs(w) which is call after construction of almost all widget
