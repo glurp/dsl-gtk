@@ -1,3 +1,7 @@
+1.4.1
+    layouts.rb : packi without padding
+    commands.rb : log scrolling
+1.4.0 : 2014-06-09 21:34:52 +0200
     tilesviewer.rb : tiles on f4map
     test.rb : test style edition
     css.rb : traces
@@ -496,6 +500,3 @@
 0.51.0 : 2012-11-24 00:50:28 +0100
     ruiby_dsl.rb : image size correction
     ruiby_dsl.rb : size, width, height options for all widget
-    ruiby_default_dialog.rb : ask_dir_to_write and ask_dir_to read creation
-    test_thread.rb : gui_invoke test
-    test_layout.rb : licenses
