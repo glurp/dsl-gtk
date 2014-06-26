@@ -109,9 +109,8 @@ module Ruiby_dsl
   end
   
 
-  ############################ define style 
-  #
-  
+	# define a set ofcss style, to be apply to every widget of main window
+	# if noparameter, load a file <caller>.rcZ
 	def def_style(string_style=nil)
 		unless string_style
 		   fn=caller[0].gsub(/.rb$/,".rc")
@@ -159,11 +158,18 @@ module Ruiby_dsl
       return
     end
     loglabel=_create_log_window()
-    loglabel.buffer.text +=  Time.now.to_s+" | " + (txt.join(" ").encode("UTF-8"))+"\n" 
+	buffer=loglabel.buffer
+	t=Time.now.to_s+" | " + (txt.join(" ").encode("UTF-8"))+"\n"
+	buffer.insert(buffer.end_iter,t)
     if ( loglabel.buffer.text.size>1000*1000)
-      loglabel.buffer.text=loglabel.buffer.text[-7000..-1].gsub(/^.*\n/m,"......\n\n")
+      loglabel.buffer.text=loglabel.buffer.text[-7000..-1]
     end
+	#----------  scroll to bottom, not perfect
+	Ruiby.update
+	vscroll=loglabel.parent.vadjustment
+    vscroll.value = vscroll.upper+8
   end
+  
   def _create_log_window() 
     return(@loglabel) if defined?(@loglabel) && @loglabel && ! @loglabel.destroyed?
    wdlog = Dialog.new(
