@@ -1,4 +1,7 @@
-1.4.1
+1.6.1
+    README.md : update 1.7
+1.6.0 : 2014-06-26 17:27:04 +0200
+1.5.0 : 2014-06-26 16:59:55 +0200
     layouts.rb : packi without padding
     commands.rb : log scrolling
 1.4.0 : 2014-06-09 21:34:52 +0200
@@ -497,6 +500,3 @@
     ruiby_dsl.rb : slot table widget
 0.52.0 : 2012-11-26 13:26:43 +0100
     ruiby.rb : correction stocker file basename
-0.51.0 : 2012-11-24 00:50:28 +0100
-    ruiby_dsl.rb : image size correction
-    ruiby_dsl.rb : size, width, height options for all widget
