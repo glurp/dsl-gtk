@@ -20,10 +20,12 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 1.4.0  !!   06-09-2014
+NEW : 1.7.0  !!   06-26-2014
 
 - def_style() working
 - some gtk3 complains corrected
+- log auto-scrolling
+- log tests
 
 TODO  :
 
