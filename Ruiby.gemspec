@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version  = File.read("VERSION").strip
   s.date     = Time.now.to_s.split(/\s+/)[0]
   s.email    = "regis.aubarede@gmail.com"
-  s.homepage = "http://raubarede.tumblr.com/"
+  s.homepage = "http://github.com/glurp/Ruiby"
   s.authors  = ["Regis d'Aubarede"]
   s.summary  = "A  DSL for building simple GUI ruby/gtk application"
   s.description = <<EEND
