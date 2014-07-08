@@ -24,8 +24,6 @@ class RubyApp < Ruiby_gtk
 
 def component()   
   (puts "\n\n####define style...####\n\n" ; def_style "* { background-image:  -gtk-gradient(linear, left top, left bottom, from(#AAA), to(@888));border-width: 3;}") if ARGV.size>0 && ARGV[0]=~/css/i
-  self.override_font(Pango::FontDescription.new("Tahoma 10")) 
-  #def_style3("* { font_name :  Courier }")
   after(1000) {puts "\n\n\n"  ; Gem.loaded_specs.each {|name,gem| puts "  #{gem.name}-#{gem.version}"} }
   mlog 'before Component'
   stack do
