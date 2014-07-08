@@ -1,4 +1,17 @@
-1.6.1
+1.7.1
+    test.rb : no def style
+    spygui.png : r
+    sketchi.png : r
+    paned.png : r
+    multi_window_threading.png : r
+    gol2.png : r
+    gol.png : r
+    freedom.png : r
+    editor.png : r
+    demo_runner.png : r
+    color.png : r
+    canvas.png : r
+1.7.0 : 2014-06-26 17:35:50 +0200
     README.md : update 1.7
 1.6.0 : 2014-06-26 17:27:04 +0200
 1.5.0 : 2014-06-26 16:59:55 +0200
@@ -487,16 +500,3 @@
     windows.rb : supress obsolete doc
     ruiby_dsl.rb : autodoc
     ruiby.rb : chrome window command
-    ruiby_dsl.rb : closure on list and grid: called on selection
-    test.rb : draw a timeline of application intialize
-    ruiby_default_dialog.rb : ask_dir_to_write() correction
-    test.rb : test button_expand and dialog
-    windows.rb : spells corrections
-    ruiby_dsl.rb : expand, dialog and dialog_async creation
-    ruiby_dsl.rb : tree_grid with image
-    test.rb : tree_grid test
-    ruiby_dsl.rb : tree_grid creation
-    README.md : treeview
-    ruiby_dsl.rb : slot table widget
-0.52.0 : 2012-11-26 13:26:43 +0100
-    ruiby.rb : correction stocker file basename
