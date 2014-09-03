@@ -1334,7 +1334,7 @@ module Ruiby_dsl
     wdlog = Dialog.new("Logs : #{$0}",
       nil,
       0,
-      [ Stock::OK, Dialog::RESPONSE_NONE ])
+      [ Stock::OK, :none ])
     Ruiby.set_last_log_window(wdlog)
     logBuffer = TextBuffer.new
     @loglabel=TextView.new(logBuffer)
