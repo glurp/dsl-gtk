@@ -255,14 +255,14 @@ EEND
     }
    end
    it "make a snapshot" do
-      File.delete("ici.png") if File.exists?("ici.png")
+      File.delete("/tmp/ici.png") if File.exists?("ici.png")
       @win.create { 
         button("eee")
         label("eeeeeeeeeeeee")
-        snapshot("ici.png")
+        snapshot("/tmp/ici.png")
       }
-      File.exists?("ici.png").should eq(true)
-      File.delete("ici.png")
+      File.exists?("/tmp/ici.png").should eq(true)
+      File.delete("/tmp/ici.png")
    end
  end
  
