@@ -1,4 +1,8 @@
-1.8.1
+1.8.2
+    test_layout.rb : png generated in /tmp
+    windows.rb : accelgreoup for ctrl-shift-h
+    ruiby_dsl.rb : to gtk3 dialo
+    Ruiby.rb : add terminal
     netprog.png : creation
     ruiby_threader.rb : indentation
 1.8.0 : 2014-07-08 15:13:37 +0200
@@ -496,7 +500,3 @@
 0.54.0 : 2013-02-13 18:47:08 +0100
 0.53.0 : 2012-12-12 21:45:21 +0100
     make_doc.rb : footer
-    ruiby_dsl.rb : privates
-    doc.html : footer
-    README.md : autodoc maker
-    sketchi.rb : hemp and api improve
