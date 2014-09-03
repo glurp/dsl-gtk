@@ -1,4 +1,5 @@
-1.8.3
+1.8.4
+    README.md : terminal intro
     README.md : REPL intro
     test_layout.rb : png generated in /tmp
     windows.rb : accelgreoup for ctrl-shift-h
@@ -499,4 +500,3 @@
     editor.rb : test
     ruiby_dsl.rb : separator in properties editor
 0.54.0 : 2013-02-13 18:47:08 +0100
-0.53.0 : 2012-12-12 21:45:21 +0100
