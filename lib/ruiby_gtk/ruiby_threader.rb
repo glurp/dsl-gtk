@@ -22,14 +22,19 @@ module Ruiby_threader
     $__queue__=@queue
     ici=self
     GLib::Timeout.add(per) {
+	  now=Time.now
       while @queue.size>0 
-           mess= @queue.pop
+         mess= @queue.pop
          if Array===mess
             win,mess=*mess
          else
           win=ici
          end
          win.instance_eval(&mess) rescue log("#{$!} :\n  #{$!.backtrace[0..3].join("\n   ")}") 
+		 if (Time.now.to_f-now.to_f)>1
+		   win.update 
+		   now=Time.now
+		 end
       end
          true
         }
@@ -114,6 +119,7 @@ def gui_invoke_wait(&blk)
   if $__mainthread__ != Thread.current
     if defined?($__queue__)
       $__queue__.push( blk ) 
+      $__queue__.push( proc {} )  # dummy bloc, empty stack mean blk is done!
       n=0
       (sleep(0.05);n+=1) while $__queue__.size>0 && n<5000 # 25 secondes max!
     else
