@@ -20,15 +20,17 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 1.7.0  !!   06-26-2014
+NEW : 1.8.0  !!   09-03-2014
 
 - def_style() working
 - some gtk3 complains corrected
 - log auto-scrolling
 - log tests
+- terminal on <Ctrl-Shift-h> on any widget of application
 
 TODO  :
 
+- ended Terminal for complete REPL
 - refactor samples demos with last improve
 - resolve 100% gtk3 deprecated warning
 - corrections in ruiby_require(?)
