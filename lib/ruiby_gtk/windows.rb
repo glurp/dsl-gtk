@@ -12,21 +12,36 @@ class Ruiby_gtk < Gtk::Window
     init_threader()
     #threader(10) # must be call by user window, if necessary
     set_title(title)
+    
+    # set default size/position
+    set_window_position Gtk::Window::Position::CENTER  # default, can be modified by window_position(x,y)
     set_default_size(w,h)
+    
+    # set quit handler    
     signal_connect "destroy" do 
         if @is_main_window
           @is_main_window=false
           Gtk.main_quit
         end
     end
+    # set default icon for application
     iconfn=Ruiby::DIR+"/../media/ruiby.png"
     set_icon(iconfn) if File.exists?(iconfn)
-    p iconfn
-    set_window_position Gtk::Window::Position::CENTER  # default, can be modified by window_position(x,y)
+    
+    # set Ctrl-Shift-h handler
+    agroup = Gtk::AccelGroup.new
+    agroup.connect(Gdk::Keyval::GDK_KEY_H, 
+      Gdk::Window::ModifierType::CONTROL_MASK | Gdk::Window::ModifierType::SHIFT_MASK, 
+      :visible) do |w| 
+      terminal("Debug terminal for #{$0}")
+    end
+    add_accel_group(agroup)
+    
     @lcur=[self]
     @ltable=[]
     @current_widget=nil
     @cur=nil
+  
     begin
       component  
     rescue
