@@ -26,7 +26,7 @@ NEW : 1.8.0  !!   09-03-2014
 - some gtk3 complains corrected
 - log auto-scrolling
 - log tests
-- terminal on <Ctrl-Shift-h> on any widget of application
+- terminal on Ctrl-Shift-h on any widget of application
 
 TODO  :
 
