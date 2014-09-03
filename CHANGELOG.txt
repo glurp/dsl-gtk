@@ -1,4 +1,7 @@
-1.7.1
+1.8.1
+    netprog.png : creation
+    ruiby_threader.rb : indentation
+1.8.0 : 2014-07-08 15:13:37 +0200
     test.rb : no def style
     spygui.png : r
     sketchi.png : r
@@ -497,6 +500,3 @@
     doc.html : footer
     README.md : autodoc maker
     sketchi.rb : hemp and api improve
-    windows.rb : supress obsolete doc
-    ruiby_dsl.rb : autodoc
-    ruiby.rb : chrome window command
