@@ -1,4 +1,7 @@
-1.8.4
+1.8.5
+    test_layout.rb : test snapshot only if windows platform
+    terminal.rb : creation
+    ruiby_terminal.rb : terminal almost ready
     README.md : terminal intro
     README.md : REPL intro
     test_layout.rb : png generated in /tmp
@@ -497,6 +500,3 @@
     table.rb : no
 0.55.0 : 2013-02-15 15:22:38 +0100
     ruiby_dsl.rb : test
-    editor.rb : test
-    ruiby_dsl.rb : separator in properties editor
-0.54.0 : 2013-02-13 18:47:08 +0100
