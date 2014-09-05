@@ -254,8 +254,9 @@ EEND
      stack { }
     }
    end
-   it "make a snapshot" do
-      File.delete("/tmp/ici.png") if File.exists?("ici.png")
+   if RUBY_PLATFORM =~ /in.*32/
+     it "make a snapshot" do
+      File.delete("/tmp/ici.png") if File.exists?("/tmp/ici.png")
       @win.create { 
         button("eee")
         label("eeeeeeeeeeeee")
@@ -263,6 +264,7 @@ EEND
       }
       File.exists?("/tmp/ici.png").should eq(true)
       File.delete("/tmp/ici.png")
+    end
    end
  end
  
