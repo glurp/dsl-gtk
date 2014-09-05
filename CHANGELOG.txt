@@ -1,4 +1,4 @@
-1.8.6
+1.9.0 : 2014-09-05 13:35:23 +0200
     terminal.rb : test and exit
     ruiby_terminal.rb : execute systems commands on terminal
     README.md : terminal update
@@ -499,4 +499,3 @@
     ruiby_dsl.rb : reoganize Kernel methods
     ruiby.rb : reorganize Kernel ressources
     dependencies.rb : creation
-    README.md : correctio

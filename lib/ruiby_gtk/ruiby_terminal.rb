@@ -131,6 +131,9 @@ class Terminal
 end
 
 module Ruiby_default_dialog
+  # create a terminal window INTO the process : gtk terminal
+  # for acces to internal state of the current process
+  # type  help command.
   def terminal(title="Terminal")
     wdlog = Dialog.new(title: title,
       parent: nil,

@@ -1,4 +1,6 @@
-# Ruiby [![Dependency Status](http://www.versioneye.com/package/Ruiby/badge.png)](http://www.versioneye.com/package/Ruiby)
+# Ruiby 
+[![Dependency Status](http://www.versioneye.com/package/Ruiby/badge.png)]
+[![Travis](https://travis-ci.org/glurp/dsl-gtk.svg?branch=master)]
 [![Gem Version](https://badge.fury.io/rb/Ruiby.png)](http://badge.fury.io/rb/Ruiby)
 
 A DSL for building simple GUI ruby application.
