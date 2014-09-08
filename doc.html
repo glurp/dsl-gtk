@@ -246,7 +246,7 @@ hdoc['get_history']= '<div class="api"><br>def get_history(n=-1)</div><div></div
 hdoc['set_history']= '<div class="api"><br>def set_history(n=-1)</div><div></div>';
 hdoc['get_line']= '<div class="api"><br>def get_line()</div><div></div>';
 hdoc['execute']= '<div class="api"><br>def execute(line=nil)</div><div></div>';
-hdoc['terminal']= '<div class="api"><br>def terminal(title="Terminal")</div><div></div>';
+hdoc['terminal']= '<div class="api"><br>def terminal(title="Terminal")</div><div>create a terminal window INTO the process : gtk terminal<br>for acces to internal state of the current process<br>type  help command.<br></div>';
 hdoc['init_threader']= '<div class="api"><br>def init_threader)</div><div>Creative Commons BY-SA :  Regis dAubarede <regis.aubarede@gmail.com><br>LGPL<br>implictly called by Ruiby window creator<br><a href=#initialize>initialize</a> multi thread engine<br></div>';
 hdoc['threader']= '<div class="api"><br>def threader(per)</div><div>must be created by application (in <a href=#initialize>initialize</a>, <a href=#after>after</a> super), active the tread engine for <br>caller window.<br>if several windows, last created is the winner : gtk_invoke will throw to last treaded() window!<br></div>';
 hdoc['anim']= '<div class="api"><br>def anim(n,&blk)</div><div>shot peridicly a  bloc parameter<br>no threading: the bloc is evaluated by gtk mainloop in main thread context<br>return handle of animation. can be stoped by <a href=#delete>delete</a>(anim) // NOT WORK!, return a Numeric...<br></div>';
@@ -291,8 +291,8 @@ function popup(word) {
  </head>
 <body>
 <div class='title'>Ruiby DSL Documentation</div>
-Ruiby Version: 1.8.6<br>
-Generated at : 2014-09-05 13:35:20 +0200<br>
+Ruiby Version: 1.9.1<br>
+Generated at : 2014-09-08 18:36:23 +0200<br>
 <a href="#code">See code example</a>
 <hr>
 <center>Search : <input type='input' value="" size='80' onchange='doSearch(this.value);'></center>
@@ -1039,7 +1039,7 @@ Generated at : 2014-09-05 13:35:20 +0200<br>
 
 <div class='atitle'><a name='terminal'>terminal</a></div>
 <div class='api'>def terminal(title="Terminal")</div>
-<div class='descr'> <a href='#ex_terminal'>ex</a></div>
+<div class='descr'>create a terminal window INTO the process : gtk terminal<br>for acces to internal state of the current process<br>type  help command.<br> <a href='#ex_terminal'>ex</a></div>
 
 <div class='atitle'><a name='text_area'>text area</a></div>
 <div class='api'>def text_area(w=200,h=100,args={})</div>
@@ -2091,8 +2091,8 @@ AABJRU5ErkJggg==
            }           
         end
         <a name='ex_notebook'></a><a href='javascript:popup("notebook");'>notebook</a> do 
-          <a name='ex_page'></a><a href='javascript:popup("page");'>page</a>("Error") { @error_log=<a name='ex_slot'></a><a href='javascript:popup("slot");'>slot</a>(<a name='ex_text_area'></a><a href='javascript:popup("text_area");'>text_area</a>(600,100,{:font=>"Courier new 10"})) }
-          <a href='javascript:popup("page");'>page</a>("Canvas Help") { make_help(<a href='javascript:popup("slot");'>slot</a>(<a href='javascript:popup("text_area");'>text_area</a>(600,100,{:font=>"Courier new 10"}))) }
+          <a name='ex_page'></a><a href='javascript:popup("page");'>page</a>("Error") { @error_log=<a name='ex_text_area'></a><a href='javascript:popup("text_area");'>text_area</a>(600,100,{:font=>"Courier new 10"}) }
+          <a href='javascript:popup("page");'>page</a>("Canvas Help") { make_help(<a href='javascript:popup("text_area");'>text_area</a>(600,100,{:font=>"Courier new 10"})) }
         end
       }
       <a name='ex_buttoni'></a><a href='javascript:popup("buttoni");'>buttoni</a>("reload <a href='javascript:popup("canvas");'>canvas</a>.rb...") do 
@@ -4268,7 +4268,7 @@ class RubyApp &lt; Ruiby_gtk
 					@wdata.<a href='javascript:popup("append");'>append</a>  Time.now.to_s+"\n"
 				end
 			}
-			@wdata= <a href='javascript:popup("slot");'>slot</a>(<a href='javascript:popup("text_area");'>text_area</a>(400,100,:text=>"Hello\n"))
+			@wdata= <a href='javascript:popup("text_area");'>text_area</a>(400,100,:text=>"Hello\n")
 			<a href='javascript:popup("buttoni");'>buttoni</a>("exit") { destroy(<a href='javascript:popup("self");'>self</a>) }
 		}
 		<a name='ex_threader'></a><a href='javascript:popup("threader");'>threader</a>(10)
@@ -5923,7 +5923,7 @@ MjAxNC0wMS0wNlQyMToxMDoyNSswMTowMIYhEJgAAAAASUVORK5CYII=
         end # end <a href='javascript:popup("notebook");'>notebook</a>
         <a href='javascript:popup("frame");'>frame</a>("Buttons in <a href='javascript:popup("frame");'>frame</a>") {
           <a href='javascript:popup("flow");'>flow</a> { <a href='javascript:popup("sloti");'>sloti</a>(<a href='javascript:popup("button");'>button</a>("packed with <a href='javascript:popup("sloti");'>sloti</a>()") {<a href='javascript:popup("alert");'>alert</a>("<a href='javascript:popup("button");'>button</a> packed with <a href='javascript:popup("sloti");'>sloti</a>()")}) 
-            @bref=<a href='javascript:popup("sloti");'>sloti</a>(<a href='javascript:popup("button");'>button</a>("bb")) ;  <a href='javascript:popup("button");'>button</a>("packed with <a href='javascript:popup("slot");'>slot</a>()") ; 
+            @bref=<a href='javascript:popup("sloti");'>sloti</a>(<a href='javascript:popup("button");'>button</a>("bb")) ;  <a href='javascript:popup("button");'>button</a>("packed with <a name='ex_slot'></a><a href='javascript:popup("slot");'>slot</a>()") ; 
           }
         }
         <a href='javascript:popup("frame");'>frame</a>("<a name='ex_regular'></a><a href='javascript:popup("regular");'>regular</a> size sub-<a name='ex_widget'></a><a href='javascript:popup("widget");'>widget</a> (homogeneous)") {
@@ -5935,8 +5935,8 @@ MjAxNC0wMS0wNlQyMToxMDoyNSswMTowMIYhEJgAAAAASUVORK5CYII=
       end
     } # end <a href='javascript:popup("flow");'>flow</a>
     <a href='javascript:popup("flowi");'>flowi</a> { 
-      <a href='javascript:popup("slot");'>slot</a>(<a href='javascript:popup("button");'>button</a>("Test dialogs...") { do_special_actions() })
-      <a href='javascript:popup("slot");'>slot</a>( <a href='javascript:popup("button");'>button</a>("Exit") { <a name='ex_ruiby_exit'></a><a href='javascript:popup("ruiby_exit");'>ruiby_exit</a> })
+      <a href='javascript:popup("button");'>button</a>("Test dialogs...") { do_special_actions() }
+      <a href='javascript:popup("button");'>button</a>("Exit") { <a name='ex_ruiby_exit'></a><a href='javascript:popup("ruiby_exit");'>ruiby_exit</a> }
     }
     mlog '<a href='javascript:popup("after");'>after</a> Component'
   end
