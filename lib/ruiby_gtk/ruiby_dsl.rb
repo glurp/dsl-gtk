@@ -745,12 +745,12 @@ module Ruiby_dsl
   # create a notebook widget. it must contain page() wigget
   # notebook { page("first") { ... } ; ... }
   def notebook() 
-  nb = Notebook.new()
-  slot(nb)
-  @lcur << nb
-  yield
-  @lcur.pop
-  nb
+    nb = Notebook.new()
+    slot(nb)
+    @lcur << nb
+    yield
+    @lcur.pop
+    nb
   end
   # a page widget. only for notebook container.
   # button can be text or icone (if startin by '#', as label)
@@ -766,50 +766,50 @@ module Ruiby_dsl
   ############################## Popup
   # popup { pp_item("text") { } ; ... }
   def popup(w=nil)
-  w ||= @lcur.last() 
-  ppmenu = Gtk::Menu.new
-  @lcur << ppmenu 
-  yield
-  @lcur.pop
-  ppmenu.show_all		
-  w.add_events(Gdk::Event::BUTTON_PRESS_MASK)
-  w.signal_connect("button_press_event") do |widget, event|
-    ppmenu.popup(nil, nil, event.button, event.time) if (event.button == 3)
-  end
-  ppmenu
+    w ||= @lcur.last() 
+    ppmenu = Gtk::Menu.new
+    @lcur << ppmenu 
+    yield
+    @lcur.pop
+    ppmenu.show_all		
+    w.add_events(Gdk::Event::BUTTON_PRESS_MASK)
+    w.signal_connect("button_press_event") do |widget, event|
+      ppmenu.popup(nil, nil, event.button, event.time) if (event.button == 3)
+    end
+    ppmenu
   end
   def pp_item(text,&blk)
-  item = Gtk::MenuItem.new(text)
-  item.signal_connect('activate') { |w| blk.call() }
-  @lcur.last.append(item)
+    item = Gtk::MenuItem.new(text)
+    item.signal_connect('activate') { |w| blk.call() }
+    @lcur.last.append(item)
   end
   def pp_separator()
-  item = Gtk::SeparatorMenuItem.new()
-  @lcur.last.append(item)
+    item = Gtk::SeparatorMenuItem.new()
+    @lcur.last.append(item)
   end
   ############################## Menu
   # create a application menu. must contain menu() {} :
   # menu_bar {menu("F") {menu_button("a") { } ; menu_separator; menu_checkbutton("b") { |w|} ...}}
   def menu_bar()
-  @menuBar= MenuBar.new
-  ret=@menuBar
-  yield
-  sloti(@menuBar)
-  @menuBar=nil
-  ret
+    @menuBar= MenuBar.new
+    ret=@menuBar
+    yield
+    sloti(@menuBar)
+    @menuBar=nil
+    ret
   end
 
   # a vertial drop-down menu, only for menu_bar container
   def menu(text)
-  raise("menu(#{text}) without menu_bar {}") unless @menuBar
-  @filem = MenuItem.new(text.to_s)
-  @menuBar.append(@filem)
-  @mmenu = Menu.new()
-  yield
-  @filem.submenu=@mmenu
-  show_all_children(@mmenu)
-  @filem=nil
-  @mmenu=nil
+    raise("menu(#{text}) without menu_bar {}") unless @menuBar
+    @filem = MenuItem.new(text.to_s)
+    @menuBar.append(@filem)
+    @mmenu = Menu.new()
+    yield
+    @filem.submenu=@mmenu
+    show_all_children(@mmenu)
+    @filem=nil
+    @mmenu=nil
   end
 
   # create an text entry in a menu
