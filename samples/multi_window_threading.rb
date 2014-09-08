@@ -29,7 +29,7 @@ class RubyApp < Ruiby_gtk
 					@wdata.append  Time.now.to_s+"\n"
 				end
 			}
-			@wdata= slot(text_area(400,100,:text=>"Hello\n"))
+			@wdata= text_area(400,100,:text=>"Hello\n")
 			buttoni("exit") { destroy(self) }
 		}
 		threader(10)
