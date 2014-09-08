@@ -11,9 +11,9 @@ class RubyApp < Ruiby_gtk
 		@change=false
 		stack {
 			flow {
-				@ed << slot( calendar(Time.now,:changed=> proc {|c| change(0)} ) )
-				@ed << slot( calendar(Time.now,:changed=> proc {|c| change(1)} ) )
-				@ed << slot( calendar(Time.now,:changed=> proc {|c| change(2)} ) )
+				@ed << calendar(Time.now,:changed=> proc {|c| change(0)} ) 
+				@ed << calendar(Time.now,:changed=> proc {|c| change(1)} ) 
+				@ed << calendar(Time.now,:changed=> proc {|c| change(2)} ) 
 			}
 			@time=sloti( label(Time.now.to_s,:font=>"Arial 24") )
 		}
