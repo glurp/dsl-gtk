@@ -42,7 +42,7 @@ class Application < Ruiby_gtk
   end
   def selection() update()  end
   def component()
-    clickable(:selection) { @st= stack { slot(label("...")) } }
+    clickable(:selection) { @st= stack { label("...") } }
   end
 end
 Ruiby.start { Application.new }
