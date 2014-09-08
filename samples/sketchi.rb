@@ -62,10 +62,10 @@ EEND
           stack { @demo=stack {label("empty...")} }
         end
         notebook do 
-          page("Error") { @error_log=slot(text_area(600,100,{:font=>"Courier new 10"})) }
-          page("Help") { make_help(slot(text_area(600,100,{:font=>"Courier new 10"}))) }
-          page("API") { make_api(slot(text_area(600,100,{:font=>"Courier new 10"}))) }
-          #page("Example") { make_example(slot(text_area(:font=> "Courier new 10"))) }
+          page("Error") { @error_log=text_area(600,100,{:font=>"Courier new 10"}) }
+          page("Help") { make_help(text_area(600,100,{:font=>"Courier new 10"})) }
+          page("API") { make_api(text_area(600,100,{:font=>"Courier new 10"})) }
+          #page("Example") { make_example(text_area(:font=> "Courier new 10")) }
         end
       end
     end
