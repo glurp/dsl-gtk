@@ -90,8 +90,8 @@ def component()
       end
     } # end flow
     flowi { 
-      slot(button("Test dialogs...") { do_special_actions() })
-      slot( button("Exit") { ruiby_exit })
+      button("Test dialogs...") { do_special_actions() }
+      button("Exit") { ruiby_exit }
     }
     mlog 'after Component'
   end
