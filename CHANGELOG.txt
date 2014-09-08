@@ -1,3 +1,15 @@
+1.9.1
+    test_systray.rb : deprecated
+    test.rb : slot
+    sketchi.rb : deprecated
+    multi_window_threading.rb : deprecated
+    hello.rb : deprecated
+    canvas.rb : deprecated
+    cal.rb : deprecated
+    benchi.rb : deprecated
+    ruiby_terminal.rb : timeout before scroll
+    ruiby_dsl.rb : deprecated
+    label_button_image.rb : deprecated
 1.9.0 : 2014-09-05 13:35:23 +0200
     terminal.rb : test and exit
     ruiby_terminal.rb : execute systems commands on terminal
@@ -488,14 +500,3 @@
 0.57.0 : 2013-03-18 16:10:46 +0100
     ruiby_dsl.rb :  no exception if gtksourceview2 is not ready
     editor.rb : no exception if gtksourceview2 is not ready
-    Ruiby.gemspec : pass to gtk 1.2.3 or more
-    test_dialogs.rb : gem test
-    README.md : presentation update
-    README.md : blog reference
-0.56.0 : 2013-02-28 21:04:08 +0100
-    ruiby.rb : hash_to_class creation
-    README.md : web site migtrate to tumbler
-    dependencies.rb : no
-    ruiby_dsl.rb : reoganize Kernel methods
-    ruiby.rb : reorganize Kernel ressources
-    dependencies.rb : creation
