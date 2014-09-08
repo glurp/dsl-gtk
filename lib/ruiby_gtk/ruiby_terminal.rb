@@ -31,7 +31,7 @@ class Terminal
     buf_start, end_iter = @tb.bounds
     @tb.insert(end_iter,text)
     insert=@tb.create_mark("insert", @tb.bounds.last, true)
-    @win.after(1) {
+    @win.after(100) {
       vscroll=@tv.parent.vadjustment
       vscroll.value = vscroll.upper+8
     }
@@ -58,7 +58,6 @@ class Terminal
   
   def execute(line=nil)
     line||=get_line
-    puts "lastline: #{line}"
     line=line.strip
     return if line.size==0
     
