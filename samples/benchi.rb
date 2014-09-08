@@ -55,7 +55,7 @@ class Appli < Ruiby_gtk
 
 	#------------ central  part
     stack do
-	  @a=slot(text_area(300,150,:font => "Courier new 12", :text=> Ruiby.stock_get("test1")  ) ) 
+	  @a=text_area(300,150,:font => "Courier new 12", :text=> Ruiby.stock_get("test1")  ) 
 	  flowi do
 	    button " Test " do
 			code=@a.text
@@ -74,7 +74,7 @@ class Appli < Ruiby_gtk
 		  clear_append_to(@demo) {  bench(@a.text) }
         end			
 	  end
-	  @b=slot(text_area(300,150,:font => "Courier new 12",:text=> Ruiby.stock_get("test2") ) )
+	  @b=text_area(300,150,:font => "Courier new 12",:text=> Ruiby.stock_get("test2") ) 
 	  flowi do
 	    button " Test " ,:width => 0.5 do
 			code=@b.text
