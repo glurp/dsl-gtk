@@ -5,7 +5,9 @@ gem 'rspec'
 gem 'gtk2'
 gem 'gtk3'
 
-gem 'gstreamer','clutter-gtk','clutter-gst'
+gem 'gstreamer'
+gem 'clutter-gtk'
+gem 'clutter-gstreamer'
 
 gem 'simplecov', :require => false, :group => :test
 gem 'gtksourceview3', :require => false, :group => :test
