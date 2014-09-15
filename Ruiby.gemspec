@@ -19,7 +19,7 @@ EEND
     [:runtime,     "gtk3"],
     [:runtime,     "gstreamer"],
     [:runtime,     "clutter-gtk"],
-    [:runtime,     "clutter-gst"],
+    [:runtime,     "clutter-gstreamer"],
     [:runtime, "gtksourceview3"]
   ]
 
