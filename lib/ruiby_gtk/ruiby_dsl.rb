@@ -1001,28 +1001,40 @@ module Ruiby_dsl
   end
 
   ############################# Video
-  # from: green shoes plugin
-  # **  not tested!	**
-  def video(uri,w=300,h=200)
-    wid=DrawingArea.new()
-    wid.set_size_request(w,h)
-    uri = File.join('file://', uri.gsub("\\", '/').sub(':', '')) unless uri =~ /^(\w\w+):\/\//
-    require('gst')
-    require('win32api') rescue nil
-    v = Gst::ElementFactory.make('playbin2')
-    v.video_sink = Gst::ElementFactory.make('dshowvideosink')
-    v.uri = uri
-    args[:real], args[:app] = v, self
-        handle = wid.window.class.method_defined?(:xid) ? @app.win.window.xid : 
-          Win32API.new('user32', 'GetForegroundWindow', [], 'N').call
-        v.video_sink.xwindow_id = handle
-    
-    wid.events |= ( ::Gdk::Event::BUTTON_PRESS_MASK | ::Gdk::Event::POINTER_MOTION_MASK | ::Gdk::Event::BUTTON_RELEASE_MASK)
-    wid.signal_connect('expose_event') do |w1,e| 		
+  # need gems gst, clutter-gtk, clutter-gstreamer
+  # sho a video viewer, with size w andd h.
+  # defined url= , play(), stop()
+
+  
+  def video(url=nil,w=300,h=200)
+    require "gst"
+    require "clutter-gtk"  # gem install clutter-gtk
+    require "clutter-gst"  # gem install clutter-gstreamer
+  
+    clutter = ClutterGtk::Embed.new
+    video=ClutterGst::VideoTexture.new
+    clutter.stage.add_child(video)
+    video.width=w
+    video.height=h
+    video.uri = url if url
+    video.playing = false
+    isNotify=false
+    clutter.define_singleton_method(:url=) { |u| video.url = url }
+    clutter.define_singleton_method(:play) { video.playing = true }
+    clutter.define_singleton_method(:stop) { video.playing = false }
+    clutter.define_singleton_method(:progress=) { |pp|
+            video.progress=(pp) unless isNotify
+    }
+    if block_given?
+      video.signal_connect("notify") { |o,v,param|
+            isNotify=true ;
+            yield(video.progress()) rescue p $! ;
+            isNotify=false
+      }
     end
-    def wid.video() v end
-    wid.video.play
+    attribs(clutter,{})
   end
+end
 
   ######### Scrollable stack container
 
