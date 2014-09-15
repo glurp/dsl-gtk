@@ -1,4 +1,7 @@
-1.14.1
+1.10.100
+    Ruiby.gemspec : gstreamer / gst
+1.16.0 : 2014-09-15 20:24:56 +0200
+1.15.0 : 2014-09-15 20:23:18 +0200
     Ruiby.gemspec : gstreamer gem name
 1.14.0 : 2014-09-15 20:20:51 +0200
     test_basics_widget.rb : supress video test : scrach on window destroy
@@ -497,6 +500,3 @@
     test_gtk3.rb : source editor on
     ruiby_dsl3.rb : sourceeditor on
     Ruiby.gemspec : depend gtk2/3
-0.61.0 : 2013-03-25 16:32:23 +0100
-    test.rb : editor
-    dependencies.rb : creation
