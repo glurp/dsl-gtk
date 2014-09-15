@@ -158,15 +158,15 @@ module Ruiby_dsl
       return
     end
     loglabel=_create_log_window()
-	buffer=loglabel.buffer
-	t=Time.now.to_s+" | " + (txt.join(" ").encode("UTF-8"))+"\n"
-	buffer.insert(buffer.end_iter,t)
+    buffer=loglabel.buffer
+    t=Time.now.to_s+" | " + (txt.join(" ").encode("UTF-8"))+"\n"
+    buffer.insert(buffer.end_iter,t)
     if ( loglabel.buffer.text.size>1000*1000)
       loglabel.buffer.text=loglabel.buffer.text[-7000..-1]
     end
-	#----------  scroll to bottom, not perfect
-	Ruiby.update
-	vscroll=loglabel.parent.vadjustment
+    #----------  scroll to bottom, not perfect
+    Ruiby.update
+    vscroll=loglabel.parent.vadjustment
     vscroll.value = vscroll.upper+8
   end
   
