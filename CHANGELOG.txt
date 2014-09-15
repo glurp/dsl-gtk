@@ -1,4 +1,6 @@
-1.13.1
+1.14.1
+    Ruiby.gemspec : gstreamer gem name
+1.14.0 : 2014-09-15 20:20:51 +0200
     test_basics_widget.rb : supress video test : scrach on window destroy
     form_fields.rb : pack radiobuttons
     Gemfile : gstreamer / gst
@@ -498,5 +500,3 @@
 0.61.0 : 2013-03-25 16:32:23 +0100
     test.rb : editor
     dependencies.rb : creation
-    ruiby_dsl.rb : only for gtk2
-    ruiby.rb : conditionaly require dsl or dsl3 gor gtk3
