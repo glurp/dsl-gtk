@@ -91,9 +91,9 @@ module Ruiby_dsl
       b0=nil
       ltext.each_with_index {|t,i|
         b=if i==0
-            b0=slot(RadioButton.new(t))
+            b0=RadioButton.new(t)
         else
-            slot(RadioButton.new(b0,t))
+            RadioButton.new(b0,t)
         end
         if i==value
           b.toggled 
@@ -118,9 +118,9 @@ module Ruiby_dsl
     s=var_box(sens,{},false) {
       ltext.each_with_index {|t,i|
         b=if i==0
-            b0=slot(RadioButton.new(t))
+            b0=RadioButton.new(t)
         else
-            slot(RadioButton.new(b0,t))
+            RadioButton.new(b0,t)
         end
         if i==value
           b.toggled 
