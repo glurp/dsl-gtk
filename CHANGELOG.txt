@@ -1,4 +1,10 @@
-1.10.1
+1.13.1
+    test_basics_widget.rb : supress video test : scrach on window destroy
+    form_fields.rb : pack radiobuttons
+    Gemfile : gstreamer / gst
+1.13.0 : 2014-09-15 20:14:22 +0200
+1.12.0 : 2014-09-15 19:43:33 +0200
+1.11.0 : 2014-09-15 19:39:34 +0200
     ruiby_dsl3.rb : video word
     ruiby_dsl.rb : video word
     layouts.rb : nothing
@@ -494,9 +500,3 @@
     dependencies.rb : creation
     ruiby_dsl.rb : only for gtk2
     ruiby.rb : conditionaly require dsl or dsl3 gor gtk3
-0.60.0 : 2013-03-20 18:38:42 +0100
-    sketchi.rb : gtk3, not finish (missing editor)
-    ruiby_default_dialog.rb : FileDialog for gtk3, incomplete
-    ruiby.rb : gtk3 can be preloaded
-    README.md : gtk3 install
-0.59.0 : 2013-03-20 17:58:36 +0100
