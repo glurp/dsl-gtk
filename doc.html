@@ -93,8 +93,8 @@ hdoc['set_selection']= '<div class="api"><br>def set_selection(t,i)</div><div></
 hdoc['get_selection']= '<div class="api"><br>def get_selection()</div><div></div>';
 hdoc['toggle_button']= '<div class="api"><br>def toggle_button(text1,text2=nil,value=false,option={},&blk)</div><div>to state <a href=#button>button</a>, with text for each state and a initiale <a href=#value>value</a><br><a href=#value>value</a> can be read by <a href=#w>w</a>.active?<br>calue can be changed by <a href=#w>w</a>.set_active(true/false)<br>callback on state change with new <a href=#value>value</a> as argument<br></div>';
 hdoc['check_button']= '<div class="api"><br>def check_button(text="",value=false,option={},&blk)</div><div>create a checked <a href=#button>button</a><br>state can be read by cb.active?<br></div>';
-hdoc['hradio_buttons']= '<div class="api"><br>def hradio_buttons(ltext=["empty!"],value=-1)</div><div>as <a href=#vradio_buttons>vradio_buttons</a> , but horizontaly disposed<br></div>';
 hdoc['vradio_buttons']= '<div class="api"><br>def vradio_buttons(ltext=["empty!"],value=-1)</div><div>create a liste of radio <a href=#button>button</a>, vertically disposed<br><a href=#value>value</a> is the indice of active item (0..(n-1)) at creation time<br>define 2 methods:<br><li> get_selected          get indice of active radio-<a href=#button>button</a><br><li> set_selected(indice)  set indice of active radio-<a href=#button>button</a><br></div>';
+hdoc['hradio_buttons']= '<div class="api"><br>def hradio_buttons(ltext=["empty!"],value=-1)</div><div>as <a href=#vradio_buttons>vradio_buttons</a> , but horizontaly disposed<br></div>';
 hdoc['entry']= '<div class="api"><br>def entry(value,size=10,option={},&blk)</div><div>create a text entry for keyboard input<br>if block defined, it while be trigger on eech of (character) change of the entry<br></div>';
 hdoc['ientry']= '<div class="api"><br>def ientry(value,option={},&blk)</div><div>create a integer text <a href=#entry>entry</a> for keyboed input<br>option must define :min :max :by for spin <a href=#button>button</a><br></div>';
 hdoc['fentry']= '<div class="api"><br>def fentry(value,option={},&blk)</div><div>create a integer text <a href=#entry>entry</a> for keyboed input<br>option must define :min :max :by for spin <a href=#button>button</a><br></div>';
@@ -292,8 +292,8 @@ function popup(word) {
  </head>
 <body>
 <div class='title'>Ruiby DSL Documentation</div>
-Ruiby Version: 1.11.0<br>
-Generated at : 2014-09-15 19:43:31 +0200<br>
+Ruiby Version: 1.12.0<br>
+Generated at : 2014-09-15 20:14:20 +0200<br>
 <a href="#code">See code example</a>
 <hr>
 <center>Search : <input type='input' value="" size='80' onchange='doSearch(this.value);'></center>
