@@ -9,22 +9,6 @@ describe Ruiby do
  after(:each) do
   destroy_window(@win)
  end
- it "video" do
-  @win.create do
-    video() rescue nil
-    video_file="d:/usr/XT.avi"
-    video_url="file:///#{video_file}"
-    stack do
-      @v=video(video_url,600,400-40)  {|progress| @prog && @prog.progress=progress*100 }
-      flowi {
-        buttoni("  Start  ") {  @v.play }
-        buttoni("  Stop  ") {  @v.stop }
-        @prog=slider(0,0,100.0) { |pos| @v && @v.progress= pos/100.0}
-      }
-      @v.play
-    end 
-   end
-  end if defined?(Gst)
  it "create a button" do
     s=nil;@win.create { s=stack {  } }
     @win.append_to(s) { @win.button("CouCou") { puts "coucou" } }
@@ -145,8 +129,8 @@ describe Ruiby do
  it "create radio buttons" do
     w=nil
     @win.create { stack {    
-     w=hradio_buttons(%w{a b c d e f},2)
-     vradio_buttons(%w{a b c d e f},2)
+       w=hradio_buttons(%w{a b c d e f},2)
+       vradio_buttons(%w{a b c d e f},2)
     } }
     w.children[0].should be_a_kind_of(Gtk::RadioButton)
  end
@@ -211,5 +195,24 @@ describe Ruiby do
     v.value=false
     v.value.should eq(false)
  end
- 
+=begin
+ it "video" do
+   puts "\n\n=============== Video test !!!!  ==================\nScratch possibility...\n\n"
+   sleep 1
+  @win.create do
+    video_file="d:/usr/XT.avi"
+    video_url="file:///#{video_file}"
+    stack do
+      @v=video(video_url,120,90)  {|progress| @prog && @prog.progress=progress*100 }
+      flowi {
+        buttoni("  Start  ") {  @v.play }
+        buttoni("  Stop  ") {  @v.stop }
+        @prog=slider(0,0,100.0) { |pos| @v && @v.progress= pos/100.0}
+      }
+      @v.play
+      @v.destroy
+    end 
+   end
+  end if defined?(Gst)
+=end 
 end
