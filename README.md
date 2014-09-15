@@ -5,7 +5,6 @@
 A DSL for building simple GUI ruby application.
 Based on gtk.
 
-Gui programming should be as simpler as in Tcl/Tk environment.
 
 Resources
 ==========
@@ -21,12 +20,15 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 1.8.0  !!   09-03-2014
+NEW : 1.11.0  !!   09-15-2014
 
-- terminal on Ctrl-Shift-h on any widget of application
+- terminal on <Ctrl-Shift-h> on any widget of application
+- video is comeback ! (not tested on linux)
+- dependency added : gstreamer, clutter, clutter-gtk, clutter-gst
 
 TODO  :
 
+- rspec video
 - refactor samples demos with last improve
 - resolve 100% gtk3 deprecated warning
 - corrections in ruiby_require(?)
@@ -55,7 +57,25 @@ Install Ruby 1.9 or 2.0.x
 > ruiby_sketchi          # write and test ruiby code
 ```
 
-
+Here a working gem config on windows (15-September-2014, ruby 2.0.0p0) :
+```
+ pkg-config  1.1.4
+       cairo 1.12.8
+      glib2  2.2.0
+ gobject-introspection  2.2.0
+       gio2  2.2.0
+        atk  2.2.0
+      pango  2.2.0
+ gdk_pixbuf2  2.2.0
+       gdk3  2.2.0
+       gtk3  2.2.0
+  gstreamer  2.2.0
+ cairo-gobject  2.2.0
+    clutter  2.2.0
+clutter-gtk  2.2.0
+ clutter-gstreamer  2.2.0
+```
+  
 
 Usage
 ======
@@ -162,8 +182,8 @@ See samples/spygui.rb, for exemple of gui with EM.
 
 Threading
 =========
-Ruiby do not confidence qith gtk multi threading, so all Ruiby commands must be done in
-main thread context. A Ruiby delegate is provided in Kenel module for supporte multi-threading
+Ruiby does not have confidence in gtk multi threading, so all Ruiby commands must be done in
+main thread context. A Ruiby delegate is provided in Kernel module for support multi-threading
 
 A Queue is polled by main-window thread :
 * main window poll Queue , messagers are proc to be instance_eval() in the main window context
@@ -225,7 +245,7 @@ So we can do :
   entry(foo)
   islider(foo)
   ....
-  foo.value=43  ## entry and slider will be updated
+  foo.value=43  
   ....
 ```
 
@@ -246,7 +266,7 @@ So DynVar is a ressource internal to Ruiby framework.
 
 Widget which accept DynVar are : entry, ientry, islider, label, check_button, 
 
-```must be exend to button, togglebutton, combo, radio_button ... list, grid,...```
+```must be extend to button, togglebutton, combo, radio_button ... list, grid,...```
 
 
 Dynamic Object
