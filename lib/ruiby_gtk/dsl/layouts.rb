@@ -35,7 +35,11 @@ module Ruiby_dsl
 
   #  mock class which can be push to layout stack : they accept some
   #  specific type of commands
-  class HandlerContainer ; def accept?(t) raise("no widget accepted here : #{self.class}") unless t==:handler end end
+  class HandlerContainer
+    def accept?(t) 
+      raise("no widget accepted here : #{self.class}") unless t==:handler 
+    end 
+  end
   
   # add a accept?() method to a layout (box). so children
   # will check if they can be added to current layout by invoke
@@ -153,21 +157,20 @@ module Ruiby_dsl
   
   # set a background color to current container
   # Usage : stack {  background("#FF0000")  { flow { ...} } }
-  def background(color,options={},&b) 
+  def background(color,options={},&b)
     _accept?(:layout)
     eventbox = Gtk::EventBox.new
-    ret=_cbox(true,eventbox,{},true,&b) 
+    ret=_cbox(true,eventbox,{},true,&b)
     apply_options(eventbox,{bg: color}.merge(options))
     ret
   end
-  def backgroundi(color,options={},&b) 
+  def backgroundi(color,options={},&b)
     _accept?(:layout)
     eventbox = Gtk::EventBox.new
-    ret=_cbox(false,eventbox,{},true,&b) 
+    ret=_cbox(false,eventbox,{},true,&b)
     apply_options(eventbox,{bg: color}.merge(options))
     ret
   end
-
 
   ######### Scrollable stack container
 
@@ -340,7 +343,7 @@ module Ruiby_dsl
     @lcur << dialog.child
     hbox=stack { yield }
     @lcur.pop
-	Ruiby.apply_provider(dialog.child)
+    Ruiby.apply_provider(dialog.child)
     if config[:response]
       dialog.signal_connect('response') do |w,e|
         rep=config[:response].call(dialog,e) 
@@ -370,7 +373,7 @@ module Ruiby_dsl
     @lcur.pop
     
     dialog.set_window_position(:center)
-	Ruiby.apply_provider(dialog.child)
+    Ruiby.apply_provider(dialog.child)
     dialog.show_all 
     rep=dialog.run  #  blocked
     dialog.destroy
