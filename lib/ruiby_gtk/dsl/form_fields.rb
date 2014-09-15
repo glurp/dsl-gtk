@@ -83,25 +83,6 @@ module Ruiby_dsl
     attribs(b,option)
     b
   end
-  # create a liste of radio button, horizontaly disposed
-  # value is the indice of active item (0..(n-1)) at creation time
-  def hradio_buttons(ltext=["empty!"],value=-1)
-    # TODO Dyn
-    flow(false) {
-      b0=nil
-      ltext.each_with_index {|t,i|
-        b=if i==0
-            b0=RadioButton.new(t)
-        else
-            RadioButton.new(b0,t)
-        end
-        if i==value
-          b.toggled 
-          b.set_active(true) 
-        end
-      }
-    }
-  end
 
   # create a liste of radio button, vertically disposed
   # value is the indice of active item (0..(n-1)) at creation time
@@ -119,8 +100,10 @@ module Ruiby_dsl
       ltext.each_with_index {|t,i|
         b=if i==0
             b0=RadioButton.new(t)
+            attribs(b0,{}) 
         else
-            RadioButton.new(b0,t)
+            r=RadioButton.new(b0,t)
+            attribs(r,{}) 
         end
         if i==value
           b.toggled 
@@ -137,7 +120,7 @@ module Ruiby_dsl
         b0.group.each_with_index.map { |w,index| w.active=true if indice==index }
       end
     end
-    s
+    attribs(s,{}) 
   end
   
  
