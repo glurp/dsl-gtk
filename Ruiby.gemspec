@@ -9,21 +9,24 @@ Gem::Specification.new do |s|
   s.email    = "regis.aubarede@gmail.com"
   s.homepage = "http://github.com/glurp/Ruiby"
   s.authors  = ["Regis d'Aubarede"]
-  s.summary  = "A  DSL for building simple GUI ruby/gtk application"
+  s.summary  = "A  DSL for building GUI ruby/gtk application"
   s.description = <<EEND
-A DSL for building simple GUI ruby application, based on Gtk.
+A DSL for building GUI ruby application, based on Gtk.
 EEND
   
   dependencies = [
     [:runtime,     "gtk2"],
     [:runtime,     "gtk3"],
+    [:runtime,     "gst"],
+    [:runtime,     "clutter-gtk"],
+    [:runtime,     "clutter-gst"],
     [:runtime, "gtksourceview3"]
   ]
 
   s.files         = Dir['**/*'].reject { |a| a =~ /^\.git/ || a =~ /\._$/}
   s.test_files    = Dir['samples/**'] 
   s.require_paths = ["lib"]
-  s.bindir		  = "bin"
+  s.bindir        = "bin"
   s.executables   = `ls bin/*`.split("\n").map{ |f| File.basename(f) }
 
   ## Make sure you can build the gem on older versions of RubyGems too:
