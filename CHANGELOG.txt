@@ -1,4 +1,8 @@
-1.11.1
+1.11.2
+    video.rb : change mrl test, rotation viewer
+    quadvideo.rb : chrome, exit button
+    ruiby_dsl3.rb : add view to video, url= correction
+    .travis.yml : add clutter and gstreamer dependency
     Gemfile : gstreamer / gst
 1.11.0 : 2014-09-15 20:28:42 +0200
     Ruiby.gemspec : gstreamer / gst
@@ -496,7 +500,3 @@
     ruiby_sketchi : comments
     ruiby_demo3 : comments
     ruiby_demo : commets
-    Ruiby.gemspec : gtk3
-    Ruiby.gemspec : dependancy
-0.62.0 : 2013-03-25 16:57:07 +0100
-    test_gtk3.rb : source editor on
