@@ -442,9 +442,11 @@ module Ruiby_dsl
     video.uri = url if url
     video.playing = false
     isNotify=false
-    clutter.define_singleton_method(:url=) { |u| video.url = url }
-    clutter.define_singleton_method(:play) { video.playing = true }
-    clutter.define_singleton_method(:stop) { video.playing = false }
+    #show_methods(video, /=$/)
+    clutter.define_singleton_method(:view) { video }
+    clutter.define_singleton_method(:url=) { |u| video.uri= u }
+    clutter.define_singleton_method(:play) { video.playing= true }
+    clutter.define_singleton_method(:stop) { video.playing= false }
     clutter.define_singleton_method(:progress=) { |pp| video.progress=(pp) unless isNotify }
     if block_given?
       video.signal_connect("notify") do |o,v,param|
@@ -453,6 +455,7 @@ module Ruiby_dsl
             isNotify=false
       end
     end
+    $video=video
     attribs(clutter,{})
   end
 end
