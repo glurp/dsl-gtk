@@ -1,4 +1,5 @@
-1.11.4
+1.11.5
+    README.md : version comments and travis link
     Ruiby.gemspec : suppress gst dependency
     ruiby_dsl3.rb : require gst in video primitive
     menus_popup.rb : popup_clear_append created
@@ -499,4 +500,3 @@
     test_gtk3.rb : nothing
     ruiby_dsl3.rb : inhibition gtksourceview : scratch
     ruiby_demo3 : gtk3
-    sketchi.rb : uncoment source_editor
