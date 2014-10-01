@@ -1,4 +1,6 @@
-1.11.9
+1.12.1
+    README.md : popup clear
+1.12.0 : 2014-10-01 12:50:41 +0200
     README.md : travis
     README.md : travis
     README.md : travis
@@ -498,5 +500,3 @@
 0.66.0 : 2013-04-09 19:14:10 +0200
     test_dialogs.rb : gtk3
 0.65.0 : 2013-04-09 19:11:24 +0200
-    ruiby_dsl3.rb : canvas working : cairo_context ok
-    ruiby_dsl.rb : anvas to gtk2 version
