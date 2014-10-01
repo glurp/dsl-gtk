@@ -17,9 +17,6 @@ EEND
   dependencies = [
     [:runtime,     "gtk2"],
     [:runtime,     "gtk3"],
-    [:runtime,     "gstreamer"],
-    [:runtime,     "clutter-gtk"],
-    [:runtime,     "clutter-gstreamer"],
     [:runtime, "gtksourceview3"]
   ]
 
