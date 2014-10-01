@@ -1,4 +1,5 @@
-1.11.8
+1.11.9
+    README.md : travis
     README.md : travis
     README.md : travis
     README.md : travis
@@ -499,4 +500,3 @@
 0.65.0 : 2013-04-09 19:11:24 +0200
     ruiby_dsl3.rb : canvas working : cairo_context ok
     ruiby_dsl.rb : anvas to gtk2 version
-0.64.0 : 2013-03-26 15:04:20 +0100
