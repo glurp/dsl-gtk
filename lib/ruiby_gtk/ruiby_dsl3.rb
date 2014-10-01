@@ -433,7 +433,15 @@ module Ruiby_dsl
   # *.progress=n    force current position in video (0..1)
   # see samples/video.rb and samples/quadvideo.rb
   
-  def video(url=nil,w=300,h=200)  
+  def video(url=nil,w=300,h=200) 
+    begin 
+    require "gst"
+    require "clutter-gtk"  # gem install clutter-gtk
+    require "clutter-gst"  # gem install clutter-gstreamer
+    rescue
+      error("Please install gstreamer, clutter-gtk, clutter-gstreamer")
+      return button("no video")
+    end
     clutter = ClutterGtk::Embed.new
     video=ClutterGst::VideoTexture.new
     clutter.stage.add_child(video)
