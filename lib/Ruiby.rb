@@ -24,9 +24,9 @@ require 'thread'
 require 'pathname'
 require 'gtk3' if ! defined?(Gtk) # caller can preload  gtk3/gtk2, at his own risk...
 
-require "gst"
-require "clutter-gtk"  # gem install clutter-gtk
-require "clutter-gst"  # gem install clutter-gstreamer
+#require "gst"          # gem install gstreamer
+#require "clutter-gtk"  # gem install clutter-gtk
+#require "clutter-gst"  # gem install clutter-gstreamer
 
 #require 'gtksourceviewX' # done by source_editor() tag, so only if source edit is needed
 
