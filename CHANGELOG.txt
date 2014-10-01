@@ -1,3 +1,9 @@
+1.11.3
+    ruiby_dsl3.rb : require gst in video primitive
+    menus_popup.rb : popup_clear_append created
+    Ruiby.rb : supress gst requires
+    Gemfile : suppress gstreamer
+    .travis.yml : supress gstreamer dependency
 1.11.2
     video.rb : change mrl test, rotation viewer
     quadvideo.rb : chrome, exit button
@@ -494,9 +500,3 @@
     ruiby_demo3 : gtk3
     sketchi.rb : uncoment source_editor
     README.md : gtk3 comments
-    Gemfile : add gtk3
-    .travis.yml : pass to ruby 2
-0.63.0 : 2013-03-25 19:02:56 +0100
-    ruiby_sketchi : comments
-    ruiby_demo3 : comments
-    ruiby_demo : commets
