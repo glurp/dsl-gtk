@@ -22,7 +22,8 @@ Status
 
 NEW : 1.12.0  !!   09-30-2014
 
-- terminal on <Ctrl-Shift-h> on any widget of application
+- terminal on Ctrl-Shift-h on any widget of application
+- popup : popup_clear_append {} created
 - video is comeback: dependencies are difficult to install on linux gstreamer,clutter,clutter-gst,clutter-gtk
 - dependency deleted : gstreamer, clutter, clutter-gtk, clutter-gst
 
