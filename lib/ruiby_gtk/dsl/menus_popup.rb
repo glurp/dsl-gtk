@@ -4,10 +4,11 @@
 module Ruiby_dsl
 
   ############################## Popup
-  # create a dynamic popup. (shoud by calling in a closure)
+  # create a dynamic popup.
   # popup block can be composed by pp_item and pp_separator
   # Exemple :
   # popup { pp_item("text") { } ; pp_seperator ; pp_item('Exit") { exit!(0)} ; ....}
+  # popup can be rebuild by popup_clear_append(w)
   def popup(w=nil)
     w ||= @lcur.last() 
     ppmenu = Gtk::Menu.new
@@ -22,6 +23,7 @@ module Ruiby_dsl
     end
     ppmenu
   end
+
   # a button in a popup
   def pp_item(text,&blk)
     _accept?(:popupitem)
@@ -29,15 +31,26 @@ module Ruiby_dsl
     item.signal_connect('activate') { |w| blk.call() }
     @lcur.last.append(item)
   end
+
   # a bar separator in a popup
   def pp_separator()
     _accept?(:popupitem)
     item = Gtk::SeparatorMenuItem.new()
     @lcur.last.append(item)
   end
+
+  # clear a existant popup, rebuild it by bloc eval
+  # popup_clear_append(@pp) { pp_item(..) ; pp_separator() ....}
+  def popup_clear_append(pp)
+    pp.children.each { |c| delete c}
+    _set_accepter(pp,:popupitem)
+    @lcur << pp
+    yield rescue error($!)
+    @lcur.pop
+    pp.show_all   
+  end  
   
-  ############################## Menu
-  
+  ############################## Menu  
   # create a application menu. must contain menu() {} :
   # menu_bar {menu("F") {menu_button("a") { } ; menu_separator; menu_checkbutton("b") { |w|} ...}}
   def menu_bar()
