@@ -57,6 +57,12 @@ Install Ruby 1.9 or 2.0.x
 > ruiby_demo             # check good installation with gtk3 (default)
 > ruiby_sketchi          # write and test ruiby code
 ```
+3) if you need video/gstreamer, install gst/clutter :
+```
+  > gem install gstreamer 
+  > gem install clutter-gtk
+  > gem install clutter-gstreamer
+```
 
 Here a working gem config on windows (15-September-2014, ruby 2.0.0p0) :
 ```
