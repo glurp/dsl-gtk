@@ -1,6 +1,6 @@
 # Ruiby 
-[![Travis](https://travis-ci.org/glurp/dsl-gtk.svg?branch=master)]
-[![Gem Version](https://badge.fury.io/rb/Ruiby.png)](http://badge.fury.io/rb/Ruiby)
+[![Travis](https://travis-ci.org/glurp/dsl-gtk.svg?branch=master)] [link](https://travis-ci.org/glurp/dsl-gtk)
+[![Gem Version](https://badge.fury.io/rb/Ruiby.png)](http://badge.fury.io/rb/Ruiby)]
 
 A DSL for building simple GUI ruby application.
 Based on gtk.
@@ -20,11 +20,11 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 1.11.0  !!   09-15-2014
+NEW : 1.12.0  !!   09-30-2014
 
 - terminal on <Ctrl-Shift-h> on any widget of application
-- video is comeback ! (not tested on linux)
-- dependency added : gstreamer, clutter, clutter-gtk, clutter-gst
+- video is comeback: dependencies are difficult to install on linux gstreamer,clutter,clutter-gst,clutter-gtk
+- dependency deleted : gstreamer, clutter, clutter-gtk, clutter-gst
 
 TODO  :
 
