@@ -1,3 +1,4 @@
+1.13.0 : 2014-10-08 17:04:09 +0200
 1.12.2
     README.md : video requirments
     README.md : popup clear
@@ -498,5 +499,3 @@
     Gemfile : to gtk3
 0.67.0 : 2013-04-09 19:15:32 +0200
     rspec_helper.rb : gtk3
-0.66.0 : 2013-04-09 19:14:10 +0200
-    test_dialogs.rb : gtk3

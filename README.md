@@ -305,7 +305,7 @@ DynObject can be persisted to filesystem : use ```make_StockDynObject```, and
 instantiate with an object persistant ID
 
 ```ruby 
-  foo1=make_StockDynClass("v1"=> 1 , "v2" => 2, "s1" => 'Hello...')
+  FooClass=make_StockDynClass("v1"=> 1 , "v2" => 2, "s1" => 'Hello...')
   foo1=FooClass.new( "foo1" , "s1" => Time.now.to_s )
   foo2=FooClass.new( "foo2" , "s1" => (Time.now+10).to_s )
   ....
@@ -314,6 +314,14 @@ instantiate with an object persistant ID
 ```
 
 ```make_StockDynObject``` do both : Class creation **and** class instanciation.
+
+```ruby 
+  foo=make_StockDynObject("v1"=> 1 , "v2" => 2, "s1" => 'Hello...')
+  ....
+  button(foo.s1) { foo.s1.value= prompt("new S1 value ?")}
+  button("Exit") { ruiby_exit} # on exit, foo1 and foo2 will been saved to {tmpdir}/<$0>.storage  
+  ....
+```
 
 
 License
