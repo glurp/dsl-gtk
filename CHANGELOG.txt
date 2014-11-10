@@ -1,3 +1,5 @@
+1.13.1
+    canvas.rb : canva resize
 1.13.0 : 2014-10-08 17:04:09 +0200
 1.12.2
     README.md : video requirments
@@ -498,4 +500,3 @@
     Ruiby.gemspec : dev dependencies
     Gemfile : to gtk3
 0.67.0 : 2013-04-09 19:15:32 +0200
-    rspec_helper.rb : gtk3
