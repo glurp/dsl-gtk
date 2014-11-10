@@ -50,7 +50,7 @@ module Ruiby_dsl
     cv.set_memo(nil)    
     
     def cv.redraw() 
-      self.queue_draw_area(0,0,self.width_request,self.height_request)
+      self.queue_draw_area(0,0,self.allocation.width,self.allocation.height)
     end
     def cv.app_window()  @app_window end
     def cv.set_window(r) @app_window=r end
@@ -179,6 +179,14 @@ module Ruiby_dsl
     @currentCanvas.signal_connect('button_press_event')   { |w,e| 
       w.set_memo(blk.call(w,e))  rescue error($!)
       force_update(w) 
+    }  
+  end
+  def on_canvas_resize(&blk)
+    _accept?(:handler)
+    @currentCanvas.signal_connect('configure_event')   { |w,e| 
+      ret=blk.call(w,e.width,e.height)  rescue error($!)
+      force_update(w) 
+      ret
     }  
   end
   # define action on mouse button press on current canvas definition
