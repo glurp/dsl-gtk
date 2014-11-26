@@ -84,8 +84,8 @@ Ruiby.app width: 1000, height: 700, title: "Game of Analogic Life" do
       make_curve()
       @ccc=canvas(1000,800) do
           on_canvas_draw do |w,cr|  
-            color=::Gdk::Color.parse("#774433")
-            color1=::Gdk::Color.parse("#334477")
+            color=Ruiby.cv_color_html("#774433")
+            color1=Ruiby.cv_color_html("#334477")
             cr.set_line_width(2)
             @ll.reverse.each_with_index do |line,i|
               cr.set_source_rgba((color.red-i*200)/65000.0, (color.green+i*200)/65000.0, color.blue/65000.0, 1)
