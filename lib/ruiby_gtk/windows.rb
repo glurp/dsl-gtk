@@ -30,8 +30,8 @@ class Ruiby_gtk < Gtk::Window
     
     # set Ctrl-Shift-h handler
     agroup = Gtk::AccelGroup.new
-    agroup.connect(Gdk::Keyval::GDK_KEY_H, 
-      Gdk::Window::ModifierType::CONTROL_MASK | Gdk::Window::ModifierType::SHIFT_MASK, 
+    agroup.connect(Gdk::Keyval::KEY_H, 
+      Gdk::ModifierType::CONTROL_MASK | Gdk::ModifierType::SHIFT_MASK, 
       :visible) do |w| 
       terminal("Debug terminal for #{$0}")
     end
@@ -82,13 +82,13 @@ class Ruiby_gtk < Gtk::Window
       set_window_position Window::POS_CENTER
       return
     elsif     x>=0 && y>=0
-      gravity= Gdk::Window::Gravity::NORTH_WEST
+      gravity= Gdk::Gravity::NORTH_WEST
     elsif   x<0 && y>=0
-      gravity= Gdk::Window::Gravity::NORTH_EAST
+      gravity= Gdk::Gravity::NORTH_EAST
     elsif   x>=0 && y<0
-      gravity= Gdk::Window::Gravity::SOUTH_WEST
+      gravity= Gdk::Gravity::SOUTH_WEST
     elsif   x<0 && y<0
-      gravity= Gdk::Window::Gravity::SOUTH_EAST
+      gravity= Gdk::Gravity::SOUTH_EAST
     end
     move(x.abs,y.abs)
   end
