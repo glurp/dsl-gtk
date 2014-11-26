@@ -1,4 +1,7 @@
-1.13.1
+1.15.1
+    canvas.rb : return vaue for  on_canvas_button_release
+1.15.0 : 2014-11-10 19:13:04 +0100
+1.14.0 : 2014-11-10 18:53:15 +0100
     canvas.rb : canva resize
 1.13.0 : 2014-10-08 17:04:09 +0200
 1.12.2
@@ -497,6 +500,3 @@
     test_composites.rb : Box Scale Paned
     test_basics_widget.rb : Box Scale
     ruiby_dsl3.rb : remove set_policy POLICY_AUTOMATIC
-    Ruiby.gemspec : dev dependencies
-    Gemfile : to gtk3
-0.67.0 : 2013-04-09 19:15:32 +0200
