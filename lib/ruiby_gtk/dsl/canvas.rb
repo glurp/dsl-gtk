@@ -36,7 +36,7 @@ module Ruiby_dsl
     cv=DrawingArea.new()
     cv.width_request=width
     cv.height_request=height
-    cv.add_events(Gdk::Event::BUTTON_PRESS_MASK  | Gdk::Event::BUTTON_MOTION_MASK | Gdk::Event::KEY_PRESS_MASK)
+    cv.add_events(Gdk::EventMask::BUTTON_PRESS_MASK  | Gdk::EventMask::BUTTON_MOTION_MASK | Gdk::EventMask::KEY_PRESS_MASK)
     cv.can_focus = true
     @currentCanvas=cv
     @lcur << HandlerContainer.new
@@ -120,13 +120,13 @@ module Ruiby_dsl
         w,cr=@currentCanvasCtx
         cr.set_line_width(width || @currentWidth )
         if color_bg
-          color=::Gdk::Color.parse(color_bg)
+          color=Ruiby_dsl.html_color(color_bg)
           cr.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
           cr.arc(x0,y0, r, width || @currentWidth , 3.0*Math::PI)
           cr.fill
         end
         if color_fg
-          color=::Gdk::Color.parse(color_fg)
+          color=Ruiby_dsl.html_color(color_fg)
           cr.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
           cr.arc(x0,y0, r, 0 , 3.0*Math::PI)
           cr.stroke
@@ -250,7 +250,7 @@ module Ruiby_dsl
     w=DrawingArea.new()
     w.width_request=width
     w.height_request=height
-    w.events |=  ( ::Gdk::Event::Mask::BUTTON_PRESS_MASK | ::Gdk::Event::Mask::POINTER_MOTION_MASK | ::Gdk::Event::Mask::BUTTON_RELEASE_MASK)
+    w.events |=  ( ::Gdk::EventMask::BUTTON_PRESS_MASK | ::Gdk::EventMask::POINTER_MOTION_MASK | ::Gdk::EventMask::BUTTON_RELEASE_MASK)
 
     w.signal_connect(  'draw' ) { |w1,cr| 
       cr.save {
