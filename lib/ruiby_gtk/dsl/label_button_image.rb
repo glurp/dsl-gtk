@@ -112,7 +112,7 @@ module Ruiby_dsl
   def clickable(method_name,&b) 
     _accept?(:layout)
     eventbox = Gtk::EventBox.new
-    eventbox.events =Gdk::Event::Mask::BUTTON_PRESS_MASK
+    eventbox.events =Gdk::EventMask::BUTTON_PRESS_MASK
     ret=_cbox(true,eventbox,{},true,&b) 
     #eventbox.realize
     eventbox.signal_connect('button_press_event') { |w, e| self.send(method_name,ret)  rescue error($!) }
@@ -128,7 +128,7 @@ module Ruiby_dsl
   def pclickable(aproc=nil,options={},&b) 
     _accept?(:layout)
     eventbox = Gtk::EventBox.new
-    eventbox.events = Gdk::Event::Mask::BUTTON_PRESS_MASK
+    eventbox.events = Gdk::EventMask::BUTTON_PRESS_MASK
     ret=_cbox(true,eventbox,{},true,&b) 
     #eventbox.realize
     eventbox.signal_connect('button_press_event') { |w, e| aproc.call(w,e)  rescue error($!)  } if aproc
