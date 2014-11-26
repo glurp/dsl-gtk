@@ -1,4 +1,5 @@
-1.15.1
+1.15.2
+    test_layout.rb : @win test
     canvas.rb : return vaue for  on_canvas_button_release
 1.15.0 : 2014-11-10 19:13:04 +0100
 1.14.0 : 2014-11-10 18:53:15 +0100
@@ -499,4 +500,3 @@
     test_layout.rb : Box
     test_composites.rb : Box Scale Paned
     test_basics_widget.rb : Box Scale
-    ruiby_dsl3.rb : remove set_policy POLICY_AUTOMATIC
