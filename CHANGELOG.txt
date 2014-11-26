@@ -1,4 +1,15 @@
-1.15.3
+1.17.1
+    test_basics_widget.rb : test gtk3
+    gol2.rb : compatibility with  2.2.3
+    canvas.rb : compatibility with  2.2.3
+    windows.rb : compatibility with  2.2.3: Gdk::Gravity
+    ruiby_dsl3.rb : compatibility with  2.2.3: color.parse.last
+    ruiby_dsl.rb : compatibility with  2.2.3: color.parse
+    menus_popup.rb : compatibility with  2.2.3
+    label_button_image.rb : compatibility with  2.2.3
+    canvas.rb : compatibility with  2.2.3
+1.17.0 : 2014-11-26 17:37:45 +0100
+1.16.0 : 2014-11-26 17:30:30 +0100
     rspec_helper.rb : win test
     test_layout.rb : @win test
     canvas.rb : return vaue for  on_canvas_button_release
@@ -489,14 +500,3 @@
     sketchi.rb : compatible gtk3 gtk3 gtksoureviewx
     Ruiby.gemspec : install post comment
     test_gtk3.rb : panned tuning
-    ruiby_dsl3.rb : show_method creation
-    ruiby_dsl.rb : show_method creation
-    test_gtk3.rb : clear traces
-    windows.rb : none
-    ruiby_dsl3.rb : gtk3 warnng
-    test_thread.rb : nothing
-0.69.0 : 2013-04-09 19:35:50 +0200
-    Ruiby.gemspec : dev
-0.68.0 : 2013-04-09 19:35:19 +0200
-    test_layout.rb : Box
-    test_composites.rb : Box Scale Paned
