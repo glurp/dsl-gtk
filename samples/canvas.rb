@@ -159,7 +159,7 @@ module DrawPrimitive
   ####################################### Simple drawing  
   
   def line(li,color="#000000",ep=2)
-    color=::Gdk::Color.parse(color)
+    color=Ruiby.cv_color_html(color)
     $ctx.set_line_width(ep)
     $ctx.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
     pt0,*poly=*li
@@ -168,7 +168,7 @@ module DrawPrimitive
     $ctx.stroke  
   end
   def fill(li,color="#000000",ep=2)
-    color=::Gdk::Color.parse(color)
+    color=Ruiby.cv_color_html(color)
     $ctx.set_line_width(ep)
     $ctx.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
     pt0,*poly=*li
