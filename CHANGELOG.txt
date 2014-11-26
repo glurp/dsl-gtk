@@ -1,4 +1,5 @@
-1.17.1
+1.17.2
+    video.rb : print gems used
     test_basics_widget.rb : test gtk3
     gol2.rb : compatibility with  2.2.3
     canvas.rb : compatibility with  2.2.3
@@ -499,4 +500,3 @@
 0.70.0 : 2013-04-12 19:49:33 +0200
     sketchi.rb : compatible gtk3 gtk3 gtksoureviewx
     Ruiby.gemspec : install post comment
-    test_gtk3.rb : panned tuning
