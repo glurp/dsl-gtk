@@ -6,11 +6,19 @@ module Ruiby_dsl
 
   def get_icon(name)
     return name if name.index('.') && File.exists?(name)
-    eval("Gtk::Stock::"+name.upcase) rescue nil
+    n="Gtk::Stock::#{name.to_s.upcase}"
+    if defined?(n)
+       a=eval(n)
+       $stderr.puts ">>>========== stock icon #{a.inspect} / #{n}"
+       a
+    else 
+       $stderr.puts "not icon : #{name}"
+       nil
+    end
   end
   # Image#initialize(:label => nil, :mnemonic => nil, :stock => nil, :size => nil)'
   def get_stockicon_pixbuf(name)
-    Image.new(:label => nil, :mnemonic => nil, :stock => eval("Gtk::Stock::"+name.upcase), :size => :button).pixbuf
+    Image.new( :stock => eval("Gtk::Stock::"+name.upcase), :size => :button).pixbuf
   end
 
   # get a Image widget from a file or from a Gtk::Stock
