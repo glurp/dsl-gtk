@@ -1,4 +1,9 @@
-1.19.1
+1.21.1
+    gol2.rb : color html
+    Ruiby.rb : monkeypatch Cairo:Context for set_source_rgba bug
+    Ruiby.gemspec : refactoring
+1.21.0 : 2014-11-26 21:49:54 +0100
+1.20.0 : 2014-11-26 20:48:45 +0100
     pixmap.rb : get_icon should be better
     label_button_image.rb : mask
     Ruiby.gemspec : dev dependency, install comment
@@ -495,8 +500,3 @@
     ruiby_default_dialog.rb : gtk3
     ruiby.rb : require dialog dynamic
 0.76.0 : 2013-04-12 19:54:12 +0200
-    Ruiby.gemspec : cti
-0.73.0 : 2013-04-12 19:51:31 +0200
-    Ruiby.gemspec : cpi
-0.72.0 : 2013-04-12 19:50:58 +0200
-    Ruiby.gemspec : cpi
