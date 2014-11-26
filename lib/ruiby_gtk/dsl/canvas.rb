@@ -177,8 +177,9 @@ module Ruiby_dsl
   def on_canvas_button_press(&blk)
     _accept?(:handler)
     @currentCanvas.signal_connect('button_press_event')   { |w,e| 
-      w.set_memo(blk.call(w,e))  rescue error($!)
+      ret=w.set_memo(blk.call(w,e))  rescue error($!)
       force_update(w) 
+      ret
     }  
   end
   def on_canvas_resize(&blk)
@@ -193,9 +194,10 @@ module Ruiby_dsl
   def on_canvas_button_release(&blk)
     _accept?(:handler)
     @currentCanvas.signal_connect('button_release_event') { |w,e| 
-      blk.call(w,e,w.get_memo) rescue error($!)
+      ret=blk.call(w,e,w.get_memo) rescue error($!)
       w.set_memo(nil)
       force_update(w) 
+      ret
     }  
   end
   # define action on mouse button motion on current canvas definition
