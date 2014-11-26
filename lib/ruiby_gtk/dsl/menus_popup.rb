@@ -17,7 +17,7 @@ module Ruiby_dsl
     yield
     @lcur.pop
     ppmenu.show_all   
-    w.add_events(Gdk::Event::Mask::BUTTON_PRESS_MASK)
+    w.add_events(Gdk::EventMask::BUTTON_PRESS_MASK)
     w.signal_connect("button_press_event") do |widget, event|
       ( ppmenu.popup(nil, nil, event.button, event.time) { |menu, x, y, push_in| [event.x_root,event.y_root] } ) if (event.button == 3)
     end
