@@ -216,7 +216,7 @@ module Ruiby_dsl
   def color_conversion(color)
     case color 
       when ::Gdk::RGBA then color
-      when String then color_conversion(::Gdk::Color.parse(color))
+      when String then color_conversion(::Gdk::Color.parse(color).last)
       when ::Gdk::Color then ::Gdk::RGBA.new(color.red/65000.0,color.green/65000.0,color.blue/65000.0,1)
       else
         raise "unknown color : #{color.inspect}"
@@ -225,12 +225,13 @@ module Ruiby_dsl
   # parse html color ( "#FF00AA" ) to rgba array, useful
   # for canvas vectors styles
   def self.cv_color_html(html_color,opacity=1)
-    c=::Gdk::Color.parse(html_color)
+    c=::Gdk::Color.parse(html_color).last
     #::Gdk::RGBA.new(c.red/65000.0,c.green/65000.0,c.blue/65000.0,1)
     [c.red/65000.0,c.green/65000.0,c.blue/65000.0,opacity>1 ? 1 : opacity<0 ? 0 : opacity]
   end
-  # parse color from #RRggBB html format
-  def html_color(str) ::Gdk::Color.parse(str) end
+  # parse color from #RRggBB html format Ruiby_dsl.html_color
+  def html_color(str) ::Gdk::Color.parse(str).last end
+  def self.html_color(str) ::Gdk::Color.parse(str).last end
    
   def widget_properties(title=nil,w=nil) 
     widg=w||@current_widget||@lcur.last
