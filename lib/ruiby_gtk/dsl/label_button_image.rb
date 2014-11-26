@@ -140,7 +140,7 @@ module Ruiby_dsl
   def pclickablie(aproc=nil,options={},&b) 
     _accept?(:layout)
     eventbox = Gtk::EventBox.new
-    eventbox.events = Gdk::Event::BUTTON_PRESS_MASK
+    eventbox.events = Gdk::EventMask::BUTTON_PRESS_MASK
     ret=_cbox(false,eventbox,{},true,&b) 
     #eventbox.realize
     eventbox.signal_connect('button_press_event') { |w, e| aproc.call(w,e)  rescue error($!)  } if aproc
