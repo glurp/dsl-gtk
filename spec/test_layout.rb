@@ -8,7 +8,7 @@ describe Ruiby do
 	Ruiby.update
  end
  after(:each) do
-	destroy_window(@win)
+	destroy_window(@win) if @win
  end
  it "check rspec work :)" do
 	Hash.new.size.should eq(0)
