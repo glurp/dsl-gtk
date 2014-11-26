@@ -1,6 +1,7 @@
 # Ruiby 
-![Travis](https://travis-ci.org/glurp/dsl-gtk.svg?branch=master) [=>](https://travis-ci.org/glurp/dsl-gtk)
-![Gem Version](https://badge.fury.io/rb/Ruiby.png)(http://badge.fury.io/rb/Ruiby)
+
+[![Build Status](https://travis-ci.org/glurp/dsl-gtk.svg?branch=master)](https://travis-ci.org/glurp/dsl-gtk)
+[![Gem Version](https://badge.fury.io/rb/Ruiby.png)](http://badge.fury.io/rb/Ruiby)
 
 A DSL for building simple GUI ruby application.
 Based on gtk.
