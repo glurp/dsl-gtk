@@ -6,9 +6,11 @@ require_relative '../lib/Ruiby'
 Ruiby.app width: 600,height: 400 do
   video_file= ARGV[0] || "d:/usr/XT.avi"
   set_title(video_file)
-  video_url=File.exists?(video_file) ?  "file:///#{video_file}" : video_file 
+  video_url=File.exists?(video_file) ?  "file:///#{video_file}" : video_file
+
   stack do
-    @v=video(video_url,600,400-40)  {|progress| @prog && @prog.progress=progress*100 }
+    @v=video(video_url,600,400-40)  {|progress| @prog && @prog.progress=progress*100 }  rescue nil
+    Gem.loaded_specs.each {|name,gem| puts "  #{gem.name}-#{gem.version}"} 
     flowi {
       buttoni("  Start  ") {  @v.play }
       buttoni("  Stop  ") {  @v.stop }
