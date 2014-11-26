@@ -280,7 +280,7 @@ module Ruiby_dsl
   end
   def color_conversion(color)
     case color 
-      when String then ::Gdk::Color.parse(color)
+      when String then ::Gdk::Color.parse(color).last
       when ::Gdk::Color then color
       else
         raise "unknown color : #{color}"
