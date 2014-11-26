@@ -9,6 +9,21 @@ describe Ruiby do
  after(:each) do
   destroy_window(@win)
  end
+ it "window primitive : rposition" do
+   @win.rposition(0,0)
+   @win.rposition(11,0)
+   @win.rposition(0,11)
+   @win.rposition(11,11)
+   @win.rposition(-11,0)
+   @win.rposition(0,-11)
+   @win.rposition(-11,-11)
+ end
+ it "window primitive : chrome" do
+   @win.chrome(false)
+   @win.sleeping(100)
+   @win.chrome(true)
+   @win.sleeping(100)
+ end
  it "create a button" do
     s=nil;@win.create { s=stack {  } }
     @win.append_to(s) { @win.button("CouCou") { puts "coucou" } }
