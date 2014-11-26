@@ -1,4 +1,9 @@
-1.17.2
+1.19.1
+    pixmap.rb : get_icon should be better
+    label_button_image.rb : mask
+    Ruiby.gemspec : dev dependency, install comment
+1.19.0 : 2014-11-26 19:19:06 +0100
+1.18.0 : 2014-11-26 19:15:00 +0100
     video.rb : print gems used
     test_basics_widget.rb : test gtk3
     gol2.rb : compatibility with  2.2.3
@@ -495,8 +500,3 @@
     Ruiby.gemspec : cpi
 0.72.0 : 2013-04-12 19:50:58 +0200
     Ruiby.gemspec : cpi
-0.71.0 : 2013-04-12 19:50:10 +0200
-    Ruiby.gemspec : comment post install
-0.70.0 : 2013-04-12 19:49:33 +0200
-    sketchi.rb : compatible gtk3 gtk3 gtksoureviewx
-    Ruiby.gemspec : install post comment
