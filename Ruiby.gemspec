@@ -3,12 +3,14 @@ $:.push('lib')
 
 Gem::Specification.new do |s|
   s.name     = "Ruiby"
+  s.authors  = ["Regis d'Aubarede"]
   s.licenses = ['LGPL', 'CC-BY-SA']
+  s.homepage = "http://github.com/glurp/Ruiby"
+  s.email    = "regis.aubarede@gmail.com"
+  
+  s.platform = Gem::Platform::CURRENT  
   s.version  = File.read("VERSION").strip
   s.date     = Time.now.to_s.split(/\s+/)[0]
-  s.email    = "regis.aubarede@gmail.com"
-  s.homepage = "http://github.com/glurp/Ruiby"
-  s.authors  = ["Regis d'Aubarede"]
   s.summary  = "A  DSL for building GUI ruby/gtk application"
   s.description = <<EEND
 A DSL for building GUI ruby application, based on Gtk.
@@ -37,13 +39,13 @@ EEND
         
   -------------------------------------------------------------------------------
         
-      Hello, welcome to Ruiby....
+      Hello, Welcome to Ru-i-by....
 
         $ ruiby_demo
-        $ ruiby "chrome(false); button ' Welcome ' do exit!(0) end "        
-        $ ruiby_sketchi  # write and test ruiby gui
+        $ ruiby_sketchi  # write and test ruiby gui code
 		
-      for video, on windows, do >gem install  gstreamer clutter-gtk clutter-gstreamer
+	  Reference doc of the DSL :  https://rawgit.com/glurp/Ruiby/master/doc.html
+      For video, on windows, do >gem install  gstreamer clutter-gtk clutter-gstreamer
    -------------------------------------------------------------------------------
    TTEXT
 end
