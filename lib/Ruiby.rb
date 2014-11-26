@@ -30,6 +30,18 @@ require 'gtk3' if ! defined?(Gtk) # caller can preload  gtk3/gtk2, at his own ri
 
 #require 'gtksourceviewX' # done by source_editor() tag, so only if source edit is needed
 
+
+############# Patch Cairo::contet for buf in gtk3 2.2.3
+module Cairo
+  class Context
+    if method_defined?(:set_source_not_gdk_rgba)
+      def set_source_rgba(*rgba)
+         set_source_not_gdk_rgba(*rgba)
+      end
+    end
+  end
+end
+
 module Ruiby
   DIR = Pathname.new(__FILE__).realpath.dirname.to_s
   VERSION = IO.read(File.join(DIR, '../VERSION')).chomp
