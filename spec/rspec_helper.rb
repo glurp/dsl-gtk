@@ -42,6 +42,7 @@ def make_window
 	w
 end
 def destroy_window(win,sleep=0)
+  return unless win
 	win.sleeping(sleep) if sleep>0
 	win.sleeping(15)
     Ruiby.destroy_log	
