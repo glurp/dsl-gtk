@@ -1,4 +1,4 @@
-1.24.1
+1.25.0 : 2014-11-28 13:36:36 +0100
     menus_popup.rb : signal for popup with gtk3 2.2.3
     Ruiby.gemspec : refactoring
     Gemfile : test dependency
@@ -499,4 +499,3 @@
 0.77.0 : 2013-04-16 22:35:35 +0200
     ruiby_dsl3.rb : corection packing in Frame
     test_gtk3.rb : lbel with font
-    ruiby_dsl3.rb : pack_start gtk3 issue

@@ -1,0 +1,8 @@
+#!/usr/bin/ruby
+#####################################################
+#  run Ruiby/samples/pipeplot.rb 
+#  must be used in end of pipe 
+#######################################################
+require 'Ruiby'
+Dir.chdir(File.join(Ruiby::DIR,"..","samples")) 
+load 'pipeplot.rb'
