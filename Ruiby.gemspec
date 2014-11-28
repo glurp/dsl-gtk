@@ -8,7 +8,6 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/glurp/Ruiby"
   s.email    = "regis.aubarede@gmail.com"
   
-  s.platform = Gem::Platform::CURRENT  
   s.version  = File.read("VERSION").strip
   s.date     = Time.now.to_s.split(/\s+/)[0]
   s.summary  = "A  DSL for building GUI ruby/gtk application"
