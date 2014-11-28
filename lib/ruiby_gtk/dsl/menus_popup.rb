@@ -19,7 +19,9 @@ module Ruiby_dsl
     ppmenu.show_all   
     w.add_events(Gdk::EventMask::BUTTON_PRESS_MASK)
     w.signal_connect("button_press_event") do |widget, event|
-      ( ppmenu.popup(nil, nil, event.button, event.time) { |menu, x, y, push_in| [event.x_root,event.y_root] } ) if (event.button == 3)
+      ( after(300) {ppmenu.popup(nil, nil, event.button, event.time) { |menu, x, y, push_in| 
+        [x,y] }} 
+      ) if (event.button != 3)
     end
     ppmenu
   end
@@ -28,7 +30,7 @@ module Ruiby_dsl
   def pp_item(text,&blk)
     _accept?(:popupitem)
     item = Gtk::MenuItem.new(text)
-    item.signal_connect('activate') { |w| blk.call() }
+    item.signal_connect('activate') { |w| blk.call() rescue error($!) }
     @lcur.last.append(item)
   end
 
