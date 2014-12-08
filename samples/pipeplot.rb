@@ -1,18 +1,21 @@
+#!/usr/bin/ruby
+# encoding: utf-8
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
 ###############################################################
-# plot.rb plot data(s) of stdin to Gui display
+# pipeplot.rb plot data(s) of stdin to Gui display
 # Usage:
 #  > data-generator | \n
-#          ruby  plot.rb -2 value-0 value-100% cpu --  10  0 5000 io auto
+#      ruby  pipeplot.rb -2 value-0 value-100% cpu --  10  0 5000 io auto
 #                        ^input-column         ^label  ^in-column .. ^auto-scale
 #      
-#  > vmstat 1 | ruby plot.rb  10  0 500  io auto -- -3 100 0 cpu 
-#                             ^columne 10
-#                                                   ^columne end-3 (cpu idle)
-#                                                      ^ min..max=100..0 (inverse)
+#  > vmstat 1 | ruby pipeplot.rb  10  0 500  io auto -- -3 100 0 cpu 
+#                                 ^columne 10
+#                                                       ^columne end-3 (cpu idle)
+#                                                           ^ min..max=100..0 (revers)
 # testing:
 #  > ruby -e '$stdout.sync=true;a=50;loop {a+=rand(-1..+1);puts a.to_s;sleep 0.05}' \n
-#      | ruby plot.rb --pos 0x200 --dim 400x100 0 0 100 alea auto
+#      | piperuby plot.rb --pos 0x200 --dim 400x100 0 0 100 alea auto
 ###############################################################
 
 require_relative '../lib/Ruiby'
@@ -187,7 +190,8 @@ def run_window()
           puts "======================="
           e.methods.select {|m| m.to_s=~/=$/ }.each {|m| puts "e.#{m} => #{e.send(m.to_s[0..-2])}" rescue nil }
           @pos_markeur=[e.x,10]
-          @comment=Measure.getValuesAtX(e.x).join("; ") 
+          @comment=Measure.getValuesAtX(e.x).join("; ")
+          false # event is not consume; di the popup...
         } 
 	    end		
 			popup(@cv) do
