@@ -21,21 +21,19 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 1.12.0  !!   09-30-2014
+NEW : 1.25.0  !!   12-02-2014
 
 - terminal on Ctrl-Shift-h on any widget of application
-- popup : popup_clear_append {} created
-- video is comeback: dependencies are difficult to install on linux gstreamer,clutter,clutter-gst,clutter-gtk
-- dependency deleted : gstreamer, clutter, clutter-gtk, clutter-gst
+- video is comme bacb, but demendency not configured for  gstreamer, clutter, clutter-gtk, clutter-gst
+- WARNING !!!! ruby-gtk3 2.2.3 is buggy on Windows !!! 
 
 TODO  :
 
-- rspec video
 - refactor samples demos with last improve
 - resolve 100% gtk3 deprecated warning
 - corrections in ruiby_require(?)
 - complete treeview and tree_grid,
-- complete rspec => 99% ?
+- complete rspec => 99% coverage ?
 
 
 
