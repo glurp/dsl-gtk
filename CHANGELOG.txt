@@ -1,4 +1,7 @@
-1.25.1
+1.25.2
+    pipeplot.rb : window icon
+    Ruiby.rb : Ruiby:MEDIA constant creation
+    README.md : add famfamfam
     pipeplot.rb : creation, from mnitcp
     README.md : updte worning for windows for gtk 2.2.3
 1.25.0 : 2014-11-28 13:36:36 +0100
@@ -497,6 +500,3 @@
 0.78.0 : 2013-04-30 15:11:04 +0200
     ruiby_dsl3.rb : bg and gf working for gtk3, widget_properties
     ruiby_dsl.rb : raz rename by razslot, widget_properties
-    ruiby_dsl3.rb : gtk3 dialogs
-    ruiby_default_dialog3.rb : gtk3 dialogs
-0.77.0 : 2013-04-16 22:35:35 +0200
