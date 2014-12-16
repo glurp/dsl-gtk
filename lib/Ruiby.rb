@@ -44,6 +44,7 @@ end
 
 module Ruiby
   DIR = Pathname.new(__FILE__).realpath.dirname.to_s
+  MEDIA = Pathname.new(__FILE__).realpath.dirname.dirname.to_s+"/media"
   VERSION = IO.read(File.join(DIR, '../VERSION')).chomp
   GUI='gtk'
   
