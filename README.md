@@ -24,13 +24,13 @@ Status
 NEW : 1.25.0  !!   12-02-2014
 
 - terminal on Ctrl-Shift-h on any widget of application
-- video is comme bacb, but demendency not configured for  gstreamer, clutter, clutter-gtk, clutter-gst
-- add famfamfam/silg icons to media
+- video is comeback, but dependency not configured for  gstreamer, clutter, clutter-gtk, clutter-gst
+- add famfamfam/silk icons to media
 - WARNING !!!! ruby-gtk3 2.2.3 is buggy on Windows !!! 
 
 TODO  :
 
-- waiting gtk3 2.2.4 !!!
+- waiting gtk3 > 2.2.3 !!!
 - refactor samples demos with last improve
 - resolve 100% gtk3 deprecated warning
 - corrections in ruiby_require(?)
