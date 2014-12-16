@@ -1,20 +1,18 @@
-1.25.2
+1.25.3
+    README.md : famfamfam
     pipeplot.rb : window icon
     Ruiby.rb : Ruiby:MEDIA constant creation
     README.md : add famfamfam
     pipeplot.rb : creation, from mnitcp
-    README.md : updte worning for windows for gtk 2.2.3
+    README.md : upadte warning for windows for gtk 2.2.3
 1.25.0 : 2014-11-28 13:36:36 +0100
     menus_popup.rb : signal for popup with gtk3 2.2.3
     Ruiby.gemspec : refactoring
     Gemfile : test dependency
-1.24.0 : 2014-11-26 22:01:49 +0100
-1.23.0 : 2014-11-26 21:59:42 +0100
 1.22.0 : 2014-11-26 21:51:27 +0100
     gol2.rb : color html
     Ruiby.rb : monkeypatch Cairo:Context for set_source_rgba bug
     Ruiby.gemspec : refactoring
-1.21.0 : 2014-11-26 21:49:54 +0100
 1.20.0 : 2014-11-26 20:48:45 +0100
     pixmap.rb : get_icon should be better
     label_button_image.rb : mask
@@ -31,7 +29,6 @@
     menus_popup.rb : compatibility with  2.2.3
     label_button_image.rb : compatibility with  2.2.3
     canvas.rb : compatibility with  2.2.3
-1.17.0 : 2014-11-26 17:37:45 +0100
 1.16.0 : 2014-11-26 17:30:30 +0100
     rspec_helper.rb : win test
     test_layout.rb : @win test
@@ -44,9 +41,6 @@
     README.md : video requirments
     README.md : popup clear
 1.12.0 : 2014-10-01 12:50:41 +0200
-    README.md : travis
-    README.md : travis
-    README.md : travis
     README.md : travis
     README.md : version comments and travis link
     Ruiby.gemspec : suppress gst dependency
@@ -70,8 +64,6 @@
     test_basics_widget.rb : supress video test : scrach on window destroy
     form_fields.rb : pack radiobuttons
     Gemfile : gstreamer / gst
-1.13.0 : 2014-09-15 20:14:22 +0200
-1.12.0 : 2014-09-15 19:43:33 +0200
 1.11.0 : 2014-09-15 19:39:34 +0200
     ruiby_dsl3.rb : video word
     ruiby_dsl.rb : video word
@@ -224,11 +216,7 @@
     ruiby_dsl3.rb : check dsl syntax, canvas ant toolbars closurified, canvas tool
     doc.html : update
     README.md : comment for currents changes
-    README.md : Dyn
     Gemfile : add gtk2
-    README.md : dyn
-    README.md : dyn
-    README.md : Dyn
     README.md : Dyn doc
     README.md : Dyn docmentations
     README.md : gis
