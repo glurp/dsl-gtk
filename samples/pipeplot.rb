@@ -19,13 +19,14 @@
 ###############################################################
 
 require_relative '../lib/Ruiby'
+
 #require 'Ruiby'
 
 $bgcolor=Ruiby_dsl.html_color("#023")
 $axecolor=Ruiby_dsl.html_color("#AA8888")
 $axeopacity=1
 $fgcolor=[
-	Ruiby_dsl.html_color("#99DDFF"),
+	Ruiby_dsl.html_color("#AAEEFF"),
 	Ruiby_dsl.html_color("#FFAA00"),
 	Ruiby_dsl.html_color("#00FF00"),
 	Ruiby_dsl.html_color("#0000FF"),
@@ -139,7 +140,7 @@ class Measure
 	def plot_curve(index,ctx)
 		return if @curve.size<2
 		a,*l=@curve
-		style(ctx,3,$fgcolor.last)   ; draw(ctx,a,l)
+		style(ctx,3,$fgcolor.last)   ; draw(ctx,a,l) if $W>20
 		style(ctx,1,$fgcolor[index]) ; draw(ctx,a,l)
 	end
 	def style(ctx,width,color)
@@ -172,6 +173,8 @@ end
 
 def run_window()
 	Ruiby.app width: $W, height: $H, title: "Curve" do
+    fn=Ruiby::MEDIA+"/famfamfam/chart_curve.png"
+    set_icon(fn) if File.exists?(fn)
     set_resizable(true)
 		chrome(false)
     @pos_markeur=[0,0]
