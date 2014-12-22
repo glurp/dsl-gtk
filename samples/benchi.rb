@@ -118,7 +118,7 @@ Test.test()
 Test.test()
 Test.test()
 }
-$etalon=(Time.now-date).to_f*1_000_000/(10_000*100)
+$etalon=(((Time.now-date).to_f)*1_000_000-10_000*0.5)/(10_000*100)
 p "call cast : #{$etalon*1000} ns"
 ##################################################################################
 ############################# Ruiby App ##########################################
@@ -131,14 +131,16 @@ class Appli < Ruiby_gtk
   end	
   def component()
 	stack do
-	#------------ title + entrys: search, commands
+	#------------ title + entry
     stacki do
       flow do
       buttoni("ed") do
+        @commontext=Ruiby.stock_get("precode")
         dialog_async("Edit common...",
            :response => proc {
               @commontext=@editor.editor.buffer.text
               begin
+                Ruiby.stock_put("precode",@commontext)
                 rep=eval(@commontext,$global,"<script>",0) 
                 alert(rep) if rep
                 true
@@ -148,7 +150,7 @@ class Appli < Ruiby_gtk
               end
             }) {
 					   @editor=source_editor(:width=>500,:height=>400,:lang=> "ruby", :font=> "Courier new 12")
-					   @editor.editor.buffer.text=(@commontext||"")
+					   @editor.editor.buffer.text=@commontext
 					}
       end
 			label "Global init : "
@@ -212,7 +214,7 @@ class Appli < Ruiby_gtk
 		  timeout(10.1) do 
 		    v1=bench(@a.text)
 		    v2=bench(@b.text)
-			mlabel "#{(100.0*(v2-v1)/((v1+v2)/2.0)).round}% best for v2"
+			  mlabel "#{(100.0*(v2-v1)/((v1+v2)/2.0)).round}% best for v2" rescue nil
 		  end
 		end
 	  end)
@@ -227,9 +229,10 @@ class Appli < Ruiby_gtk
   end
   def bench(code)
 	 begin
-		eval( "class Test ; def self.test()  #{code} ;#{code} ;#{code} ;#{code} ;#{code} ;#{code} ;#{code} ;#{code} ;#{code} ;#{code} ;  end ; end ",$global)
+		eval( "class Test ; def self.test()  #{([code]*1000).join(" ; ")} ;  end ; end ",$global)
 		__i=0
-		pas=1000 # number of Test.test() in the while()
+		istep=1000 # number of Test.test() in the while()
+    cstep=1000 # number of code duplication in Test.test
 		Test.test # raise error if bg
 		begin
 		 timeout(1.1) { Test.test }
@@ -1242,16 +1245,16 @@ class Appli < Ruiby_gtk
 		   __i+=1
 		end
 		now=Time.now
-		durn=((((now-date).to_f*1000_000_000.0)/(__i*pas)) - $etalon*1000).round/10
-		dur=((((now-date).to_f*1000_000.0)/(__i*pas)) - $etalon*10000).round/10
+		durn=(((((now-date).to_f*1000_000_000.0)/(__i*istep)) - $etalon*istep)/cstep).round
+		 dur=((((now-date).to_f*1000_000.0)/(__i*istep)) - $etalon).round/cstep
 		if dur<1
-		  mlabel "Duration : #{durn} nanos / #{__i*pas} iterations"
+		  mlabel "Duration : #{durn} nanos / #{__i*istep} iterations"
 		elsif dur<5000
-		  mlabel "Duration : #{dur} micros / #{__i*pas} iterations"
+		  mlabel "Duration : #{dur} micros / #{__i*istep} iterations"
 		elsif dur<10_000_000
-		  mlabel "Duration : #{(dur/1000.0).round} millis / #{__i*pas} iterations" 
+		  mlabel "Duration : #{(dur/1000.0).round} millis / #{__i*istep} iterations" 
 		else
-		  mlabel "Duration : #{(dur/1000_000.0).round} sec / #{__i*pas} iterations" if dur >=10_000_000 					
+		  mlabel "Duration : #{(dur/1000_000.0).round} sec / #{__i*istep} iterations" if dur >=10_000_000 					
 		end
 		__i
 	rescue Exception => e
