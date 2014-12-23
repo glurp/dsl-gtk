@@ -216,7 +216,7 @@ module Ruiby_dsl
   def color_conversion(color)
     case color 
       when ::Gdk::RGBA then color
-      when String then color_conversion(::Gdk::Color.parse(color).last)
+      when String then color_conversion(::Gdk::Color.parse(color))
       when ::Gdk::Color then ::Gdk::RGBA.new(color.red/65000.0,color.green/65000.0,color.blue/65000.0,1)
       else
         raise "unknown color : #{color.inspect}"
@@ -225,13 +225,13 @@ module Ruiby_dsl
   # parse html color ( "#FF00AA" ) to rgba array, useful
   # for canvas vectors styles
   def self.cv_color_html(html_color,opacity=1)
-    c=::Gdk::Color.parse(html_color).last
+    c=::Gdk::Color.parse(html_color)
     #::Gdk::RGBA.new(c.red/65000.0,c.green/65000.0,c.blue/65000.0,1)
     [c.red/65000.0,c.green/65000.0,c.blue/65000.0,opacity>1 ? 1 : opacity<0 ? 0 : opacity]
   end
   # parse color from #RRggBB html format Ruiby_dsl.html_color
-  def html_color(str) ::Gdk::Color.parse(str).last end
-  def self.html_color(str) ::Gdk::Color.parse(str).last end
+  def html_color(str) ::Gdk::Color.parse(str) end
+  def self.html_color(str) ::Gdk::Color.parse(str) end
    
   def widget_properties(title=nil,w=nil) 
     widg=w||@current_widget||@lcur.last
@@ -443,9 +443,14 @@ module Ruiby_dsl
       error("Please install gstreamer, clutter-gtk, clutter-gstreamer")
       return button("no video")
     end
+    p 1
     clutter = ClutterGtk::Embed.new
+    p 2
     video=ClutterGst::VideoTexture.new
+    p 3
+    p video
     clutter.stage.add_child(video)
+    p 4
     video.width=w
     video.height=h
     video.uri = url if url
