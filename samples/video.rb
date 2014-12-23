@@ -9,7 +9,7 @@ Ruiby.app width: 600,height: 400 do
   video_url=File.exists?(video_file) ?  "file:///#{video_file}" : video_file
 
   stack do
-    @v=video(video_url,600,400-40)  {|progress| @prog && @prog.progress=progress*100 }  rescue nil
+    (@v=video(video_url,600,400-40)  {|progress| @prog && @prog.progress=progress*100 })  rescue p $!
     Gem.loaded_specs.each {|name,gem| puts "  #{gem.name}-#{gem.version}"} 
     flowi {
       buttoni("  Start  ") {  @v.play }
@@ -18,7 +18,7 @@ Ruiby.app width: 600,height: 400 do
       buttoni("  Exit  ") { exit!(0) }
     }
   end
-  @v.play 
+  @v.play rescue p $!
   after(10000) { 
     @v.view.rotation_center_x=Clutter::Vertex.new(300,200,0)
     anim(50) {
