@@ -163,7 +163,8 @@ module Ruiby
     klass.send(:chrome,config[:chrome]) if config.has_key?(:chrome)
     start_secure { 
       w=klass.new(config[:title] || "",config[:width] ||600,config[:height] ||600) 
-        w.send(:chrome,config[:chrome]) if config[:chrome]
+      w.send(:chrome,config[:chrome]) if config[:chrome]
+      $app=w
     }
   end
   def self.set_last_log_window(win)
