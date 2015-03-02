@@ -1,4 +1,6 @@
-1.26.1
+1.27.1
+    Ruiby.rb : creation var $app
+1.27.0 : 2015-03-02 18:41:15 +0100
     pingpongplot.rb : debug
     table.rb : autoslot befor doing anything with table
     layouts.rb : creaion script command
@@ -498,4 +500,3 @@
     doc.html : update
 0.78.0 : 2013-04-30 15:11:04 +0200
     ruiby_dsl3.rb : bg and gf working for gtk3, widget_properties
-    ruiby_dsl.rb : raz rename by razslot, widget_properties
