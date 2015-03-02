@@ -9,6 +9,7 @@ module Ruiby_dsl
   # or this form :
   # table { cell(w) ; cell(w2) ; next_row ; cell(w3), cell(w4) }
   def table(nb_col=0,nb_row=0,config={})
+    autoslot
     table = Gtk::Table.new(nb_row,nb_col,false)
     table.set_column_spacings(config[:set_column_spacings]) if config[:set_column_spacings]
     _set_accepter(table,:row,:cell,:widget)
