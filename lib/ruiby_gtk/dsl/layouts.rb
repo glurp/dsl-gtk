@@ -319,6 +319,49 @@ module Ruiby_dsl
     attribs(expander,options)
   end
   
+  ######################## script ##################
+  # define a hmi correpsonding to a script command.
+  # see samples/script.rb
+  # the layout created contains tree zone: 
+  # * parameters : a set of entry, created with a DyynObject which descriptor is hctx
+  # * button zone : a table of widgets. widget are created with bloc traitment,
+  # * a log zone : scolling area on text, appended with log() commande
+  # * bottom fixed buttons : clear log and exit.
+  def script(caption="Parameters",nb_column=2,hctx=nil) 
+    @ctx=make_StockDynObject("ctx",hctx) if hctx
+    stack do
+      stacki do
+        button_expand(caption+"...") do
+          table(0,0) do
+            row {
+              @ctx.keys.each {|key|
+                value=@ctx.send(key)
+                cell_right(label "#{key.gsub('_',' ')} : ")
+                cell_hspan(2,entry(value,{font: 'Courier 10'}))
+                next_row
+              }
+            }
+          end
+        end if hctx
+        @st=stack do yield end
+        table(0,0) do
+          row {
+            @st.children.each_slice(nb_column||3) { |lb|
+              lb.each {|w| w.parent.remove(w) ; cell(w) }
+              next_row
+            }
+          }
+        end
+        delete(@st)
+      end
+      @log=text_area(100,100,{font: 'Courier 8', bg: "#004444", fg: "#FFF"})
+      flowi do
+        button("Clear log") { @log.text=""}
+        buttoni("Exit") { after(0) {exit()} } 
+      end 
+    end
+    self.class.instance_eval { define_method("log") do |*args|  @log.append(args.join(" ")+"\n") end }
+  end  
  
   ######################## Dialog ##################
 
