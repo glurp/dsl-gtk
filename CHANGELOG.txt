@@ -1,4 +1,10 @@
-1.25.6
+1.26.1
+    pingpongplot.rb : debug
+    table.rb : autoslot befor doing anything with table
+    layouts.rb : creaion script command
+    Ruiby.gemspec : dependancy 2.2.3 or more
+    README.md : script creation
+1.26.0 : 2014-12-23 21:50:57 +0100
     video.rb : trye to trace error
     benchi.rb : correctio timing
     ruiby_dsl3.rb : Color.parse corrections
