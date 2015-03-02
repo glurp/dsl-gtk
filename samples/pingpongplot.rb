@@ -1,4 +1,4 @@
-# LGPL,  Author: Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL and Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 #################################################################
 #  pingpongplot.rb : measure (tcp) ping on sommes url
 #
@@ -24,14 +24,22 @@ if ARGV[0] && ARGV[0]=="-a"
 else 
   $prevalue=false 
 end
+if ARGV[0] && ARGV[0]=="-debug" 
+  $debug=true
+  ARGV.shift
+else 
+  $debug=false 
+end
 
 l=ARGV.size>0 ? ARGV : ["google.com"]
 
 $data=(1..l.size).map {|| "0"}
 l.each_with_index do |url,index|
-  MClient.run_continious(url,80,$periode-100) do |socket|
+  url,port=url.split(':')
+  MClient.run_continious(url,(port||"80").to_i,$periode-100) do |socket|
     s=Time.now.to_f
-    socket.on_receive_sep("\r\n") do |data| 
+    socket.on_any_receive() do |data| 
+      p data if $debug
       $data[index]="#{((Time.now.to_f-s)*1000).round}"
       socket.close rescue nil
     end
