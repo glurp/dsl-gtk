@@ -13,7 +13,7 @@ Resources
 
 Code: http://github.com/glurp/Ruiby
 
-Doc: [Ref.](https://rawgithub.com/glurp/Ruiby/master/doc.html)   
+Doc: [Reference.](https://rawgithub.com/glurp/Ruiby/master/doc.html)   
 
 Gem : https://rubygems.org/gems/Ruiby
 
@@ -21,12 +21,10 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 1.25.0  !!   12-02-2014
+NEW : 1.26.0  !!   02-03-2015
 
-- terminal on Ctrl-Shift-h on any widget of application
-- video is comeback, but dependency not configured for  gstreamer, clutter, clutter-gtk, clutter-gst
-- add famfamfam/silk icons to media
-- WARNING !!!! ruby-gtk3 2.2.3 is buggy on Windows !!! 
+- create script layout (see samples/script.rb )
+- WARNING !!!! current ruby-gtk3 2.2.3 is buggy on Windows !!! 
 
 TODO  :
 
