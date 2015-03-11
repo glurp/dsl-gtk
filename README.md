@@ -21,14 +21,15 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 1.26.0  !!   02-03-2015
+NEW : 1.27.0  !!   02-03-2015
 
 - create script layout (see samples/script.rb )
-- WARNING !!!! current ruby-gtk3 2.2.3 is buggy on Windows !!! 
+- access to famfamfam icons 
+- WARNING !!!! current ruby-gtk3 version 2.2.4 is buggy on Windows !!! 
 
 TODO  :
 
-- waiting gtk3 > 2.2.3 !!!
+- waiting gtk3 > 2.2.4
 - refactor samples demos with last improve
 - resolve 100% gtk3 deprecated warning
 - corrections in ruiby_require(?)
