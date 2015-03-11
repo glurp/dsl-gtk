@@ -6,6 +6,13 @@ module Ruiby_dsl
 
   def get_icon(name)
     return name if name.index('.') && File.exists?(name)
+    if name=~ /^famfamfam/
+      fn=Dir.glob("#{Ruiby::MEDIA}/#{name.split(/\s+/).join("*")}.png").to_a.first
+      if File.exists(fn)
+         @cach_pix[fn]=Gdk::Pixbuf.new(fn) unless @cach_pix[fn]
+         return @cach_pix[fn]
+      end
+    end
     n="Gtk::Stock::#{name.to_s.upcase}"
     if defined?(n)
        a=eval(n)
