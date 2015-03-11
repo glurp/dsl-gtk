@@ -1,4 +1,9 @@
-1.27.1
+1.27.2
+    gol2.png : nv
+    canvas.png : v
+    cal.png : nv
+    benchi.png : nv
+    pixmap.rb : famfamfam added
     Ruiby.rb : creation var $app
 1.27.0 : 2015-03-02 18:41:15 +0100
     pingpongplot.rb : debug
@@ -495,8 +500,3 @@
     test_basics_widget.rb : image commands give a Image widget
     ruiby_dsl3.rb : delete deprecated api on calendard
 0.79.0 : 2013-04-30 23:45:14 +0200
-    make_doc.rb : based on gtk3 dsl version
-    ruiby_dsl3.rb : text_aarea docs and methods complete
-    doc.html : update
-0.78.0 : 2013-04-30 15:11:04 +0200
-    ruiby_dsl3.rb : bg and gf working for gtk3, widget_properties
