@@ -1,4 +1,5 @@
-1.27.3
+1.27.4
+    canvas.rb : draw_rectangle
     README.md : v 27
     gol2.png : nv
     canvas.png : v
@@ -499,4 +500,3 @@
     doc.html : cross references
 0.80.0 : 2013-04-30 23:53:11 +0200
     test_basics_widget.rb : image commands give a Image widget
-    ruiby_dsl3.rb : delete deprecated api on calendard
