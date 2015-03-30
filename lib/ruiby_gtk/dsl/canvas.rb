@@ -132,6 +132,29 @@ module Ruiby_dsl
           cr.stroke
         end
     end
+    def cv.draw_pie(x0,y0,r,l_ratio_color_txt)
+      cv,ctx=@currentCanvasCtx
+      start=0.0
+      l_ratio_color_txt.each { |(sweep,coul,text)|
+        eend=start+Math::PI*2.0*sweep
+        mid=(eend+3*start)*0.25
+        if sweep>0.11 && r>=20
+          dx=(mid>(Math::PI/2+Math::PI/4) && mid < Math::PI*3/2) ? text.size*7 : 0
+          cv.draw_line([x0,y0,x0+1.4*r*Math.cos(mid),y0+1.4*r*Math.sin(mid)],"#000",1)
+          cv.draw_text(x0+1.4*r*Math.cos(mid)-dx,y0+1.4*r*Math.sin(mid),text,1,coul)
+        end
+        ctx.move_to(x0,y0)
+        ctx.line_to(x0+r*Math.cos(start),y0+r*Math.sin(start)) 	
+        ctx.arc( x0,y0, r, start, eend );
+        ctx.close_path
+        ctx.set_line_width( 1.0 )
+        ctx.set_source_rgba(*Ruiby_dsl.cv_color_html(coul))
+        ctx.fill_preserve
+        ctx.set_source_rgba(*Ruiby_dsl.cv_color_html("#000"))
+        ctx.stroke
+        start=eend
+      }
+    end
     def cv.draw_image(x,y,filename,sx=1,sy=sx)
       w,cr=@currentCanvasCtx
       pxb=w.app_window.get_pixbuf(filename)
