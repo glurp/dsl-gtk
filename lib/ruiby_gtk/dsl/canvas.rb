@@ -23,6 +23,7 @@ module Ruiby_dsl
   #     w.draw_polygon([x,y,...],colorFill,colorStroke,widthStroke)
   #     w.draw_circle(cx,cy,rayon,colorFill,colorStroke,widthStroke)
   #     w.draw_rectangle(x0,y0,w,h,r,widthStroke,colorFill,colorStroke)
+  #     w.draw_pie(x,y,r,l_ratio_color_label)
   #     w.draw_image(x,y,filename)
   #     w.draw_text(x,y,text,scale,color)
   #     lxy=w.translate(lxy,dx=0,dy=0) # move a list of points
