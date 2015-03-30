@@ -1,4 +1,7 @@
-1.27.5
+1.28.1
+    canvas.rb : draw pie comment
+    doc.html : update canas
+1.28.0 : 2015-03-30 20:35:10 +0200
     canvas.rb : draw_pie creation
     canvas.rb : draw_rectangle
     README.md : v 27
@@ -497,6 +500,3 @@
     ruiby_dsl3.rb : cell_hvspan creation
     doc.html : non
     make_doc.rb : cross reference hypertext and look
-    ruiby_dsl3.rb : comments for make_doc
-    doc.html : cross references
-0.80.0 : 2013-04-30 23:53:11 +0200
