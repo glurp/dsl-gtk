@@ -4,53 +4,60 @@
 module Ruiby_dsl
   ############### Inputs widgets
 
-  # combo box, decribe  with a Hash choice-text => value-of-choice
-  # choices: array of text choices
-  # dfault : text activate or index of text in array
-  # bloc ! called when a choice is selected
+  # combo box. 
+  # Choices are describes with:
+  # * a Hash choice-text => value-of-choice
+  # * or an array of string : value of choice is the index of choice in array
   #
-  # Usage :  combo(%w{aa bb cc},"bb") { |text,index| alert("the choice is #{text} at #{index}") }
+  # default: initiale choice, String (text of choice) or index of choice in array/hash of choices
+  # bloc : called when a choice is selected, with text and value
+  #
+  # methods defined:
+  # * cb.get_selection() >> [text-selected, value-of-selected] or ['',-1]
+  #
+  # Usage :  
+  # combo(%w{aa bb cc},"bb") { |text,index| alert("#{text} at #{index}") }
+  # combo({"aa" => 20, "bb"=> 30, "cc"=> 40},0) { |text,index| alert("#{text} at #{index}") }
   #
   def combo(choices,default=nil,option={},&blk)
     # TODO Dyn
     w=ComboBoxText.new()
     choices=choices.inject({}) { |h,k| h[k]=h.size ; h} if Array===choices
+    inv_choice=choices.values.each_with_index.inject({}) {|h,(v,i)| h[v]=i ; h} 
     choices.each do |text,indice|  
       w.append_text(text) 
     end
+    selection=-1
     if default
         if String==default
-          w.set_active(choice[default]) 
+          selection=choice[default]
         else
-          w.set_active(default) 
+          selection= inv_choice[default] || default
         end
+        w.set_active(selection)
     end
     w.signal_connect(:changed) { |w,evt|
         indice=choices[w.active_text]
-        w.set_selection(w.active_text,indice)
+        w._set_selection(w.active_text,inv_choice[indice])
         blk.call(w.active_text,indice) if blk    
     }
     attribs(w,option)   
     class << w
-      def choices()
-          []
-      end
-      def choices=(h)
-         clear
-         h.keys.each { |k| append_text(k) }
-      end
-      def set_selection(t,i) @selection=[t,i] end
+      def _set_selection(t,i) @selection=[t,i] end # done on changed signal
       def get_selection()   (@selection||["",-1]) end
     end
+    w._set_selection(["",selection])
     w
   end
 
-  # to state button, with text for each state and a initiale value
+  # two state button, with text for each state and a initiale value
   # value can be read by w.active?
-  # calue can be changed by w.set_active(true/false)
-  # callback on state change with new value as argument
+  # value can be changed by w.set_active(true/false)
+  # callback is called on state change, with new value as argument
   def toggle_button(text1,text2=nil,value=false,option={},&blk)
-    # TODO Dyn
+    if DynVar === value
+      return _dyn_toggle_button(text1,text2,value,option,&blk)
+    end
     text2 = "- "+text1 unless text2
     b=ToggleButton.new(text1);
     b.signal_connect("clicked") do |w,e| 
@@ -59,6 +66,21 @@ module Ruiby_dsl
     end
     b.set_active(value)
     b.label= value ? text2.to_s : text1.to_s 
+    attribs(b,option)   
+    b
+  end
+  
+  def _dyn_toggle_button(text1,text2,var,option={},&blk)
+    text2 = "- "+text1 unless text2
+    b=ToggleButton.new(text1);
+    b.signal_connect("clicked") do |w,e| 
+      w.label= w.active?() ? text2.to_s : text1.to_s 
+      ( blk.call(w.active?()) rescue error($!) ) if blk
+      var.set_as_bool(w.active?())
+    end
+    b.set_active(var.value)
+    var.observ { |v|  b.set_active(var.get_as_bool())  }
+    b.label= var.value ? text2.to_s : text1.to_s 
     attribs(b,option)   
     b
   end
@@ -93,32 +115,49 @@ module Ruiby_dsl
   # as vradio_buttons , but horizontaly disposed
   def hradio_buttons(ltext=["empty!"],value=-1) _radio_buttons(:horizontal,ltext,value) end
   
-  def _radio_buttons(sens,ltext=["empty!"],value=-1)
-    # TODO Dyn
+  def _radio_buttons(sens,ltext=["empty!"],value=-1,&blk)
+    is_dyn = (DynVar === value)
     b0=nil
     s=var_box(sens,{},false) {
-      ltext.each_with_index {|t,i|
-        b=if i==0
-            b0=RadioButton.new(t)
-            attribs(b0,{}) 
-        else
-            r=RadioButton.new(b0,t)
-            attribs(r,{}) 
+      ltext.each_with_index {|txt,i|
+        b= (i==0) ? (b0=RadioButton.new(txt)) : RadioButton.new(b0,txt)
+        attribs(b,{}) 
+        b.signal_connect("clicked") do |w,e| 
+          puts "clicked on button #{i} state=#{w.active?}"
+          if w.active?
+            ( blk.call(i) rescue error($!) ) if blk
+            puts "action on button #{i}"
+            (puts "set to #{i} from #{value.value}"; value.value=i ) if  is_dyn  && value.value.to_i!=i 
+          end
         end
-        if i==value
-          b.toggled 
+        
+        if i== (is_dyn ? value.value : value)
+          #b.toggled 
           b.set_active(true) 
         end
       }
     }
     # TODO: test!
     class << s
+      ; def set_b0(b) @b0=b end
+      ; def b0() @b0 end
       ;  def get_selected()
-        b0.group.each_with_index.map { |w,index| return(index) if w.active? }
+        b0.group.each_with_index { |w,index| return(index) if w.active? }
       end
-     ;  def set_selected(indice)
-        b0.group.each_with_index.map { |w,index| w.active=true if indice==index }
+      ;  def set_selected(indice)
+        b0.group.reverse.each_with_index { |w,index| 
+         if !w.active? && indice.to_i==index
+           puts "setsel #{index}"
+           w.set_active(true) rescue p $!
+           return
+         end
+        }
       end
+    end
+    s.set_b0(b0)
+    if is_dyn
+      value.set_trace(true)
+      value.observ { |v|  after(100) {p ["observ",v] ;s.set_selected(v.to_i) }}
     end
     attribs(s,{}) 
   end
@@ -222,7 +261,7 @@ module Ruiby_dsl
   end
   
   def _dyn_islider(var,option,&blk) 
-    w=  block_given? ?  islider(var.value.to_i,option,&blk) : islider(var.value.to_i,option) { |v| var.value=v }
+    w=  block_given? ?  islider(var.value.to_i,option,&blk) : islider(var.value.to_i,option) { |v| var.value=v.to_i }
     var.observ { |v| w.set_value(v.to_i) }
     attribs(w,option)   
     w
