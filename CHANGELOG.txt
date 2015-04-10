@@ -1,4 +1,10 @@
-1.28.1
+1.28.2
+    dyn.rb : test radiobutton, toggleButton
+    dyn_var.rb : avoid notification if same value nt changed, temporisation notifications
+    layouts.rb : title on dialogs
+    form_fields.rb : dynvar on combo, callback on combo
+    canvas.rb : draw_varrbarr creation, text background
+    doc.html : update comments
     canvas.rb : draw pie comment
     doc.html : update canas
 1.28.0 : 2015-03-30 20:35:10 +0200
@@ -494,9 +500,3 @@
     README.md : versioneye
     ruiby_dsl3.rb : table paccking
     ruiby.rb : comments
-    README.md : versioneye append
-    test_basics_widget.rb : Image is Label
-    make_doc.rb : rounded title
-    ruiby_dsl3.rb : cell_hvspan creation
-    doc.html : non
-    make_doc.rb : cross reference hypertext and look
