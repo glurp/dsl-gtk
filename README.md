@@ -21,10 +21,11 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 1.27.0  !!   02-03-2015
+NEW : 1.30.0  !!   04-10-2015
 
 - create script layout (see samples/script.rb )
 - access to famfamfam icons 
+-- comboBow, radio button, toggle button completed, add dyn var on them
 - WARNING !!!! current ruby-gtk3 version 2.2.4 is buggy on Windows !!! 
 
 TODO  :
