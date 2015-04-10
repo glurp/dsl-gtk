@@ -64,12 +64,14 @@ class DynVar
   def name() @name                                         end
   def observ(&blk)  @abo[caller] = blk  ; blk.call(@value) end
   def do_notification()
-    abo=@abo
-     value=@value
-     gui_invoke_wait { abo.each { |a,b|  b.call(value) } } if @abo.size>0  
+     return if @abo.size==0
+     abo=@abo.clone
+     return if abo.size==0
+     there=self
+     gui_invoke_wait { after(100) { abo.each { |a,b|  b.call(there.value) } } } 
   end
-  def value=(v)     @value=v ; do_notification()           end
-  def value()       @value                                 end
+  def value=(v)  (tr(@value,v);  @value=v ; do_notification()) if @value!=v end
+  def value()     @value  end
   def set_as_bool(v) 
     @value=case  @value
          when Numeric then v ? 1 : 0 
@@ -85,6 +87,12 @@ class DynVar
     else 
       !! @value
     end
+  end
+  def set_trace(on)
+    @trace=on
+  end
+  def tr(old,neww)
+    puts "trace var from #{old} to #{neww}" if @trace
   end
 end
 
