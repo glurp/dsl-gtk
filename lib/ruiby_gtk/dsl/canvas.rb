@@ -24,12 +24,13 @@ module Ruiby_dsl
   #     w.draw_circle(cx,cy,rayon,colorFill,colorStroke,widthStroke)
   #     w.draw_rectangle(x0,y0,w,h,r,widthStroke,colorFill,colorStroke)
   #     w.draw_pie(x,y,r,l_ratio_color_label)
+  #     w.draw_varbarr(x0,y0,x1,y1,vmin,vmax,l_date_value,width) {|value| color}
   #     w.draw_image(x,y,filename)
   #     w.draw_text(x,y,text,scale,color)
   #     lxy=w.translate(lxy,dx=0,dy=0) # move a list of points
   #     lxy=w.rotate(lxy,x0,y0,angle)  # rotate a list of points
   #     w.scale(10,20,2) { w.draw_image(3,0,filename) } # draw in a transladed/scaled coord system
-  #                          >> image with be draw at 16,20, and his size doubled
+  #                          >> image will be draw at 16,20, and size doubled
   # end
 
   def canvas(width,height,option={})
@@ -106,11 +107,56 @@ module Ruiby_dsl
       width||=@currentWidth
       draw_line([x,y-width/4, x,y+width/4],color,width)
     end
-    def cv.draw_text(x,y,text,scale=1,color=nil)
+    def cv.draw_text(x,y,text,scale=1,color=nil,bgcolor=nil)
       w,cr=@currentCanvasCtx
       cr.set_line_width(1)
       cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color || @currentColorFg ))
-      scale(x,y,scale) {  cr.move_to(0,0); cr.show_text(text) }
+      scale(x,y,scale) {  
+        if bgcolor
+          a=cr.text_extents(text)
+          w.draw_rectangle(-a.width,-a.height,a.width,a.height,1,bgcolor,bgcolor,0)
+        end
+        cr.move_to(0,0)
+        cr.show_text(text) 
+      }
+    end
+    def cv.draw_varbarr(x0,y0,x1,y1,dmin,dmax,lvalues0,width,&b)
+      xconv=proc {|d| (x1==x0) ? x1 : (a=1.0*(x1-x0)/(dmax-dmin) ;b= x0-a*dmin; a*d+b) }
+      yconv=proc {|d| (y1==y0) ? y1 : (a=1.0*(y1-y0)/(dmax-dmin) ;b= y0-a*dmin; a*d+b) }
+      w,cr=@currentCanvasCtx
+      lvalues=lvalues0.sort_by {|a| a.first}
+      l=[lvalues.first]+lvalues.each_cons(2).map {|(d,v),(d1,v1)|
+        (v1 && v!=v1 && d!=d1) ? [d1,v1] : nil 
+      }.compact+[lvalues.last]
+      #p l
+      cr.set_line_join(Cairo::LINE_JOIN_MITER)
+      cr.set_line_cap(Cairo::LINE_CAP_BUTT)
+      l.each_cons(2).map {|(d,v),(d1,v1)| 
+        next unless v1
+        color=  yield(v)
+        lxy=[xconv.call(d),yconv.call(d),xconv.call(d1),yconv.call(d1)]
+        #p "   #{d},#{d1} ==> #{lxy.inspect}" if l.size>1
+        w.draw_line(lxy,color, width) if color
+      }
+    end    
+    def cv.draw_text_left(x,y,text,scale=1,color=nil,bgcolor=nil)
+      w,cr=@currentCanvasCtx
+      cr.set_line_width(1)
+      cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color || @currentColorFg ))
+      scale(x,y,scale) {  
+        a=cr.text_extents(text)
+        if bgcolor
+          w.draw_rectangle(-a.width,-a.height,a.width,a.height,1,bgcolor,bgcolor,1)
+        end
+        cr.move_to(-a.width,0)
+        cr.show_text(text) 
+      }
+    end
+    def cv.draw_text_center(x,y,text,scale=1,color=nil)
+      w,cr=@currentCanvasCtx
+      cr.set_line_width(1)
+      cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color || @currentColorFg ))
+      scale(x,y,scale) {  a=cr.text_extents(text);cr.move_to(-a.width/2.0,0); cr.show_text(text) }
     end
     def cv.draw_rectangle(x0,y0,w,h,r=0,colorStroke=nil,colorFill=nil,widthStroke=nil)
       x1, y1 = x0+w, y0+h
@@ -133,16 +179,28 @@ module Ruiby_dsl
           cr.stroke
         end
     end
-    def cv.draw_pie(x0,y0,r,l_ratio_color_txt)
+    def cv.draw_pie(x0,y0,r,l_ratio_color_txt,with_legend=false)
+      lcolor=%w{#F00 #A00 #AA0 #AF0 #AAF #AAA #FAF #AFA #33F #044}
       cv,ctx=@currentCanvasCtx
-      start=0.0
-      l_ratio_color_txt.each { |(sweep,coul,text)|
+      start=3.0*Math::PI/2.0
+      total=l_ratio_color_txt.inject(0.0) { |sum,(a)| sum+a }
+      h0=y0-r
+      p0=x0+r*1.2
+      l_ratio_color_txt.each_with_index { |(sweep0,coul,text),i|
+        coul=lcolor[i%lcolor.size] unless coul
+        sweep=sweep0/total
         eend=start+Math::PI*2.0*sweep
         mid=(eend+3*start)*0.25
-        if sweep>0.11 && r>=20
+        if !with_legend && sweep>0.11 && r>=20 && text && text.size>0
           dx=(mid>(Math::PI/2+Math::PI/4) && mid < Math::PI*3/2) ? text.size*7 : 0
           cv.draw_line([x0,y0,x0+1.4*r*Math.cos(mid),y0+1.4*r*Math.sin(mid)],"#000",1)
           cv.draw_text(x0+1.4*r*Math.cos(mid)-dx,y0+1.4*r*Math.sin(mid),text,1,coul)
+        end
+        if with_legend && text && text.size>0 && h0<y0+r
+          draw_rectangle(p0,h0,20,8,0,"#000",coul,1)
+          draw_text(p0+30,h0+10,text,1,"#000")
+          draw_text(p0+70,h0+10,": #{sweep0}",1,"#000")
+          h0+=10
         end
         ctx.move_to(x0,y0)
         ctx.line_to(x0+r*Math.cos(start),y0+r*Math.sin(start)) 	
@@ -150,9 +208,9 @@ module Ruiby_dsl
         ctx.close_path
         ctx.set_line_width( 1.0 )
         ctx.set_source_rgba(*Ruiby_dsl.cv_color_html(coul))
-        ctx.fill_preserve
-        ctx.set_source_rgba(*Ruiby_dsl.cv_color_html("#000"))
-        ctx.stroke
+        ctx.fill
+        #ctx.set_source_rgba(*Ruiby_dsl.cv_color_html("#000"))
+        #ctx.stroke
         start=eend
       }
     end
