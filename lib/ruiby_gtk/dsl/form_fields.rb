@@ -46,7 +46,7 @@ module Ruiby_dsl
       def _set_selection(t,i) @selection=[t,i] end # done on changed signal
       def get_selection()   (@selection||["",-1]) end
     end
-    w._set_selection(["",selection])
+    w._set_selection("",selection)
     w
   end
 
