@@ -201,6 +201,7 @@ module Ruiby_dsl
 
   # create a notebook widget. it must contain page() wigget
   # notebook { page("first") { ... } ; ... }
+  #  nb.page=<no page>  => active no page
   def notebook() 
     nb = Notebook.new()
     slot(nb)
@@ -374,7 +375,7 @@ module Ruiby_dsl
   # }
   def dialog_async(title,config={},&b) 
     dialog = Dialog.new(
-      title:   "Message",
+      title:   title,
       parent:  self,
       buttons: [[Gtk::Stock::OK, :accept],
                 [Gtk::Stock::CANCEL, :reject]]
