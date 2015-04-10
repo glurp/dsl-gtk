@@ -171,6 +171,8 @@ describe Ruiby do
       aa=""
       v.observ { |value| aa= value}
       v.value="33"
+      t=Time.now
+      @win.update while Time.now< t+1 
       aa.should eq("33")
    end
 	 it "Dyn Stock var" do
