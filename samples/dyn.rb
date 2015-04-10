@@ -9,29 +9,36 @@ require_relative '../lib/Ruiby.rb'
 Ruiby.app do
   stacki {
      labeli( <<-EEND ,font: "Arial 14",bg: "#004455", fg: "#CCCCCC")
-     Test variables binding for entry/slider/CheckButton/label. 
+     Test variables binding for entry/slider/CheckButton/toggleButton/radioButton/label. 
      
-     Observer patern : Variables are Value Object,
+     Observer pattern :
      widget can be observer of a variable,
      so variable modification will be showing in all widget observer,
-     and a edition by a observer widget will be  notified to value object
+     and a edition by a observer widget will be  notified to all widget concerned.
      EEND
      
      v1=DynVar.stock("v1",1)
      v2=DynVar.stock("v2","99")
      v3=DynVar.stock("v3",true)
+     v4=DynVar.stock("v4",1)
      flow {
        framei("Int value",margins: 20) {
          framei("Dyn widget") {
            flowi { labeli "dyn label: " ;  label v1,bg: "#FFCCCC" ; bourrage 10 }
            flowi { labeli "dyn entry : " ;  entry v1 }
+           flowi { labeli "dyn radiobutton: " ;  hradio_buttons(["FALSE","TRUE","two"],v1) }
            flowi { labeli "dyn show/edit slider: " ;  islider v1 }
            flowi { labeli "dyn show     slider: " ;  islider v1 do end}
-           flowi { labeli "dyn checkButton: " ;  check_button "!= 0",v1 }
+           flowi { labeli "dyn checkButton: " ;  check_button "!= 0",v3 }
+           flowi { labeli "dyn toggle: " ;  toggle_button "FALSE","TRUE",v3 }
            
          }
          flowi { labeli "editor (not dyn) :" ; entry("")  { |v| v1.value=v.to_i }                    }
-         flowi { labeli "+/- button :" ; button("v1++") { v1.value=v1.value+1};  button("v1--") { v1.value=v1.value-1}          }   
+         flowi { 
+            labeli "+/- button :"
+            button("v1++") { v1.value=v1.value+1}  
+            button("v1--") { v1.value=v1.value-1} 
+         }   
        }
        
        framei("String value",margins: 20) {
