@@ -1,4 +1,8 @@
-1.28.2
+1.29.1
+    test_layout.rb : whait one second for dynvar notification verificatio
+    form_fields.rb : set_selection on combo
+    README.md : v 1.30
+1.29.0 : 2015-04-10 21:29:05 +0200
     dyn.rb : test radiobutton, toggleButton
     dyn_var.rb : avoid notification if same value nt changed, temporisation notifications
     layouts.rb : title on dialogs
@@ -496,7 +500,3 @@
     ruiby_demo3 : defined
     ruiby : defined
     README.md : versioneye
-    README.md : versioneye
-    README.md : versioneye
-    ruiby_dsl3.rb : table paccking
-    ruiby.rb : comments
