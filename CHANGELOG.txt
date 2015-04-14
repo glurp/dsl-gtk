@@ -1,3 +1,5 @@
+1.30.3
+    Rakefile.rb : no giti on linux
 1.30.2
     script.rb : debug windows version
     README.md : comments
@@ -498,5 +500,3 @@
     ruiby.rb : EM
 0.82.0 : 2013-05-16 13:17:20 +0200
     ruiby.rb : EM
-    ruiby.rb : Event Machine main-loop
-0.81.0 : 2013-05-15 18:24:11 +0200
