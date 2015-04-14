@@ -1,6 +1,5 @@
-1.30.3
-    Rakefile.rb : no giti on linux
 1.30.2
+    Rakefile.rb : no giti on linux
     script.rb : debug windows version
     README.md : comments
 1.30.0 : 2015-04-10 21:42:32 +0200
