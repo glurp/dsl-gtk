@@ -27,6 +27,7 @@ require_relative 'dsl/commands.rb'
 require_relative 'dsl/pixmap.rb'
 require_relative 'dsl/label_button_image.rb'
 require_relative 'dsl/form_fields.rb'
+require_relative 'dsl/script.rb'
 
 require_relative 'dsl/canvas.rb'
 require_relative 'dsl/editors.rb'

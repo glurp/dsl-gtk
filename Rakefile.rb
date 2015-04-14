@@ -127,7 +127,7 @@ task :pre_commit do
 --------------------------------------------------------------------
 EEND2
   
-  sh "giti"
+  sh "giti" if RUBY_PLATFORM =~ /(win32)|(mingw)/i
   $changed=false
 end
 
