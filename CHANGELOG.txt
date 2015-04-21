@@ -1,3 +1,6 @@
+1.31.1
+    commands.rb : log: show backtrace if arg is exception
+1.31.0 : 2015-04-14 18:01:30 +0200
 1.30.2
     Rakefile.rb : no giti on linux
     script.rb : debug windows version
@@ -496,6 +499,4 @@
     README.md : em
     README.md : event machine documentation
 0.83.0 : 2013-05-16 13:19:05 +0200
-    ruiby.rb : EM
-0.82.0 : 2013-05-16 13:17:20 +0200
     ruiby.rb : EM
