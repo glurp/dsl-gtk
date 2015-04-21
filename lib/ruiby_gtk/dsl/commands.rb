@@ -159,7 +159,11 @@ module Ruiby_dsl
     end
     loglabel=_create_log_window()
     buffer=loglabel.buffer
-    t=Time.now.to_s+" | " + (txt.join(" ").encode("UTF-8"))+"\n"
+    tc=txt.map {|t| 
+      t.kind_of?(Exception) ?  "#{t.to_s}\n  #{(t.backtrace||[]).join("\n  ")}\n" :  t 
+    }.join(" ")
+    txt_utf8= tc.encode("UTF-8", 'binary', invalid: :replace, undef: :replace, replace: '?')
+    t="#{Time.now} | #{txt_utf8}\n"
     buffer.insert(buffer.end_iter,t)
     if ( loglabel.buffer.text.size>1000*1000)
       loglabel.buffer.text=loglabel.buffer.text[-7000..-1]
