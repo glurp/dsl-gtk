@@ -160,26 +160,31 @@ module Ruiby_dsl
       scale(x,y,scale) {  a=cr.text_extents(text);cr.move_to(-a.width/2.0,0); cr.show_text(text) }
     end
     def cv.draw_rectangle(x0,y0,w,h,r=0,colorStroke=nil,colorFill=nil,widthStroke=nil)
-      return draw_rounded_rectangle(x0,y0,w,h,r,colorStroke,colorFill,widthStroke) if r>1
+      return draw_rounded_rectangle(x0,y0,w,h,r,colorStroke,colorFill,widthStroke) if r.kind_of?(Array) || r>1
       x1, y1 = x0+w, y0+h
       colorStroke=@currentColorFg if colorFill.nil? && colorStroke.nil?
       _draw_poly([x0,y0, x1,y0, x1,y1, x0,y1, x0,y0],colorStroke,colorFill,widthStroke)
     end
-    def cv.draw_rounded_rectangle(x0,y0,w,h,r,colorStroke,colorFill,widthStroke)
+    def cv.draw_rounded_rectangle(x0,y0,w,h,ar,colorStroke,colorFill,widthStroke)
       cv,cr=@currentCanvasCtx
       pi=Math::PI
-      x00,y00,x01,y01=x0+r,y0+r,x0+w-r,y0+h-r
+      ar=[ar,ar,ar,ar] if ar.kind_of?(Numeric)
       cr.set_source_rgba(*Ruiby_dsl.cv_color_html(colorFill ? colorFill : colorStroke))
       cr.set_line_width( widthStroke )
-      cr.move_to(x0,y00)
+      r=ar[0]
+      cr.move_to(x0,y0+r)
       cr.arc(x0+r,y0+r, r, -pi,-pi/2)
-      cr.line_to(x01,y0)
-      cr.arc(x01,y00, r, -pi/2, 0)
-      cr.line_to(x0+w,y01)
-      cr.arc(x01,y01, r, 0, pi/2)
-      cr.line_to(x00,y0+h)
-      cr.arc(x00,y01, r, pi/2,pi)
-      cr.line_to(x0,y00)
+      r=ar[1]
+      cr.line_to(x0+w-r,y0)
+      cr.arc(x0+w-r,y0+r, r, -pi/2, 0)
+      r=ar[2]
+      cr.line_to(x0+w,y0+h-r)
+      cr.arc(x0+w-r,y0+h-r, r, 0, pi/2)
+      r=ar[3]
+      cr.line_to(x0+r,y0+h)
+      cr.arc(x0+r,y0+h-r, r, pi/2,pi)
+      r=ar[0]
+      cr.line_to(x0,y0+r)
       colorFill ? cr.fill : cr.stroke
     end
     def cv.draw_circle(x0,y0,r,color_bg=nil,color_fg=nil,width=nil)
@@ -286,7 +291,7 @@ module Ruiby_dsl
   # action must return an object whici will be transmit to motion/release handler
   def on_canvas_button_press(&blk)
     _accept?(:handler)
-    @currentCanvas.signal_connect('button_press_event')   { |w,e| 
+    @currentCanvas.signal_connect('button-press-event')   { |w,e| 
       ret=w.set_memo(blk.call(w,e))  rescue error($!)
       force_update(w) 
       ret
