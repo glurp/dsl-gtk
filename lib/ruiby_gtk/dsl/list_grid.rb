@@ -115,8 +115,9 @@ module Ruiby_dsl
       )
     end
     if block_given?
-      treeview.signal_connect("changed") do |view, path, column|
-        # TODO
+      treeview.signal_connect("row-activated") do |tview, path, column|
+          sl=names.size.times.map {|i| tview.selection.selected[i].to_s.clone} 
+          yield(sl)
       end   
     end
     
@@ -132,6 +133,7 @@ module Ruiby_dsl
       @ruiby_data
     end
     def scrolled_win.set_data(data) 
+      grid().selection.unselect_all 
       @ruiby_data=data
       raise("grid.set_data() out of main thread!")if $__mainthread__ != Thread.current
       grid().model.clear() ; data.each { |words| add_row(words) }
