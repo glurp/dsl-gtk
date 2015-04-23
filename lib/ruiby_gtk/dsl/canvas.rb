@@ -24,6 +24,7 @@ module Ruiby_dsl
   #     w.draw_circle(cx,cy,rayon,colorFill,colorStroke,widthStroke)
   #     w.draw_rectangle(x0,y0,w,h,r,widthStroke,colorFill,colorStroke)
   #     w.draw_pie(x,y,r,l_ratio_color_label)
+  #     w.draw_arc(x,y,r,start,eend,width,color_stroke,color_fill=nil)
   #     w.draw_varbarr(x0,y0,x1,y1,vmin,vmax,l_date_value,width) {|value| color}
   #     w.draw_image(x,y,filename)
   #     w.draw_text(x,y,text,scale,color)
@@ -213,6 +214,15 @@ module Ruiby_dsl
         #ctx.stroke
         start=eend
       }
+    end
+    def cv.draw_arc(x,y,r,start,eend,width,color_stroke,color_fill=nil)
+      w,ctx=@currentCanvasCtx
+      ctx.set_line_width( width )
+      ctx.set_source_rgba(*Ruiby_dsl.cv_color_html(color_fill ? color_fill : color_stroke))
+      ctx.move_to(x,y)
+      ctx.arc( x,y, r, Math::PI*2.0*start, Math::PI*2.0*eend );
+      ctx.close_path
+      color_fill ? ctx.fill : ctx.stroke
     end
     def cv.draw_image(x,y,filename,sx=1,sy=sx)
       w,cr=@currentCanvasCtx
