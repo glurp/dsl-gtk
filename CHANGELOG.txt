@@ -1,4 +1,5 @@
-1.32.1
+1.32.2
+    README.md : update
     README.md : todo presentations
 1.32.0 : 2015-04-23 20:48:25 +0200
     canvas.rb : rounded rectangle with several radius
@@ -499,4 +500,3 @@
 0.87.0 : 2013-05-16 15:43:34 +0200
 0.86.0 : 2013-05-16 15:40:07 +0200
     Rakefile.rb : q
-0.85.0 : 2013-05-16 15:39:08 +0200
