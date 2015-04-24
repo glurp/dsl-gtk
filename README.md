@@ -21,21 +21,29 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 1.30.0  !!   04-10-2015
+NEW : 1.34.0  !!   04-24-2015
 
-- create script layout (see samples/script.rb )
-- access to famfamfam icons 
--- combo, radio button, toggle button completed, add dyn var on them
 - WARNING !!!! current ruby-gtk3 version 2.2.4 is buggy on Windows !!! 
+Main issue : mouse_button_press event : X/Y are incorrects !
 
 TODO  :
 
-- waiting gtk3 > 2.2.4
-- refactor samples demos with last improve
-- resolve 100% gtk3 deprecated warning
-- corrections in ruiby_require(?)
-- complete treeview and tree_grid,
-- complete rspec => 99% coverage ?
+* [x] create script layout (see samples/script.rb )
+* [x] access to famfamfam icons 
+* [x] combo, radio button, toggle button completed, add dyn var on them
+* [x] complete draw_ functio for canvas : rounded rectangle
+* [x] complete draw_ functio for canvas : draw_arc
+* [x] complete draw_ functio for canvas : draw_pie
+* [ ] complete draw_ functio for canvas : 
+* [ ] Gadget api
+* [ ] editor / executor  : console/canvas/widget+help
+* [x] grid : get selection double-click, debug...
+* [ ] waiting gtk3 > 2.2.4
+* [ ] refactor samples demos with last improve
+* [ ] resolve 100% gtk3 deprecated warning
+* [ ] corrections in ruiby_require(?)
+* [ ] complete treeview and tree_grid,
+* [ ] complete rspec => 99% coverage ?
 
 
 
