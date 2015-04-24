@@ -31,15 +31,16 @@ TODO  :
 * [x] create script layout (see samples/script.rb )
 * [x] access to famfamfam icons 
 * [x] combo, radio button, toggle button completed, add dyn var on them
-* [x] complete draw_ functio for canvas : rounded rectangle
-* [x] complete draw_ functio for canvas : draw_arc
-* [x] complete draw_ functio for canvas : draw_pie
-* [ ] complete draw_ functio for canvas : 
+* [x] complete draw_ function for canvas : rounded rectangle
+* [x] complete draw_ function for canvas : draw_arc
+* [x] complete draw_ function for canvas : draw_pie
+* [ ] complete draw_ function for canvas : 
+* [ ] make a demo of a gadget: REST/gui canvas/dialog/config
 * [ ] Gadget api
 * [ ] editor / executor  : console/canvas/widget+help
 * [x] grid : get selection double-click, debug...
 * [ ] waiting gtk3 > 2.2.4
-* [ ] refactor samples demos with last improve
+* [ ] refactor samples demos with last improve: dynvar/autoslot...
 * [ ] resolve 100% gtk3 deprecated warning
 * [ ] corrections in ruiby_require(?)
 * [ ] complete treeview and tree_grid,
