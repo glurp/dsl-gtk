@@ -34,12 +34,12 @@ TODO  :
 * [x] complete draw_ function for canvas : rounded rectangle
 * [x] complete draw_ function for canvas : draw_arc
 * [x] complete draw_ function for canvas : draw_pie
-* [ ] complete draw_ function for canvas : 
-* [ ] make a demo of a gadget: REST/gui canvas/dialog/config
+* [x] complete draw_ function for canvas  
+* [x] make a demo of a gadget: REST/gui canvas/dialog/config
 * [ ] Gadget api
 * [ ] editor / executor  : console/canvas/widget+help
 * [x] grid : get selection double-click, debug...
-* [ ] waiting gtk3 > 2.2.4
+* [x] waiting gtk3 > 2.2.4
 * [ ] refactor samples demos with last improve: dynvar/autoslot...
 * [ ] resolve 100% gtk3 deprecated warning
 * [ ] corrections in ruiby_require(?)
