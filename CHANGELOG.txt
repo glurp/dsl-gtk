@@ -1,3 +1,5 @@
+1.32.4
+    gadget_clock.rb : best drawing
 1.32.3
     README.md : update
     README.md : todo presentations
@@ -498,5 +500,3 @@
     Rakefile.rb : ignore status of test execution
 0.88.0 : 2013-05-16 15:44:55 +0200
 0.87.0 : 2013-05-16 15:43:34 +0200
-0.86.0 : 2013-05-16 15:40:07 +0200
-    Rakefile.rb : q
