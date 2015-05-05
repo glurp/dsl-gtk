@@ -24,33 +24,49 @@ Ruiby.app width: 120,height: 120, title: "Clock" do
       } 
     end		
   end
-  def draw_aig(cv,x,y,r,pos,width,color) 
+  def draw_aig(cv,x,y,r,pos,width,color)
     a=(pos+0.75)*(Math::PI*2.0)
-    @cv.draw_line([x,y,x+r*Math.cos(a),y+r*Math.sin(a)],color,width) 
+	if width<2
+      @cv.draw_line([x,y,x+r*Math.cos(a),y+r*Math.sin(a)],color,width) 
+    else
+      a1=(pos+0.75-width/60.0)*(Math::PI*2.0)
+      a2=(pos+0.75+width/60.0)*(Math::PI*2.0)
+			 r1=x/15.0
+      x1,y1=x+r1*Math.cos(a1),y+r1*Math.sin(a1)
+      x2,y2=x+r1*Math.cos(a2),y+r1*Math.sin(a2)
+      x3,y3=x+r*Math.cos(a),y+r*Math.sin(a)
+      @cv.draw_polygon([x,y,x1,y1,x3,y3,x2,y2,x,y],color,color,1) 
+      @cv.draw_circle(x,y,2,color,color,1) 
+    end
   end  
+
   #show_methods(self,/iz/)
   def expose(cv,ctx)
     ssize= size()
-    @cv.set_size_request(ssize.first,ssize.last)
+    @cv.set_size_request(ssize.first-2,ssize.last-2)
     cx,cy=ssize.first/2,ssize.last/2
     ray=cx*0.8
     @cv.draw_rectangle(0,0,cx*2,cy*2,0,$BG,$BG,0)
     @cv.draw_circle(cx,cy,ray,"#A0A0A0","#FFF",3)
-    12.times { |i| 
+    c=[[3,1],[5,3],[8,5]]
+    60.times { |i| 
+      type= if (i%15)==0 then 2 elsif (i%5)==0 then 1 else 0 end 
       @cv.draw_line([
-          cx+(ray)*Math.cos(i*(Math::PI*2.0)/12.0),
-          cy+(ray)*Math.sin(i*(Math::PI*2.0)/12.0),
-          cx+(ray-6)*Math.cos(i*(Math::PI*2.0)/12.0),
-          cy+(ray-6)*Math.sin(i*(Math::PI*2.0)/12.0)],
-          "#FFF",3)
+          cx+(ray-2)*Math.cos(i*(Math::PI*2.0)/60.0),
+          cy+(ray-2)*Math.sin(i*(Math::PI*2.0)/60.0),
+          cx+(ray-c[type][0])*Math.cos(i*(Math::PI*2.0)/60.0),
+          cy+(ray-c[type][0])*Math.sin(i*(Math::PI*2.0)/60.0)],
+          "#FFF",c[type][1])
     }
     
     now=Time.now
     hour,min,sec=now.hour,now.min,now.sec
-    @cv.draw_text(cx-40,cy*2-3,"%02d:%02d:%02d" % [hour,min,sec],1.8,"#FFF")
-    draw_aig(cv,cx,cy,ray/2,hour/12.0,4,"#FF0000")
-    draw_aig(cv,cx,cy,ray*2/3,min/60.0,2,"#FFFF00")
-    draw_aig(cv,cx,cy,ray*0.9,sec/60.0,1,"#808080")
+    min,sec=(now.to_i%3600)/60.0,now.to_f%60
+    hour+=min/60.0
+    @cv.draw_text(cx-35,cy*2-3,"%02d:%02d:%02d" % [hour,min,sec],1.6,"#FFF")
+    draw_aig(cv,cx,cy,ray/2,hour/12.0,4,"#FFF")
+    draw_aig(cv,cx,cy,ray*2/3,min/60.0,2,"#FFF")
+    draw_aig(cv,cx,cy,ray*0.9,sec/60.0,1,"#888")
   rescue 
     puts "#{$!}\n  #{$!.backtrace.join("\n  ")}\n\n\n"
   end
