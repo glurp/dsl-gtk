@@ -1,4 +1,15 @@
-1.32.5
+1.32.6
+    video.png : u
+    tree.png : u
+    testth.png : u
+    test_systray.png : u
+    test.png : u
+    table2.png : u
+    sketchi.png : u
+    plot.png : u
+    multi_window_threading.png : u
+    dyn.png : u
+    README.md : update
     gadget_clock.rb : center clock
 1.32.4
     gadget_clock.rb : best drawing
@@ -489,14 +500,3 @@
     make_doc.rb : search engine
     doc.html : search dialog input
     test_gtk3.rb : versions
-    test.rb : versions
-    make_doc.rb : review look of autognerated doc
-    doc.html : review look of documentation
-    LICENSE.html : update txt
-    LICENSE.html : update html to text
-    README.md : uppdate 90
-0.90.0 : 2013-05-27 20:05:53 +0200
-    ruiby_demo3 : resolve scratch with gtk3 init
-0.89.0 : 2013-05-27 20:03:18 +0200
-    README.md : todo and EM
-    Rakefile.rb : ignore status of test execution
