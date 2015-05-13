@@ -21,25 +21,17 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 1.34.0  !!   04-24-2015
+NEW : 1.32.5  !!   05-12-2015
 
-- WARNING !!!! current ruby-gtk3 version 2.2.4 is buggy on Windows !!! 
-Main issue : mouse_button_press event : X/Y are incorrects !
+WARNING !!!! current ruby-gtk3 version 2.2.4 is buggy on Windows ruby/32, bt ok wirh Ruby/x64 !!! 
 
 TODO  :
 
-* [x] create script layout (see samples/script.rb )
-* [x] access to famfamfam icons 
-* [x] combo, radio button, toggle button completed, add dyn var on them
-* [x] complete draw_ function for canvas : rounded rectangle
-* [x] complete draw_ function for canvas : draw_arc
-* [x] complete draw_ function for canvas : draw_pie
-* [x] complete draw_ function for canvas  
 * [x] make a demo of a gadget: REST/gui canvas/dialog/config
-* [ ] Gadget api
-* [ ] editor / executor  : console/canvas/widget+help
 * [x] grid : get selection double-click, debug...
 * [x] waiting gtk3 > 2.2.4
+* [ ] Gadget api: atuel gadget are cairo drawing => to be encapsuled
+* [ ] editor / executor  : console/canvas/widget+help
 * [ ] refactor samples demos with last improve: dynvar/autoslot...
 * [ ] resolve 100% gtk3 deprecated warning
 * [ ] corrections in ruiby_require(?)
@@ -54,14 +46,13 @@ Installation
 ============
 1) system
 
-Install Ruby 1.9 or 2.0.x
+Install Ruby 2.x
 
 
 2) install Ruiby
 (Ruiby install ruby-gtk3 which install gtk3 libs)
 
 ```
-> gem update --system    # gem 2.0.3
 > gem install Ruiby
 
 > ruiby_demo             # check good installation with gtk3 (default)
@@ -170,12 +161,6 @@ Simple usage with gtk3 :
 require 'Ruiby'
 ```
 
-Usage with gtk2 (obsollete) : 
-
-```ruby 
-require 'gtk2'
-require 'Ruiby'
-```
 
 Usage with Event Machine: preload event-machine before Ruiby :
 
@@ -340,49 +325,5 @@ LGPL, CC BY-SA
 
 Exemples
 ========
-see samples in "./samples" directory
-See at end of Doc reference : [Ex.](https://rawgithub.com/glurp/Ruiby/master/doc.html#code) 
-
-A little one
-------------
-
-ScreenShot:
-
-![](http://raw.github.com/raubarede/Ruiby/master/samples/media/snapshot_simplissime.png)
-
-```ruby
-require 'Ruiby'
-
-Ruiby.app width: 300,height: 200,title:"UpCase" do
-  chrome(false)
-  # create a class from a hash, instanciate on object which will save/restor at each stop/start of the script
-  # structure of class and initale values are in the hash
-  ctx=make_StockDynObject("simpl1",{"value" => "0" , "len" => 10, "res"=> ""})
-  stack do
-    flowi {
-      sloti(toggle_button("D",false) {|v| chrome(v)})
-      frame("Convertissor",margins: 20) do
-       flowi {
-         labeli "Value: " ,width: 200
-         entry(ctx.value)
-         button("reset") { ctx.value.value="" }}
-       separator
-       flowi { labeli "len: " ,width: 200 ; entry(ctx.len) }
-       flowi { labeli " " ,width: 200 ; islider(ctx.len) }
-       flowi { labeli "Resultat: " ,width: 200 ; entry(ctx.res) }
-      end
-    }
-    flowi { regular # tool bar of buttons, each must have same size (regular on flow => same width)
-      button("Validation") { validation(ctx) }
-      button("Exit") { ruiby_exit }
-    }
-  end
-  def validation(ctx) # a method appended to current class (private)
-    Thread.new do
-      sleep 1 # long time traitment...
-      ctx.res.value= ctx.value.value.upcase 
-      ctx.len.value= ctx.res.value.size
-    end
-  end
-end
-```
+see samples in "./samples" directory (run all.rb)
+cd sampSee at end of Doc reference : [Ex.](https://rawgithub.com/glurp/Ruiby/master/doc.html#code) 
