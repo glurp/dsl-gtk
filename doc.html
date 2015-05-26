@@ -84,7 +84,7 @@ hdoc['show_all_children']= '<div class="api"><br>def show_all_children(c)</div><
 hdoc['slot_append_before']= '<div class="api"><br>def slot_append_before(w,wref)</div><div><a href=#append>append</a> the <a href=#widget>widget</a> <a href=#w>w</a> before another one wref<br>thread protected<br></div>';
 hdoc['slot_append_after']= '<div class="api"><br>def slot_append_after(w,wref)</div><div><a href=#append>append</a> the <a href=#widget>widget</a> <a href=#w>w</a> <a href=#after>after</a> anotherone wref)<br>thread protected<br></div>';
 hdoc['delete']= '<div class="api"><br>def delete(w)</div><div>delete a <a href=#widget>widget</a> or a timer<br>thread protected<br></div>';
-hdoc['def_style']= '<div class="api"><br>def def_style(string_style=nil)</div><div>define a set ofcss style, to be apply to every <a href=#widget>widget</a> of main window<br>if noparameter, load a file <caller>.rcZ<br></div>';
+hdoc['def_style']= '<div class="api"><br>def def_style(string_style=nil)</div><div>define a set of css style, to be apply to every <a href=#widget>widget</a> of main window<br>if noparameter, load a file <caller>.rc<br></div>';
 hdoc['snapshot']= '<div class="api"><br>def snapshot(filename=nil)</div><div>make a snapshot raster file of current window<br>can be called by user. <br>Is called by mainloop if string take-a-snapshot is present in ARGV<br>only for Windows !!!<br></div>';
 hdoc['log']= '<div class="api"><br>def log(*txt)</div><div> Logs<br>put a line of <a href=#message>message</a> text in log <a href=#dialog>dialog</a> (create and show the log <a href=#dialog>dialog</a> if not exist)<br></div>';
 hdoc['source_editor']= '<div class="api"><br>def source_editor(args={},&blk)</div><div>Creative Commons BY-SA :  Regis dAubarede <regis.aubarede@gmail.com><br>LGPL<br> source editor<br>a source_editor <a href=#widget>widget</a> : text as showed in fixed font, colorized (default: ruby syntaxe)<br>from: green shoes plugin<br>options= :width  :height :on_change :lang :font<br>@<a href=#edit>edit</a>=source_editor().editor<br>@<a href=#edit>edit</a>.buffer.text=File.read(@filename)<br></div>';
@@ -97,7 +97,7 @@ hdoc['hradio_buttons']= '<div class="api"><br>def hradio_buttons(ltext=["empty!"
 hdoc['entry']= '<div class="api"><br>def entry(value,size=10,option={},&blk)</div><div>create a text entry for keyboard input<br>if block defined, it while be trigger on eech of (character) change of the entry<br></div>';
 hdoc['ientry']= '<div class="api"><br>def ientry(value,option={},&blk)</div><div>create a integer text <a href=#entry>entry</a> for keyboed input<br>option must define :min :max :by for spin <a href=#button>button</a><br></div>';
 hdoc['fentry']= '<div class="api"><br>def fentry(value,option={},&blk)</div><div>create a integer text <a href=#entry>entry</a> for keyboed input<br>option must define :min :max :by for spin <a href=#button>button</a><br></div>';
-hdoc['field']= '<div class="api"><br>def field(tlabel,width,value,option={},&blk)</div><div>show a <a href=#label>label</a> and a <a href=#entry>entry</a> in a  <a href=#flow>flow</a>. <a href=#entry>entry</a> <a href=#widget>widget</a> is returned<br>see <a href=#fields>fields</a>()<br></div>';
+hdoc['field']= '<div class="api"><br>def field(tlabel,lwidth,value,option={},&blk)</div><div>show a <a href=#label>label</a> and a <a href=#entry>entry</a> in a  <a href=#flow>flow</a>. <a href=#entry>entry</a> <a href=#widget>widget</a> is returned<br>see <a href=#fields>fields</a>()<br></div>';
 hdoc['fields']= '<div class="api"><br>def fields(alabel=[["nothing",""]],option={},&blk)</div><div>show a <a href=#stack>stack</a> of <a href=#label>label</a>/<a href=#entry>entry</a> and buttons validation/annulation<br>on <a href=#button>button</a>, bloc is invoked with the <a href=#list>list</a> of values of entrys<br></div>';
 hdoc['islider']= '<div class="api"><br>def islider(value=0,option={},&b)</div><div>create a <a href=#slider>slider</a><br>option must define :min :max :by for spin <a href=#button>button</a><br>current <a href=#value>value</a> can be read by <a href=#w>w</a>.<a href=#value>value</a><br>if bloc is given, it with be call on each change, with new <a href=#value>value</a> as parameter<br>if <a href=#value>value</a> is a DynVar, <a href=#slider>slider</a> will be binded to the DynVar : each change of the var <a href=#value>value</a> will <a href=#update>update</a> the <a href=#slider>slider</a>,<br>of no block given,each change of the <a href=#slider>slider</a> is notifies to the DynVar, else change will<br>only call the block.<br></div>';
 hdoc['color_choice']= '<div class="api"><br>def color_choice(text=nil,options={},&cb)</div><div>create a <a href=#button>button</a> wich will show a <a href=#dialog>dialog</a> for color choice<br>if bloc is given, it with be call on each change, with new color <a href=#value>value</a> as parameter<br>current color is <a href=#w>w</a>.get_color()<br></div>';
@@ -296,8 +296,8 @@ function popup(word) {
  </head>
 <body>
 <div class='title'>Ruiby DSL Documentation</div>
-Ruiby Version: 1.31.4<br>
-Generated at : 2015-04-23 20:48:23 +0200<br>
+Ruiby Version: 1.32.7<br>
+Generated at : 2015-05-26 19:28:11 +0200<br>
 <a href="#code">See code example</a>
 <hr>
 <center>Search : <input type='input' value="" size='80' onchange='doSearch(this.value);'></center>
@@ -548,7 +548,7 @@ Generated at : 2015-04-23 20:48:23 +0200<br>
 
 <div class='atitle'><a name='def_style'>def style</a></div>
 <div class='api'>def def_style(string_style=nil)</div>
-<div class='descr'>define a set ofcss style, to be apply to every <a href='#widget'>widget</a> of main window<br>if noparameter, load a file <caller>.rcZ<br> <a href='#ex_def_style'>ex</a></div>
+<div class='descr'>define a set of css style, to be apply to every <a href='#widget'>widget</a> of main window<br>if noparameter, load a file <caller>.rc<br> <a href='#ex_def_style'>ex</a></div>
 
 <div class='atitle'><a name='delete'>delete</a></div>
 <div class='api'>def delete(w)</div>
@@ -595,7 +595,7 @@ Generated at : 2015-04-23 20:48:23 +0200<br>
 <div class='descr'>create a integer text <a href='#entry'>entry</a> for keyboed input<br>option must define :min :max :by for spin <a href='#button'>button</a><br> <a href='#ex_fentry'>ex</a></div>
 
 <div class='atitle'><a name='field'>field</a></div>
-<div class='api'>def field(tlabel,width,value,option={},&blk)</div>
+<div class='api'>def field(tlabel,lwidth,value,option={},&blk)</div>
 <div class='descr'>show a <a href='#label'>label</a> and a <a href='#entry'>entry</a> in a  <a href='#flow'>flow</a>. <a href='#entry'>entry</a> <a href='#widget'>widget</a> is returned<br>see <a href='#fields'>fields</a>()<br> <a href='#ex_field'>ex</a></div>
 
 <div class='atitle'><a name='fields'>fields</a></div>
