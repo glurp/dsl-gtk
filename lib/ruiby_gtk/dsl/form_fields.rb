@@ -181,6 +181,7 @@ module Ruiby_dsl
        return _dyn_entry(value,size,option,false,&blk)       
     end
     w=Entry.new().tap {|e| e.set_text(value ? value.to_s : "") }
+    w.set_width_chars(size)
     after(1) do
       w.signal_connect("key-press-event") do |en,e|
         after(1) { blk.call(w.text) rescue error($!) }
@@ -235,12 +236,12 @@ module Ruiby_dsl
   
   # show a label and a entry in a  flow. entry widget is returned
   # see fields()
-  def field(tlabel,width,value,option={},&blk)
+  def field(tlabel,lwidth,value,option={},&blk)
     e=nil
     flow {
       l=label(tlabel+ " : ")
-      l.width_chars=width+3
-      e=entry(value,option,&blk)
+      l.width_chars=lwidth+3
+      e=entry(value,10,option,&blk)
     }
     e
   end
