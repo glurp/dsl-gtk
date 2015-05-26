@@ -109,8 +109,8 @@ module Ruiby_dsl
   end
   
 
-	# define a set ofcss style, to be apply to every widget of main window
-	# if noparameter, load a file <caller>.rcZ
+	# define a set of css style, to be apply to every widget of main window
+	# if noparameter, load a file <caller>.rc
 	def def_style(string_style=nil)
 		unless string_style
 		   fn=caller[0].gsub(/.rb$/,".rc")
