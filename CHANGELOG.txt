@@ -1,4 +1,6 @@
-1.32.6
+1.32.7
+    form_fields.rb : width entry and bug n field()
+    commands.rb : comments on def_style
     video.png : u
     tree.png : u
     testth.png : u
@@ -498,5 +500,3 @@
     color.rb : comments
     benchi.rb : fixed font
     make_doc.rb : search engine
-    doc.html : search dialog input
-    test_gtk3.rb : versions
