@@ -39,6 +39,5 @@ class RubyApp < Ruiby_gtk
 	end
 end
 
-Gtk.init
-    RubyApp.new
+RubyApp.new
 Gtk.main
