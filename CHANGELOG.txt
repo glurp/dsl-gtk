@@ -1,3 +1,17 @@
+3.0.1
+    test.rb :  update 3.0.0
+    paned.rb :  update 3.0.0
+    hello.rb :  update 3.0.0
+    cal.rb :  update 3.0.0
+    windows.rb :  update 3.0.0
+    ruiby_dsl3.rb :  update 3.0.0
+    pixmap.rb :  update 3.0.0
+    menus_popup.rb :  update 3.0.0
+    list_grid.rb :  update 3.0.0
+    layouts.rb :  update 3.0.0
+    form_fields.rb :  update 3.0.0
+    Ruiby.rb :  update 3.0.0
+    README.md : update 3.0.0
 1.33.0 : 2015-05-26 19:28:12 +0200
     form_fields.rb : width entry and bug n field()
     commands.rb : comments on def_style
@@ -486,16 +500,3 @@
     ruiby.rb : gtk3 default
 0.94.0 : 2013-06-13 23:35:24 +0200
     test_basics_widget.rb : fileds size
-0.93.0 : 2013-06-13 20:32:34 +0200
-    test.rb : switch to gtk3
-    color.rb : dialogs tests
-    ruiby_dsl3.rb : fields better
-    ruiby_default_dialog3.rb : MessageDialog gtk3 style
-    benchi.rb : error trap
-0.92.0 : 2013-06-13 15:59:01 +0200
-    Ruiby.gemspec : homepage, licenses
-0.91.0 : 2013-06-13 15:46:26 +0200
-    netprog.rb : force gtk3 
-    dependencies.rb : comments
-    color.rb : comments
-    benchi.rb : fixed font
