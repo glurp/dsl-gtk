@@ -21,17 +21,20 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 1.33.0  !!   01-06-2015
+NEW : 3.0.0  !!   14-09-2015
+new : gadgets, ruby-gtk3 3.0.0, trading demo
 
-WARNING !!!! current ruby-gtk3 version 2.2.5 is buggy on Windows ruby/32, but it is ok with Ruby/x64 !!!
+WARNING !!!! current ruby-gtk3 version 3.0.2 is buggy on Windows ruby :
+* no icons
+* mouse event have false informations
+* gtksourceview3 buggi
 
 TODO  :
 
 * [x] make a demo of a gadget: REST/gui canvas/dialog/config
 * [x] grid : get selection double-click, debug...
-* [x] waiting gtk3 > 2.2.4
 * [ ] Refactor images loader for button/label/toggleBUtton...
-* [ ] Gadget api: actuel gadgets are cairo drawing => to be encapsuled
+* [ ] Gadget api: actual gadgets are cairo drawing => to be encapsuled
 * [ ] editor / executor  : console/canvas/widget+help
 * [ ] refactor samples demos with last improve: dynvar/autoslot...
 * [ ] resolve 100% gtk3 deprecated warning
