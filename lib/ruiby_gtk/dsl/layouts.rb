@@ -23,8 +23,8 @@ module Ruiby_dsl
   # box { } container which manage children widget without slot (pack()) 
   # in parent container.
   # Use it for cell in table, notebook  : table { row { cell(box { });... }; ... }
-  def box() 
-    box=Gtk::Box.new(:vertical,2)
+  def box(sens=:vertical) 
+    box=Gtk::Box.new(sens,2)
     _set_accepter(box,:layout,:widget)
     @lcur << box
     yield
@@ -199,7 +199,7 @@ module Ruiby_dsl
 
   ###################################### notebooks
 
-  # create a notebook widget. it must contain page() wigget
+  # create a notebook widget. it must contain page() widgets
   # notebook { page("first") { ... } ; ... }
   #  nb.page=<no page>  => active no page
   def notebook() 
@@ -215,11 +215,9 @@ module Ruiby_dsl
   # button can be text or icone (if startin by '#', as label)
   def page(title,icon=nil)
     _accept?(:tab)
-    if icon && icon[0,1]=="#" 
-      l = Image.new(:stock => get_icon(icon[1..-1]),:size => :button); 
-    else
-      l=Label.new(title)
-    end 
+    l=Image.new(get_pixmap(icon[1..-1])) if icon
+    l=Image.new(get_pixmap(title[1..-1])) if title && title[0,1]=="#"
+    l=Label.new(title) if  title.size>1 && title[0,1]!="#"
     @lcur.last.append_page( box { yield }, l )
   end
 
@@ -379,6 +377,28 @@ module Ruiby_dsl
     rep=dialog.run  #  blocked
     dialog.destroy
     rep==-3
+  end
+  
+  # a dialog without default buttons
+  # can be synchrone (block the caller until wndow destroyed)
+  def window(title="",sync=false) 
+    dialog = Dialog.new(
+      title: title,
+      parent: self,
+      buttons: []
+    )
+      
+    @lcur << dialog.child
+    hbox=stack { yield }
+    @lcur.pop
+    
+    dialog.set_window_position(:center)
+    Ruiby.apply_provider(dialog.child)
+    dialog.show_all 
+    if sync
+      rep=dialog.run  #  blocked
+      dialog.destroy
+    end
   end
   
 end
