@@ -146,7 +146,7 @@ module Ruiby_dsl
     File.delete(filename) if File.exists?(filename)
     puts "generated  for title '#{self.title}' ==> #{filename} ..."
     Win32::Screenshot::Take.of(:window,:title => /#{self.title}/, :context => :window).write(filename)
-    puts "nsnapshot done, size= #{File.size(filename)/1024} KB, name=#{filename}"
+    puts "snapshot done, size= #{File.size(filename)/1024} KB, name=#{filename}"
   end  
 
   ###################################### Logs
