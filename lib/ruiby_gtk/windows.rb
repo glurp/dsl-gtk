@@ -14,7 +14,7 @@ class Ruiby_gtk < Gtk::Window
     set_title(title)
     
     # set default size/position
-    set_window_position Gtk::Window::Position::CENTER  # default, can be modified by window_position(x,y)
+    set_window_position Gtk::WindowPosition::CENTER  # default, can be modified by window_position(x,y)
     set_default_size(w,h)
     
     # set quit handler    
@@ -79,7 +79,7 @@ class Ruiby_gtk < Gtk::Window
   # system.
   def rposition(x,y)
     if x==0 && y==0
-      set_window_position Window::POS_CENTER
+      set_window_position Gtk::WindowPosition::CENTER
       return
     elsif     x>=0 && y>=0
       gravity= Gdk::Gravity::NORTH_WEST
