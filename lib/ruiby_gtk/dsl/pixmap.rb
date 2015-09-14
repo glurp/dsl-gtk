@@ -54,13 +54,13 @@ module Ruiby_dsl
   #     see samples/draw.rb
   def get_image_from(name,size=:button)
     if name.index('.') 
-      return Image.new(name) if File.exists?(name)
+      return Image.new(file: name) if File.exists?(name)
       return _sub_image(name) if name.index("[")
       alert("unknown icone #{name}")
     end
     iname=get_icon(name)
     if iname && Gdk::Pixbuf  === iname
-      return Image.new(name) 
+      return Image.new(:pixbuf => iname) 
     elsif iname
       Image.new(:stock => iname,:size=> size)
     else
@@ -68,7 +68,7 @@ module Ruiby_dsl
     end
   end
   def _sub_image(name)
-    Image.new(get_pixbuf(name))
+    Image.new(pixbuf: get_pixbuf(name))
   end
   def get_pixbuf(name)
     @cach_pix={} unless defined?(@cach_pix)
