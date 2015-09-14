@@ -30,7 +30,7 @@ module Ruiby_dsl
     treeview = Gtk::TreeView.new(model)
     if block_given?
       treeview.selection.signal_connect("changed") do |selection, path, column1|
-        li=[];i=0;selection.selected_each {|model1, path1, iter|  li << path1.to_s.to_i; i+=1 }
+        li=[];i=0;selection.each {|model1, path1, iter|  li << path1.to_s.to_i; i+=1 }
         ldata=[];model.each {|model, path, iter|  ldata << iter.get_value(0) }
         ld=li.map { |idx| ldata[idx] }
         yield(li,ld) rescue error($!)
@@ -62,11 +62,11 @@ module Ruiby_dsl
       words.each { |w| list().model.append[0]=w }
     end
     def scrolled_win.selection()
-      li=[];i=0;list().selection.selected_each {|model, path, iter|  li << path.to_s.to_i; i+=1 }
+      li=[];i=0;list().selection.each {|model, path, iter|  li << path.to_s.to_i; i+=1 }
       li
     end
     def scrolled_win.index()
-      li=[];i=0;list().selection.selected_each {|model, path, iter|  li << path.to_s.to_i; i+=1 }
+      li=[];i=0;list().selection.each {|model, path, iter|  li << path.to_s.to_i; i+=1 }
       li
     end
     def scrolled_win.set_selections(istart,istop)
