@@ -1,4 +1,4 @@
-# Ruiby 
+# Ruiby
 
 [![Build Status](https://travis-ci.org/glurp/dsl-gtk.svg?branch=master)](https://travis-ci.org/glurp/dsl-gtk)
 [![Gem Version](https://badge.fury.io/rb/Ruiby.png)](http://badge.fury.io/rb/Ruiby)
@@ -13,7 +13,7 @@ Resources
 
 Code: http://github.com/glurp/Ruiby
 
-Doc: [Reference+Exemples.](https://rawgithub.com/glurp/Ruiby/master/doc.html)   
+Doc: [Reference+Exemples.](https://rawgithub.com/glurp/Ruiby/master/doc.html)
 
 Gem : https://rubygems.org/gems/Ruiby
 
@@ -21,16 +21,17 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 1.32.5  !!   05-12-2015
+NEW : 1.33.0  !!   01-06-2015
 
-WARNING !!!! current ruby-gtk3 version 2.2.4 is buggy on Windows ruby/32, bt ok wirh Ruby/x64 !!! 
+WARNING !!!! current ruby-gtk3 version 2.2.5 is buggy on Windows ruby/32, but it is ok with Ruby/x64 !!!
 
 TODO  :
 
 * [x] make a demo of a gadget: REST/gui canvas/dialog/config
 * [x] grid : get selection double-click, debug...
 * [x] waiting gtk3 > 2.2.4
-* [ ] Gadget api: atuel gadget are cairo drawing => to be encapsuled
+* [ ] Refactor images loader for button/label/toggleBUtton...
+* [ ] Gadget api: actuel gadgets are cairo drawing => to be encapsuled
 * [ ] editor / executor  : console/canvas/widget+help
 * [ ] refactor samples demos with last improve: dynvar/autoslot...
 * [ ] resolve 100% gtk3 deprecated warning
@@ -60,7 +61,7 @@ Install Ruby 2.x
 ```
 3) if you need video/gstreamer, install gst/clutter :
 ```
-  > gem install gstreamer 
+  > gem install gstreamer
   > gem install clutter-gtk
   > gem install clutter-gstreamer
 ```
@@ -83,7 +84,7 @@ Here a working gem config on windows (15-September-2014, ruby 2.0.0p0) :
 clutter-gtk  2.2.0
  clutter-gstreamer  2.2.0
 ```
-  
+
 
 Usage
 ======
@@ -95,7 +96,7 @@ By inherit:
 class Application < Ruiby_gtk
     def initialize(t,w,h)
         super(t,w,h)
-    end	
+    end
 	def component()
 	  stack do
 		...
@@ -114,14 +115,14 @@ class Win < Gtk::Window
 	include Ruiby
     def initialize(t,w,h)
         super()
-		add(@vb=VBox.new(false, 2)) 
+		add(@vb=VBox.new(false, 2))
 		....
-    end	
-	def add_a_ruiby_button() 
+    end
+	def add_a_ruiby_button()
 		ruiby_component do
-			append_to(@vb) do 
+			append_to(@vb) do
 				button("Hello Word #{@vb.children.size}") {
-					add_a_ruiby_button() 
+					add_a_ruiby_button()
 				}
 			end
 		end
@@ -132,17 +133,17 @@ Ruiby.start { Win.new("application title",350,10) }
 
 Autonomous DSL, for  little application :
 
-```ruby 
+```ruby
 require  'Ruiby'
 Ruiby.app do
 	stack do
-		. . . 
+		. . .
 	end
 end
 ```
 And, for very little application ('~' are replaced by guillemet):
 
-```ruby 
+```ruby
 
 > ruiby   button(~Continue ? ~) "{  exit!(0) }"
 > ruiby   fields([%w{a b},%w{b c},%w{c d}]) { "|a,b,c|" p [a,b,c] if a; exit!(a ?0:1) }
@@ -157,14 +158,14 @@ Require
 =======
 Simple usage with gtk3 :
 
-```ruby 
+```ruby
 require 'Ruiby'
 ```
 
 
 Usage with Event Machine: preload event-machine before Ruiby :
 
-```ruby 
+```ruby
 require 'em-proxy'
 require 'Ruiby'
 ```
@@ -172,7 +173,7 @@ require 'Ruiby'
 Warning : EM.run is done when starting mainloop, after creation of window(s).
 So, if you need initialization of event-machine callback, do it in component(), in a after(0):
 
-```ruby 
+```ruby
 Ruiby.app do
   ....
   after(0) { EventMachine::start_server().. { ... } }
@@ -190,7 +191,7 @@ main thread context. A Ruiby delegate is provided in Kernel module for support m
 A Queue is polled by main-window thread :
 * main window poll Queue , messagers are proc to be instance_eval() in the main window context
 * everywere, a thread can invoke ```invoke_gui {ruiby code}```. this send to the main queue the proc,
- which will be evaluated asynchroniously 
+ which will be evaluated asynchroniously
 
 instance_eval is avoided in ruiby. He is used only for thread invoker : gui_invoke().
 
@@ -202,24 +203,24 @@ class App < Ruiby_gtk
 		threader(10)
 		Thread.new { A.new.run }
     end
-	def component()        
+	def component()
 	  stack do
 		sloti(label("Hello, this is Thread test !"))
 		stack { @lab=stacki { } }
 	  end
 	end # endcomponent
-	
+
 end
 class A
 	def run
  		loop do
 		 	sleep(1) # thread...
-			there=self 
-			gui_invoke { append_to(@lab) { sloti( 
+			there=self
+			gui_invoke { append_to(@lab) { sloti(
 					label( there.aaa )  # ! instance_eval on main window
 			)  } }
 		end
-	end 
+	end
 	def aaa() Time.now.to_s  end
 end
 
@@ -238,7 +239,7 @@ This is very tyring :)
 
 With data binding, this notifications are done by the framework
 
-So ```DynVar``` can be  used for representing a value variable which is dynamics, ie. 
+So ```DynVar``` can be  used for representing a value variable which is dynamics, ie.
 which must notify widgets which show the variable state.
 
 So we can do :
@@ -266,7 +267,7 @@ Here, a modification of foo variable will be send on the network...
 Warning !! the block will always be executed in the main thread context (mainloop gtk context).
 So DynVar is a ressource internal to Ruiby framework.
 
-Widget which accept DynVar are : entry, ientry, islider, label, check_button, 
+Widget which accept DynVar are : entry, ientry, islider, label, check_button,
 
 ```must be extend to button, togglebutton, combo, radio_button ... list, grid,...```
 
@@ -278,13 +279,13 @@ Often, this kind of Dyn variables are members of a 'record', which should be org
 Ruby Object (a Struct...)
 
 So ```DynObject``` create a class, which is organised by a hash  :
-* packet of variable name 
+* packet of variable name
 * put initial value for each
 * each variable will be a DynVar
 
-```ruby 
+```ruby
   FooClass=make_DynClass("v1" => 1 , "v2" => 2, "s1" => 'Hello...')
-  foo=FooClass.new( "s1" => Time.now.to_s ) # default value of s1 variable is replaced 
+  foo=FooClass.new( "s1" => Time.now.to_s ) # default value of s1 variable is replaced
   ...
   label(" foo: ") ; entry(foo.s1)
   islider(foo.v1)
@@ -299,7 +300,7 @@ Dynamic Stock Object
 DynObject can be persisted to filesystem : use ```make_StockDynObject```, and
 instantiate with an object persistant ID
 
-```ruby 
+```ruby
   FooClass=make_StockDynClass("v1"=> 1 , "v2" => 2, "s1" => 'Hello...')
   foo1=FooClass.new( "foo1" , "s1" => Time.now.to_s )
   foo2=FooClass.new( "foo2" , "s1" => (Time.now+10).to_s )
@@ -310,7 +311,7 @@ instantiate with an object persistant ID
 
 ```make_StockDynObject``` do both : Class creation **and** class instanciation.
 
-```ruby 
+```ruby
   foo=make_StockDynObject("v1"=> 1 , "v2" => 2, "s1" => 'Hello...')
   ....
   button(foo.s1) { foo.s1.value= prompt("new S1 value ?")}
@@ -326,4 +327,4 @@ LGPL, CC BY-SA
 Exemples
 ========
 see samples in "./samples" directory (run all.rb)
-cd sampSee at end of Doc reference : [Ex.](https://rawgithub.com/glurp/Ruiby/master/doc.html#code) 
+cd sampSee at end of Doc reference : [Ex.](https://rawgithub.com/glurp/Ruiby/master/doc.html#code)

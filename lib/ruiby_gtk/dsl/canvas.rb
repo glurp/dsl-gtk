@@ -127,7 +127,7 @@ module Ruiby_dsl
       w,cr=@currentCanvasCtx
       lvalues=lvalues0.sort_by {|a| a.first}
       l=[lvalues.first]+lvalues.each_cons(2).map {|(d,v),(d1,v1)|
-        (v1 && v!=v1 && d!=d1) ? [d1,v1] : nil 
+        (v1 && v!=v1) ? [d1,v1] : nil 
       }.compact+[lvalues.last]
       #p l
       cr.set_line_join(Cairo::LINE_JOIN_MITER)
@@ -238,6 +238,13 @@ module Ruiby_dsl
         start=eend
       }
     end
+    def cv.draw_arc2(x,y,r,start,eend,width,color_stroke,color_fill=nil)
+      w,ctx=@currentCanvasCtx
+      ctx.set_line_width( width )
+      ctx.set_source_rgba(*Ruiby_dsl.cv_color_html(color_fill ? color_fill : color_stroke))
+      ctx.arc( x,y, r, Math::PI*2.0*start, Math::PI*2.0*eend );
+      color_fill ? ctx.fill : ctx.stroke
+    end
     def cv.draw_arc(x,y,r,start,eend,width,color_stroke,color_fill=nil)
       w,ctx=@currentCanvasCtx
       ctx.set_line_width( width )
@@ -339,7 +346,6 @@ module Ruiby_dsl
   def on_canvas_draw(&blk)
     _accept?(:handler)
     @currentCanvas.signal_connect(  'draw' ) do |w,cr| 
-      cr.save do
         cr.set_line_join(Cairo::LINE_JOIN_ROUND)
         cr.set_line_cap(Cairo::LINE_CAP_ROUND)
         cr.set_line_width(2)
@@ -348,11 +354,10 @@ module Ruiby_dsl
         begin
            w.instance_eval { @currentCanvasCtx=[w,cr] }
            blk.call(w,cr) 
-           w.instance_eval { @currentCanvasCtx=nil }
+           #w.instance_eval { @currentCanvasCtx=nil }
         rescue Exception => e
          after(1) { error(e) }
         end  
-      end
     end
   end  
 

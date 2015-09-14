@@ -26,7 +26,7 @@ class Ruiby_gtk < Gtk::Window
     end
     # set default icon for application
     iconfn=Ruiby::DIR+"/../media/ruiby.png"
-    set_icon(iconfn) if File.exists?(iconfn)
+    #set_icon(name:  iconfn) if File.exists?(iconfn)
     
     # set Ctrl-Shift-h handler
     agroup = Gtk::AccelGroup.new

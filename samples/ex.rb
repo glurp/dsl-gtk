@@ -1,7 +1,3 @@
-#!/usr/bin/ruby
-# encoding: utf-8
-# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
-# LGPL
 #####################################################################
 #  ex.rb : simple text (ruby) editorend test view
 #####################################################################
@@ -18,6 +14,7 @@ class RubyApp < Ruiby_gtk
   end
   def component()
     stack do
+      a=slot(Image.new( :stock => Gtk::Stock::OPEN, :size => :button))
       sloti(htoolbar do
         toolbar_button("open","ouvrir fichier") {
           load(ask_file_to_read(".","*.rb"))
@@ -39,18 +36,20 @@ class RubyApp < Ruiby_gtk
       flow_paned(1200,0.5) do 
         stack do
           @edit=source_editor(:width=>200,:height=>50,
-            :lang=> "ruby", :font=> "Courier new 12",:on_change=>
-            proc { change }
+            :lang=> "ruby", :font=> "Courier new 12",:on_change=> proc { change }
           ).editor
+          @edit.buffer.text=Ruiby.stock_get("text1","")
           flowi {
-            @bt=button("Test in concole...") { execute_console() }
-            @bt=button("Test in canvas...") { execute_canvas() }
-            @bt=button("Test in stack...") { execute_stack() }
+            @bt=button("Test in concole...") { Ruiby.stock_put("text1",@edit.buffer.text); execute_console() }
+            @bt=button("Test in canvas...") { Ruiby.stock_put("text1",@edit.buffer.text);execute_canvas() }
+            @bt=button("Test in stack...") { Ruiby.stock_put("text1",@edit.buffer.text);execute_stack() }
           }
         end
         @nb=notebook do   
           page("console") do
+            content=Ruiby.stock_get("text1","")
             @ta=text_area(300,600,:font=> "Courier new 12")
+            @ta.text=content
           end
           page("canvas") do
             @cv=canvas(300,600)  { 
@@ -63,28 +62,12 @@ class RubyApp < Ruiby_gtk
         end
       end
       @nbh=notebook do 
-        page("Error") { @error_log=text_area(600,100,{:font=>"Courier new 10"}) }
-        page("Help") { 
-          t=text_area(1,1,:font=> "Courier new 10")
-          t.text=<<-EEND
-          in concole : no stdin, stdout is redirected to console.
-          in canvas: 'cv' and 'ctx' vriables  contains canvas and cairo context handlers.
-          EEND
+        page("Error") { 
+          @error_log=text_area(600,100,{:font=>"Courier new 10"}) 
         }
         page("Ex. canvas") { 
           t=text_area(1,1,:font=> "Courier new 10")
           t.text=<<-EEND
-          cv.draw_line([x1,y1,....],color,width)
-          cv.draw_point(x1,y1,color,width)
-          cv.draw_polygon([x,y,...],colorFill,colorStroke,widthStroke)
-          cv.draw_circle(cx,cy,rayon,colorFill,colorStroke,widthStroke)
-          cv.draw_rectangle(x0,y0,w,h,r,widthStroke,colorFill,colorStroke)
-          cv.draw_pie(x,y,r,l_ratio_color_label)
-          cv.draw_image(x,y,filename)
-          cv.draw_text(x,y,text,scale,color)
-          lxy=cv.translate(lxy,dx=0,dy=0) # move a list of points
-          lxy=cv.rotate(lxy,x0,y0,angle)  # rotate a list of points
-          cv.scale(10,20,2) { cv.draw_image(3,0,filename) } # draw in a transladed/scaled coord system
           
           Real code:
           ==========
@@ -105,6 +88,8 @@ class RubyApp < Ruiby_gtk
           cv.draw_polygon([1,110,100,110,100,110,100,210,1,110],"#0FF","#DDD",1)
           cv.draw_text(200,70,"Hello !",6,"#000")
           EEND
+          c=File.read("#{Ruiby::DIR}/ruiby_gtk/dsl/canvas.rb").split(/\r?\n/).grep(/^\s+def\s+cv\./).reject {|a|a=~/end/}.join("\n")
+          t.text+=c 
         }
         page("Ex. stack") { 
           t=text_area(1,1,:font=> "Courier new 10")
@@ -112,8 +97,23 @@ class RubyApp < Ruiby_gtk
             flowi{ button("button") {alert("Hi!")}
           EEND
         }
-      end
+        page("Ruiby APi") { 
+          doc=::Ruiby.make_doc_api().uniq
+          flow {
+            stacki { 
+              label "Search :"
+              e=entry("",20)
+              button("Go") { alert( doc.grep(/#{e.text}/).join("\n")) }
+            }
+            t=text_area(1,1,:font=> "Courier new 10")
+            l,r= *(doc.each_with_index.partition {|a,i| i<(doc.size/2)})
+            t.text=l.zip(r).map {|l,r| "%-55s | %-40s" % [l.first,r.first]}.join("\n")
+          }
+        }
+        #
     end
+    end
+    # end nb
     after(20)   { rposition(-3,3) }
   end
   

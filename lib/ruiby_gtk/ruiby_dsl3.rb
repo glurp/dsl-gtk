@@ -262,7 +262,7 @@ module Ruiby_dsl
       _accept?(:toolb)
       iname=get_icon(name)
       
-      w=Gtk::ToolButton.new(:stock_id => iname)
+      w=Gtk::ToolButton.new(get_pixmap(name))
       w.signal_connect("clicked") { blk.call rescue error($!) } if blk
       w.set_tooltip_text(tooltip) if tooltip
       
@@ -477,4 +477,141 @@ module Ruiby_dsl
 end
 
 
-
+=begin
+dsl/canvas.rb:   
+    canvas(width,height,option={})
+    canvasOld(width,height,option={})
+dsl/form_fields.rb:   
+    combo(choices,default=nil,option={},&blk)
+    toggle_button(text1,text2=nil,value=false,option={},&blk)
+    check_button(text="",value=false,option={},&blk)
+    entry(value,size=10,option={},&blk)
+    ientry(value,option={},&blk)
+    fentry(value,option={},&blk)
+    field(tlabel,lwidth,value,option={},&blk)
+    fields(alabel=[["nothing",""]],option={},&blk)   
+    islider(value=0,option={},&b)
+    color_choice(text=nil,options={},&cb)
+dsl/label_button_image.rb:   
+    label(text,options={})
+    labeli(text,options={})
+    image(file,options={}) 
+    button(text,option={},&blk)
+    buttoni(text,option={},&blk)
+    slider(start=0.0,min=0.0,max=1.0,options={})
+    progress_bar(start=0,options)
+    levelbar(start=0,options)
+    pclickable(aproc=nil,options={},&b) 
+    pclickablie(aproc=nil,options={},&b) 
+dsl/layouts.rb:   
+   background(color,options={},&b)
+   backgroundi(color,options={},&b)
+   button_expand(text,initiale_state=false,options={},&b) 
+dsl/list_grid.rb:   
+   list(title,w=0,h=0,options={})
+   grid(names,w=0,h=0,options={})
+   tree_grid(names,w=0,h=0,options={})
+dyn_var.rb:
+   stock(name,defv) 
+   save_stock 
+   make_DynClass(h={"dummy"=>"?"})
+   make_StockDynClass(h={"dummy"=>"?"})
+   initialize(oname="",x={})
+   make_StockDynObject(oname,h)   
+ruiby_default_dialog3.rb:  
+   alert(*txt) message(:info,*txt) end
+   error(*txt) 
+   prompt(txt,value="") 
+   ask(*txt) 
+   trace(*txt) message(:warning,*txt) end
+   message(style,*txt)
+   ask_color()
+   edit(filename)
+   ask_file_to_read(dir,filter)
+   ask_file_to_write(dir,filter)
+   ask_dir_to_read(initial_dir=nil)
+   ask_dir_to_write(initial_dir=nil)
+   dialog_chooser(title, action, button)
+   
+ruiby_dsl3.rb:
+   get_current_container() @lcur.last end
+   get_config(w)
+   css_name(name)
+   tooltip(value="?") 
+   attribs(w,options)
+   apply_options(w,options)
+   _() @current_widget end
+   color_conversion(color)
+   self.cv_color_html(html_color,opacity=1)
+   html_color(str) color_conversion(str) end
+   self.html_color(str) ::Gdk::Color.parse(str) end
+   widget_properties(title=nil,w=nil) 
+   htoolbar(options={})
+   toolbar_button(name,tooltip=nil,&blk)
+   toolbar_separator()
+   htoolbar_with_icon_text(conf={})
+   button_icon_text(icon,text="",options={},&b)
+   show_methods(obj=nil,filter=nil)
+   propertys(title,hash,options={:edit=>false, :scroll=>[0,0]},&b)
+   properties(title,hash,options={:edit=>false, :scroll=>[0,0]})
+   calendar(time=Time.now,options={})
+   video(url=nil,w=300,h=200) 
+ruiby_terminal.rb:  
+   terminal(title="Terminal")
+ruiby_threader.rb:  
+   anim(n,&blk)
+   after(n,&blk) 
+  gui_invoke(&blk) 
+  gui_invoke_in_window(w,&blk) 
+  gui_invoke_wait(&blk) 
+systray.rb:
+   systray(x=nil,y=nil,systray_config={})
+windows.rb:
+   on_resize(&blk)
+   on_destroy(&blk) 
+   ruiby_exit()
+   component
+   rposition(x,y)
+   chrome(on=false)
+   ruiby_component()
+   initialize()
+dsl/layouts.rb
+  stack(config={},add1=true,&b)
+  flow(config={},add1=true,&b)
+  var_box(sens,config={},add1=true,&b)
+  stacki(config={},add1=true,&b)
+  flowi(config={},add1=true,&b)
+  var_boxi(sens,config={},add1=true,&b)
+  box(sens=:vertical) 
+  accept?(t) 
+  _set_accepter(layout,*types)
+  _accept?(type)
+  regular(on=true)
+  spacing(npixels=0)
+  center() 
+  left(&blk) 
+  right(&blk) 
+  update() Ruiby.update() end
+  frame(t="",config={},add1=true,&b)    
+  framei(t="",config={},add1=true,&b)
+  slot(w)
+  sloti(w)
+  autoslot(w=nil)
+  razslot()
+  background(color,options={},&b)
+  backgroundi(color,options={},&b)
+  scrolled(width,height,&b)
+  vbox_scrolled(width,height,&b)
+  notebook() 
+  page(title,icon=nil)
+  accordion() 
+  haccordion() 
+  aitem(txt,&blk) 
+  alabel(txt,&blk)
+  stack_paned(size,fragment,&blk)
+  flow_paned(size,fragment,&blk)
+  button_expand(text,initiale_state=false,options={},&b) 
+  dialog_async(title,config={},&b) 
+  dialog(title="") 
+  window(title="") 
+=end

@@ -158,7 +158,7 @@ module Ruiby_default_dialog
   end
   def _process_terminal_key(w,ev,termBuffer)
     char=(ev.keyval.chr rescue nil)
-    #puts ev.keyval if !char 
+    #p ["%08X" % ev.keyval , char]
     up=65362
     down=65364
     enter=65293

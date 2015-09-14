@@ -61,9 +61,11 @@ module Ruiby
   def self.make_doc_api()
       lfile=Dir.glob(DIR+"/**/*dsl*.rb")
       ret=lfile.map do |src|
-        File.read(src).split(/\r?\n/).grep(/^\s*def[\s\t]+[^_]/).map {|a|a.strip.gsub(/def\s+/,"").split(')')[0]+")"}
+        File.read(src).split(/\r?\n/).grep(/^\s*def[\s\t]+[^_]/).map {|a|
+          a.strip.gsub(/def\s+/,"").split(')')[0]+")" unless a.index(".")
+        }
       end
-      ret.flatten.sort
+      ret.flatten.compact.sort
   end
   class << self
 	  def set_style_provider(provider)
@@ -123,7 +125,7 @@ module Ruiby
     Thread.abort_on_exception = true  
     BasicSocket.do_not_reverse_lookup = true if defined?(BasicSocket)
     trap("INT") { exit(0) }
-    Gtk.init
+    #Gtk.init
     yield
     secure_main()	
   end
@@ -139,7 +141,7 @@ module Ruiby
     Thread.abort_on_exception = true  
     BasicSocket.do_not_reverse_lookup = true if defined?(BasicSocket)
     trap("INT") { exit(0) }
-    Gtk.init
+    #Gtk.init
     yield
     secure_main()	
   end

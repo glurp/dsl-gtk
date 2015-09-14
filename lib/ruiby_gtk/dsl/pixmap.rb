@@ -3,37 +3,55 @@
 
 module Ruiby_dsl
   ########################### raster images access #############################
-
-  def get_icon(name)
-    return name if name.index('.') && File.exists?(name)
+  
+  def get_image(name)
+    Image.new(get_pixmap(name));
+  end
+  
+  def get_pixmap(name)
     if name=~ /^famfamfam/
-      fn=Dir.glob("#{Ruiby::MEDIA}/#{name.split(/\s+/).join("*")}.png").to_a.first
-      if File.exists(fn)
-         @cach_pix[fn]=Gdk::Pixbuf.new(fn) unless @cach_pix[fn]
-         return @cach_pix[fn]
+      name=Dir.glob("#{Ruiby::MEDIA}/#{name.split(/\s+/).join("*")}.png").to_a.first
+    end
+    if name.index('.') 
+      if File.exists?(name)
+         @cach_pix||={}
+         @cach_pix[name]=Gdk::Pixbuf.new(name) unless @cach_pix[name]
+         return @cach_pix[name]
+      elsif name.index("[")
+        return get_pixbuf(name)
       end
+      error("Unknown file #{name} for image raster")
+      return(nil)
     end
-    n="Gtk::Stock::#{name.to_s.upcase}"
-    if defined?(n)
-       a=eval(n)
-       $stderr.puts ">>>========== stock icon #{a.inspect} / #{n}"
-       a
-    else 
-       $stderr.puts "not icon : #{name}"
-       nil
+    begin
+      return get_stockicon_pixbuf(name)
+    rescue Exception => e
+      error("Unknown pixmap for icon '#{name}' :\n",e)
+      return nil
     end
   end
-  # Image#initialize(:label => nil, :mnemonic => nil, :stock => nil, :size => nil)'
+  
+  # get pixmap from Gtk stoc
   def get_stockicon_pixbuf(name)
-    Image.new( :stock => eval("Gtk::Stock::"+name.upcase), :size => :button).pixbuf
+    begin
+      icn="gtk-#{name.downcase.gsub('_','-')}"
+      return Gtk::IconTheme.default().load_icon(icn,16,0)
+    rescue Exception => ee
+       puts ee.inspect
+      return Gtk::IconTheme.default().load_icon("gtk-cancel",48,0)
+    end
   end
+  
+  # obsolete  
+  def get_icon(name) get_pixmap(name) end
+  
 
-  # get a Image widget from a file or from a Gtk::Stock
-  # image can be a filename or a predefined icon in GTK::Stock
+  # get a Image widget from a file or from a Gtk::Stock or famfamfam embeded in Ruiby.
+  # image can be a filename or a predefined icon in GTK::Stock or a famfamfam icon name (without .png)
   # for file image, whe can specify a sub image (sqared) :
   #     filename.png[NoCol , NoRow]xSize
   #     filename.png[3,2]x32 : extract a icon of 32x32 pixel size from third column/second line
-  #    see samples/draw.rb
+  #     see samples/draw.rb
   def get_image_from(name,size=:button)
     if name.index('.') 
       return Image.new(name) if File.exists?(name)
@@ -41,7 +59,9 @@ module Ruiby_dsl
       alert("unknown icone #{name}")
     end
     iname=get_icon(name)
-    if iname
+    if iname && Gdk::Pixbuf  === iname
+      return Image.new(name) 
+    elsif iname
       Image.new(:stock => iname,:size=> size)
     else
       nil

@@ -5,7 +5,7 @@ module Ruiby_dsl
   ##################################### List
 
   # create a verticale liste of data, with scrollbar if necessary
-  # define methods: 
+  # define methods:
   # *  list() : get (gtk)list widget embeded
   # *  model() : get (gtk) model of the list widget
   # *  clear()  clear content of the list
@@ -15,9 +15,9 @@ module Ruiby_dsl
   # * set_selection(index) : force current selection do no item in data
   # * set_selctions(i0,i1) : force multiple consecutives selection from i1 to i2
   #
-  # if bloc is given, it is called on each  selection, with array 
+  # if bloc is given, it is called on each  selection, with array
   # of index of item selectioned
-  # 
+  #
   # Usage :  list("title",100,200) { |li| alert("Selections is : #{i.join(',')}") }.set_data(%w{a b c d})
   #
   def list(title,w=0,h=0,options={})
@@ -34,24 +34,24 @@ module Ruiby_dsl
         ldata=[];model.each {|model, path, iter|  ldata << iter.get_value(0) }
         ld=li.map { |idx| ldata[idx] }
         yield(li,ld) rescue error($!)
-      end   
+      end
     end
     treeview.append_column(column)
     treeview.selection.set_mode(:multiple)
     scrolled_win.add_with_viewport(treeview)
-    
+
     def scrolled_win.options(c) $__mainwindow__.apply_options(children[0].children[0],c) end
     def scrolled_win.list() children[0].children[0] end
     def scrolled_win.model() list().model end
     def scrolled_win.clear() list().model.clear end
     def scrolled_win.add_item(word)
       raise("list.add_item() out of main thread!") if $__mainthread__ != Thread.current
-      list().model.append[0]=word  
+      list().model.append[0]=word
     end
     def scrolled_win.get_data()
       raise("list.get_data() out of main thread!") if $__mainthread__ != Thread.current
-      puts 
-      l=[];list().model.each {|model, path, iter| 
+      puts
+      l=[];list().model.each {|model, path, iter|
           l << iter.get_value(0)
       }
       l
@@ -61,35 +61,35 @@ module Ruiby_dsl
       list().model.clear
       words.each { |w| list().model.append[0]=w }
     end
-    def scrolled_win.selection() 
+    def scrolled_win.selection()
       li=[];i=0;list().selection.selected_each {|model, path, iter|  li << path.to_s.to_i; i+=1 }
-      li 
+      li
     end
-    def scrolled_win.index() 
+    def scrolled_win.index()
       li=[];i=0;list().selection.selected_each {|model, path, iter|  li << path.to_s.to_i; i+=1 }
-      li 
+      li
     end
-    def scrolled_win.set_selections(istart,istop) 
+    def scrolled_win.set_selections(istart,istop)
       spath,epath=nil,nil
-      i=0;model().each {|model, path, iter| 
+      i=0;model().each {|model, path, iter|
           if i==istart
-            spath=path  
+            spath=path
           elsif i==istop
-            epath=path  
+            epath=path
           end
           list().selection.unselect_path(path)
           i+=1
-      } 
+      }
       list().selection.select_range(spath,epath) if spath && epath
     end
-    def scrolled_win.set_selection(index) 
-      model().each {|model, path, iter|  list().selection.unselect_path(path) } 
-      i=0;model().each {|model, path, iter| 
-          if i==index 
-            list().selection.select_path(path)  
+    def scrolled_win.set_selection(index)
+      model().each {|model, path, iter|  list().selection.unselect_path(path) }
+      i=0;model().each {|model, path, iter|
+          if i==index
+            list().selection.select_path(path)
           end
           i+=1
-      } 
+      }
     end
     apply_options(treeview,options)
     autoslot(scrolled_win)
@@ -105,7 +105,7 @@ module Ruiby_dsl
     scrolled_win.set_policy(:automatic,:automatic)
     scrolled_win.set_width_request(w) if w>0
     scrolled_win.set_height_request(h)  if h>0
-    
+
     model = Gtk::ListStore.new(*([String]*names.size))
     treeview = Gtk::TreeView.new(model)
     treeview.selection.set_mode(:single)
@@ -116,11 +116,11 @@ module Ruiby_dsl
     end
     if block_given?
       treeview.signal_connect("row-activated") do |tview, path, column|
-          sl=names.size.times.map {|i| tview.selection.selected[i].to_s.clone} 
+          sl=names.size.times.map {|i| tview.selection.selected[i].to_s.clone}
           yield(sl)
-      end   
+      end
     end
-    
+
     def scrolled_win.grid() children[0].children[0] end
     def scrolled_win.model() grid().model end
     def scrolled_win.add_row(words)
@@ -128,12 +128,12 @@ module Ruiby_dsl
       words.each_with_index { |w,i| l[i] = w.to_s }
     end
     $ici=self
-    def scrolled_win.get_data() 
+    def scrolled_win.get_data()
       raise("grid.get_data() out of main thread!")if $__mainthread__ != Thread.current
       @ruiby_data
     end
-    def scrolled_win.set_data(data) 
-      grid().selection.unselect_all 
+    def scrolled_win.set_data(data)
+      grid().selection.unselect_all
       @ruiby_data=data
       raise("grid.set_data() out of main thread!")if $__mainthread__ != Thread.current
       grid().model.clear() ; data.each { |words| add_row(words) }
@@ -159,7 +159,7 @@ module Ruiby_dsl
     scrolled_win.set_width_request(w) if w>0
     scrolled_win.set_height_request(h)  if h>0
     scrolled_win.shadow_type = :etched_in
-    
+
     types=names.map do |name|
      case name[0,1]
       when "#" then Gdk::Pixbuf
@@ -169,7 +169,7 @@ module Ruiby_dsl
      end
     end
     model = Gtk::TreeStore.new(*types)
-    
+
     treeview = Gtk::TreeView.new(model)
     treeview.selection.set_mode(:single)
     names.each_with_index do  |name,i|
@@ -184,19 +184,19 @@ module Ruiby_dsl
         Gtk::TreeViewColumn.new( name.gsub(/^[#?0-9]/,""),renderer,{symb => i} )
       )
     end
-    
+
     #------------- Build singleton
-    
+
     def scrolled_win.init(types) @types=types end
     scrolled_win.init(types)
     def scrolled_win.tree() children[0].children[0] end
     def scrolled_win.model() tree().model end
     $ici=self
-    def scrolled_win.get_data() 
+    def scrolled_win.get_data()
       raise("tree.get_data() out of main thread!")if $__mainthread__ != Thread.current
       @ruiby_data
     end
-    def scrolled_win.set_data(hdata,parent=nil,first=true)  
+    def scrolled_win.set_data(hdata,parent=nil,first=true)
       raise("tree.set_data() out of main thread!")if $__mainthread__ != Thread.current
       if parent==nil && first
         @ruiby_data=hdata
@@ -204,9 +204,9 @@ module Ruiby_dsl
       end
       hdata.each do |k,v|
         case v
-          when Array 
+          when Array
             set_row([k.to_s]+v,parent)
-          when Hash 
+          when Hash
             p=model.append(parent)
             p[0] =k.to_s
             set_data(v,p,false)
@@ -228,7 +228,7 @@ module Ruiby_dsl
     end
     def scrolled_win.selection() a=tree().selection.selected ; a ? a[0] : nil ; end
     def scrolled_win.index() tree().selection.selected end
-    
+
     scrolled_win.add_with_viewport(treeview)
     apply_options(treeview,options)
     autoslot(nil)

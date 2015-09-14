@@ -16,20 +16,20 @@ A DSL for building GUI ruby application, based on Gtk.
 EEND
   
 
-  s.files         = Dir['**/*'].reject { |a| a =~ /^\.git/ || a =~ /\._$/}
+  s.files         = Dir['**/*'].reject { |a| a =~ /^\.git/ || a =~ /\._$/ }
   s.test_files    = Dir['samples/**'] 
   s.require_paths = ["lib"]
   s.bindir        = "bin"
   s.executables   = `ls bin/*`.split("\n").map{ |f| File.basename(f) }
 
-  s.add_runtime_dependency  'gtk3', '~>2.2','>= 2.2.4'
-  s.add_runtime_dependency  'gtksourceview3', '~>2.2','>= 2.2.4'
+  s.add_runtime_dependency  'gtk3',          '>= 2.2.5'
+  s.add_runtime_dependency  'gtksourceview3','>= 2.2.5'
   
 
   
-  s.add_development_dependency  'gstreamer'
-  s.add_development_dependency  'clutter-gtk'
-  s.add_development_dependency  'clutter-gstreamer'
+#  s.add_development_dependency  'gstreamer'
+#  s.add_development_dependency  'clutter-gtk'
+#  s.add_development_dependency  'clutter-gstreamer'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec'
   s.add_development_dependency 'simplecov'
@@ -38,14 +38,12 @@ EEND
         
   -------------------------------------------------------------------------------
         
-      Hello, Welcome to Ru-i-by....
+      Hello, Welcome to Ruiby....
 
         $ ruiby_demo
         $ ruiby_sketchi  # write and test ruiby gui code
-		
-	  Reference doc of the DSL :  https://rawgit.com/glurp/Ruiby/master/doc.html
-      For video, on windows, do >gem install  gstreamer clutter-gtk clutter-gstreamer
-	  but video  do not work with gtk 2.2.3 or 2.24 ...
+
+    Reference doc of the DSL :  https://rawgit.com/glurp/Ruiby/master/doc.html
    -------------------------------------------------------------------------------
    TTEXT
 end

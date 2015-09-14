@@ -43,6 +43,20 @@ module Ruiby_threader
   # shot peridicly a  bloc parameter
   # no threading: the bloc is evaluated by gtk mainloop in main thread context
   # return handle of animation. can be stoped by delete(anim) // NOT WORK!, return a Numeric...
+  def on_idle(&blk)
+    ii=0
+    px=GLib::Idle.add() do 
+      begin
+        blk.call(ii)
+        ii=(ii+1)%1000_000
+        true
+      rescue Exception => e
+        $on_idle_ok=false
+        log("#{$!} :\n  #{$!.backtrace.join("\n   ")}")
+        false
+      end
+    end
+  end
   def anim(n,&blk)
     @hTimer||={}
     $on=false

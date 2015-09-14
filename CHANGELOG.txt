@@ -1,4 +1,4 @@
-1.32.7
+1.33.0 : 2015-05-26 19:28:12 +0200
     form_fields.rb : width entry and bug n field()
     commands.rb : comments on def_style
     video.png : u
@@ -499,4 +499,3 @@
     dependencies.rb : comments
     color.rb : comments
     benchi.rb : fixed font
-    make_doc.rb : search engine
