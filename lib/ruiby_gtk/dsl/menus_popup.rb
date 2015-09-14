@@ -91,7 +91,7 @@ module Ruiby_dsl
   # create an checkbox  entry in a menu
   def menu_checkbutton(text="?",state=false,&blk)
     _accept?(:menuitem)
-    item = CheckMenuItem.new(text,false)
+    item = CheckMenuItem.new(label: text,use_underline: false)
     item.active=state
     @lcur.last.append(item)
     item.signal_connect("activate") {
