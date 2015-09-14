@@ -120,7 +120,7 @@ module Ruiby_dsl
     b0=nil
     s=var_box(sens,{},false) {
       ltext.each_with_index {|txt,i|
-        b= (i==0) ? (b0=RadioButton.new(txt)) : RadioButton.new(b0,txt)
+        b= (i==0) ? (b0=RadioButton.new(label: txt)) : RadioButton.new(member: b0,label: txt)
         attribs(b,{}) 
         b.signal_connect("clicked") do |w,e| 
           puts "clicked on button #{i} state=#{w.active?}"
