@@ -215,8 +215,8 @@ module Ruiby_dsl
   # button can be text or icone (if startin by '#', as label)
   def page(title,icon=nil)
     _accept?(:tab)
-    l=Image.new(get_pixmap(icon[1..-1])) if icon
-    l=Image.new(get_pixmap(title[1..-1])) if title && title[0,1]=="#"
+    l=Image.new(bixbuf: get_pixmap(icon[1..-1])) if icon
+    l=Image.new(bixbuf: get_pixmap(title[1..-1])) if title && title[0,1]=="#"
     l=Label.new(title) if  title.size>1 && title[0,1]!="#"
     @lcur.last.append_page( box { yield }, l )
   end
