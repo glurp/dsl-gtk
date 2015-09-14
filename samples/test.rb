@@ -13,7 +13,9 @@ end
 
 mlog 'require gtk3...'     ; require 'gtk3' 
 mlog 'require ruiby....'   ; require_relative '../lib/Ruiby' ; mlog 'require ruiby done.'
-
+module Gtk
+ VERSION=%w{3 0 3}
+end
 class RubyApp < Ruiby_gtk
     def initialize
       mlog "befor init"
