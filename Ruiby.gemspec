@@ -22,17 +22,17 @@ EEND
   s.bindir        = "bin"
   s.executables   = `ls bin/*`.split("\n").map{ |f| File.basename(f) }
 
-  s.add_runtime_dependency  'gtk3',          '>= 2.2.5'
-  s.add_runtime_dependency  'gtksourceview3','>= 2.2.5'
+  s.add_runtime_dependency  'gtk3',          '>= 3.0.2'
+  s.add_runtime_dependency  'gtksourceview3','>= 3.0.2'
   
 
   
 #  s.add_development_dependency  'gstreamer'
 #  s.add_development_dependency  'clutter-gtk'
 #  s.add_development_dependency  'clutter-gstreamer'
-  s.add_development_dependency 'rake'
-  s.add_development_dependency 'rspec'
-  s.add_development_dependency 'simplecov'
+   s.add_development_dependency 'rake'
+   s.add_development_dependency 'rspec'
+   s.add_development_dependency 'simplecov'
   
   s.post_install_message = <<-TTEXT
         
