@@ -44,6 +44,5 @@ end
 
 
 
-Gtk.init
 window = eval("RubyApp"+(ARGV[0]||'0')).new("Hw",200,100)
 Gtk.main
