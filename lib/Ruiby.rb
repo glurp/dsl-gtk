@@ -75,7 +75,7 @@ module Ruiby
 		  return unless defined?(@@provider)
 		  widget.style_context.add_provider(@@provider, GLib::MAXUINT)
 		  if widget.is_a?(Gtk::Container)
-			widget.each_forall { |child| Ruiby.apply_provider(child) }
+			widget.each_all { |child| Ruiby.apply_provider(child) }
 		  elsif widget.respond_to?(:child)
 			Ruiby.apply_provider(widget.child) 
 		  end
@@ -125,7 +125,6 @@ module Ruiby
     Thread.abort_on_exception = true  
     BasicSocket.do_not_reverse_lookup = true if defined?(BasicSocket)
     trap("INT") { exit(0) }
-    #Gtk.init
     yield
     secure_main()	
   end
@@ -141,7 +140,6 @@ module Ruiby
     Thread.abort_on_exception = true  
     BasicSocket.do_not_reverse_lookup = true if defined?(BasicSocket)
     trap("INT") { exit(0) }
-    #Gtk.init
     yield
     secure_main()	
   end
