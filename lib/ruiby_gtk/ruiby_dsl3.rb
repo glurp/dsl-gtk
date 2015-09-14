@@ -247,7 +247,7 @@ module Ruiby_dsl
   #   htoolbar { toolbat_button("text/tooltip" { } ; toolbar_separator ; ... } 
   def htoolbar(options={})
     b=Toolbar.new
-    b.set_toolbar_style(Toolbar::Style::ICONS)
+    b.set_toolbar_style(Gtk::ToolbarStyle::ICONS)
     _set_accepter(b,:toolb)
     @toolbarIndex=0
     @lcur << b
@@ -262,7 +262,7 @@ module Ruiby_dsl
       _accept?(:toolb)
       iname=get_icon(name)
       
-      w=Gtk::ToolButton.new(get_pixmap(name))
+      w=Gtk::ToolButton.new(icon_widget: Image.new(pixbuf: get_pixmap(name)))
       w.signal_connect("clicked") { blk.call rescue error($!) } if blk
       w.set_tooltip_text(tooltip) if tooltip
       
