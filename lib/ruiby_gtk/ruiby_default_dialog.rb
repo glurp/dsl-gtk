@@ -69,7 +69,7 @@ module Ruiby_default_dialog
 	end
 	# dialog asking a color
 	def ask_color
-		cdia = ColorSelectionDialog.new("Select color")
+		cdia =  ColorSelectionDialog.new("Select color")
 		cdia.set_window_position(Window::POS_CENTER)
 		response=cdia.run
 		color=nil
