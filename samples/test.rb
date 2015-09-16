@@ -14,7 +14,7 @@ end
 mlog 'require gtk3...'     ; require 'gtk3' 
 mlog 'require ruiby....'   ; require_relative '../lib/Ruiby' ; mlog 'require ruiby done.'
 module Gtk
- VERSION=%w{3 0 3}
+ VERSION=%w{3 0 2}
 end
 class RubyApp < Ruiby_gtk
     def initialize
@@ -30,11 +30,11 @@ def component()
   mlog 'before Component'
   stack do
     htoolbar_with_icon_text do
-      button_icon_text("open","Open...") { edit(__FILE__) }
-      button_icon_text("save","Save.."){ alert("Save what ?")}
+      button_icon_text("document-open","Open...") { edit(__FILE__) }
+      button_icon_text("document-save","Save.."){ alert("Save what ?")}
       button_icon_text("sep")
-      button_icon_text("undo","Undo") { alert( "undo")} 
-      button_icon_text("redo","Redo") { alert("redo") }
+      button_icon_text("edit-undo","Undo") { alert( "undo")} 
+      button_icon_text("edit-redo","Redo") { alert("redo") }
     end
     flowi do
       sloti(label( <<-EEND ,:font=>"Tahoma bold 12"))
@@ -51,7 +51,7 @@ def component()
       separator
       stack do
         notebook do
-          page("","#home") { 
+          page("","#go-home") { 
              stack(margins: 40){
                 image(Ruiby::DIR+"/../media/ruiby.png")
                 label("A Notebook Page with icon as button-title",{font: "Arial 18"}) 
@@ -118,7 +118,6 @@ end
      flow do
         stack do
           button("Color") {
-            #alert("alert !") ; error("error !") ; ask("ask !") ;trace("trace !") ;
             @color=ask_color()
           }
           tooltip("Please choose the <b>drawing</b> <i>color</i>...")
