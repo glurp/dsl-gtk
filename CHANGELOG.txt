@@ -1,4 +1,12 @@
-3.0.2
+3.0.3
+    test.rb : icon names have cange for gtk3
+    fractal.rb : color naming for gtk3
+    ruiby_dsl3.rb : rgba() correction...nott sure, for gtk3
+    ruiby_default_dialog3.rb : ColorChooserDialog in gtk3
+    ruiby_default_dialog.rb : qcolorChooserDialog have changeing name in gtk3
+    pixmap.rb : ivon names changes in gtk3
+    layouts.rb : icons for notebook for gtk3
+    canvas.rb : :q
     Ruiby.gemspec : dependancy gtksousrceview3 on 2.2.5
     test.rb :  update 3.0.0
     paned.rb :  update 3.0.0
@@ -492,11 +500,3 @@
     Ruiby.gemspec : canvas
     canvas.rb : look
 0.99.0 : 2013-07-04 19:18:56 +0200
-    samples/*.rb : require Ruiby / ruiby
-0.98.0 : 2013-07-04 16:17:52 +0200
-    README.md : gtk3 and capitalisation of Ruiby
-    README.md : update for canvas.rb
-0.95.0 : 2013-06-18 22:05:41 +0200
-    cal.rb : gtk3
-    ruiby.rb : gtk3 default
-0.94.0 : 2013-06-13 23:35:24 +0200
