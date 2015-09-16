@@ -116,6 +116,7 @@ module Ruiby_dsl
         if bgcolor
           a=cr.text_extents(text)
           w.draw_rectangle(-a.width,-a.height,a.width,a.height,1,bgcolor,bgcolor,0)
+          cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color || @currentColorFg ))
         end
         cr.move_to(0,0)
         cr.show_text(text) 
@@ -148,6 +149,7 @@ module Ruiby_dsl
         a=cr.text_extents(text)
         if bgcolor
           w.draw_rectangle(-a.width,-a.height,a.width,a.height,1,bgcolor,bgcolor,1)
+          cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color || @currentColorFg ))
         end
         cr.move_to(-a.width,0)
         cr.show_text(text) 
