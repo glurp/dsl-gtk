@@ -21,13 +21,11 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 3.0.0  !!   14-09-2015
+NEW : 3.0.3  !!   16-09-2015
 new : gadgets, ruby-gtk3 3.0.0, trading demo
 
-WARNING !!!! current ruby-gtk3 version 3.0.2 is buggy on Windows ruby :
-* no icons
+WARNING !!!! current ruby-gtk3 version 3.0.3 is buggy on Windows x32 :
 * mouse event have false informations
-* gtksourceview3 buggi
 
 TODO  :
 
