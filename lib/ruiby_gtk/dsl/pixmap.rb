@@ -34,11 +34,11 @@ module Ruiby_dsl
   # get pixmap from Gtk stoc
   def get_stockicon_pixbuf(name)
     begin
-      icn="gtk-#{name.downcase.gsub('_','-')}"
+      icn="#{name.downcase.gsub('_','-')}"
       return Gtk::IconTheme.default().load_icon(icn,16,0)
     rescue Exception => ee
        puts ee.inspect
-      return Gtk::IconTheme.default().load_icon("gtk-cancel",48,0)
+      return Gtk::IconTheme.default().load_icon("process-stop",48,0)
     end
   end
   
