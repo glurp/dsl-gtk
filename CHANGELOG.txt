@@ -1,4 +1,5 @@
-3.0.3
+3.0.4
+    README.md : updae for 3.0.3
     test.rb : icon names have cange for gtk3
     fractal.rb : color naming for gtk3
     ruiby_dsl3.rb : rgba() correction...nott sure, for gtk3
@@ -499,4 +500,3 @@
     Ruiby.gemspec : add ruiby_canvas bin command
     Ruiby.gemspec : canvas
     canvas.rb : look
-0.99.0 : 2013-07-04 19:18:56 +0200
