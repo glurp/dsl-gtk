@@ -1,3 +1,6 @@
+#!/usr/bin/ruby
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
 require 'Ruiby'
 
 DEG_TO_RAD = Math::PI / 180.0
@@ -10,8 +13,9 @@ def draw_tree(cr,x1, y1, angle, depth)
 	y2 = y1 + (Math.sin(angle * DEG_TO_RAD) * depth * s).to_i
 
 	cr.set_line_width([1,5,depth/3].sort[1])
-	color=html_color("##{C[(C.size-depth)%C.size]}")
-	cr.set_source_rgba(color.red/65000.0, color.green/65000.0, color.blue/65000.0, 1)
+	color=Ruiby_dsl.cv_color_html(a="##{C[(C.size-depth)%C.size]}")
+  p [a,color]
+	cr.set_source_rgba(*color)
 	cr.move_to(x1,y1)
 	cr.line_to(x2,y2) 
 	cr.stroke
