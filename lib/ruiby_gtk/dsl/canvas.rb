@@ -106,7 +106,7 @@ module Ruiby_dsl
     end
     def cv.draw_point(x,y,color=nil,width=nil)
       width||=@currentWidth
-      draw_line([x,y-width/4, x,y+width/4],color,width)
+      draw_line([x,y-width/2.0, x,y+width/2.0],color,width)
     end
     def cv.draw_text(x,y,text,scale=1,color=nil,bgcolor=nil)
       w,cr=@currentCanvasCtx
@@ -115,7 +115,7 @@ module Ruiby_dsl
       scale(x,y,scale) {  
         if bgcolor
           a=cr.text_extents(text)
-          w.draw_rectangle(-a.width,-a.height,a.width,a.height,1,bgcolor,bgcolor,0)
+          w.draw_rectangle(0,0,a.width,-a.height,1,bgcolor,bgcolor,0)
           cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color || @currentColorFg ))
         end
         cr.move_to(0,0)
@@ -155,11 +155,19 @@ module Ruiby_dsl
         cr.show_text(text) 
       }
     end
-    def cv.draw_text_center(x,y,text,scale=1,color=nil)
+    def cv.draw_text_center(x,y,text,scale=1,color=nil,bgcolor=nil)
       w,cr=@currentCanvasCtx
       cr.set_line_width(1)
       cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color || @currentColorFg ))
-      scale(x,y,scale) {  a=cr.text_extents(text);cr.move_to(-a.width/2.0,0); cr.show_text(text) }
+      scale(x,y,scale) {  
+        a=cr.text_extents(text)
+        if bgcolor
+          w.draw_rectangle(-a.width/2,0,a.width,-a.height,1,bgcolor,bgcolor,1)
+          cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color || @currentColorFg ))
+        end
+        cr.move_to(-a.width/2.0,0)
+        cr.show_text(text) 
+      }
     end
     def cv.draw_rectangle(x0,y0,w,h,r=0,colorStroke=nil,colorFill=nil,widthStroke=nil)
       return draw_rounded_rectangle(x0,y0,w,h,r,colorStroke,colorFill,widthStroke) if r.kind_of?(Array) || r>1
@@ -278,9 +286,9 @@ module Ruiby_dsl
     def cv.rotation(cx,cy,a,&blk) 
      w,cr=@currentCanvasCtx
      cr.translate(cx,cy)
-     cr.rotate(a)
+     cr.rotate(Math::PI*2.0*a)
      blk.call rescue Message.error $!
-     cr.rotate(-a)
+     cr.rotate(-Math::PI*2.0*a)
      cr.translate(-cx,-cy)
     end
     def cv.translate(lxy,dx=0,dy=0) 
@@ -425,6 +433,8 @@ module Ruiby_dsl
        on_canvas_draw { |w,ctx| w.expose(ctx) }
        on_canvas_button_press { |w,event| }
      end
+     def plot.config(c) @config=c end
+     plot.config(config.merge({w: width,h:height}))
      def plot.add_curve(name,config) 
         c=config.dup
         c[:data] ||= [[0,0],[100,100]]
@@ -445,6 +455,12 @@ module Ruiby_dsl
         redraw
      end
      def plot.expose(ctx) 
+        if @config[:bg]
+          ctx.set_source_rgba(Ruiby_dsl.cv_color_html(@config[:bg])) 
+          ctx.rectangle(0,0,@config[:w],@config[:h])
+          ctx.fill
+        end
+        
         @curves.values.each do |c|
               next if c[:data].size<2
               l=c[:data].map { |(y,x)|  [x*c[:xa]+c[:xb] , y*c[:ya]+c[:yb] ]  }
