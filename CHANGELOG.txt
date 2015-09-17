@@ -1,4 +1,7 @@
-3.2.1
+3.2.2
+    sketchi.rb : list stock update for gtk3
+    ruiby_dsl3.rb : color convertions for gtk3
+    canvas.rb : draw_* complements, debugs
     test.rb : drawing canvas demo
     README.md : update gtk3.0.3
 3.2.0 : 2015-09-16 21:32:15 +0200
@@ -497,6 +500,3 @@
     canvas.rb : plot xyft
     Ruiby.gemspec : indentations
 0.106.0 : 2013-07-09 18:55:53 +0200
-    canvas.rb : default color for text item
-    make_doc.rb : code ex
-    doc.html : code example with popup asist
