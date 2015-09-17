@@ -13,9 +13,11 @@ end
 
 mlog 'require gtk3...'     ; require 'gtk3' 
 mlog 'require ruiby....'   ; require_relative '../lib/Ruiby' ; mlog 'require ruiby done.'
+
 module Gtk
- VERSION=%w{3 0 2}
+ VERSION=%w{3 0 3}
 end
+
 class RubyApp < Ruiby_gtk
     def initialize
       mlog "befor init"
@@ -37,47 +39,16 @@ def component()
       button_icon_text("edit-redo","Redo") { alert("redo") }
     end
     flowi do
-      sloti(label( <<-EEND ,:font=>"Tahoma bold 12"))
-       This window is test & demo of Ruiby capacity. Ruby is #{RUBY_VERSION}, Ruiby is #{Ruiby::VERSION}, 
-       Gtk is  #{Gtk::VERSION.join(".")} HMI code take #{File.read(__FILE__).split("comp"+"onent"+"()")[1].split(/\r?\n/).select {|l| l !~ /\s*#/ && l.strip.size>3}.size} LOC (without blanc lines,comment line,'end' alone)
-      EEND
     end
     separator
-    flow {
+    flow do
        @left=stack {
         test_table
         test_canvas
       }
       separator
       stack do
-        notebook do
-          page("","#go-home") { 
-             stack(margins: 40){
-                image(Ruiby::DIR+"/../media/ruiby.png")
-                label("A Notebook Page with icon as button-title",{font: "Arial 18"}) 
-				buttoni("Test css defininition...") {
-					ici=self
-					dialog_async("Edit Css style...",:response => proc {def_style(@css_editor.editor.buffer.text);false}) {
-					   @css_editor=source_editor(:width=>300,:height=>200,:lang=> "css", :font=> "Courier new 12")
-					   @css_editor.editor.buffer.text="* { background-image:  -gtk-gradient(linear, left top, left bottom, \nfrom(#AAA), to(@888));\nborder-width: 3;}"
-					}
-				}
-             }
-          }
-          page("List & grids") { test_list_grid }		
-          page("Explorer") { test_treeview }
-          page("ex&dia") { test_dialog }
-          page("Properties") { test_properties(0) }
-          page("Source Ed") {
-            if ed=source_editor(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 8",:on_change=> proc { edit_change })
-              @editor=ed.editor
-              @editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
-            end
-          }
-          page("Menu") { test_menu }
-          page("Accordion") { test_accordion }
-          page("Pan & Scrolled") { test_pan_scroll}
-        end # end notebook
+        test_notebook
         frame("Buttons in frame") {
           flow { sloti(button("packed with sloti()") {alert("button packed with sloti()")}) 
             @bref=sloti(button("bb")) ;  button("packed with slot()") ; 
@@ -89,16 +60,48 @@ def component()
             5.times { |i| button("**"*(1+i)) ; tooltip("button <b>#{i+1}</b>") }
           }
         }
+      flowi { 
+        button("Test dialogs...") { do_special_actions() }
+        button("Exit") { ruiby_exit }
+      }
       end
-    } # end flow
-    flowi { 
-      button("Test dialogs...") { do_special_actions() }
-      button("Exit") { ruiby_exit }
-    }
+    end # end flow
     mlog 'after Component'
+  end # end global stack
+end # end def component
+  def test_notebook
+        notebook do
+          page("","#go-home") {  test_pg }
+          page("List & grids") { test_list_grid }		
+          page("Explorer") { test_treeview }
+          page("ex&dia") { test_dialog }
+          page("Properties") { test_properties(0) }
+          page("Source Ed") {
+            if ed=source_editor(:width=>200,:height=>300,:lang=> "ruby", :font=> "Courier new 8",:on_change=> proc { edit_change })
+              @editor=ed.editor
+              @editor.buffer.text='def comp'+'onent'+File.read(__FILE__).split(/comp[o]nent/)[1]
+            end
+          }
+          page("Menu") { test_menu }
+          page("Acc.") { test_accordion }
+          page("Scrol.") { test_pan_scroll}
+          page("Cv") { test_canvas_draw }
+          
+        end # end notebook
   end
-end
-
+  def test_pg
+     stack(margins: 40) {
+        image(Ruiby::DIR+"/../media/ruiby.png")
+        label("A Notebook Page with icon as button-title",{font: "Arial 18"}) 
+        buttoni("Test css defininition...") {
+          ici=self
+          dialog_async("Edit Css style...",:response => proc {def_style(@css_editor.editor.buffer.text);false}) {
+             @css_editor=source_editor(:width=>300,:height=>200,:lang=> "css", :font=> "Courier new 12")
+             @css_editor.editor.buffer.text="* { background-image:  -gtk-gradient(linear, left top, left bottom, \nfrom(#AAA), to(@888));\nborder-width: 3;}"
+          }
+        }
+     }
+  end
   def test_table
     frame("Forms",margins: 10,bg: "#FEE") { table(2,10,{set_column_spacings: 3}) do
         row { cell_right(label  "state")             ; cell(button("set") { alert("?") }) }
@@ -330,14 +333,88 @@ end
         end
       end
   end
-
+  def test_canvas_draw()
+    stack do
+      canvas(400,300) do
+        on_canvas_draw do |cv,cr|
+          cv.draw_pie(
+             200,300,70,
+             [
+               [1,"#F00","P1e"],[2,"#00F","P2"],[3,"#0F0","P3"],
+               [1,"#F00","P1"],[2,"#00F","P2"],[3,"#0F0","P3"],
+               [4,"#F00","P1"],[5,"#00F","P2"],[6,"#0F0","P3"]
+             ],
+             true)
+          cv.draw_pie(100,70,15,[1,8,3,2])            
+          
+          cv.draw_image(400,10,"#{Ruiby::DIR}/../samples/media/angel.png")
+          cv.scale(400,200,0.5) {
+            w=80
+            cv.draw_rectangle(w+10,0,w+20,2*w+20,20,"#000","#0E0",1)
+            cv.draw_image(0,0,"#{Ruiby::DIR}/../samples/media/angel.png")
+            cv.draw_rectangle(0,0,w,2*w,0,"#000",nil,4)
+          }
+          
+          # polyline and polygone...
+          cv.draw_line([1,10,100,10,100,10,100,110],"#0A0",1)
+          cv.draw_polygon([1,110,100,110,100,110,100,210,1,110],"#0AA","#A00",1)
+          
+          # horizontal text
+          cv.draw_line([200,0,200,120],"#000",1)            
+          cv.draw_text(200,70,"Hello !",6,"#000")    
+          cv.draw_text(200,90,"Hello, with bg",2,"#000","#EEE")    
+          cv.draw_text_left(200,100,"Right aligned",0.8,"#000")    
+          cv.draw_text_center(200,130,"centered aligned ✈",2,"#000","#CAA")    
+          
+          # not horizontal text
+          cv.rotation(290,100,1.0/16) { 
+            cv.draw_point(0,0,"#066",3)
+            cv.draw_text(0,0,"1234567890",1,"#000")     
+          }
+          
+          # gant chart
+          x0,y0,x1,y1=600,130,800,130
+          vmin,vmax=0,10
+          cv.draw_rectangle(x0,y0-5,x1-x0,55,0,"#000","#050",1)
+          cv.draw_varbarr(x0,y0,x1,y1            ,vmin,vmax,[[0,0],[2,0]],10)  {|value| "#F00"}
+          cv.draw_varbarr(x0,y0+10,x1,y1+10      ,vmin,vmax,[[2,0],[3,0]],10)  {|value| "#0FF"}
+          cv.draw_varbarr(x0,y0+20,x1,y1+20      ,vmin,vmax,[[3,0],[4,0]],10)  {|value| "#F0F"}
+          cv.draw_varbarr(x0,y0+30,x1,y1+30      ,vmin,vmax,[[5.5,0],[7.5,0]],10) {|value| "#FF0"}
+          cv.draw_varbarr(x0,y0+40,x1,y1+40      ,vmin,vmax,[
+            [0,2],[1,2],[1,0],[2,0],[3,1],[4,1],[5,2],[6,2],[8,3],[10,3]
+          ],10)  {|value| blue='%01X' % (value*5) ; "#A090#{blue}0" }
+          
+          15.times { |c| 15.times { |l| cv.draw_point(600+c*10,200+l*10,"#000",2)} }
+          cv.draw_arc( 500,200,30,0.1,0.3,0,"#F00","#0F0")
+          cv.draw_arc2(520,210,30,0.1,0.3,0,"#F0F","#00F")
+          4.times { |f|  
+            cv.draw_arc2(530,290,20,
+              0.1+0.25*f,0.1+0.25*(f+1),
+              0,"#F0F","#0AA" ) 
+         }
+        end            
+      end
+      pl=plot(200,100,{
+            "a"=> { data: aleacurve(2) , color: "#A0A0FF" , maxlendata: 100},
+            "b"=> { data: aleacurve(3) , color: "#FFA0A0"}
+            },{
+            bg: "#383"
+            }
+      )
+    end
+  end
+  def aleacurve(pas=1) 
+     l=[[50,0]]
+     200.times { l << [[0,300,l.last[0]+rand(-pas..pas)].sort[1],l.last[1]+1] }
+     l
+  end
  
   def edit_change()
     alert("please, do not change my code..")
   end
 
   def do_special_actions()
-    100.times { |i| log("#{i} "+ ("*"*(i+1))) }
+    10.times { |i| log("#{i} "+ ("*"*(i+1))) }
     dialog("Dialog tests") do
       stack do
         labeli "  alert, prompt, file chosser and log  "
@@ -405,7 +482,7 @@ end
       }
     end
   end
-# end component()
+ #end component()
 end
 # test autoload plugins
 Exemple.new
