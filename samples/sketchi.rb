@@ -85,17 +85,8 @@ EEND
   def dialog_icones
     dialog "Ruiby Predefined icones" do
         stack do
-          labeli <<-EEND
-          
-              label or button can be represented by a icon if '#' char prefixe is present :
-                  button("#open") { }
-                  label("#close") { }
-                  
-              Here, the list of predefined icones, (known by gtk/gnome)
-              
-          EEND
-          scrolled(400,500) { Stock.constants.map { |name|  
-            flow { labeli "#"+name.to_s ; labeli name.to_s.capitalize } 
+          scrolled(400,500) { Gtk::IconTheme.default.icons.sort.map { |name|  
+            flow { labeli "#"+name.to_s ; labeli name.to_s } rescue nil
           } }
         end
     end
