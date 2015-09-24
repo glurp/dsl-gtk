@@ -80,13 +80,25 @@ module Ruiby_dsl
   # w.proess=n can force current position at n
   #
   def slider(start=0.0,min=0.0,max=1.0,options={})
-   w=Gtk::Scale.new(:horizontal)
-   w.set_range min,max
-   w.set_size_request 160, 35
-   w.set_value start
-   w.signal_connect("value-changed") { |w| yield(w.value) } if block_given?
-   w.define_singleton_method(:progress=) { |value| w.set_value(value) }
-   attribs(w,{})
+    fslider(start,{min: min, max: max, by: options[:by]||1}.merge(option))
+  end
+  
+  def fslider(value=0,option={},&b)
+    if DynVar === value
+      return _dyn_fslider(value,option,&b)
+    end
+    w=Scale.new(:horizontal,option[:min],option[:max],option[:by])
+    w.set_value(value ? value : 0)
+    w.set_digits(option[:decimal]) if option[:decimal]
+    w.signal_connect(:value_changed) { || b.call(w.value)  rescue error($!) } if block_given?
+    w.define_singleton_method(:progress=) { |value| w.set_value(value) }
+    attribs(w,option)   
+  end
+  def _dyn_fslider(var,option,&blk) 
+    w=  block_given? ?  fslider(var.value,option,&blk) : fslider(var.value,option) { |v| var.value=v }
+    var.observ { |v| w.set_value(v) }
+    attribs(w,option)   
+    w
   end
   
   # Show the evolution if a numeric value. Evolution is a number between 0 and 1.0
