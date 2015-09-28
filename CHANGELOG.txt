@@ -1,4 +1,6 @@
-3.2.5
+3.3.1
+    Gemfile : remove rspec simplevov dependency
+3.3.0 : 2015-09-28 10:59:48 +0200
     Ruiby.gemspec : dempend on gtk3 3.0.5
 3.2.4
     Gemfile : gtksourceview3 referenced
@@ -498,5 +500,3 @@
     test.rb : noting
     sketchi.rb : paned by bloc
     paned.rb : paned by bloc
-    canvas.rb : paned by bloc
-    ruiby_dsl3.rb : paned by block
