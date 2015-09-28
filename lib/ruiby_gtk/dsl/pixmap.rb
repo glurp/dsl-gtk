@@ -37,11 +37,35 @@ module Ruiby_dsl
       icn="#{name.downcase.gsub('_','-')}"
       return Gtk::IconTheme.default().load_icon(icn,16,0)
     rescue Exception => ee
+       if GTK2ICONNAME[icn]
+        ( return Gtk::IconTheme.default().load_icon(GTK2ICONNAME[icn],16,0) ) rescue nil
+       end
        puts ee.inspect
       return Gtk::IconTheme.default().load_icon("process-stop",48,0)
     end
   end
-  
+  GTK2ICONNAME= {
+"about" => "help-about", "add" => "list-add", "bold" => "format-text-bold", "cancel" => "process-stop", "clear" => "edit-clear", 
+"close" => "window-close", "copy" => "edit-copy", "cut" => "edit-cut", "delete" => "edit-delete", "execute" => "system-run", 
+"find-and-replace" => "edit-find-replace", "find" => "edit-find", "fullscreen" => "view-fullscreen", "go-back-ltr" => "go-previous",
+ "go-back-rtl" => "go-next", "go-down" => "go-down", "go-forward-ltr" => "go-next", "go-forward-rtl" => "go-previous", "go-up" => "go-up",
+ "goto-bottom" => "go-bottom", "goto-first-ltr" => "go-first", "goto-first-rtl" => "go-last", "goto-last-ltr" => "go-last",
+ "goto-last-rtl" => "go-first", "goto-top" => "go-top", "help" => "help-contents", "home" => "go-home", "indent-ltr" => "format-indent-more",
+ "indent-rtl" => "format-indent-less", "italic" => "format-text-italic", "jump-to-ltr" => "go-jump", "jump-to-rtl" => "go-jump",
+ "justify-center" => "format-justify-center", "justify-fill" => "format-justify-fill", "justify-left" => "format-justify-left",
+ "justify-right" => "format-justify-right", "leave-fullscreen" => "view-restore", "media-forward-ltr" => "media-seek-forward",
+ "media-forward-rtl" => "media-seek-backward", "media-next-ltr" => "media-skip-forward", "media-next-rtl" => "media-skip-backward",
+ "media-pause" => "media-playback-pause", "media-play-ltr" => "media-playback-start", "media-previous-ltr" => "media-skip-backward",
+ "media-previous-rtl" => "media-skip-forward", "media-record" => "media-record", "media-rewind-ltr" => "media-seek-backward",
+ "media-rewind-rtl" => "media-seek-forward", "media-stop" => "media-playback-stop", "new" => "document-new", "open" => "document-open",
+ "paste" => "edit-paste", "print-preview" => "document-print-preview", "print" => "document-print", "properties" => "document-properties",
+ "quit" => "application-exit", "redo-ltr" => "edit-redo", "refresh" => "view-refresh", "remove" => "list-remove",
+ "revert-to-saved-ltr" => "document-revert", "revert-to-saved-rtl" => "document-revert", "save-as" => "document-save-as",
+ "save" => "document-save", "select-all" => "edit-select-all", "sort-ascending" => "view-sort-ascending",
+ "sort-descending" => "view-sort-descending", "spell-check" => "tools-check-spelling", "stop" => "process-stop",
+ "strikethrough" => "format-text-strikethrough", "underline" => "format-text-underline", "undo-ltr" => "edit-undo",
+ "unindent-ltr" => "format-indent-less", "unindent-rtl" => "format-indent-more", "zoom-100" => "zoom-original",
+ "zoom-fit" => "zoom-fit-best" }
   # obsolete  
   def get_icon(name) get_pixmap(name) end
   
