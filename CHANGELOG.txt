@@ -1,4 +1,6 @@
-3.3.2
+3.3.3
+    test_dialogs.rb : do not test editor() if travis running
+    sketchi.rb : font dialog size
     rspec_helper.rb : add gtksourceview3 to dependancy
     editor.rb : supress floppy button
     ruiby_default_dialog3.rb : puts error stack end limit error dialog size on error()
@@ -498,5 +500,3 @@
     paned.rb : style test
     ruiby_dsl3.rb : container style
 0.111.0 : 2013-07-11 19:57:02 +0200
-    README.md : paned upgrade
-    test_composites.rb : paned update
