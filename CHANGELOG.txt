@@ -1,4 +1,5 @@
-3.3.3
+3.3.4
+    form_fields.rb : no set_witdh for entry
     test_dialogs.rb : do not test editor() if travis running
     sketchi.rb : font dialog size
     rspec_helper.rb : add gtksourceview3 to dependancy
@@ -499,4 +500,3 @@
     README.md : doc reference
     paned.rb : style test
     ruiby_dsl3.rb : container style
-0.111.0 : 2013-07-11 19:57:02 +0200
