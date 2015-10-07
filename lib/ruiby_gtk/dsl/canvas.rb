@@ -431,23 +431,23 @@ module Ruiby_dsl
   def plot(width,height,curves,config={})
      plot=canvas(width,height) do
        on_canvas_draw { |w,ctx| w.expose(ctx) }
-       on_canvas_button_press { |w,event| }
+       on_canvas_button_press { |w,event| w.track(event)}
      end
      def plot.config(c) @config=c end
      plot.config(config.merge({w: width,h:height}))
      def plot.add_curve(name,config) 
         c=config.dup
         c[:data] ||= [[0,0],[100,100]]
-        c[:maxlendata] ||= 100
+        c[:maxlendata] ||= c[:data].size
         c[:color] ||= "#003030"
+        c[:rgba] = ::Gdk::Color.parse(c[:color])
         c[:xminmax] ||= [c[:data].first[1],c[:data].last[1]]
         c[:yminmax] ||= [0,100]
         c[:style] ||= :linear
         c[:xa] = 1.0*width_request/(c[:xminmax][1]-c[:xminmax][0])
         c[:xb] = 0.0    -c[:xminmax][0]*c[:xa]
         c[:ya] = 1.0*height_request/(c[:yminmax][0]-c[:yminmax][1])
-        c[:yb] = 1.0*height_request+c[:yminmax][0]*c[:xa]
-        @curves||={}
+        c[:yb] = 0.0-c[:yminmax][1]*c[:ya]
         @curves[name]=c
      end
      def plot.delete_curve(name) 
@@ -455,20 +455,33 @@ module Ruiby_dsl
         redraw
      end
      def plot.expose(ctx) 
+        return unless @curves
         if @config[:bg]
           ctx.set_source_rgba(Ruiby_dsl.cv_color_html(@config[:bg])) 
           ctx.rectangle(0,0,@config[:w],@config[:h])
           ctx.fill
         end
-        
         @curves.values.each do |c|
               next if c[:data].size<2
-              l=c[:data].map { |(y,x)|  [x*c[:xa]+c[:xb] , y*c[:ya]+c[:yb] ]  }
+              l=c[:data].map { |(y,x)|  
+                [x*c[:xa]+c[:xb] , y*c[:ya]+c[:yb] ] 
+              }
               coul=c[:rgba]
               ctx.set_source_rgba(coul.red,coul.green,coul.blue)
               ctx.move_to(*l[0])
-              l[1..-1].each { |pt| ctx.line_to(*pt) }
+              l[1..-1].each { |pt| ctx.line_to(*pt);  }
               ctx.stroke
+        end
+        if @tx && @track_text
+           ctx.set_source_rgba(Ruiby_dsl.cv_color_html("#FFF")) 
+           ctx.move_to(@tx,0);ctx.line_to(@tx,height_request);ctx.stroke
+           @track_text.each do |name,text,h,ht|
+              coul=@curves[name][:rgba]
+              ctx.set_source_rgba(coul.red,coul.green,coul.blue)
+             ctx.move_to(@tx,h)      ; ctx.line_to(@tx+10,ht);ctx.stroke
+             ctx.move_to(@tx+10,ht)  ; ctx.show_text(text) 
+           end
+           ctx.move_to(width_request/2-100,30); ctx.show_text("Date: #{@track_title}")            
         end
      end
      
@@ -494,9 +507,51 @@ module Ruiby_dsl
         redraw
      end
      def plot.maxlen(name,len)
-       @curves[name][:data]=@curves[name][:data][-len..-1] if @curves[name][:data].size>len
+       @curves[name][:data]=if @curves[name][:data].size>=len
+        @curves[name][:data][-len..-1] 
+       else
+        @curves[name][:data]
+       end
      end
-     curves.each { |name,descr| descr[:rgba]=color_conversion(descr[:color]||'#303030') ; plot.add_curve(name,descr) }
+     def plot.track(event)
+      return unless @config[:tracker]
+      x=nil
+      lt=@curves.map {|name,d|
+        x=(event.x-d[:xb])/d[:xa]
+        y=psearch(d[:data],x)
+        h=y*d[:ya]+d[:yb]
+        [name,@config[:tracker][1].call(d[:name],y) || "",h,h-10]
+      }
+      10.times {
+        lt.each_with_index {|a,ia| h=a[3]
+          ld=lt.each_with_index.select {|(n,t,h0,hh),ii| ii!=ia && (h-hh).abs<9}
+          if ld.size>0  
+            a[3]-=(h-ld.first.last+1)/6.0
+            break 
+          end
+        }
+      }
+      @tx,@track_text,@track_title=event.x,lt,@config[:tracker][0].call(x)
+     end
+     def plot.psearch(lxy,x)
+       imin,imax=0,(lxy.size-1)
+       while imin<imax
+          i= (imin+imax)/2
+          vi=lxy[i][1]
+          if vi<x
+            imin=i+1
+          elsif vi>x
+            imax=i-1
+          else
+            return(lxy[i][0])
+          end
+       end
+       return lxy[i][0]
+     end
+
+     def plot.init() @curves,@tx,@track_text={},nil,nil  end
+     plot.init
+     curves.each { |name,descr|  ; plot.add_curve(name,descr) }
      plot
   end
 end
