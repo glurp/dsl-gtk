@@ -459,7 +459,6 @@
     Rakefile.rb : make_doc on each commit
     README.md : make_doc
     README.md : doc on github
-0.120.1
 0.120.0 : 2013-08-20 17:33:38 +0200
 0.119.0 : 2013-08-20 17:03:19 +0200
     ruiby_dsl3.rb : def_style gtk3
