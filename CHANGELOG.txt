@@ -1,3 +1,5 @@
+3.3.5
+    README.md : update
 3.2.7
     doc.html : update
     canvas.rb : bar in plot
@@ -498,4 +500,3 @@
 0.109.0 : 2013-07-11 19:32:53 +0200
     test.rb : noting
     sketchi.rb : paned by bloc
-    paned.rb : paned by bloc
