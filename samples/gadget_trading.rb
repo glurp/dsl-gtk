@@ -8,13 +8,12 @@
 require 'json'
 require 'httpclient'
 require 'yahoo-finance'
-require 'Ruiby'                       unless Dir.exists?("Ruiby")
-require_relative 'Ruiby/lib/Ruiby.rb' if Dir.exists?("Ruiby")
+require 'Ruiby'                       unless Dir.exists?("../lib/ruiby_dsl")
+require_relative '../lib/Ruiby.rb' if Dir.exists?("../lib/ruiby_dsl")
 
 require 'thread'
 require 'date'
 require 'pp'
-load 'Ruiby/lib/ruiby_gtk/dsl/canvas.rb'
 
 $rfirst=! defined?($rfirst)
 
