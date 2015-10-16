@@ -123,8 +123,10 @@ module Ruiby_dsl
       }
     end
     def cv.draw_varbarr(x0,y0,x1,y1,dmin,dmax,lvalues0,width,&b)
-      xconv=proc {|d| (x1==x0) ? x1 : (a=1.0*(x1-x0)/(dmax-dmin) ;b= x0-a*dmin; a*d+b) }
-      yconv=proc {|d| (y1==y0) ? y1 : (a=1.0*(y1-y0)/(dmax-dmin) ;b= y0-a*dmin; a*d+b) }
+      ax=1.0*(x1-x0)/(dmax-dmin) ;bx= x0-ax*dmin 
+      ay=1.0*(y1-y0)/(dmax-dmin) ;by= y0-ay*dmin 
+      xconv=proc {|d| (x1==x0) ? x1 :  (ax*d+bx) }
+      yconv=proc {|d| (y1==y0) ? y1 :  (ay*d+by) }
       w,cr=@currentCanvasCtx
       lvalues=lvalues0.sort_by {|a| a.first}
       l=[lvalues.first]+lvalues.each_cons(2).map {|(d,v),(d1,v1)|
@@ -135,12 +137,12 @@ module Ruiby_dsl
       cr.set_line_cap(Cairo::LINE_CAP_BUTT)
       l.each_cons(2).map {|(d,v),(d1,v1)| 
         next unless v1
-        color=  yield(v)
+        color=  block_given? ? yield(v) : v.to_s
         lxy=[xconv.call(d),yconv.call(d),xconv.call(d1),yconv.call(d1)]
         #p "   #{d},#{d1} ==> #{lxy.inspect}" if l.size>1
         w.draw_line(lxy,color, width) if color
       }
-    end    
+    end 
     def cv.draw_text_left(x,y,text,scale=1,color=nil,bgcolor=nil)
       w,cr=@currentCanvasCtx
       cr.set_line_width(1)
@@ -430,13 +432,14 @@ module Ruiby_dsl
   # see samples/plot.rb
   def plot(width,height,curves,config={})
      plot=canvas(width,height) do
-       on_canvas_draw { |w,ctx| w.expose(ctx) }
+       on_canvas_draw { |w,ctx| w.expose(w,ctx) }
        on_canvas_button_press { |w,event| w.track(event)}
      end
      def plot.config(c) @config=c end
      plot.config(config.merge({w: width,h:height}))
      def plot.add_curve(name,config) 
         c=config.dup
+        c[:type] = :curve
         c[:data] ||= [[0,0],[100,100]]
         c[:maxlendata] ||= c[:data].size
         c[:color] ||= "#003030"
@@ -450,38 +453,43 @@ module Ruiby_dsl
         c[:yb] = 0.0-c[:yminmax][1]*c[:ya]
         @curves[name]=c
      end
+     def plot.add_bar(name,values)
+        c={type: :bar,data:values, xmin: values.first.first , xmax: values.last.first}
+        @curves[name]=c
+     end
      def plot.delete_curve(name) 
         @curves.delete(name)
         redraw
      end
-     def plot.expose(ctx) 
+     def plot.expose(w,ctx) 
         return unless @curves
-        if @config[:bg]
-          ctx.set_source_rgba(Ruiby_dsl.cv_color_html(@config[:bg])) 
-          ctx.rectangle(0,0,@config[:w],@config[:h])
-          ctx.fill
-        end
+        w.draw_rectangle(0,0,@config[:w],@config[:h],0,@config[:bg],@config[:bg],0) if @config[:bg]
+        yb0=3
         @curves.values.each do |c|
               next if c[:data].size<2
-              l=c[:data].map { |(y,x)|  
-                [x*c[:xa]+c[:xb] , y*c[:ya]+c[:yb] ] 
-              }
-              coul=c[:rgba]
-              ctx.set_source_rgba(coul.red,coul.green,coul.blue)
-              ctx.move_to(*l[0])
-              l[1..-1].each { |pt| ctx.line_to(*pt);  }
-              ctx.stroke
+              case c[:type] 
+              when :curve
+                  l=c[:data].each_with_object([]) { |(y,x),a|  
+                    a << x*c[:xa]+c[:xb] ; a <<  y*c[:ya]+c[:yb] 
+                  }
+                  w.draw_line(l,c[:color],2)
+              when :bar
+                 w.draw_varbarr(0,@config[:h]-yb0,@config[:w],@config[:h]-yb0,c[:xmin],c[:xmax],c[:data],5)
+                 yb0+=5
+              end
         end
         if @tx && @track_text
-           ctx.set_source_rgba(Ruiby_dsl.cv_color_html("#FFF")) 
-           ctx.move_to(@tx,0);ctx.line_to(@tx,height_request);ctx.stroke
+           w.draw_line([@tx,0,@tx,height_request],"#FFF",1)
+           dx=(@tx<(width_request-70)) ? 10 : -10
            @track_text.each do |name,text,h,ht|
-              coul=@curves[name][:rgba]
-              ctx.set_source_rgba(coul.red,coul.green,coul.blue)
-             ctx.move_to(@tx,h)      ; ctx.line_to(@tx+10,ht);ctx.stroke
-             ctx.move_to(@tx+10,ht)  ; ctx.show_text(text) 
+              w.draw_line([@tx,h,@tx+dx,ht],@curves[name][:color],1)
+              if dx>0 
+                w.draw_text(@tx+dx,ht,text,1,@curves[name][:color],"#000")
+              else
+                w.draw_text_left(@tx+dx,ht,text,1,@curves[name][:color],"#000")
+              end
            end
-           ctx.move_to(width_request/2-100,30); ctx.show_text("Date: #{@track_title}")            
+           w.draw_text_center(width_request/2,20,"Date: #{@track_title}",1.3,"#FFF","#000")
         end
      end
      
@@ -516,11 +524,12 @@ module Ruiby_dsl
      def plot.track(event)
       return unless @config[:tracker]
       x=nil
-      lt=@curves.map {|name,d|
+      lt=@curves.each_with_object([]) {|(name,d),a|
+        next unless d[:type]==:curve
         x=(event.x-d[:xb])/d[:xa]
         y=psearch(d[:data],x)
         h=y*d[:ya]+d[:yb]
-        [name,@config[:tracker][1].call(d[:name],y) || "",h,h-10]
+        a << [name,@config[:tracker][1].call(d[:name],y) || "",h,(h>20) ? (h-10) : (h+10)]
       }
       10.times {
         lt.each_with_index {|a,ia| h=a[3]
