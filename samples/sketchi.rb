@@ -94,7 +94,7 @@ EEND
   def dialog_font
     dialog "Ruiby Predefined icones" do
         conf={typo: "Arial", type: "bold", size: 12}
-        we=entry("text...",300)
+        we=entry("text...",30)
         properties("attributes",conf,edit: true) { |confpp|
           apply_options(we,font: confpp.values.join(" "))
         }

@@ -32,9 +32,6 @@ class RubyApp < Ruiby_gtk
             File.open(@file,"w") { |f| f.write(content) } if @file && content && content.size>2
           end
         }
-        toolbar_button("floppy") {
-          edit(@file) # embeded source code shower un Ruiby
-        }
       end
       @edit=source_editor(:width=>200,:height=>50,:lang=> "ruby", :font=> "Courier new 12",:on_change=> proc { change }).editor
       sloti( button("Exit") { exit! })	
