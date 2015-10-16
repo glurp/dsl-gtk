@@ -1,4 +1,5 @@
-3.3.5
+3.3.6
+    Rakefile.rb : project name
     README.md : update
 3.2.7
     doc.html : update
@@ -499,4 +500,3 @@
     test_composites.rb : paned update
 0.109.0 : 2013-07-11 19:32:53 +0200
     test.rb : noting
-    sketchi.rb : paned by bloc
