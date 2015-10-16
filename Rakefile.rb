@@ -38,7 +38,7 @@
 #################################################################
 
 FIGNORES=%w{VERSION CHANGELOG.txt .gitignore}
-NAME= Dir.pwd.gsub(File.dirname(Dir.pwd)+'/',"")
+NAME= Dir.glob("*.gemspec").first.split(".").first
 
 Rake.application.options.trace = false
 
