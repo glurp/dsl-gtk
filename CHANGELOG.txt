@@ -1,4 +1,6 @@
-3.2.6
+3.2.7
+    doc.html : update
+    canvas.rb : bar in plot
     gadget_trading.rb : recreation
     canvas.rb : plot multicurve
     Gemfile : gtksourceview3 referenced
@@ -498,5 +500,3 @@
     test.rb : noting
     sketchi.rb : paned by bloc
     paned.rb : paned by bloc
-    canvas.rb : paned by bloc
-    ruiby_dsl3.rb : paned by block
