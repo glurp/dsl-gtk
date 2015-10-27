@@ -94,6 +94,9 @@ class DynVar
   def tr(old,neww)
     puts "trace var from #{old} to #{neww}" if @trace
   end
+  def destroy()
+    @abo=[]
+  end
 end
 
 ################################# Object binding
