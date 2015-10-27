@@ -14,10 +14,10 @@ module Ruiby_dsl
   #    on_canvas_keypress       {|w,key| ... }
   # end
   #
-  # for drawing in canvas, this commands are offered.
-  # basic gtk comands can be uses to ( move_to(), line_to()... )
+  # for drawing in canvas, this commands are usable.
+  # basic gtk commands can still be uses ( move_to(), line_to()... )
   # def myDraw(w,ctx)
-  #     w.init_ctx
+  #     w.init_ctx(color_fg="#000000",color_bg="#FFFFFF",width=1)
   #     w.draw_line([x1,y1,....],color,width)
   #     w.draw_point(x1,y1,color,width)
   #     w.draw_polygon([x,y,...],colorFill,colorStroke,widthStroke)
@@ -25,13 +25,18 @@ module Ruiby_dsl
   #     w.draw_rectangle(x0,y0,w,h,r,widthStroke,colorFill,colorStroke)
   #     w.draw_pie(x,y,r,l_ratio_color_label)
   #     w.draw_arc(x,y,r,start,eend,width,color_stroke,color_fill=nil)
+  #     w.draw_arc2(x,y,r,start,eend,width,color_stroke,color_fill=nil)
   #     w.draw_varbarr(x0,y0,x1,y1,vmin,vmax,l_date_value,width) {|value| color}
   #     w.draw_image(x,y,filename)
-  #     w.draw_text(x,y,text,scale,color)
+  #     w.draw_text(x,y,text,scale,color,bgcolor=nil)
+  #     w.draw_text_left(x,y,text,scale,color,bgcolor=nil)
+  #     w.draw_text_center(x,y,text,scale,color,bgcolor=nil)
   #     lxy=w.translate(lxy,dx=0,dy=0) # move a list of points
   #     lxy=w.rotate(lxy,x0,y0,angle)  # rotate a list of points
-  #     w.scale(10,20,2) { w.draw_image(3,0,filename) } # draw in a transladed/scaled coord system
-  #                          >> image will be draw at 16,20, and size doubled
+  #     w.scale(10,20,2) { w.draw_image(3,0,filename) } 
+  #                   >> draw in a transladed/scaled coord system
+  #                   >> image will be draw at 16/20 (10+3*2)/(20+0*2)
+  #                      , and size doubled
   # end
 
   def canvas(width,height,option={})
@@ -464,6 +469,16 @@ module Ruiby_dsl
      def plot.expose(w,ctx) 
         return unless @curves
         w.draw_rectangle(0,0,@config[:w],@config[:h],0,@config[:bg],@config[:bg],0) if @config[:bg]
+        if @config[:grid] 
+          dx=dy=(@config[:grid]||"40").to_i
+          color=@config[:grid_color] || "#AAA"
+          0.step(width_request,dx) {|x| 
+            w.draw_line([x,0,x,height_request],color,1) 
+          }
+          0.step(height_request,dy) {|y|
+            w.draw_line([0,y,width_request,y],color,1)           
+          }
+        end
         yb0=3
         @curves.values.each do |c|
               next if c[:data].size<2
