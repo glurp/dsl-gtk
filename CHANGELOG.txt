@@ -1,4 +1,14 @@
-3.3.7
+3.7.1
+    dyn_var.rb : destroy creation
+    layouts.rb : panel_async for dialog without buttons
+    form_fields.rb : progress bar creation
+    canvas.rb : comments
+    Rakefile.rb : project name diff of directory name
+    README.md : updated
+3.7.0 : 2015-10-16 23:43:45 +0200
+3.6.0 : 2015-10-16 23:41:42 +0200
+3.5.0 : 2015-10-16 23:38:18 +0200
+3.4.0 : 2015-10-16 23:33:55 +0200
     make_doc.rb : plot_curve as example
     gadget_trading.rb : archives
     README.md : october news
@@ -490,13 +500,3 @@
     make_doc.rb : link to all words
     ruiby_dsl3.rb : comment generalities
 0.116.0 : 2013-07-16 15:41:27 +0200
-    ruiby : %% as guillemet
-0.113.0 : 2013-07-15 18:45:25 +0200
-    make_doc.rb : popup on code example
-    editor.rb : button_list become private, for documentation
-    ruiby : require Ruiby ruiby
-    README.md : doc reference
-    paned.rb : style test
-    ruiby_dsl3.rb : container style
-0.111.0 : 2013-07-11 19:57:02 +0200
-    README.md : paned upgrade
