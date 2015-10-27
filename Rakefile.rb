@@ -198,14 +198,15 @@ task :test do
   system("rspec spec/test_all.rb")
  end
  if File.exists?("samples/test.rb")
+   origin=Dir.pwd
    cd ".."
    mkdir "#{NAME}Test" unless File.exists?("#{NAME}Test")
    nname="#{NAME}Test/test.rb"
-   content=File.read("#{NAME}/samples/test.rb").gsub(/require_relative/," require").gsub('../lib/','')
+   content=File.read("#{origin}/samples/test.rb").gsub(/require_relative/," require").gsub('../lib/','')
    File.open(nname,"w") { |f| f.write(content) }
-   sh "gem install #{FileList["#{NAME}/#{NAME}*.gem"][-1]}"
+   sh "gem install #{Dir.glob("#{origin}/#{NAME}*.gem").last}"
    ruby nname rescue nil
-   cd NAME
+   cd origin
    print "\n\nOk for diffusion ? "
    rep=$stdin.gets
    raise("aborted!") unless rep && rep =~ /^y|o|d/
