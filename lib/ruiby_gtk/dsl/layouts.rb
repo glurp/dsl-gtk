@@ -351,6 +351,29 @@ module Ruiby_dsl
     end
     dialog.show_all 
   end
+  # panel_async: a dialog without button
+  def panel_async(title,config={},&b) 
+    dialog = Dialog.new(
+      title:   title,
+      parent:  self,
+      buttons: []
+    )
+            
+
+    dialog.set_window_position(:center) if ! config[:position]
+    
+    @lcur << dialog.child
+    hbox=stack { yield }
+    @lcur.pop
+    Ruiby.apply_provider(dialog.child)
+    if config[:response]
+      dialog.signal_connect('response') do |w,e|
+        rep=config[:response].call(dialog,e) 
+        dialog.destroy if rep
+      end
+    end
+    dialog.show_all 
+  end
   
   # Dialog contents is build with bloc parameter.
   # call is bloced until action on Ok/Nok/delete button 
