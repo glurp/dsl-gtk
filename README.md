@@ -22,7 +22,7 @@ Status
 ======
 
 NEW : 3.3.4 !!   16-10-2015
-new : gadgets, ruby-gtk3 3.0.3, trading demo, plots demos
+new : ruby-gtk3 3.0.3, trading demo, plots demos
 
 
 TODO  :
