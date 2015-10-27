@@ -284,7 +284,57 @@ module Ruiby_dsl
     w.signal_connect(:value_changed) { || b.call(w.value)  rescue error($!) } if block_given?
     attribs(w,option)   
   end
-
+  
+  # Progress bar
+  #   w=progress(0.5,"Hello")
+  #   w.set_fraction(0.99)
+  # show a progress bar. progresion is updated by set_fraction(0.0..1.0)
+  #   w=progress(0.5,"Hello")
+  #   w.set_fraction(0.99)
+  def progress(value=0,text=nil,option={})
+    if DynVar === value
+      return _dyn_progress(value,text,option)
+    end
+    w=ProgressBar.new()
+    w.set_fraction(value)
+    w.text=text if text
+    #w.orientation=ProgressBar::GtkProgressBarOrientation::LEFT_TO_RIGHT
+    attribs(w,option)   
+  end
+  
+  def _dyn_progress(var,text,option)
+    w=progress(var.value,text,option)
+    var.observ {|value| w.set_fraction(value.to_f)}
+    w
+  end
+  # show a dialog with a progress bar, actualised by a Dynvar value
+  #   dv=panel_progress("Loading xxxxx.rb...")
+  #   anim(100) { fract=Time.now.to_i%60/60.0 ; dv.value=fract }
+  #   after(10000) { dv.value=-1 }
+  #   dv=panel_progress("Starting...") { |value| 
+  #     "Advance: %d " % ((value*100).to_i " }
+  #   }
+ def panel_progress(text="",&blk) 
+     dvar= ::DynVar.new(0)
+     lw=nil
+     d=panel_async("Progression...",{}) {
+         lw=label text if text && text.size >0
+         label ""
+         flowi { labeli "  " ; progress(dvar,text) ; labeli "  "}
+         label ""
+     }
+     dvar.observ {|value| 
+       if blk && lw
+         lw.text= blk.call(value)
+       end
+       if value <= -1.0 || value >= 2.0 
+        dvar.destroy
+        d.destroy 
+       end
+     }
+     dvar
+  end
+  
   # create a button wich will show a dialog for color choice
   # if bloc is given, it with be call on each change, with new color value as parameter
   # current color is w.get_color()
