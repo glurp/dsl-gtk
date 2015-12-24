@@ -97,10 +97,13 @@ module Ruiby_default_dialog
 
   ########## File Edit
   
-  # dialog showing code editor
-  def edit(filename)
-    Editor.new(self,filename)
-  end
+  # dialog showing code editor, 
+  # call back is called on exit button, 
+  # edit("x.txt") { |content| compile(content) ? true : (alert("error!");false) }
+  #
+	def edit(filename,&blk)
+		Editor.new(self,filename,350,&blk) 
+	end
   
   ########## File dialog
 
