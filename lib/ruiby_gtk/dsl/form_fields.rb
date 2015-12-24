@@ -72,11 +72,11 @@ module Ruiby_dsl
   
   def _dyn_toggle_button(text1,text2,var,option={},&blk)
     text2 = "- "+text1 unless text2
-    b=ToggleButton.new(text1);
+    b=ToggleButton.new(label: text1);
     b.signal_connect("clicked") do |w,e| 
       w.label= w.active?() ? text2.to_s : text1.to_s 
       ( blk.call(w.active?()) rescue error($!) ) if blk
-      var.set_as_bool(w.active?())
+      var.value=w.active?()
     end
     b.set_active(var.value)
     var.observ { |v|  b.set_active(var.get_as_bool())  }
@@ -317,7 +317,7 @@ module Ruiby_dsl
  def panel_progress(text="",&blk) 
      dvar= ::DynVar.new(0)
      lw=nil
-     d=panel_async("Progression...",{}) {
+     d=panel_async("Progression...") {
          lw=label text if text && text.size >0
          label ""
          flowi { labeli "  " ; progress(dvar,text) ; labeli "  "}
