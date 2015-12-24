@@ -10,12 +10,15 @@ module Ruiby_dsl
   
   def get_pixmap(name)
     if name=~ /^famfamfam/
+      p name
+      p Dir.glob("#{Ruiby::MEDIA}/#{name.split(/\s+/).join("*")}.png").to_a
       name=Dir.glob("#{Ruiby::MEDIA}/#{name.split(/\s+/).join("*")}.png").to_a.first
     end
     if name.index('.') 
       if File.exists?(name)
          @cach_pix||={}
          @cach_pix[name]=Gdk::Pixbuf.new(name) unless @cach_pix[name]
+         p @cach_pix[name]
          return @cach_pix[name]
       elsif name.index("[")
         return get_pixbuf(name)
