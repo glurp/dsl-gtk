@@ -85,9 +85,14 @@ EEND
   def dialog_icones
     dialog "Ruiby Predefined icones" do
         stack do
-          scrolled(400,500) { Gtk::IconTheme.default.icons.sort.map { |name|  
-            flow { labeli "#"+name.to_s ; labeli name.to_s } rescue nil
-          } }
+          scrolled(400,500) { 
+            Gtk::IconTheme.default.icons.sort.map { |name|  
+              (flow { labeli "#"+name.to_s ; entry(name.to_s)  } rescue nil) if name.to_s !~ /symbolic/
+            } 
+            Gtk::IconTheme.default.icons.sort.map { |name|  
+              (flow { labeli "#"+name.to_s ; entry(name.to_s)  } rescue nil) if name.to_s =~ /symbolic/ 
+            } 
+         }
         end
     end
   end
