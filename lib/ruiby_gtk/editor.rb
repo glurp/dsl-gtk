@@ -1,23 +1,31 @@
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
-# create a diaog which contain a little editor
+
+# create a dialog which contain a little editor
 # text is colorize for ruby lang
 class Editor < Ruiby_gtk 
-    def initialize(w,filename,width=350)
-	@filename=filename
-	super("Edit #{filename[0..40]}",width,0)
-	transient_for=w
+    def initialize(w,filename,width=350,&blk)
+      @filename=filename
+      super("Edit #{filename[0..40]}",width,0)
+      transient_for=w
+      @blk=blk
     end	
     def component()
-	stack do
-	    if ed=source_editor()
-		@edit=slot(ed).editor
-		@edit.buffer.text=File.exists?(@filename) ? File.read(@filename) : @filename
-	    end
-	    sloti( button("Exit") { destroy() })
-	end
+      stack do
+          if ed=source_editor()
+            @edit=slot(ed).editor
+            @edit.buffer.text=File.exists?(@filename) ? File.read(@filename) : @filename
+          end
+          sloti( button("Exit") { 
+           if @blk 
+             ok=@blk.call(@edit.buffer.text)
+             destroy() if ok 
+           else
+             destroy()
+           end           
+          })
+      end
     end # endcomponent
-
 end
 # create a dialogue which sho data in a grid
 # @title:	title of the dialog
