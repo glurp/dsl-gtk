@@ -120,7 +120,7 @@ module Ruiby_dsl
       scale(x,y,scale) {  
         if bgcolor
           a=cr.text_extents(text)
-          w.draw_rectangle(0,0,a.width,-a.height,1,bgcolor,bgcolor,0)
+          w.draw_rectangle(0,-1,a.width,-a.height-3,1,bgcolor,bgcolor,0)
           cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color || @currentColorFg ))
         end
         cr.move_to(0,0)
@@ -155,7 +155,7 @@ module Ruiby_dsl
       scale(x,y,scale) {  
         a=cr.text_extents(text)
         if bgcolor
-          w.draw_rectangle(-a.width,-a.height,a.width,a.height,1,bgcolor,bgcolor,1)
+          w.draw_rectangle(-a.width,-a.height,a.width,a.height+2,1,bgcolor,bgcolor,1)
           cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color || @currentColorFg ))
         end
         cr.move_to(-a.width,0)
@@ -169,7 +169,7 @@ module Ruiby_dsl
       scale(x,y,scale) {  
         a=cr.text_extents(text)
         if bgcolor
-          w.draw_rectangle(-a.width/2,0,a.width,-a.height,1,bgcolor,bgcolor,1)
+          w.draw_rectangle(-a.width/2,-1,a.width,-a.height-3,1,bgcolor,bgcolor,1)
           cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color || @currentColorFg ))
         end
         cr.move_to(-a.width/2.0,0)
@@ -544,14 +544,16 @@ module Ruiby_dsl
         x=(event.x-d[:xb])/d[:xa]
         y=psearch(d[:data],x)
         h=y*d[:ya]+d[:yb]
-        a << [name,@config[:tracker][1].call(d[:name],y) || "",h,(h>20) ? (h-10) : (h+10)]
+        a << [name,@config[:tracker][1].call(d[:name],y) || "",h,(h>30) ? (h-10) : (h+10)]
       }
       10.times {
         lt.each_with_index {|a,ia| h=a[3]
-          ld=lt.each_with_index.select {|(n,t,h0,hh),ii| ii!=ia && (h-hh).abs<9}
-          if ld.size>0  
-            a[3]-=(h-ld.first.last+1)/6.0
-            break 
+          ld=lt.each_with_index.select {|(n,t,h0,hh),ii| ii!=ia && (h-hh).abs<12}
+          if ld.size>0
+            moin=a[3]<20
+            delta=(h-ld.first.last+1)/6.0
+            a[3]= moin ? a[3]-delta :  a[3]+delta 
+            #break 
           end
         }
       }
