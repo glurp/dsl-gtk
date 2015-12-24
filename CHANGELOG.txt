@@ -1,4 +1,12 @@
-3.7.1
+3.7.2
+    sketchi.rb : list of icone 
+    ruiby_default_dialog3.rb : edit xith callback
+    ruiby_default_dialog.rb : edit with callback
+    editor.rb : edit with callback
+    pixmap.rb : traces
+    layouts.rb : panel_async creation
+    form_fields.rb : toggle button and dyn value
+    canvas.rb : scale
     dyn_var.rb : destroy creation
     layouts.rb : panel_async for dialog without buttons
     form_fields.rb : progress bar creation
@@ -492,11 +500,3 @@
     make_doc.rb : reference manual to example, many exemples
     draw.rb : comment for doc
     accordion.rb : indentations
-    windows.rb : ionitialize
-    test.rb : color_choice correction
-    make_doc.rb : d
-    ruiby_dsl3.rb : y
-    ruiby_default_dialog3.rb : correction ask_color
-    make_doc.rb : link to all words
-    ruiby_dsl3.rb : comment generalities
-0.116.0 : 2013-07-16 15:41:27 +0200
