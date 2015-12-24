@@ -352,26 +352,19 @@ module Ruiby_dsl
     dialog.show_all 
   end
   # panel_async: a dialog without button
-  def panel_async(title,config={},&b) 
+  def panel_async(title) 
     dialog = Dialog.new(
       title:   title,
       parent:  self,
       buttons: []
     )
-            
-
-    dialog.set_window_position(:center) if ! config[:position]
+    dialog.set_window_position(:center) 
     
     @lcur << dialog.child
-    hbox=stack { yield }
+    stack { yield(dialog) }
     @lcur.pop
     Ruiby.apply_provider(dialog.child)
-    if config[:response]
-      dialog.signal_connect('response') do |w,e|
-        rep=config[:response].call(dialog,e) 
-        dialog.destroy if rep
-      end
-    end
+
     dialog.show_all 
   end
   
