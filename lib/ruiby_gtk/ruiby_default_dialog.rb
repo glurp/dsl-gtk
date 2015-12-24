@@ -84,8 +84,8 @@ module Ruiby_default_dialog
 	########## File Edit
 	
 	# dialog showing code editor
-	def edit(filename)
-		Editor.new(self,filename)
+	def edit(filename,&blk)
+		Editor.new(self,filename,350,&blk) 
 	end
 	
 	########## File dialog
