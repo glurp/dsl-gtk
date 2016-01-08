@@ -140,7 +140,7 @@ module Ruiby_default_dialog
       end
 end
 
-#  To be use for direct  call (blocing) of common dialog :
+#  To be use for direct  call (blocking) of common dialog :
 #  Message.alert("ddde",'eee')
 class Message
 	class Embbeded  < ::Gtk::Window
