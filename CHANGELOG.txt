@@ -1,4 +1,7 @@
-3.7.2
+3.8.1
+    ruiby_default_dialog.rb : orthographe
+    layouts.rb : dialog closure with dialog widget as agument
+3.8.0 : 2015-12-24 16:29:15 +0100
     sketchi.rb : list of icone 
     ruiby_default_dialog3.rb : edit xith callback
     ruiby_default_dialog.rb : edit with callback
@@ -497,6 +500,3 @@
     ruiby_dsl3.rb : toolbar with icon and text
     test_systray.rb : presentation for doc
     test.rb : indent for doc
-    make_doc.rb : reference manual to example, many exemples
-    draw.rb : comment for doc
-    accordion.rb : indentations
