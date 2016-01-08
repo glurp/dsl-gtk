@@ -340,7 +340,7 @@ module Ruiby_dsl
     dialog.set_window_position(:center) if ! config[:position]
     
     @lcur << dialog.child
-    hbox=stack { yield }
+    hbox=stack { yield(dialog) }
     @lcur.pop
     Ruiby.apply_provider(dialog.child)
     if config[:response]
