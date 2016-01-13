@@ -19,6 +19,9 @@ module Ruiby_dsl
   # container : vertical or horizontal box (stacki/flowi, choice by first argument), 
   # sloted in parent by default
   def var_boxi(sens,config={},add1=true,&b) _cbox(false,Box.new(sens, 2),config,add1,&b) end
+  # container manage children has sentence flow widgets
+  def sentence(config={},add=true,&b) _cbox(true,FlowBox.new(),config,add,&b) end
+  def sentenci(config={},add=true,&b) _cbox(false,FlowBox.new(),config,add,&b) end
 
   # box { } container which manage children widget without slot (pack()) 
   # in parent container.
@@ -31,7 +34,10 @@ module Ruiby_dsl
     autoslot()
     @lcur.pop
   end
-  
+  # a button for show source code of application. usefule for demos app
+  def show_source
+    buttoni("Show source...") { Editor.new(self,$0,500) }
+  end
 
   #  mock class which can be push to layout stack : they accept some
   #  specific type of commands
@@ -118,7 +124,6 @@ module Ruiby_dsl
   def framei(t="",config={},add1=true,&b)
     _cbox(false,Frame.new(t),config,add1) { s=stack { b.call } ; s.set_border_width(5) }
   end
-
   # private: generic packer
   def _cbox(expand,box,config,add1)
     autoslot() # pack last widget before append new bow
@@ -367,7 +372,12 @@ module Ruiby_dsl
 
     dialog.show_all 
   end
-  
+  # Arm a callback on window/dialog closed
+  # must return false for close the dialog
+  # dialog { stack {.... ; on_delete { @isclosed=true ; false} } }
+  def on_delete(&b)
+      @lcur.last.toplevel.signal_connect("delete_event") { |w,e| b.call }
+  end
   # Dialog contents is build with bloc parameter.
   # call is bloced until action on Ok/Nok/delete button 
   # return true if dialog quit is done by action on OK button
@@ -384,7 +394,7 @@ module Ruiby_dsl
     )
       
     @lcur << dialog.child
-    hbox=stack { yield }
+    hbox=stack { yield(dialog) }
     @lcur.pop
     
     dialog.set_window_position(:center)
@@ -405,7 +415,7 @@ module Ruiby_dsl
     )
       
     @lcur << dialog.child
-    hbox=stack { yield }
+    hbox=stack { yield(dialog) }
     @lcur.pop
     
     dialog.set_window_position(:center)
