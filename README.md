@@ -21,8 +21,7 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 3.3.4 !!   16-10-2015
-new : ruby-gtk3 3.0.3, trading demo, plots demos
+NEW : 3.8.2 !!   13-01-2016 : sentence container (FlowBox), 
 
 
 TODO  :
