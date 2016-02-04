@@ -1,4 +1,8 @@
-3.8.2
+3.8.3
+    layouts.rb : dialog validation
+    label_button_image.rb : show_source creation
+    form_fields.rb : combo corrections
+    README.md : update
     README.md : update
     ruiby_default_dialog.rb : orthographe
     layouts.rb : dialog closure with dialog widget as agument
@@ -496,7 +500,3 @@
     ruiby_dsl3.rb : larg icon for button_text_icon
     doc.html : prototypes
     test.rb : toolbar test update
-    sketchi.rb : helpers icones end font
-    make_doc.rb : chow prototype of functions
-    ruiby_dsl3.rb : toolbar with icon and text
-    test_systray.rb : presentation for doc
