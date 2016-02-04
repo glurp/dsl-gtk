@@ -34,10 +34,7 @@ module Ruiby_dsl
     autoslot()
     @lcur.pop
   end
-  # a button for show source code of application. usefule for demos app
-  def show_source
-    buttoni("Show source...") { Editor.new(self,$0,500) }
-  end
+
 
   #  mock class which can be push to layout stack : they accept some
   #  specific type of commands
@@ -349,10 +346,16 @@ module Ruiby_dsl
     @lcur.pop
     Ruiby.apply_provider(dialog.child)
     if config[:response]
-      dialog.signal_connect('response') do |w,e|
-        rep=config[:response].call(dialog,e) 
+      dialog.signal_connect('response') do |w,response_id|
+        rep=if response_id == Gtk::ResponseType::ACCEPT 
+          config[:response].call(dialog,response_id) 
+        else
+          true
+        end
         dialog.destroy if rep
       end
+    else
+      dialog.signal_connect('response') { |w,response_id| dialog.destroy }
     end
     dialog.show_all 
   end
