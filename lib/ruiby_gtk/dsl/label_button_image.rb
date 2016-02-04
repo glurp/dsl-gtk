@@ -73,8 +73,20 @@ module Ruiby_dsl
   # block argument is evaluate at button click, slotied :
   #  packed without expand for share free place
   def buttoni(text,option={},&blk) sloti(button(text,option,&blk)) end 
-  
-  
+
+  # a button for show source code of application.
+  # usefule for demos app
+  def show_source
+    label_clickable("Show source...") { Editor.new(self,$0,500) }
+  end
+
+  # a label clikable
+  # label_button("hello") { alert(Time.now.to_s) }
+  def label_clickable(text,config={},&b)
+     pclickable(proc { b.call()} ) { label(txt) }  
+  end
+
+
   # Create a horizontal bar with a stick which can be moved.
   # block (if defined) is invoked on each value changed
   # w.proess=n can force current position at n
