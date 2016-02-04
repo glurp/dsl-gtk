@@ -21,16 +21,12 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 3.8.2 !!   13-01-2016 : sentence container (FlowBox), 
+NEW : 3.8.3 !!   04-02-2016 : bugs corrections in combo, dialog
 
 
 TODO  :
 
-* [x] make a demo of a gadget: REST/gui canvas/dialog/config
-* [x] grid : get selection double-click, debug...
-* [ ] Refactor images loader for button/label/toggleBUtton...
 * [ ] Gadget api: actual gadgets are cairo drawing => to be encapsuled
-* [ ] editor / executor  : console/canvas/widget+help
 * [ ] refactor samples demos with last improve: dynvar/autoslot...
 * [ ] resolve 100% gtk3 deprecated warning
 * [ ] corrections in ruiby_require(?)
