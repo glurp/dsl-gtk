@@ -1,4 +1,6 @@
-3.8.3
+3.9.1
+    README.md : update
+3.9.0 : 2016-02-04 23:24:23 +0100
     layouts.rb : dialog validation
     label_button_image.rb : show_source creation
     form_fields.rb : combo corrections
@@ -498,5 +500,3 @@
     sketchi.rb : button_icon_text
     systray.rb : gtk.main_quit
     ruiby_dsl3.rb : larg icon for button_text_icon
-    doc.html : prototypes
-    test.rb : toolbar test update
