@@ -21,7 +21,7 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 3.8.3 !!   04-02-2016 : bugs corrections in combo, dialog
+NEW : 3.9.0!!   04-02-2016 : bugs corrections in combo, dialog
 
 
 TODO  :
