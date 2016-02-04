@@ -17,36 +17,37 @@ module Ruiby_dsl
   #
   # Usage :  
   # combo(%w{aa bb cc},"bb") { |text,index| alert("#{text} at #{index}") }
-  # combo({"aa" => 20, "bb"=> 30, "cc"=> 40},0) { |text,index| alert("#{text} at #{index}") }
-  #
+  # w=combo({"aa" => 20, "bb"=> 30, "cc"=> 40},0) { |text,index| alert("#{text} at #{index}") }
+  # w.get_selection() ==> ["aa",20]
   def combo(choices,default=nil,option={},&blk)
     # TODO Dyn
     w=ComboBoxText.new()
-    choices=choices.inject({}) { |h,k| h[k]=h.size ; h} if Array===choices
-    inv_choice=choices.values.each_with_index.inject({}) {|h,(v,i)| h[v]=i ; h} 
+    choices=choices.inject({}) { |h,k| 
+      h[k]=h.size
+      h
+    } if Array===choices
+    default=choices.to_a.first.first unless default
+    
+    inv_choices=choices.values.each_with_index.inject({}) {|h,(ind,i)| h[ind]=i ; h} 
     choices.each do |text,indice|  
       w.append_text(text) 
     end
-    selection=-1
-    if default
-        if String==default
-          selection=choice[default]
-        else
-          selection= inv_choice[default] || default
-        end
-        w.set_active(selection)
-    end
+    
+    selection=default.is_a?(String) ? inv_choices[choices[default]] : default.to_i 
+    w.set_active(selection)
+    
     w.signal_connect(:changed) { |w,evt|
         indice=choices[w.active_text]
-        w._set_selection(w.active_text,inv_choice[indice])
+        w._set_selection(w.active_text,indice)
+        p w.get_selection()
         blk.call(w.active_text,indice) if blk    
     }
     attribs(w,option)   
     class << w
       def _set_selection(t,i) @selection=[t,i] end # done on changed signal
-      def get_selection()   (@selection||["",-1]) end
+      def get_selection()  p @selection;  (@selection||["",-1]) end
     end
-    w._set_selection("",selection)
+    w._set_selection(default||"",choices[default])
     w
   end
 
