@@ -83,7 +83,7 @@ module Ruiby_dsl
   # a label clikable
   # label_button("hello") { alert(Time.now.to_s) }
   def label_clickable(text,config={},&b)
-     pclickable(proc { b.call()} ) { label(txt) }  
+     pclickable(proc { b.call()} ) { label(text) }  
   end
 
 

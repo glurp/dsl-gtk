@@ -21,7 +21,7 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 3.9.0!!   04-02-2016 : bugs corrections in combo, dialog
+NEW : 3.10.0 !!   13-02-2016 : Creation of component
 
 
 TODO  :
@@ -221,6 +221,61 @@ end
 Ruiby.start { App.new }
 
 ```
+
+Component
+=========
+Ruiby is not realy object : most of DSL words are simple method in Ruby_dsl module.
+
+Sometime, this is not good enaugh :
+* when a compenent must have many specifique methods
+* when component have (model) state : variable member must be used
+
+So Component concept has been added (Fev 2016).It authorise to define a
+class, childr of AbstractComponent, which can be used by a dsl Word.
+
+Components code seem very close to a Ruiby window : free constructor, 
+define ```component()``` method for draw the widgets
+
+Create a component:
+```ruby
+class AAA < AbstractComposant
+   def initialize(name)
+      @name= name
+      @state=1
+   end
+   def component() 
+    framei("Component Comp:#{@name}") do
+      label_clickable("B#{@name}...") { @state=2 }
+      entry(@name,4)
+    end
+   end
+   def get_state() @state end
+end
+```
+
+Define a word which instantiate a composant of class AAA:
+```ruby
+module Ruiby_dsl
+  def aaa(*args)
+    c=install_composant(self,AAA.new(*args))
+  end
+end
+```
+
+Use the component:
+```ruby
+        stack {
+           aaa "foo"
+           flowi { aaa 1; c=aaa 2 }
+        }
+        button("?") { alert( c.get_state() ) }
+```
+
+TODO:
+* Canvas and Plot will be converted to Component, soon :)
+* define ```destroy()```
+* ...
+
 
 Observed Object/Variable
 ========================

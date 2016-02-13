@@ -34,7 +34,7 @@ module Ruiby_dsl
     autoslot()
     @lcur.pop
   end
-
+  def current_layout() @lcur.last end
 
   #  mock class which can be push to layout stack : they accept some
   #  specific type of commands

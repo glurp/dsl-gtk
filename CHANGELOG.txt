@@ -1,4 +1,3 @@
-3.9.1
     README.md : update
 3.9.0 : 2016-02-04 23:24:23 +0100
     layouts.rb : dialog validation

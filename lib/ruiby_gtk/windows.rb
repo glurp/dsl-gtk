@@ -9,6 +9,7 @@ class Ruiby_gtk < Gtk::Window
   include ::Ruiby_threader
   def initialize(title,w,h)
     super()
+    $app=self unless defined?($app)
     init_threader()
     #threader(10) # must be call by user window, if necessary
     set_title(title)
@@ -48,7 +49,7 @@ class Ruiby_gtk < Gtk::Window
       error("COMPONENT() : "+$!.to_s + " :\n     " +  $!.backtrace[0..10].join("\n     "))
       exit(1)
     end
-	Ruiby.apply_provider(self)
+	  Ruiby.apply_provider(self)
     begin
       show_all 
     rescue
@@ -61,12 +62,23 @@ class Ruiby_gtk < Gtk::Window
       }
     end
   end
+  # define a action when window is resized
   def on_resize(&blk)
     self.resizable=true
     signal_connect("configure_event") { blk.call } if blk
   end
+  # define action when window is closed
   def on_destroy(&blk) 
         signal_connect("destroy") { blk.call }
+  end
+  # set taskbar icon for current window
+  # filename must have absolute path
+  def set_window_icon(filename)
+    if File.exists?(filename)
+      self.set_icon_from_file(filename)
+    else
+      error("set_xindow_icon() : file #{filename} do not exists !!!")
+    end
   end
   def ruiby_exit()
     Gtk.main_quit 
