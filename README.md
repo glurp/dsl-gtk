@@ -272,10 +272,13 @@ Use the component:
         button("?") { alert( c.get_state() ) }
 ```
 
+A demo is at ```samples/composant.rb```.
+
 TODO:
-* Canvas and Plot will be converted to Component, soon :)
-* define ```destroy()```
-* ...
+* Canvas and Plot must be converted to Component, soon :)
+* Define ```destroy()```
+* Test Stock, Dynvar, threading, 
+* Tests, tests, test...
 
 
 Observed Object/Variable
