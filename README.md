@@ -264,9 +264,10 @@ end
 
 Use the component:
 ```ruby
+        c=nil
         stack {
-           aaa "foo"
-           flowi { aaa 1; c=aaa 2 }
+           c=aaa "foo"
+           flowi { aaa 1; aaa 2 }
         }
         button("?") { alert( c.get_state() ) }
 ```
