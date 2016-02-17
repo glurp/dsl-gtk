@@ -494,6 +494,7 @@ module Ruiby_dsl
               end
         end
         if @tx && @track_text
+           w.draw_text_center(width_request/2,20,"Date: #{@track_title}",1.3,"#FFF","#000")
            w.draw_line([@tx,0,@tx,height_request],"#FFF",1)
            dx=(@tx<(width_request-70)) ? 10 : -10
            @track_text.each do |name,text,h,ht|
@@ -504,7 +505,6 @@ module Ruiby_dsl
                 w.draw_text_left(@tx+dx,ht,text,1,@curves[name][:color],"#000")
               end
            end
-           w.draw_text_center(width_request/2,20,"Date: #{@track_title}",1.3,"#FFF","#000")
         end
      end
      
@@ -544,18 +544,22 @@ module Ruiby_dsl
         x=(event.x-d[:xb])/d[:xa]
         y=psearch(d[:data],x)
         h=y*d[:ya]+d[:yb]
-        a << [name,@config[:tracker][1].call(d[:name],y) || "",h,(h>30) ? (h-10) : (h+10)]
+        a << [name,@config[:tracker][1].call(name,y) || "",h,(h>30) ? (h-10) : (h+10)]
       }
-      10.times {
+     50.times {
+        t=false
         lt.each_with_index {|a,ia| h=a[3]
-          ld=lt.each_with_index.select {|(n,t,h0,hh),ii| ii!=ia && (h-hh).abs<12}
+          ld=lt.each_with_index.select {|(n,t,h0,hh),ii| ii!=ia && (h-hh).abs<8}
           if ld.size>0
+            ref=lt.each_with_object(0) {|(n,t,h0,hh),sum| sum+=(h-hh)}/ld.size
             moin=a[3]<20
-            delta=(h-ld.first.last+1)/6.0
-            a[3]= moin ? a[3]-delta :  a[3]+delta 
-            #break 
+            delta=(h-ref<0.1)? rand(h-2..h+2) : ((h-ref) > 0) ?  2 : -2 
+            a[3]= [0,a[3]+delta,height_request].sort[1]
+            t=true
+            break 
           end
         }
+        break unless t
       }
       @tx,@track_text,@track_title=event.x,lt,@config[:tracker][0].call(x)
      end
