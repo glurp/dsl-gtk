@@ -277,6 +277,7 @@ A demo is at ```samples/composant.rb```.
 TODO:
 * Canvas and Plot must be converted to Component, soon :)
 * Define ```destroy()```
+* Hook for auto-generate dsl word
 * Test Stock, Dynvar, threading, 
 * Tests, tests, test...
 
