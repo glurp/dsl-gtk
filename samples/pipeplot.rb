@@ -167,7 +167,7 @@ def run(app)
 		Measure.scan_line($str)
 		gui_invoke { redrawCv }
 	else 
-		exit!(0)
+		exit!(0) unless $wait
 	end
 end
 
@@ -268,7 +268,11 @@ if $0==__FILE__
 	PAS=2
 	HHEAD=20
 	$posxy=[0,0]
-
+  $wait=false
+	if  ARGV.size>=1 && ARGV[0]=="--wait"
+	  ARGV.shift
+	  $wait=true
+	end  
 	if  ARGV.size>=2 && ARGV[0]=="--pos"
 	  _,posxy=ARGV.shift,ARGV.shift
 	  $posxy=posxy.split(/[x,:]/).map(&:to_i)
