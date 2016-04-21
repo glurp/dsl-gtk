@@ -9,10 +9,11 @@ Gem::Specification.new do |s|
   s.email    = "regis.aubarede@gmail.com"
   
   s.version  = File.read("VERSION").strip
+  s.required_ruby_version = '>= 2.1'
   s.date     = Time.now.to_s.split(/\s+/)[0]
   s.summary  = "A  DSL for building GUI ruby/gtk application"
   s.description = <<EEND
-A DSL for building GUI ruby application, based on Gtk.
+A DSL for building simple GUI ruby application, based on Gtk.
 EEND
   
 
@@ -22,8 +23,8 @@ EEND
   s.bindir        = "bin"
   s.executables   = `ls bin/*`.split("\n").map{ |f| File.basename(f) }
 
-  s.add_runtime_dependency  'gtk3',          '>= 3.0.5'
-  s.add_runtime_dependency  'gtksourceview3','>= 3.0.5'
+  s.add_runtime_dependency  'gtk3',          '>= 3.0.8'
+  s.add_runtime_dependency  'gtksourceview3','>= 3.0.8'
   
 
   
@@ -41,7 +42,7 @@ EEND
       Hello, Welcome to Ruiby....
 
         $ ruiby_demo
-        $ ruiby_sketchi  # write and test ruiby gui code
+        $ ruiby "button('please click me...',size: [200,100]) { ruiby_exit }" 
 
     Reference doc of the DSL :  https://rawgit.com/glurp/Ruiby/master/doc.html
    -------------------------------------------------------------------------------
