@@ -19,11 +19,16 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 # 
+if RUBY_VERSION < "2.1.0"
+  puts("Ruby version must be 2.1 or more (for gtk3 usage)") 
+  exit(-1)
+end
 require 'tmpdir'
 require 'thread'
 require 'pathname'
-require 'gtk3' if ! defined?(Gtk) # caller can preload  gtk3/gtk2, at his own risk...
-
+if ! defined?(Gtk) # caller can preload  gtk3/gtk2, at his own risk...
+  require 'gtk3' 
+end
 #require "gst"          # gem install gstreamer
 #require "clutter-gtk"  # gem install clutter-gtk
 #require "clutter-gst"  # gem install clutter-gstreamer
@@ -32,15 +37,15 @@ require 'gtk3' if ! defined?(Gtk) # caller can preload  gtk3/gtk2, at his own ri
 
 
 ############# Patch Cairo::contet for buf in gtk3 2.2.3
-module Cairo
-  class Context
-    if method_defined?(:set_source_not_gdk_rgba)
-      def set_source_rgba(*rgba)
-         set_source_not_gdk_rgba(*rgba)
-      end
-    end
-  end
-end
+#module Cairo
+#  class Context
+#    if method_defined?(:set_source_not_gdk_rgba)
+#      def set_source_rgba(*rgba)
+#         set_source_not_gdk_rgba(*rgba)
+#      end
+#    end
+#  end
+#end
 
 module Ruiby
   DIR = Pathname.new(__FILE__).realpath.dirname.to_s
