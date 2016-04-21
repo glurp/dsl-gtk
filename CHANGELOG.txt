@@ -1,4 +1,10 @@
-3.9.2
+3.10.1
+    cal.rb : require Ruiby
+    ruiby_threader.rb : get pending event queue size
+    layouts.rb : fremei does stacki
+    canvas.rb : no traces
+    Ruiby.rb : test ruby version
+3.10.0 : 2016-02-17 22:38:03 +0100
     pipeplot.rb : wait option
     canvas.rb : plot tracking draw
     README.md : update
@@ -494,9 +500,3 @@
     doc.html : d
     doc.html : doc
     Rakefile.rb : make_doc on each commit
-    README.md : make_doc
-    README.md : doc on github
-0.120.0 : 2013-08-20 17:33:38 +0200
-0.119.0 : 2013-08-20 17:03:19 +0200
-    ruiby_dsl3.rb : def_style gtk3
-    test_systray.rb : chrome true
