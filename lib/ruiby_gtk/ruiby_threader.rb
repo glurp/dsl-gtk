@@ -143,3 +143,16 @@ def gui_invoke_wait(&blk)
     $__mainwindow__.instance_eval( &blk )
   end
 end
+
+# return the number of traitment waiting to be executed by main window
+def gui_async_pending_size() defined?($__queue__) ? $__queue__.size : 0 end
+
+# wait that  number of traitment waiting to be inferior or equal a a reference
+def gui_async_wait_size(size=0) 
+  if ! defined?($__mainwindow__)
+    puts("\n\ngui_invoke_wait() : initialize() of main windows not done!\n\n") 
+    return
+  end
+  sleep(0.07) while $__queue__.size>size 
+  sleep(0.07)
+end
