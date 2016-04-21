@@ -119,7 +119,7 @@ module Ruiby_dsl
   end
   # a box with border and texte title, take only necessary space
   def framei(t="",config={},add1=true,&b)
-    _cbox(false,Frame.new(t),config,add1) { s=stack { b.call } ; s.set_border_width(5) }
+    _cbox(false,Frame.new(t),config,add1) { s=stacki { b.call } ; s.set_border_width(5) }
   end
   # private: generic packer
   def _cbox(expand,box,config,add1)
