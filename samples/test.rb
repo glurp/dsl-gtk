@@ -68,7 +68,7 @@ def component()
     end # end flow
     mlog 'after Component'
   end # end global stack
-end # end def component
+end # end def Component
   def test_notebook
         notebook do
           page("","#go-home") {  test_pg }
