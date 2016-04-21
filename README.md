@@ -60,23 +60,20 @@ Install Ruby 2.x
   > gem install clutter-gstreamer
 ```
 
-Here a working gem config on windows (15-September-2014, ruby 2.0.0p0) :
+Here a working gem config on windows (17-Feb-2016, ruby 2.0.0p0) :
 ```
- pkg-config  1.1.4
-       cairo 1.12.8
-      glib2  2.2.0
- gobject-introspection  2.2.0
-       gio2  2.2.0
-        atk  2.2.0
-      pango  2.2.0
- gdk_pixbuf2  2.2.0
-       gdk3  2.2.0
-       gtk3  2.2.0
-  gstreamer  2.2.0
- cairo-gobject  2.2.0
-    clutter  2.2.0
-clutter-gtk  2.2.0
- clutter-gstreamer  2.2.0
+  cairo-1.14.1
+  glib2-3.0.7
+  gobject-introspection-3.0.7
+  gio2-3.0.7
+  atk-3.0.7
+  pango-3.0.7
+  gdk_pixbuf2-3.0.7
+  cairo-gobject-3.0.7
+  gdk3-3.0.7
+  rsvg2-3.0.7
+  gtk3-3.0.7
+  gtksourceview3-3.0.7
 ```
 
 
