@@ -103,10 +103,11 @@ module Ruiby_dsl
           cr.fill
         end
         if color_fg
+          #p lxy
           cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color_fg))
-          cr.move_to(x0,y0)
-          poly.each_slice(2) {|x,y| cr.line_to(x,y) } 
-          cr.stroke  
+          cr.move_to(x0.round,y0.round)
+          poly.each_slice(2) {|x,y| cr.line_to(x.round,y.round) } 
+          cr.stroke()  
         end
     end
     def cv.draw_point(x,y,color=nil,width=nil)
