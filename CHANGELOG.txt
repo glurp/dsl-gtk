@@ -1,4 +1,9 @@
-3.10.1
+3.12.1
+    test.rb : edit all sources
+    Ruiby.gemspec : ruby version >= 2.1
+    README.md : update
+3.12.0 : 2016-04-21 15:12:41 +0200
+3.11.0 : 2016-04-21 14:55:22 +0200
     cal.rb : require Ruiby
     ruiby_threader.rb : get pending event queue size
     layouts.rb : fremei does stacki
@@ -495,8 +500,3 @@
     table2.rb : stack false obsolete
     make_doc.rb : create and include base64 image osnapshot of each exemple
     animtext.rb : snapshot
-    windows.rb : create snapshot and exit of option take-a-snapshot exists
-    ruiby_dsl3.rb : snapshot creation
-    doc.html : d
-    doc.html : doc
-    Rakefile.rb : make_doc on each commit
