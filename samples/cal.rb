@@ -1,8 +1,8 @@
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
 
-require_relative '../lib/Ruiby'
-
+#require_relative '../lib/Ruiby'
+require 'Ruiby'
 
 class RubyApp < Ruiby_gtk
     def initialize() super("Calendar",400,10)  end
