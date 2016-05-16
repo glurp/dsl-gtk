@@ -1,6 +1,43 @@
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
 
+=begin
+dsl 
+  image() ==> get_pixmap(file) + pix.scale ==> Img.new(pixbuf)
+  button("#") => htoolbar { toolbar_button() }
+  label("#")  => get_image_from(name)
+  
+get_image => (Image)
+    Image.new( get_pixmap )
+
+get_icon(n) ==> (Pixbuff)
+    get_pixmap(n) 
+
+get_pixmap ==> (Pixbuff)
+    ?< fn= famfamfam+fn >
+    Pixbuff.new(fn) | 
+    get_pixbuf("[]name") |
+    get_stockicon_pixbuf(name)
+    
+get_stockicon_pixbuf() ==>  (Pixbuff)
+   Gtk::IconTheme.default().load_icon |
+   Gtk::IconTheme.default().load_icon(GTK2ICONNAME[icn]) |
+   Gtk::IconTheme.default().load_icon("process-stop")
+   
+get_image_from(name) ( Image )
+  Image.new(file: name) |
+  _sub_image(name) |
+  Image.new(:pixbuf => get_icon(iname))
+  Image.new(:stock => get_icon(iname))
+
+_sub_image(name) ==>  ( Image )
+    Image.new(pixbuf: get_pixbuf(name))  
+
+get_pixbuf(name)  => ( Pixbuf )
+  Cache || Gdk::Pixbuf.new(filename) ||
+  get_stockicon_pixbuf(name)
+   
+=end
 module Ruiby_dsl
   ########################### raster images access #############################
   
@@ -10,15 +47,12 @@ module Ruiby_dsl
   
   def get_pixmap(name)
     if name=~ /^famfamfam/
-      p name
-      p Dir.glob("#{Ruiby::MEDIA}/#{name.split(/\s+/).join("*")}.png").to_a
-      name=Dir.glob("#{Ruiby::MEDIA}/#{name.split(/\s+/).join("*")}.png").to_a.first
-    end
+      name=Dir.glob("#{Ruiby::MEDIA}/#{name.split(/\s+/).join("*")}*").first
+    end    
     if name.index('.') 
       if File.exists?(name)
          @cach_pix||={}
          @cach_pix[name]=Gdk::Pixbuf.new(name) unless @cach_pix[name]
-         p @cach_pix[name]
          return @cach_pix[name]
       elsif name.index("[")
         return get_pixbuf(name)
@@ -34,14 +68,13 @@ module Ruiby_dsl
     end
   end
   
-  # get pixmap from Gtk stoc
   def get_stockicon_pixbuf(name)
     begin
       icn="#{name.downcase.gsub('_','-')}"
       return Gtk::IconTheme.default().load_icon(icn,16,0)
     rescue Exception => ee
        if GTK2ICONNAME[icn]
-        ( return Gtk::IconTheme.default().load_icon(GTK2ICONNAME[icn],16,0) ) rescue nil
+        ( return Gtk::IconTheme.default().load_icon(GTK2ICONNAME[icn],16,0) ) rescue error($!)
        end
        puts ee.inspect
       return Gtk::IconTheme.default().load_icon("process-stop",48,0)
@@ -71,8 +104,6 @@ module Ruiby_dsl
  "zoom-fit" => "zoom-fit-best" }
   # obsolete  
   def get_icon(name) get_pixmap(name) end
-  
-
   # get a Image widget from a file or from a Gtk::Stock or famfamfam embeded in Ruiby.
   # image can be a filename or a predefined icon in GTK::Stock or a famfamfam icon name (without .png)
   # for file image, whe can specify a sub image (sqared) :
