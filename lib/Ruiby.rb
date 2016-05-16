@@ -24,6 +24,7 @@ if RUBY_VERSION < "2.1.0"
   exit(-1)
 end
 require 'tmpdir'
+require 'timeout'
 require 'thread'
 require 'pathname'
 if ! defined?(Gtk) # caller can preload  gtk3/gtk2, at his own risk...
@@ -202,12 +203,14 @@ module Kernel
   # asking  permission is done for each gem. the output of 'gem install'
   # id show in ruiby log window
   def ruiby_require(*gems)
-    w=Ruiby_dialog.new
-    gems.flatten.each do|gem| 
+    w=nil
+    gems=gems.map {|g| g.split(/\s+/)}.flatten
+    gems.each do|gem| 
       begin
         require gem
       rescue LoadError 
-        rep=w.ask("Loading #{gems.join(', ')}\n\n'#{gem}' package is missing. Can I load it from internet ?")
+        w=Ruiby_dialog.new unless w
+        rep=Message.ask("Loading #{gems.join(', ')}\n\n'#{gem}' package is missing. Can I load it from internet ?")
         exit(0) unless rep
         Ruiby.update
         require 'open3'
@@ -219,21 +222,25 @@ module Kernel
           Thread.new { loop {q.push(se.gets) } rescue p $!; q.push(nil)}
           str=""
           while str
-            timeout(1) { str=q.pop } rescue p $!
+            (timeout(90) { str=q.pop } ) rescue p $!
             (w.log(str);str="") if str && str.size>0
-            w.log Time.now
             Ruiby.update						
           end
         }
         w.log "done!"
         Ruiby.update
         Gem.clear_paths() 
-        require(gem) 
-        w.log("loading '#{gem}' ok!")
-        Ruiby.update
+        begin
+          require(gem) 
+          w.log("loading '#{gem}' ok!")
+          Ruiby.update
+        rescue Exception => e
+          Message.alert("Gem #{gem} unknown ! #{e}")
+          exit(-1)
+        end
       end		
     end
-    w.destroy()
+    w.destroy() if w
     Ruiby.update
   end
   # run gtk mainloop with trapping gtk/callback error
