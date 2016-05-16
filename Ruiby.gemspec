@@ -31,6 +31,7 @@ EEND
 #  s.add_development_dependency  'gstreamer'
 #  s.add_development_dependency  'clutter-gtk'
 #  s.add_development_dependency  'clutter-gstreamer'
+   s.add_development_dependency 'bundle'
    s.add_development_dependency 'rake'
    s.add_development_dependency 'rspec'
    s.add_development_dependency 'simplecov'
