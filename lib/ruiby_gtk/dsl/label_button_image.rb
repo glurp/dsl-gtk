@@ -40,7 +40,7 @@ module Ruiby_dsl
   # option can specify a new size : :width and :height, or :size  (square image)
   def image(file,options={})
     im=if File.exists?(file)
-      pix=Gdk::Pixbuf.new(file) 
+      pix=get_pixmap(file)
       pix=pix.scale(options[:width],options[:height],Gdk::Pixbuf::INTERP_BILINEAR) if options[:width] && options[:height]
       pix=pix.scale(options[:size],options[:size],Gdk::Pixbuf::INTERP_BILINEAR)  if options[:size] 
       Image.new(pixbuf: pix)
@@ -59,8 +59,14 @@ module Ruiby_dsl
   # block argument is evaluate at button click
   def button(text,option={},&blk)
     if text && text[0,1]=="#"
-      b=Button.new(:label => "", :mnemonic => nil, :stock_id => nil)
-      b.set_image(get_image_from(text[1..-1]))
+      b=Button.new(:label => nil, :mnemonic => nil, :stock_id => nil);
+      text,tooltip=text[1..-1].split("//")
+      b.set_always_show_image(true)
+      b.set_image( get_image(text) )
+      if tooltip
+        b.has_tooltip= true
+        b.tooltip_text=tooltip  
+      end
     else
       b=Button.new(:label => text, :mnemonic => nil, :stock_id => nil);
     end
