@@ -46,6 +46,30 @@ module Ruiby_default_dialog
     end
     dialog.show_all	
   end
+  def promptSync(txt,value="") 
+     dialog = Dialog.new(
+      title: "Message",
+      parent: self,
+      flags: [Dialog::DESTROY_WITH_PARENT],
+      buttons: [ [Stock::OK,1], [:annulation,2] ]
+    )
+
+    label=Label.new(txt)
+    entry=Entry.new().tap {|e| e.set_text(value) }
+    dialog.vbox.add(label)
+    dialog.vbox.add(entry)
+    dialog.set_window_position(:center)
+    dialog.show_all	
+    
+    rep=dialog.run
+    response=entry.text
+    dialog.destroy
+    if block_given? && rep==1
+      yield(reponse)  
+    else
+      rep==1 ? response : nil
+    end
+  end
 
 
   # show a modal dialog, asking yes/no question, return boolean response
