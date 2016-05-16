@@ -176,7 +176,7 @@ module Ruiby_dsl
   
   def _create_log_window() 
     return(@loglabel) if defined?(@loglabel) && @loglabel && ! @loglabel.destroyed?
-   wdlog = Dialog.new(
+    wdlog = Dialog.new(
             title: "Logs #{$0}",
             parent: nil,
             flags: 0,
