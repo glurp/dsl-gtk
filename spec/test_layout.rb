@@ -24,7 +24,6 @@ describe Ruiby do
 		ici=nil
 		@win.create { ici=stack {  } }
 		ici.should be_a_kind_of(Gtk::Box)
-		ici.should be_a_kind_of(Gtk::Box)
 		ici.should be_a_kind_of(Gtk::Widget)
 	 end
 	 it "create a flow and check its presence" do
@@ -44,11 +43,13 @@ describe Ruiby do
 	 end
 	 it "create a left box" do
 		ici=nil
-		@win.create { stack {  left { } } }
+		@win.create { stack {  left { ici=button("ee") } } }
+    ici.should be_a_kind_of(Gtk::Button)
 	 end
 	 it "create a right box" do
 		ici=nil
-		@win.create { stack {  right { } } }
+		@win.create { stack {  right { ici=button("ee") } } }
+    ici.should be_a_kind_of(Gtk::Button)
 	 end
 	 it "create a  box with a background" do
 		ici=nil
@@ -256,6 +257,7 @@ EEND
      stack { }
     }
    end
+=begin
    if RUBY_PLATFORM =~ /in.*32/
      it "make a snapshot" do
       File.delete("/tmp/ici.png") if File.exists?("/tmp/ici.png")
@@ -268,6 +270,6 @@ EEND
       File.delete("/tmp/ici.png")
     end
    end
+=end 
  end
- 
 end
