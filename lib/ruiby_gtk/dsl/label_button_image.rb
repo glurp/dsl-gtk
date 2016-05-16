@@ -61,7 +61,6 @@ module Ruiby_dsl
     if text && text[0,1]=="#"
       b=Button.new(:label => nil, :mnemonic => nil, :stock_id => nil);
       text,tooltip=text[1..-1].split("//")
-      b.set_always_show_image(true)
       b.set_image( get_image(text) )
       if tooltip
         b.has_tooltip= true
