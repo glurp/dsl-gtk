@@ -21,16 +21,20 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 3.10.0 !!   13-02-2016 : Creation of component
-
+NEW : 3.13.0 !!   16-05-2016 : 
+* ruiby_require working: is a gem is not installed, ask to user if installation, do it, and reload
+* Stock icones and famfamfam correction: label/button/image are now working with stocknameen famfamfam name
+* Samples/icones.rb creation: search/show an incon in Gtk Stock/embeded famfamfam 
+* force gtk 3.0.7 ( 3.0.8 has a big bug on DrawingArea resize...). if 3.0.8 is needed , intall it manually
+  (3.0.8 has mose callback with mouse position working on DrawingArea, better demos, ...)
 
 TODO  :
 
 * [ ] Gadget api: actual gadgets are cairo drawing => to be encapsuled
 * [ ] refactor samples demos with last improve: dynvar/autoslot...
 * [ ] resolve 100% gtk3 deprecated warning
-* [ ] corrections in ruiby_require(?)
-* [ ] complete treeview and tree_grid,
+* [x] corrections in ruiby_require(?)
+* [x] complete treeview and tree_grid,
 * [ ] complete rspec => 99% coverage ?
 
 
