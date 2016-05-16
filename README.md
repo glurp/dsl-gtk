@@ -68,7 +68,7 @@ Install Ruby 2.x
 
 Here a working gem config on windows (17-Feb-2016, ruby 2.0.0p0) :
 ```
-  cairo-1.14.1
+  cairo-1.15.2
   glib2-3.0.7
   gobject-introspection-3.0.7
   gio2-3.0.7
