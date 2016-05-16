@@ -34,6 +34,11 @@ require_relative 'dsl/editors.rb'
 require_relative 'dsl/list_grid.rb'
 require_relative 'dsl/menus_popup.rb'
 require_relative 'dsl/table.rb'
+module Kernel
+  def __(filter=//)
+     $__mainwindow__.show_methods(self,filter)
+  end
+end
 
 module Ruiby_dsl
 
@@ -262,7 +267,7 @@ module Ruiby_dsl
       _accept?(:toolb)
       iname=get_icon(name)
       
-      w=Gtk::ToolButton.new(icon_widget: Image.new(pixbuf: get_pixmap(name)))
+      w=Gtk::ToolButton.new(icon_widget: get_image(name) )
       w.signal_connect("clicked") { blk.call rescue error($!) } if blk
       w.set_tooltip_text(tooltip) if tooltip
       
