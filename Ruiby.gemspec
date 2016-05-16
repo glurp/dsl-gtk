@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.email    = "regis.aubarede@gmail.com"
   
   s.version  = File.read("VERSION").strip
-  s.required_ruby_version = '>= 2.1'
+  s.required_ruby_version = '>= 2.2'
   s.date     = Time.now.to_s.split(/\s+/)[0]
   s.summary  = "A  DSL for building GUI ruby/gtk application"
   s.description = <<EEND
@@ -31,7 +31,7 @@ EEND
 #  s.add_development_dependency  'gstreamer'
 #  s.add_development_dependency  'clutter-gtk'
 #  s.add_development_dependency  'clutter-gstreamer'
-   s.add_development_dependency 'bundle'
+   s.add_development_dependency 'bundler'
    s.add_development_dependency 'rake'
    s.add_development_dependency 'rspec'
    s.add_development_dependency 'simplecov'
