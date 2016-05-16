@@ -15,9 +15,9 @@ Ruiby.app(:width=> 800, :height=>800) do
 		table(3,ARGV.size) do
 			ARGV.each { |fn| 
 				row { 
-					cell( w=label( "#"+fn ) )
-					cell(flow(false) { properties(fn,get_config(w.pixbuf))  if w.pixbuf })
-					cell(flow(false) { properties(fn,get_config(w),{:scroll => [300,100]})})
+					cell( w=image( fn ) )
+					#cell(box { properties(fn,get_config(w.pixbuf))  if w.pixbuf })
+					cell(box { properties(fn,get_config(w),{:scroll => [300,100]})})
 				}
 			}
 		end
