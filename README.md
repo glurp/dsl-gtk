@@ -21,7 +21,7 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 3.14.0 !!   é'-05-2016 : 
+NEW : 3.14.0 !!   24-05-2016 : 
 * stop EM at app destroy
 * ruiby_require working: if a gem is not installed, ask to user if installation, do it, and reload it
 * Stock icones and famfamfam correction: label/button/image are now working with stock names and famfamfam names
