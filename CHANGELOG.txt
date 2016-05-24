@@ -1,4 +1,19 @@
-3.12.1
+3.13.1
+    icones.rb : window size
+    windows.rb : stop event Machine at window destroy
+    README.md : update
+3.13.0 : 2016-05-16 13:37:43 +0200
+    test_layout.rb : left/right test
+    test.rb : refactoring notepad
+    images.rb : coorected
+    ruiby_dsl3.rb : ToolButton gtk3
+    ruiby_default_dialog3.rb : propteSync() creation
+    pixmap.rb : get_pixmap corrected for Label/Button/Image
+    label_button_image.rb : image on Button/Image corrected, with tooltips
+    commands.rb : log window with title
+    Ruiby.rb : ruiby_require corrected
+    Ruiby.gemspec : force 3.0.7 gtk version
+3.12.0 : 2016-04-21 15:16:02 +0200
     test.rb : edit all sources
     Ruiby.gemspec : ruby version >= 2.1
     README.md : update
@@ -485,18 +500,3 @@
     README.md : update
     ruiby_dsl3.rb : combobox with bloc on selection
     windows.rb : n
-    ruiby_dsl3.rb : background container
-    marianne.rb : white background, news separator
-    ruiby_dsl3.rb : options on pclickable
-    test_include.rb : correction take-a-snapshot
-    windows.rb : snapshot
-0.121.0 : 2013-08-27 21:22:08 +0200
-    ruiby_dsl3.rb : left and right creation
-    test_include.rb : q
-    test_include.rb : snapshot
-    make_doc.rb : order ex
-    README.md : doc via rawgithub
-    test_systray.rb : no style
-    table2.rb : stack false obsolete
-    make_doc.rb : create and include base64 image osnapshot of each exemple
-    animtext.rb : snapshot
