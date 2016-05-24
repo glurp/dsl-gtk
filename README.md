@@ -36,6 +36,7 @@ TODO  :
 * [x] Create a icone selector for helping to find good icone
 * [x] corrections in ruiby_require(?)
 * [x] complete treeview and tree_grid,
+* [x] EM integration test
 * [ ] Gadget api: actual gadgets are cairo drawing => to be encapsuled
 * [ ] refactor samples demos with last improve: dynvar/autoslot...
 * [ ] resolve 100% gtk3 deprecated warning
