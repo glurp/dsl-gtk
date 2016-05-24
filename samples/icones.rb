@@ -23,9 +23,21 @@ Ruiby.app width: 300, height: 120, title: "Predefined icones (Stock GTK)" do
       alert("no found *#{@e.text}*")
       return
     end
+    if l.size > 500
+      alert("Sory too many choice *#{l.size} !!!")
+      return
+    end
+    if l.size < 500
+       clear_append_to(@data) {
+          l.sort.map { |name|  
+            (flow { labeli "#"+name ; entry(name)  } rescue nil) 
+          }         
+       }
+       return
+    end
     dialog {
       stack {
-        scrolled(300,200) do
+        scrolled(300,500) do
           l.sort.map { |name|  
             (flow { labeli "#"+name ; entry(name)  } rescue nil) 
           } 
@@ -52,13 +64,7 @@ Ruiby.app width: 300, height: 120, title: "Predefined icones (Stock GTK)" do
     @licones_name = (Gtk::IconTheme.default.icons + limg).sort
     limg= limg.each_slice(limg.size/2).to_a
     scrolled(400,500) do
-      flow { 
-        stacki { limg[0].each { |name| ent(name) } }
-        stacki { limg[1].each { |name| ent(name) } }
-        stack {Gtk::IconTheme.default.icons.sort.map { |name|  
-          ent(name) if name.to_s !~ /symbolic/
-        } } 
-      }
-    end if false
+       @data=get_current_container
+    end 
   end
 end
