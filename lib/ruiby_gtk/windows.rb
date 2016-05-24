@@ -21,8 +21,9 @@ class Ruiby_gtk < Gtk::Window
     # set quit handler    
     signal_connect "destroy" do 
         if @is_main_window
+          (EM.stop rescue nil) if defined?(EM) 
           @is_main_window=false
-          Gtk.main_quit
+          Gtk.main_quit rescue nil
         end
     end
     # set default icon for application
