@@ -27,6 +27,7 @@ NEW : 3.13.0 !!   16-05-2016 :
 * Samples/icones.rb creation: search/show an incon in Gtk Stock/embeded famfamfam 
 * force gtk 3.0.7 ( 3.0.8 has a big bug on DrawingArea resize, so all gadgets scratchs...). 
 if 3.0.8 is needed , intall it manually  (3.0.8 has callback with mouse position working on DrawingArea, better demos, ...)
+* travis pass ...!
 
 TODO  :
 
