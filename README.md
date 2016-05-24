@@ -34,7 +34,7 @@ TODO  :
 
 * [x] Stock and famfamfam bug for default icones
 * [x] Create a icone selector for helping to find good icone
-* [x] corrections in ruiby_require(?)
+* [x] corrections in ruiby_require
 * [x] complete treeview and tree_grid,
 * [x] EM integration test
 * [ ] Gadget api: actual gadgets are cairo drawing => to be encapsuled
