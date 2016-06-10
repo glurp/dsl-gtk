@@ -197,5 +197,5 @@ class Message
   def self.alert(*txt) Embbeded.new.alert(*txt) end
   def self.error(*txt) Embbeded.new.error(*txt) end
   def self.ask(*txt)   Embbeded.new.ask(*txt)   end
-  def self.prompt(txt,value="")  Embbeded.new.alert(*txt) end
+  def self.prompt(txt,value="")  Embbeded.new.promptSync(txt,value) end
 end

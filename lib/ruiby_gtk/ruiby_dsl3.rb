@@ -311,6 +311,17 @@ module Ruiby_dsl
           separator
        end
   end
+  def button_left_icon_text(icon,text="",options={},&b)
+       if icon !~ /^sep/
+          spacei
+          pclickablie(proc { b.call  }) { flowi { 
+              label("#"+icon,{isize: (options[:isize] || :dialog) }) 
+              label(text,options)
+         } }
+       else
+          separator
+       end
+  end
   
   # show methods of a object/class in log window
   def show_methods(obj=nil,filter=nil)
@@ -384,24 +395,24 @@ module Ruiby_dsl
     widget.instance_variable_set(:@prop_current,prop_current)   
     widget.instance_variable_set(:@hash_initial,hash)   
     def widget.set_data(newh)
-    newh.each { |k,v| @prop_current[k].text=v.to_s }
-  end
-  def widget.get_data()
-  @prop_current.inject({}) {|nhash,(k,w)| 
-    v_old=@hash_initial[k]
-    v_new=w.text
-    vbin=case v_old 
-      when String then v_new
-      when Fixnum then v_new.to_i
-      when Float  then v_new.to_f
-      when /^(\[.*\])|(\{.*\})$/ then eval( v_new ) rescue error($!)
-      else v_new.to_s
+      newh.each { |k,v| @prop_current[k].text=v.to_s }
     end
-    nhash[k]=vbin
-    nhash
-  }
-  end
-  widget
+    def widget.get_data()
+      @prop_current.inject({}) {|nhash,(k,w)| 
+      v_old=@hash_initial[k]
+      v_new=w.text
+      vbin=case v_old 
+        when String then v_new
+        when Fixnum then v_new.to_i
+        when Float  then v_new.to_f
+        when /^(\[.*\])|(\{.*\})$/ then eval( v_new ) rescue error($!)
+        else v_new.to_s
+      end
+      nhash[k]=vbin
+      nhash
+      }
+    end
+    widget
   end
 
 

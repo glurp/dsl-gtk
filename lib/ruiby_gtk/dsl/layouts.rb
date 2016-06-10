@@ -407,6 +407,23 @@ module Ruiby_dsl
     dialog.destroy
     rep==-3
   end
+  def panel(title="") 
+    dialog = Dialog.new(
+      title: title,
+      parent: self,
+      buttons: []
+    )
+      
+    @lcur << dialog.child
+    hbox=stack { yield(dialog) }
+    @lcur.pop
+    
+    dialog.set_window_position(:center)
+    Ruiby.apply_provider(dialog.child)
+    dialog.show_all 
+    rep=dialog.run  #  blocked
+    dialog.destroy
+  end
   
   # a dialog without default buttons
   # can be synchrone (block the caller until wndow destroyed)
