@@ -21,22 +21,12 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 3.14.0 !!   24-05-2016 : 
-* stop EM at app destroy
-* ruiby_require working: if a gem is not installed, ask to user if installation, do it, and reload it
-* Stock icones and famfamfam correction: label/button/image are now working with stock names and famfamfam names
-* Samples/icones.rb creation: search/show an incon in Gtk Stock/embeded famfamfam 
-* force gtk 3.0.7 ( 3.0.8 has a big bug on DrawingArea resize, so all gadgets scratchs...). 
-if 3.0.8 is needed , intall it manually  (3.0.8 has callback with mouse position working on DrawingArea, better demos, ...)
-* travis pass ...!
+NEW : 3.15.0 !!   10-06-2016 : 
+* force gtk 3.0.7 ( 3.0.8 has a big bug on DrawingArea resize, so all gadgets cratchs...). 
+* pannel {} for dialog Synchron
 
 TODO  :
 
-* [x] Stock and famfamfam bug for default icones
-* [x] Create a icone selector for helping to find good icone
-* [x] corrections in ruiby_require
-* [x] complete treeview and tree_grid,
-* [x] EM integration test
 * [ ] Gadget api: actual gadgets are cairo drawing => to be encapsuled
 * [ ] refactor samples demos with last improve: dynvar/autoslot...
 * [ ] resolve 100% gtk3 deprecated warning
