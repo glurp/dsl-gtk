@@ -21,9 +21,9 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 3.15.0 !!   10-06-2016 : 
+NEW : 3.16.0 !!   13-06-2016 : 
 * force gtk 3.0.7 ( 3.0.8 has a big bug on DrawingArea resize, so all gadgets cratchs...). 
-* pannel {} for dialog Synchron
+* pannel {} for dialog synchrone witout buttons
 * add icons set: Farm Fresh and Crystal
 
 TODO  :
