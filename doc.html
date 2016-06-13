@@ -189,7 +189,7 @@ hdoc['get_image']= '<div class="api"><br>def get_image(name)</div><div>Creative 
 hdoc['get_pixmap']= '<div class="api"><br>def get_pixmap(name)</div><div></div>';
 hdoc['get_stockicon_pixbuf']= '<div class="api"><br>def get_stockicon_pixbuf(name)</div><div></div>';
 hdoc['get_icon']= '<div class="api"><br>def get_icon(name)</div><div>obsolete  <br></div>';
-hdoc['get_image_from']= '<div class="api"><br>def get_image_from(name,size=:button)</div><div>get a Image <a href=#widget>widget</a> from a file or from a Gtk::Stock or famfamfam embeded in Ruiby.<br><a href=#image>image</a> can be a filename or a predefined icon in GTK::Stock or a famfamfam icon <a href=#name>name</a> (without .png)<br>for file <a href=#image>image</a>, whe can specify a sub <a href=#image>image</a> (sqared) :<br>filename.png[NoCol , NoRow]xSize<br>filename.png[3,2]x32 : extract a icon of 32x32 pixel size from third column/second line<br>see samples/draw.rb<br></div>';
+hdoc['get_image_from']= '<div class="api"><br>def get_image_from(name,size=:button)</div><div>get a Image <a href=#widget>widget</a> from a file or from a Gtk::Stock or famfamfam/crystal embeded in Ruiby.<br><a href=#image>image</a> can be a filename or a predefined icon in GTK::Stock or a famfamfam/crystal icon <a href=#name>name</a> (without .png)<br>for file <a href=#image>image</a>, whe can specify a sub <a href=#image>image</a> (sqared) :<br>filename.png[NoCol , NoRow]xSize<br>filename.png[3,2]x32 : extract a icon of 32x32 pixel size from third column/second line<br>see samples/draw.rb<br></div>';
 hdoc['get_pixbuf']= '<div class="api"><br>def get_pixbuf(name)</div><div></div>';
 hdoc['script']= '<div class="api"><br>def script(caption="Parameters",nb_column=2,hctx=nil)</div><div>Creative Commons BY-SA :  Regis dAubarede <regis.aubarede@gmail.com><br>LGPL<br> script <br>define a hmi corresponding to a script command.<br>see samples/script.rb<br>the layout created contains three zones: <br><li> parameters : a set of <a href=#entry>entry</a>, created with a DynObject which descriptor is hctx<br><li> <a href=#button>button</a> zone : a <a href=#table>table</a> of widgets. <a href=#widget>widget</a> are created with bloc traitment,<br><li> a <a href=#log>log</a> zone : scolling area on text, appended with <a href=#log>log</a>() commande<br><li> bottom fixed buttons : <a href=#clear>clear</a> <a href=#log>log</a> and exit.<br></div>';
 hdoc['exe']= '<div class="api"><br>def exe(cmd,to=nil)</div><div><a href=#execute>execute</a> a asynchonous system command, as done in a shell.<br>output goes to <a href=#log>log</a>, pid of process is in $ruiby_script_pid<br>on linux/unix host, exe() use PTY gem , on Windows it use popen3<br>to parameter is timeout of IO.select which wait for stdout output.<br></div>';
@@ -319,8 +319,8 @@ function popup(word) {
  </head>
 <body>
 <div class='title'>Ruiby DSL Documentation</div>
-Ruiby Version: 3.14.0<br>
-Generated at : 2016-06-10 13:33:19 +0200<br>
+Ruiby Version: 3.15.0<br>
+Generated at : 2016-06-13 13:26:20 +0200<br>
 <a href="#code">See code example</a>
 <hr>
 <center>Search : <input type='input' value="" size='80' onchange='doSearch(this.value);'></center>
@@ -691,7 +691,7 @@ Generated at : 2016-06-10 13:33:19 +0200<br>
 
 <div class='atitle'><a name='get_image_from'>get image from</a></div>
 <div class='api'>def get_image_from(name,size=:button)</div>
-<div class='descr'>get a Image <a href='#widget'>widget</a> from a file or from a Gtk::Stock or famfamfam embeded in Ruiby.<br><a href='#image'>image</a> can be a filename or a predefined icon in GTK::Stock or a famfamfam icon <a href='#name'>name</a> (without .png)<br>for file <a href='#image'>image</a>, whe can specify a sub <a href='#image'>image</a> (sqared) :<br>filename.png[NoCol , NoRow]xSize<br>filename.png[3,2]x32 : extract a icon of 32x32 pixel size from third column/second line<br>see samples/draw.rb<br> <a href='#ex_get_image_from'>ex</a></div>
+<div class='descr'>get a Image <a href='#widget'>widget</a> from a file or from a Gtk::Stock or famfamfam/crystal embeded in Ruiby.<br><a href='#image'>image</a> can be a filename or a predefined icon in GTK::Stock or a famfamfam/crystal icon <a href='#name'>name</a> (without .png)<br>for file <a href='#image'>image</a>, whe can specify a sub <a href='#image'>image</a> (sqared) :<br>filename.png[NoCol , NoRow]xSize<br>filename.png[3,2]x32 : extract a icon of 32x32 pixel size from third column/second line<br>see samples/draw.rb<br> <a href='#ex_get_image_from'>ex</a></div>
 
 <div class='atitle'><a name='get_line'>get line</a></div>
 <div class='api'>def get_line()</div>
