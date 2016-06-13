@@ -60,7 +60,7 @@ Ruiby.app width: 300, height: 120, title: "Predefined icones (Stock GTK)" do
       buttoni("#famfamfam/bullet_go") { do_dialog() }
       (after(10) { do_dialog() } )  if ARGV.size>0 
     end
-    limg=Dir.glob("#{Ruiby::MEDIA}/famfamfam/**/*.png").map {|f| f.gsub("#{Ruiby::MEDIA}/","").split(".").first }
+    limg=Dir.glob("#{Ruiby::MEDIA}/**/*.png").map {|f| f.gsub("#{Ruiby::MEDIA}/","").split(".").first }
     @licones_name = (Gtk::IconTheme.default.icons + limg).sort
     limg= limg.each_slice(limg.size/2).to_a
     scrolled(400,500) do

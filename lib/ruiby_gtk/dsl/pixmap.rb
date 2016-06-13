@@ -46,7 +46,7 @@ module Ruiby_dsl
   end
   
   def get_pixmap(name)
-    if name=~ /^famfamfam/
+    if name=~ /^(famfamfam|crystal|farmfresh)/
       name=Dir.glob("#{Ruiby::MEDIA}/#{name.split(/\s+/).join("*")}*").first
     end    
     if name.index('.') 
@@ -104,8 +104,8 @@ module Ruiby_dsl
  "zoom-fit" => "zoom-fit-best" }
   # obsolete  
   def get_icon(name) get_pixmap(name) end
-  # get a Image widget from a file or from a Gtk::Stock or famfamfam embeded in Ruiby.
-  # image can be a filename or a predefined icon in GTK::Stock or a famfamfam icon name (without .png)
+  # get a Image widget from a file or from a Gtk::Stock or famfamfam/crystal embeded in Ruiby.
+  # image can be a filename or a predefined icon in GTK::Stock or a famfamfam/crystal icon name (without .png)
   # for file image, whe can specify a sub image (sqared) :
   #     filename.png[NoCol , NoRow]xSize
   #     filename.png[3,2]x32 : extract a icon of 32x32 pixel size from third column/second line
