@@ -24,6 +24,7 @@ Status
 NEW : 3.15.0 !!   10-06-2016 : 
 * force gtk 3.0.7 ( 3.0.8 has a big bug on DrawingArea resize, so all gadgets cratchs...). 
 * pannel {} for dialog Synchron
+* add icons set: Farm Fresh and Crystal
 
 TODO  :
 
@@ -40,27 +41,26 @@ Installation
 ============
 1) system
 
-Install Ruby 2.x
+Install Ruby 2.x  #  x>0
 
 
 2) install Ruiby
-(Ruiby install ruby-gtk3 which install gtk3 libs)
-
+(```gem install Ruiby``` will install ruby-gtk3 which install gtk3 libs)
 ```
 > gem install Ruiby
+```
 
+Test it:
+
+```
 > ruiby_demo             # check good installation with gtk3 (default)
 > ruiby_sketchi          # write and test ruiby code
 ```
-3) if you need video/gstreamer, install gst/clutter :
-```
-  > gem install gstreamer
-  > gem install clutter-gtk
-  > gem install clutter-gstreamer
-```
 
-Here a working gem config on windows (17-Feb-2016, ruby 2.0.0p0) :
+
+Here a working gem config on windows (10-Jun-2016, Ruby 2.2.4p230) :
 ```
+  pkg-config-1.1.7
   cairo-1.15.2
   glib2-3.0.7
   gobject-introspection-3.0.7
@@ -121,7 +121,8 @@ end
 Ruiby.start { Win.new("application title",350,10) }
 ```
 
-Autonomous DSL, for  little application :
+Autonomous DSL, for  little application (most of demo in samples/ are
+done with this patern) :
 
 ```ruby
 require  'Ruiby'
@@ -218,65 +219,6 @@ Ruiby.start { App.new }
 
 ```
 
-Component
-=========
-Ruiby is not realy object : most of DSL words are simple method in Ruby_dsl module.
-
-Sometime, this is not good enaugh :
-* when a compenent must have many specifique methods
-* when component have (model) state : variable member must be used
-
-So Component concept has been added (Fev 2016).It authorise to define a
-class, childr of AbstractComponent, which can be used by a dsl Word.
-
-Components code seem very close to a Ruiby window : free constructor, 
-define ```component()``` method for draw the widgets
-
-Create a component:
-```ruby
-class AAA < AbstractComposant
-   def initialize(name)
-      @name= name
-      @state=1
-   end
-   def component() 
-    framei("Component Comp:#{@name}") do
-      label_clickable("B#{@name}...") { @state=2 }
-      entry(@name,4)
-    end
-   end
-   def get_state() @state end
-end
-```
-
-Define a word which instantiate a composant of class AAA:
-```ruby
-module Ruiby_dsl
-  def aaa(*args)
-    c=install_composant(self,AAA.new(*args))
-  end
-end
-```
-
-Use the component:
-```ruby
-        c=nil
-        stack {
-           c=aaa "foo"
-           flowi { aaa 1; aaa 2 }
-        }
-        button("?") { alert( c.get_state() ) }
-```
-
-A demo is at ```samples/composant.rb```.
-
-TODO:
-* Canvas and Plot must be converted to Component, soon :)
-* Define ```destroy()```
-* Hook for auto-generate dsl word
-* Test Stock, Dynvar, threading, 
-* Tests, tests, test...
-
 
 Observed Object/Variable
 ========================
@@ -369,12 +311,74 @@ instantiate with an object persistant ID
   ....
 ```
 
+Component
+=========
+Ruiby is not realy object : most of DSL words are simple method in Ruby_dsl module.
+
+Sometime, this is not good enaugh :
+* when a compenent must have many specifique methods
+* when component have (model) state : variable member must be used
+
+So Component concept has been added (Fev 2016).It authorise to define a
+class, childr of AbstractComponent, which can be used by a dsl Word.
+
+Components code seem very close to a Ruiby window : free constructor, 
+define ```component()``` method for draw the widgets
+
+Create a component:
+```ruby
+class AAA < AbstractComposant
+   def initialize(name)
+      @name= name
+      @state=1
+   end
+   def component() 
+    framei("Component Comp:#{@name}") do
+      label_clickable("B#{@name}...") { @state=2 }
+      entry(@name,4)
+    end
+   end
+   def get_state() @state end
+end
+```
+
+Define a word which instantiate a composant of class AAA:
+```ruby
+module Ruiby_dsl
+  def aaa(*args)
+    c=install_composant(self,AAA.new(*args))
+  end
+end
+```
+
+Use the component:
+```ruby
+        c=nil
+        stack {
+           c=aaa "foo"
+           flowi { aaa 1; aaa 2 }
+        }
+        button("?") { alert( c.get_state() ) }
+```
+
+A demo is at ```samples/composant.rb```.
+
+TODO:
+* Canvas and Plot must be converted to Component, soon :)
+* Define ```destroy()```
+* Hook for auto-generate dsl word
+* Test Stock, Dynvar, threading, 
+* Tests, tests, test...
+
 
 License
 =======
-LGPL, CC BY-SA
+Ruiby                   : LGPL, CC BY-SA
+fafamfam rasters images : CC Attribution 4.0 http://www.famfamfam.com/
+Crystal Clear icon set  : LGPL 
+Farm Fresh icon set     :  CC Attribution 3.0 License http://www.fatcow.com/free-icons
 
 Exemples
 ========
-see samples in "./samples" directory (run all.rb)
-cd sampSee at end of Doc reference : [Ex.](https://rawgithub.com/glurp/Ruiby/master/doc.html#code)
+See samples in "./samples" directory (run all.rb)
+See at end of Doc reference : [Ex.](https://rawgithub.com/glurp/Ruiby/master/doc.html#code)
