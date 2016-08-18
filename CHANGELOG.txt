@@ -1,3 +1,7 @@
+3.16.1
+    README.md : update
+3.16.0 : 2016-06-13 13:26:21 +0200
+3.15.0 : 2016-06-10 13:33:20 +0200
 3.14.0 : 2016-05-24 16:21:28 +0200
     icones.rb : window size
     windows.rb : stop event Machine at window destroy
@@ -496,6 +500,3 @@
     ruiby_dsl3.rb : list selection set/reset/callback
     doc.html : update
     README.md : updated
-0.122.0 : 2013-08-30 16:06:59 +0200
-    README.md : update
-    ruiby_dsl3.rb : combobox with bloc on selection
