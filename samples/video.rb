@@ -3,6 +3,17 @@ require_relative '../lib/Ruiby'
 # Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 # LGPL
 
+require "gst"
+require "clutter-gtk" 
+require "clutter-gst" 
+Gem.loaded_specs.each {|name,gem| puts "  #{gem.name}-#{gem.version}"} 
+
+p ClutterGst
+p ClutterGst.constants
+p ClutterGst.included_modules
+p ClutterGst.methods.sort
+exit(0)
+
 Ruiby.app width: 600,height: 400 do
   video_file= ARGV[0] || "d:/usr/XT.avi"
   set_title(video_file)
@@ -14,7 +25,7 @@ Ruiby.app width: 600,height: 400 do
     flowi {
       buttoni("  Start  ") {  @v.play }
       buttoni("  Stop  ") {  @v.stop }
-      @prog=slider(0,0,100.0) { |pos| @v.progress= pos/100.0}
+      #@prog=slider(0,0,100.0) { |pos| @v.progress= pos/100.0}
       buttoni("  Exit  ") { exit!(0) }
     }
   end
