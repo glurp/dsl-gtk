@@ -23,8 +23,8 @@ EEND
   s.bindir        = "bin"
   s.executables   = `ls bin/*`.split("\n").map{ |f| File.basename(f) }
 
-  s.add_runtime_dependency  'gtk3',          '= 3.0.7'  # too many bug with 3.0.8 ...
-  s.add_runtime_dependency  'gtksourceview3','= 3.0.7'
+  #s.add_runtime_dependency  'gtk3',          '= 3.0.7' 
+  #s.add_runtime_dependency  'gtksourceview3','= 3.0.7'
   
 
   
