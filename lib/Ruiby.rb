@@ -62,7 +62,9 @@ module Ruiby
     Gtk.main_iteration while Gtk.events_pending?  
   end
   def self.gtk_version(major)
+    p "executing Gtk::Version.or_later? ..." 
     Gtk::Version.or_later?(major, 0, 0)
+    p ".or_later done."
   end
   def self.make_doc_api()
       lfile=Dir.glob(DIR+"/**/*dsl*.rb")
