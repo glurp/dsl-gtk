@@ -457,8 +457,9 @@ module Ruiby_dsl
     require "gst"
     require "clutter-gtk"  # gem install clutter-gtk
     require "clutter-gst"  # gem install clutter-gstreamer
+    ClutterGst::VideoTexture.new
     rescue
-      error("Please install gstreamer, clutter-gtk, clutter-gstreamer")
+      error("Not ready for Clutter/Gstreame...")
       return button("no video")
     end
     p 1
