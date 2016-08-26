@@ -187,7 +187,7 @@ end
 
 
 #require_relative 'ruiby_gtk/ruiby_default_dialog.rb'
-require_relative(Ruiby.gtk_version(2) ? 'ruiby_gtk/ruiby_dsl.rb' : 'ruiby_gtk/ruiby_dsl3.rb')
+require_relative('ruiby_gtk/ruiby_dsl3.rb')
 require_relative 'ruiby_gtk/ruiby_threader.rb'
 require_relative 'ruiby_gtk/windows.rb'
 require_relative 'ruiby_gtk/component.rb'
