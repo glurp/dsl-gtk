@@ -1,3 +1,5 @@
+3.17.2
+    Ruiby.gemspec : gtk3 dependecie
 3.17.1
     Ruiby.rb : gtk_version with Gtk::Version.or_later?
 3.17.0 : 2016-08-18 13:17:08 +0200
@@ -498,5 +500,3 @@
     ruiby_dsl3.rb : popup position, html_color
     test.rb : list callback test
     all.rb : Gui for the script
-    windows.rb : snapshot in subdir
-    ruiby_dsl3.rb : list selection set/reset/callback
