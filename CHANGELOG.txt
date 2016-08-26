@@ -1,4 +1,7 @@
-3.17.2
+3.19.1
+    Ruiby.rb : gtk3 only
+3.19.0 : 2016-08-26 23:56:10 +0200
+3.18.0 : 2016-08-26 23:55:33 +0200
     Ruiby.gemspec : gtk3 dependecie
 3.17.1
     Ruiby.rb : gtk_version with Gtk::Version.or_later?
@@ -497,6 +500,3 @@
     doc.html : u
     test.rb : poup test
     make_doc.rb : nop
-    ruiby_dsl3.rb : popup position, html_color
-    test.rb : list callback test
-    all.rb : Gui for the script
