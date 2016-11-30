@@ -23,8 +23,8 @@ EEND
   s.bindir        = "bin"
   s.executables   = `ls bin/*`.split("\n").map{ |f| File.basename(f) }
 
-   s.add_runtime_dependency  'gtk3'
-   s.add_runtime_dependency  'gtksourceview3'
+  s.add_runtime_dependency  'gtk3'
+  s.add_runtime_dependency  'gtksourceview3'
   
 
   
