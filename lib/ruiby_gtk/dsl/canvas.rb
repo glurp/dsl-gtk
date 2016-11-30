@@ -126,6 +126,7 @@ module Ruiby_dsl
         end
         cr.move_to(0,0)
         cr.show_text(text) 
+        cr.fill
       }
     end
     def cv.draw_varbarr(x0,y0,x1,y1,dmin,dmax,lvalues0,width,&b)
@@ -161,6 +162,7 @@ module Ruiby_dsl
         end
         cr.move_to(-a.width,0)
         cr.show_text(text) 
+        cr.fill
       }
     end
     def cv.draw_text_center(x,y,text,scale=1,color=nil,bgcolor=nil)
@@ -175,6 +177,7 @@ module Ruiby_dsl
         end
         cr.move_to(-a.width/2.0,0)
         cr.show_text(text) 
+        cr.fill
       }
     end
     def cv.draw_rectangle(x0,y0,w,h,r=0,colorStroke=nil,colorFill=nil,widthStroke=nil)
