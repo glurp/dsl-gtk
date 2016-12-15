@@ -16,7 +16,7 @@ if they detect a invocation out of main thread, they auto-recall in a gui_invoke
 
 =end
 
-require_relative 'ruiby_default_dialog3'
+require_relative 'ruiby_default_dialog3.rb'
 module Ruiby_dsl
   include ::Gtk
   include ::Ruiby_default_dialog
@@ -30,6 +30,7 @@ require_relative 'dsl/form_fields.rb'
 require_relative 'dsl/script.rb'
 
 require_relative 'dsl/canvas.rb'
+require_relative 'dsl/plot.rb'
 require_relative 'dsl/editors.rb'
 require_relative 'dsl/list_grid.rb'
 require_relative 'dsl/menus_popup.rb'
