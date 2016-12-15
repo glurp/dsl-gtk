@@ -3,7 +3,10 @@
 3.19.0 : 2016-08-26 23:56:10 +0200
 3.18.0 : 2016-08-26 23:55:33 +0200
     Ruiby.gemspec : gtk3 dependecie
-3.17.2
+3.17.3
+    ruiby_dsl3.rb : add reqire plot.rb
+    canvas.rb : correction doc on cv.draw*
+    Ruiby.rb : adde require default_dialog
     canvas.rb : fill drawing text tools
     Ruiby.rb : supression gtk2
     Ruiby.gemspec : updates
@@ -501,6 +504,7 @@
     test_composites.rb : selection in list
     test_basics_widget.rb : image test
     doc.html : u
+<<<<<<< HEAD
     test.rb : poup test
 <<<<<<< HEAD
     make_doc.rb : nop
@@ -508,4 +512,7 @@
     make_doc.rb : nop
     ruiby_dsl3.rb : popup position, html_color
     test.rb : list callback test
+>>>>>>> update
+=======
+    test.rb : poup test
 >>>>>>> update
