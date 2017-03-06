@@ -385,9 +385,9 @@ module Ruiby_dsl
       eb.add(tv)
       eb.define_singleton_method(:text_area) { tv }
       class << eb
-      ; def text=(a)  self.children[0].buffer.text=a.to_s.encode("UTF-8") end
+      ; def text=(a)  self.children[0].buffer.text=a.to_s.encode("UTF-8",'binary', invalid: :replace, undef: :replace, replace: '?') end
       ; def text()    self.children[0].buffer.text end
-      ; def append(a) self.children[0].buffer.text+=a.to_s.encode("UTF-8") end
+      ; def append(a) self.children[0].buffer.text+=a.to_s.encode("UTF-8",'binary', invalid: :replace, undef: :replace, replace: '?') end
       ; def buffer()  self.children[0].buffer end
       ; def tv()      self.children[0] end
       end
