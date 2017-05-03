@@ -10,4 +10,4 @@ before_test:
   - bundle -v
 
 test_script:
-  - rspec test/test_all.rb
+  - rspec spec/test_all.rb
