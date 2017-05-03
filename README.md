@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/glurp/dsl-gtk.svg?branch=master)](https://travis-ci.org/glurp/dsl-gtk)
 [![Gem Version](https://badge.fury.io/rb/Ruiby.png)](http://badge.fury.io/rb/Ruiby)
-(https://ci.appveyor.com/api/projects/status/y6pqyq79ybcmj9ye?svg=true](https://ci.appveyor.com/project/Glurp/dsl-gtk/branch/master)
+[https://ci.appveyor.com/api/projects/status/y6pqyq79ybcmj9ye?svg=true](https://ci.appveyor.com/project/Glurp/dsl-gtk/branch/master)
 
 A DSL for building simple GUI ruby application.
 Based on gtk.
