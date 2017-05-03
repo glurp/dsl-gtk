@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/glurp/dsl-gtk.svg?branch=master)](https://travis-ci.org/glurp/dsl-gtk)
 [![Gem Version](https://badge.fury.io/rb/Ruiby.png)](http://badge.fury.io/rb/Ruiby)
+(https://ci.appveyor.com/api/projects/status/y6pqyq79ybcmj9ye?svg=true](https://ci.appveyor.com/project/Glurp/dsl-gtk/branch/master)
 
 A DSL for building simple GUI ruby application.
 Based on gtk.
@@ -21,7 +22,8 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 3.19.0 !!   15-12-2016 : 
+NEW : 3.19.0 !!   03-05-2017 : NOK...
+
 * create plot.rb, corrections on canvas.draw*
 * do not force gtk 3.0.7 ( 3.0.9 seem ok). 
 * add icons set: Farm Fresh and Crystal
