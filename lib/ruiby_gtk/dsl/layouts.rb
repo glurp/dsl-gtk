@@ -413,9 +413,9 @@ module Ruiby_dsl
       parent: self,
       buttons: []
     )
-      
+    ctx={}
     @lcur << dialog.child
-    hbox=stack { yield(dialog) }
+    hbox=stack { yield(dialog,ctx) }
     @lcur.pop
     
     dialog.set_window_position(:center)
@@ -423,6 +423,7 @@ module Ruiby_dsl
     dialog.show_all 
     rep=dialog.run  #  blocked
     dialog.destroy
+    ctx
   end
   
   # a dialog without default buttons
