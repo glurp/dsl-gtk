@@ -22,11 +22,8 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 3.19.2 !!   03-05-2017 : NOK with gtk3 3.1.3 ...
+NEW : 3.20.0 !!   03-05-2017 : OK with gtk3 3.1.3 ...
 
-* create plot.rb, corrections on canvas.draw*
-* do not force gtk 3.0.7 ( 3.0.9 seem ok). 
-* add icons set: Farm Fresh and Crystal
 
 TODO  :
 
