@@ -381,3 +381,4 @@ Exemples
 ========
 See samples in "./samples" directory (run all.rb)
 See at end of Doc reference : [Ex.](https://rawgithub.com/glurp/Ruiby/master/doc.html#code)
+"e" 
