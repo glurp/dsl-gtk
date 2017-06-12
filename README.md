@@ -22,8 +22,8 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 3.20.0 !!   03-05-2017 : OK with gtk3 3.1.3 ...
-
+NEW : 3.21.0 !!   06-06-2017 : OK with gtk3 3.1.6 ...
+Appveyor : running with ruby 2.3.3   32bits
 
 TODO  :
 
