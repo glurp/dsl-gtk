@@ -1,13 +1,11 @@
 install:
-  - set PATH=C:\Ruby22\bin;%PATH%
+  - set PATH=C:\Ruby23\bin;%PATH%
   - bundle install
 
 build: off
 
 before_test:
   - ruby -v
-  - gem -v
-  - bundle -v
 
 test_script:
   - rspec spec/test_all.rb
