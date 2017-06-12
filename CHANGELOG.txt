@@ -1,4 +1,9 @@
-3.19.3
+3.21.1
+    doc.html : update
+    appveyor.yml : ruby 2.3
+    README.md : update
+3.21.0 : 2017-06-02 13:11:54 +0200
+3.20.0 : 2017-06-02 13:07:36 +0200
     README.md : version 3.20
     dyn.rb : nl
     layouts.rb : add context to dialog container
@@ -495,8 +500,3 @@
     test_include.rb : Box
     make_doc.rb : nop
     windows.rb : gravity gtk3
-    ruiby_dsl3.rb : list improve
-    doc.html : nop
-    Rakefile.rb : nop
-    Rakefile.rb : transfer make_doc to gem task
-    freedom.rb : GPL text animation al la 'star-wars'
