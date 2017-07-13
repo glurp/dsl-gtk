@@ -1,4 +1,9 @@
-3.21.1
+3.22.1
+    pixmap.rb : gtk3
+    form_fields.rb : trxt_area_dyn correction
+    commands.rb : create_log_widget : log applicationato can be embedded
+    getdownstat.rb : echo
+3.22.0 : 2017-06-12 16:11:43 +0200
     doc.html : update
     appveyor.yml : ruby 2.3
     README.md : update
@@ -495,8 +500,3 @@
     ruiby_dsl3.rb : video reation with CLutter GSrteamer
     README.md : video news
 0.123.0 : 2013-09-09 21:44:15 +0200
-    test_basics_widget.rb : label for a image
-    test_systray.rb : nop
-    test_include.rb : Box
-    make_doc.rb : nop
-    windows.rb : gravity gtk3
