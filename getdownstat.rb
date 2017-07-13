@@ -18,7 +18,7 @@ end
 
 
 v=getCount(framework)-1
-puts "Currant #{v}"
+puts "Current #{v}"
 start=Time.now.to_i
 loop {
   v1=getCount(framework)
