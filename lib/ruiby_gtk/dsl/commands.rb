@@ -197,4 +197,26 @@ module Ruiby_dsl
     wdlog.show_all  
     @loglabel
   end
+  def create_log_widget(opt={})
+    logBuffer = TextBuffer.new
+    loglabel=TextView.new(logBuffer)
+    loglabel.override_font(  Pango::FontDescription.new( opt["font"] || "Courier new 10")) 
+    sw=ScrolledWindow.new()
+    sw.set_width_request(800) 
+    sw.set_height_request(200)  
+    sw.set_policy(:automatic, :always)
+    class << loglabel
+      def add(s) 
+        self.buffer.insert(self.buffer.end_iter,s)  
+        self.scroll_mark_onscreen(self.buffer.create_mark("mend",self.buffer.start_iter.forward_to_end,false))
+        #self.parent.vadjustment.value=self.parent.vadjustment.upper - self.parent.vadjustment.page_size
+      end
+      def clear() self.buffer.text="" end
+      def text=(s) self.buffer.text=s  end
+    end
+    sw.add_with_viewport(loglabel)
+    apply_options(loglabel,opt)
+    attribs(sw,{})
+    loglabel
+  end
 end
