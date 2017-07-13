@@ -52,7 +52,7 @@ module Ruiby_dsl
     if name.index('.') 
       if File.exists?(name)
          @cach_pix||={}
-         @cach_pix[name]=Gdk::Pixbuf.new(name) unless @cach_pix[name]
+         @cach_pix[name]=Gdk::Pixbuf.new(:file =>name) unless @cach_pix[name]
          return @cach_pix[name]
       elsif name.index("[")
         return get_pixbuf(name)
@@ -137,7 +137,7 @@ module Ruiby_dsl
     filename,px,py,bidon,dim=name.split(/\[|,|(\]x)/)
     if filename && px && py && bidon && dim && File.exist?(filename)
       dim=dim.to_i
-      @cach_pix[filename]=Gdk::Pixbuf.new(filename) unless @cach_pix[filename]
+      @cach_pix[filename]=Gdk::Pixbuf.new(:file =>filename) unless @cach_pix[filename]
       x0= dim*px.to_i
       y0= dim*py.to_i
       #p [x0,y0,"/",@cach_pix[filename].width,@cach_pix[filename].height]
