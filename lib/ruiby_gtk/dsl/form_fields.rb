@@ -359,7 +359,7 @@ module Ruiby_dsl
   #
   def text_area_dyn(dynvar,w=200,h=100,args={}) # from green_shoes app
     # TDODO : test !
-    w=text_area_dyn(w,h,args) 
+    w=text_area(w,h,args) 
     dynvar.observ { |o,n| w.text=n }
     w.text_area.signal_connect(:changed) { |t,e| dynvar.value(w.text) }
     w
