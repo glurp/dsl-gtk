@@ -22,8 +22,9 @@ Gem : https://rubygems.org/gems/Ruiby
 Status
 ======
 
-NEW : 3.21.0 !!   06-06-2017 : OK with gtk3 3.1.6 ...
-Appveyor : running with ruby 2.3.3   32bits
+NEW : 3.22.0 !!   25-09-2017 : minor corrections, improve canvas drawing
+
+
 
 TODO  :
 
@@ -40,7 +41,7 @@ Installation
 ============
 1) system
 
-Install Ruby 2.x  #  x>0
+Install Ruby 2.x  #  x>1
 
 
 2) install Ruiby
@@ -181,7 +182,7 @@ main thread context. A Ruiby delegate is provided in Kernel module for support m
 A Queue is polled by main-window thread :
 * main window poll Queue , messagers are proc to be instance_eval() in the main window context
 * everywere, a thread can invoke ```invoke_gui {ruiby code}```. this send to the main queue the proc,
- which will be evaluated asynchroniously
+   which will be evaluated asynchroniously
 
 instance_eval is avoided in ruiby. He is used only for thread invoker : gui_invoke().
 
@@ -381,4 +382,4 @@ Exemples
 ========
 See samples in "./samples" directory (run all.rb)
 See at end of Doc reference : [Ex.](https://rawgithub.com/glurp/Ruiby/master/doc.html#code)
-"e" 
+
