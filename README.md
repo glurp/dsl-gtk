@@ -58,21 +58,24 @@ Test it:
 ```
 
 
-Here a working gem config on windows (10-Jun-2016, Ruby 2.2.4p230) :
+Here a working gem config on windows (25-Sept-2019, Ruby  2.3.3p222) :
 ```
-  pkg-config-1.1.7
-  cairo-1.15.2
-  glib2-3.0.7
-  gobject-introspection-3.0.7
-  gio2-3.0.7
-  atk-3.0.7
-  pango-3.0.7
-  gdk_pixbuf2-3.0.7
-  cairo-gobject-3.0.7
-  gdk3-3.0.7
-  rsvg2-3.0.7
-  gtk3-3.0.7
-  gtksourceview3-3.0.7
+  did_you_mean-1.0.0
+  pkg-config-1.2.3
+  native-package-installer-1.0.4
+  cairo-1.15.9
+  glib2-3.1.8
+  gobject-introspection-3.1.8
+  gio2-3.1.8
+  atk-3.1.8
+  cairo-gobject-3.1.8
+  pango-3.1.8
+  gdk_pixbuf2-3.1.8
+  gdk3-3.1.8
+  rsvg2-3.1.8
+  gtk3-3.1.8
+  Ruiby-3.23.0
+  gtksourceview3-3.1.8
 ```
 
 
