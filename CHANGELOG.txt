@@ -1,4 +1,8 @@
-3.22.2
+3.22.3
+    ruiby_default_dialog3.rb : dialog synced
+    plot.rb : draw polygon 
+    commands.rb : define trace()
+    canvas.rb : declare font and size for drawing text
     .travis.yml : trusty version for ubuntu execution
     pixmap.rb : gtk3
     form_fields.rb : trxt_area_dyn correction
@@ -496,7 +500,3 @@
 0.125.0 : 2013-09-23 22:01:28 +0200
 0.124.0 : 2013-09-23 21:59:35 +0200
     Gemfile : clutter-gtk and clutter-gst for test
-    test_systray.rb : message
-    systray.rb : debug
-    ruiby_dsl3.rb : video reation with CLutter GSrteamer
-    README.md : video news
