@@ -1,4 +1,6 @@
-3.22.4
+3.23.1
+    README.md : update dependencies
+3.23.0 : 2017-09-25 17:43:54 +0200
     README.md : 3.23
     ruiby_default_dialog3.rb : dialog synced
     plot.rb : draw polygon 
@@ -498,5 +500,3 @@
     ruiby_dsl3.rb : uri
 0.126.0 : 2013-09-24 00:14:00 +0200
     ruiby_dsl3.rb : uri / url
-0.125.0 : 2013-09-23 22:01:28 +0200
-0.124.0 : 2013-09-23 21:59:35 +0200
