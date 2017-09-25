@@ -1,4 +1,5 @@
-3.22.3
+3.22.4
+    README.md : 3.23
     ruiby_default_dialog3.rb : dialog synced
     plot.rb : draw polygon 
     commands.rb : define trace()
@@ -499,4 +500,3 @@
     ruiby_dsl3.rb : uri / url
 0.125.0 : 2013-09-23 22:01:28 +0200
 0.124.0 : 2013-09-23 21:59:35 +0200
-    Gemfile : clutter-gtk and clutter-gst for test
