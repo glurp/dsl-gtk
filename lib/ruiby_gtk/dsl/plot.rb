@@ -31,6 +31,7 @@ module Ruiby_dsl
         c[:maxlendata] ||= c[:data].size
         c[:color] ||= "#003030"
         c[:rgba] = ::Gdk::Color.parse(c[:color])
+        c[:bgrgba] = c[:bgcolor] ? ::Gdk::Color.parse(c[:bgcolor]) : nil
         c[:xminmax] ||= [c[:data].first[1],c[:data].last[1]]
         c[:yminmax] ||= [0,100]
         c[:style] ||= :linear
@@ -69,7 +70,12 @@ module Ruiby_dsl
                   l=c[:data].each_with_object([]) { |(y,x),a|  
                     a << x*c[:xa]+c[:xb] ; a <<  y*c[:ya]+c[:yb] 
                   }
-                  w.draw_line(l,c[:color],2)
+                  if c[:bgrgba]
+                    l1= [0,c[:yb]] + l + [ c[:xminmax].last*c[:xa]+c[:xb] ,c[:yb]]
+                    w.draw_polygon(l1,c[:bgcolor],c[:color],2)
+                  else
+                    w.draw_line(l,c[:color],2)
+                  end
               when :bar
                  w.draw_varbarr(0,@config[:h]-yb0,@config[:w],@config[:h]-yb0,c[:xmin],c[:xmax],c[:data],5)
                  yb0+=5
