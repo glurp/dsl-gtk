@@ -377,8 +377,11 @@ TODO:
 License
 =======
 Ruiby                   : LGPL, CC BY-SA
+
 fafamfam rasters images : CC Attribution 4.0 http://www.famfamfam.com/
+
 Crystal Clear icon set  : LGPL 
+
 Farm Fresh icon set     :  CC Attribution 3.0 License http://www.fatcow.com/free-icons
 
 Exemples
