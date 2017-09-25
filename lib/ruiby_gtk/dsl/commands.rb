@@ -173,6 +173,27 @@ module Ruiby_dsl
     vscroll=loglabel.parent.vadjustment
     vscroll.value = vscroll.upper+8
   end
+  def trace(*txt)
+    if $__mainthread__ && $__mainthread__ != Thread.current
+      gui_invoke { log(*txt) }
+      return
+    end
+    loglabel=_create_log_window()
+    buffer=loglabel.buffer
+    tc=txt.map {|t| 
+      t.kind_of?(Exception) ?  "#{t.to_s}\n  #{(t.backtrace||[]).join("\n  ")}\n" :  t 
+    }.join(" ")
+    txt_utf8= tc.encode("UTF-8", 'binary', invalid: :replace, undef: :replace, replace: '?')
+    t=" #{txt_utf8}\n"
+    buffer.insert(buffer.end_iter,t)
+    if ( loglabel.buffer.text.size>1000*1000)
+      loglabel.buffer.text=loglabel.buffer.text[-7000..-1]
+    end
+    #----------  scroll to bottom, not perfect
+    Ruiby.update
+    vscroll=loglabel.parent.vadjustment
+    vscroll.value = vscroll.upper+8
+  end
   
   def _create_log_window() 
     return(@loglabel) if defined?(@loglabel) && @loglabel && ! @loglabel.destroyed?
@@ -197,19 +218,19 @@ module Ruiby_dsl
     wdlog.show_all  
     @loglabel
   end
-  def create_log_widget(opt={})
+  def log_as_widget(width=nil,height=nil,opt={})
     logBuffer = TextBuffer.new
     loglabel=TextView.new(logBuffer)
     loglabel.override_font(  Pango::FontDescription.new( opt["font"] || "Courier new 10")) 
     sw=ScrolledWindow.new()
-    sw.set_width_request(800) 
-    sw.set_height_request(200)  
+    sw.set_width_request(width) if width
+    sw.set_height_request(height)  if height
     sw.set_policy(:automatic, :always)
     class << loglabel
       def add(s) 
         self.buffer.insert(self.buffer.end_iter,s)  
         self.scroll_mark_onscreen(self.buffer.create_mark("mend",self.buffer.start_iter.forward_to_end,false))
-        #self.parent.vadjustment.value=self.parent.vadjustment.upper - self.parent.vadjustment.page_size
+        self.parent.vadjustment.value=self.parent.vadjustment.upper - self.parent.vadjustment.page_size
       end
       def clear() self.buffer.text="" end
       def text=(s) self.buffer.text=s  end
@@ -217,6 +238,6 @@ module Ruiby_dsl
     sw.add_with_viewport(loglabel)
     apply_options(loglabel,opt)
     attribs(sw,{})
-    loglabel
+    @loglabel=loglabel
   end
 end
