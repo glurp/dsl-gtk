@@ -45,6 +45,12 @@ module Ruiby_default_dialog
       dialog.destroy if rep
     end
     dialog.show_all	
+    unless block_given?
+        rep=dialog.run
+        response=entry.text
+        dialog.destroy
+        rep==1 ? response : nil
+    end
   end
   def promptSync(txt,value="") 
      dialog = Dialog.new(
