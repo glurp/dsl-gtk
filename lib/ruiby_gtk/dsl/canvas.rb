@@ -151,6 +151,13 @@ module Ruiby_dsl
         w.draw_line(lxy,color, width) if color
       }
     end 
+    def cv.ctx_font(name,size)
+      w,cr=@currentCanvasCtx
+      fd=Pango::FontDescription.new(name)
+      cr.select_font_face(fd.family, Cairo::FONT_SLANT_NORMAL, Cairo::FONT_WEIGHT_NORMAL)
+      cr.set_font_size(size)
+    end
+    
     def cv.draw_text_left(x,y,text,scale=1,color=nil,bgcolor=nil)
       w,cr=@currentCanvasCtx
       cr.set_line_width(1)
