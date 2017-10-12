@@ -1,6 +1,6 @@
 # Ruiby
 
-<center> ![icon](https://user-images.githubusercontent.com/27629/31522353-9bbe8958-afad-11e7-8e50-56ec8f904a79.png) </center>
+![icon](https://user-images.githubusercontent.com/27629/31522353-9bbe8958-afad-11e7-8e50-56ec8f904a79.png)
 
 [![Build Status](https://travis-ci.org/glurp/dsl-gtk.svg?branch=master)](https://travis-ci.org/glurp/dsl-gtk)
 [![Gem Version](https://badge.fury.io/rb/Ruiby.png)](http://badge.fury.io/rb/Ruiby)
