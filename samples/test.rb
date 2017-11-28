@@ -178,7 +178,7 @@ end # end def Component
           
           # polyline and polygone...
           cv.draw_line([1,10,100,10,100,10,100,110],"#0A0",1)
-          cv.draw_polygon([1,110,100,110,100,110,100,210,1,110],"#0AA","#A00",1)
+          cv.draw_polygon([1,110,100,110,100,110,100,210,1,110],"#0AA",%w{gradient tb #A00 #FF0},1)
           
           # horizontal text
           cv.draw_line([200,0,200,120],"#000",1)            
