@@ -22,13 +22,13 @@ Gem : https://rubygems.org/gems/Ruiby
 
 Based on Ruby-Gmome2 : 
 * [Sources, Issues](https://github.com/ruby-gnome2/ruby-gnome2)
-* [API](http://ruby-gnome2.osdn.jp/)
+* [API](http://ruby-gnome2.osdn.jp/hiki.cgi?Ruby%2FGTK)
 
 
 Status
 ======
 
-NEW : 3.24.0 !!   28-11-2017 : Gradient on canvas draw primitives
+NEW : 3.24.0 !!   28-11-2017 : Linear Gradient on canvas draw surfaces primitives
 
 
 
