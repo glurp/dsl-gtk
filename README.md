@@ -28,17 +28,22 @@ Based on Ruby-Gmome2 :
 Status
 ======
 
-NEW : 3.24.0 !!   28-11-2017 : Gradiant on canvas draw primitives
+NEW : 3.24.0 !!   28-11-2017 : Gradient on canvas draw primitives
 
 
 
 TODO  :
 
-* [ ] improve graphics quality on canvas : gradiant,transparency...
-* [ ] Gadget api: actual gadgets are cairo drawing => to be encapsuled
+* [x] improve graphics quality on canvas : linear gradient
+* [x] improve graphics quality on canvas : radial  gradient
+* [x] improve graphics quality on canvas : transparency
 * [ ] refactor samples demos with last improve: dynvar/autoslot...
 * [ ] resolve 100% gtk3 deprecated warning
 * [ ] complete rspec => 99% coverage ?
+
+Abandoned :
+
+* [x] gadget API
 
 
 
@@ -65,7 +70,7 @@ Test it:
 ```
 
 
-Here a working gem config on windows (25-Sept-2019, Ruby  2.3.3p222) :
+Here a working gem config on windows (25-Sept-2016, Ruby  2.3.3p222) :
 ```
   did_you_mean-1.0.0
   pkg-config-1.2.3
