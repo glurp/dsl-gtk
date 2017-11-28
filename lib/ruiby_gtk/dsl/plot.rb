@@ -51,7 +51,7 @@ module Ruiby_dsl
      end
      def plot.expose(w,ctx) 
         return unless @curves
-        w.draw_rectangle(0,0,@config[:w],@config[:h],0,@config[:bg],@config[:bg],0) if @config[:bg]
+        w.draw_rectangle(0,0,@config[:w],@config[:h],0,nil,@config[:bg],0) if @config[:bg]
         if @config[:grid] 
           dx=dy=(@config[:grid]||"40").to_i
           color=@config[:grid_color] || "#AAA"
