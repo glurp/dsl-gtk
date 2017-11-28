@@ -18,16 +18,21 @@ Doc: [Reference+Exemples.](https://rawgithub.com/glurp/Ruiby/master/doc.html)
 
 Gem : https://rubygems.org/gems/Ruiby
 
+Based on Ruby-Gmome2 : 
+* [Sources, Issues](https://github.com/ruby-gnome2/ruby-gnome2)
+* [API](http://ruby-gnome2.osdn.jp/)
+
 
 Status
 ======
 
-NEW : 3.22.0 !!   25-09-2017 : minor corrections, improve canvas drawing
+NEW : 3.24.0 !!   28-11-2017 : Gradiant on canvas draw primitives
 
 
 
 TODO  :
 
+* [ ] improve graphics quality on canvas : gradiant,transparency...
 * [ ] Gadget api: actual gadgets are cairo drawing => to be encapsuled
 * [ ] refactor samples demos with last improve: dynvar/autoslot...
 * [ ] resolve 100% gtk3 deprecated warning
