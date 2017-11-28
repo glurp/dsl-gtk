@@ -1,4 +1,6 @@
-3.24.1
+3.24.2
+    test.rb : gradiant on canvas demo
+    README.md : gradient
     README.md : orthographe
 3.24.0 : 2017-11-28 19:12:41 +0100
     quadvideo.rb : q
@@ -498,5 +500,3 @@
     gol.rb : some mod
     canvas.rb : best
     ruiby_dsl3.rb : api n combo box
-    gol.rb : speedy
-    ruiby_threader.rb : anim
