@@ -1,4 +1,7 @@
-3.24.2
+3.24.3
+    ruiby_dsl3.rb : color parse take care of Array for color name
+    plot.rb : no bordures for plot zone
+    README.md : gradiant
     test.rb : gradiant on canvas demo
     README.md : gradient
     README.md : orthographe
@@ -497,6 +500,3 @@
     gol2.rb : opt
 0.129.0 : 2013-11-13 22:20:06 +0100
     video.rb : no check file
-    gol.rb : some mod
-    canvas.rb : best
-    ruiby_dsl3.rb : api n combo box
