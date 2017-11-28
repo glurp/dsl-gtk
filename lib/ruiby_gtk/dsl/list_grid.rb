@@ -58,6 +58,7 @@ module Ruiby_dsl
     end
     def scrolled_win.set_data(words)
       raise("list.set_data() out of main thread!") if $__mainthread__ != Thread.current
+      list().unselect_all
       list().model.clear
       words.each { |w| list().model.append[0]=w }
     end
