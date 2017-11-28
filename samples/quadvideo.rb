@@ -10,6 +10,9 @@
 ######################################################################
 
 require_relative '../lib/Ruiby.rb'
+require "gst"
+require "clutter-gtk"  # gem install clutter-gtk
+require "clutter-gst"  # gem install clutter-gstreamer
 
 Gem.loaded_specs.map {|n,g| puts "  | %10s %6s " % [g.name,g.version] }
 
