@@ -30,6 +30,8 @@ Status
 
 NEW : 3.24.0 !!   28-11-2017 : Linear Gradient on canvas draw surfaces primitives
 
+Now, plotters and dashboard can have beautiful background :)
+
 
 
 TODO  :
