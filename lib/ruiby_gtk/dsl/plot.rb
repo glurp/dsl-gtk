@@ -70,7 +70,7 @@ module Ruiby_dsl
                   l=c[:data].each_with_object([]) { |(y,x),a|  
                     a << x*c[:xa]+c[:xb] ; a <<  y*c[:ya]+c[:yb] 
                   }
-                  if c[:bgrgba]
+                  if c[:bgcolor]
                     l1= [0,c[:yb]] + l + [ c[:xminmax].last*c[:xa]+c[:xb] ,c[:yb]]
                     w.draw_polygon(l1,c[:bgcolor],c[:color],2)
                   else
