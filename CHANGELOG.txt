@@ -1,4 +1,11 @@
-3.23.2
+3.23.3
+    quadvideo.rb : q
+    circle.rb : bg with gradient
+    ruiby_dsl3.rb : error() with exception for video()
+    plot.rb : correction color
+    list_grid.rb : no unselect on set_data
+    canvas.rb : gradiant for draw_rectangle, draw_rounded_rectangle, drw_polygon
+    README.md : gradient evolution, ruby-gnome2 references
     README.md : updates
     README.md : update dependencies
 3.23.0 : 2017-09-25 17:43:54 +0200
@@ -493,10 +500,3 @@
     ruiby_threader.rb : anim
     gol.rb : entry for modify life formula online
     canvas.rb : animation, polygons, scale, rotation, translation
-    test_basics_widget.rb : video test only if gstereamer is loaded
-    Gemfile : no gst
-0.128.0 : 2013-09-24 00:47:41 +0200
-    test_basics_widget.rb : video test
-0.127.0 : 2013-09-24 00:18:05 +0200
-    ruiby_dsl3.rb : uri
-0.126.0 : 2013-09-24 00:14:00 +0200
