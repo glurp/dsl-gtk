@@ -233,13 +233,13 @@ module Ruiby_dsl
   # parse html color ( "#FF00AA" ) to rgba array, useful
   # for canvas vectors styles
   def self.cv_color_html(html_color,opacity=1)
-    c=::Gdk::Color.parse(html_color)
+    c=::Gdk::Color.parse(html_color.kind_of?(Array) ? html_color.last : html_color)
     #::Gdk::RGBA.new(c.red/65000.0,c.green/65000.0,c.blue/65000.0,1)
     [c.red/65535.0,c.green/65535.0,c.blue/65535.0,opacity>1 ? 1 : opacity<0 ? 0 : opacity]
   end
   # parse color from #RRggBB html format Ruiby_dsl.html_color
-  def html_color(str) color_conversion(str) end
-  def self.html_color(str) ::Gdk::Color.parse(str) end
+  def html_color(str) color_conversion(str.kind_of?(Array) ? str.last : str) end
+  def self.html_color(str)  ::Gdk::Color.parse(str.kind_of?(Array) ? str.last : str) end
    
   def widget_properties(title=nil,w=nil) 
     widg=w||@current_widget||@lcur.last
