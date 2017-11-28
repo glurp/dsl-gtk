@@ -21,13 +21,14 @@ module Ruiby_dsl
   #     w.draw_point(x1,y1,color,width)
   #     w.draw_polygon([x,y,...],colorFill,colorStroke,widthStroke)
   #     w.draw_circle(cx,cy,rayon,colorFill,colorStroke,widthStroke)
-  #     w.draw_rectangle(x0,y0,w,h,r,widthStroke,colorFill,colorStroke)
+  #     w.draw_rectangle(x0,y0,w,h, r,widthStroke,colorFill,w)
   #     cv.draw_rounded_rectangle(x0,y0,w,h,ar,colorStroke,colorFill,widthStroke)
   #     w.draw_pie(x,y,r,l_ratio_color_label)
-  #     w.draw_arc(x,y,r,start,eend,width,color_stroke,color_fill=nil)
-  #     w.draw_arc2(x,y,r,start,eend,width,color_stroke,color_fill=nil)
+  #     w.draw_arc(x,y,r,start,eend,width,color_stroke,color_fill=nil) # camenber
+  #     w.draw_arc2(x,y,r,start,eend,width,color_stroke,color_fill=nil) # circle fraction
   #     w.draw_varbarr(x0,y0,x1,y1,vmin,vmax,l_date_value,width) {|value| color}
   #     w.draw_image(x,y,filename,sx,sy)
+  #     cv.ctx_font(name,size)        # choose font name and size for next draw_text...
   #     w.draw_text(x,y,text,scale,color,bgcolor=nil)
   #     w.draw_text_left(x,y,text,scale,color,bgcolor=nil)
   #     w.draw_text_center(x,y,text,scale,color,bgcolor=nil)
@@ -38,7 +39,11 @@ module Ruiby_dsl
   #                   >> draw in a transladed/scaled coord system
   #                   >> image will be draw at 16/20 (10+3*2)/(20+0*2)
   #                      , and size doubled
+  # 
   # end
+  # gradient can be use for recangle and polygone, see samples/gradients.rb
+  # in place od String bg-color, say Array : #w{type direction color1 color2 ...}
+  # type = linear/radial direction : tb Top->Bottom, bu Bottom->Up , lr: Left->Right, ..., trb -> TopLeft -> BottomRight 
 
   def canvas(width,height,option={})
     autoslot()
@@ -92,15 +97,58 @@ module Ruiby_dsl
        colorStroke=@currentColorFg if colorFill.nil? && colorStroke.nil?
         _draw_poly(lxy,colorStroke,colorFill,widthStroke)
     end
+    def cv._set_gradient(cv,cr,acolor,lxy)
+      type,sens,*data=acolor
+      return unless type && sens && data && data.size>=2
+      cr.set_source_rgba(*Ruiby_dsl.cv_color_html("#FFF"))
+      if type =~ /^g/
+        x0,y0,x1,y1=*bbox(lxy)
+        case sens
+          when "tb" then x0,y0,x1,y1 = x1/2,y0,  x1/2,y1
+          when "bu" then x1,y1,x0,y0 = x1/2,y0,  x1/2,y1
+          when "lr" then x0,y0,x1,y1 = 0,y1/2,   x1,y1/2
+          when "rl" then x0,y0,x1,y1 = x1,y1/2,  x0,y1/2
+          when "trb" then x0,y0,x1,y1 = x0,y0,   x1,y1
+          when "tlb" then x0,y0,x1,y1 = x1,y0,   x0,y1
+          else
+            error("unknown gradient : #{sens}")
+        end
+        #p [sens,x0,y0,x1,y1]
+        pattern = Cairo::LinearPattern.new(x0,y0,x1,y1)
+        last_color="#000"
+        data.each_with_index {|color,i|
+            pos= 1.0*i/(data.length-1)
+            #p [pos,Ruiby_dsl.cv_color_html(color)]
+            color=last_color if color=="-"
+            last_color=color
+            pattern.add_color_stop(pos, *(Ruiby_dsl.cv_color_html(color)[0..2]))
+         }
+         cr.set_source(pattern)
+      else
+      end
+    end
+    def cv.bbox(lxy)
+      xmin,ymin=lxy[0..1]
+      xmax,ymax=lxy[0..1]
+      lxy.each_slice(2) {|x,y| 
+        xmin=x if x<xmin ;ymin=y if y<ymin 
+        xmax=x if x>xmax ;ymax=y if y>ymax 
+      }
+      [xmin,ymin,xmax,ymax]
+    end
     def cv._draw_poly(lxy,color_fg,color_bg,width)
         raise("odd number of coord for lxy") if !lxy || lxy.size==0 || lxy.size%2==1
         w,cr=@currentCanvasCtx
         cr.set_line_width(width) if width
         x0,y0,*poly=*lxy
         if color_bg
-          cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color_bg))
           cr.move_to(x0,y0)
           poly.each_slice(2) {|x,y| cr.line_to(x,y) } 
+          if Array === color_bg
+            _set_gradient(w,cr,color_bg,lxy)
+          else
+             cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color_bg))
+          end
           cr.fill
         end
         if color_fg
@@ -114,21 +162,6 @@ module Ruiby_dsl
     def cv.draw_point(x,y,color=nil,width=nil)
       width||=@currentWidth
       draw_line([x,y-width/2.0, x,y+width/2.0],color,width)
-    end
-    def cv.draw_text(x,y,text,scale=1,color=nil,bgcolor=nil)
-      w,cr=@currentCanvasCtx
-      cr.set_line_width(1)
-      cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color || @currentColorFg ))
-      scale(x,y,scale) {  
-        if bgcolor
-          a=cr.text_extents(text)
-          w.draw_rectangle(0,-1,a.width,-a.height-3,1,bgcolor,bgcolor,0)
-          cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color || @currentColorFg ))
-        end
-        cr.move_to(0,0)
-        cr.show_text(text) 
-        cr.fill
-      }
     end
     def cv.draw_varbarr(x0,y0,x1,y1,dmin,dmax,lvalues0,width,&b)
       ax=1.0*(x1-x0)/(dmax-dmin) ;bx= x0-ax*dmin 
@@ -156,6 +189,21 @@ module Ruiby_dsl
       fd=Pango::FontDescription.new(name)
       cr.select_font_face(fd.family, Cairo::FONT_SLANT_NORMAL, Cairo::FONT_WEIGHT_NORMAL)
       cr.set_font_size(size)
+    end
+    def cv.draw_text(x,y,text,scale=1,color=nil,bgcolor=nil)
+      w,cr=@currentCanvasCtx
+      cr.set_line_width(1)
+      cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color || @currentColorFg ))
+      scale(x,y,scale) {  
+        if bgcolor
+          a=cr.text_extents(text)
+          w.draw_rectangle(0,-1,a.width,-a.height-3,1,bgcolor,bgcolor,0)
+          cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color || @currentColorFg ))
+        end
+        cr.move_to(0,0)
+        cr.show_text(text) 
+        cr.fill
+      }
     end
     
     def cv.draw_text_left(x,y,text,scale=1,color=nil,bgcolor=nil)
@@ -198,7 +246,11 @@ module Ruiby_dsl
       cv,cr=@currentCanvasCtx
       pi=Math::PI
       ar=[ar,ar,ar,ar] if ar.kind_of?(Numeric)
-      cr.set_source_rgba(*Ruiby_dsl.cv_color_html(colorFill ? colorFill : colorStroke))
+      if Array === colorFill
+        _set_gradient(w,cr,colorFill,[x0,y0,x0+w,y0+h])
+      else
+        cr.set_source_rgba(*Ruiby_dsl.cv_color_html(colorFill ? colorFill : colorStroke))
+      end
       cr.set_line_width( widthStroke )
       r=ar[0]
       cr.move_to(x0,y0+r)
@@ -375,6 +427,7 @@ module Ruiby_dsl
   def on_canvas_draw(&blk)
     _accept?(:handler)
     @currentCanvas.signal_connect(  'draw' ) do |w,cr| 
+        next if defined?($RUIBY_CANVAS_ERROR) &&  $RUIBY_CANVAS_ERROR==true
         cr.set_line_join(Cairo::LINE_JOIN_ROUND)
         cr.set_line_cap(Cairo::LINE_CAP_ROUND)
         cr.set_line_width(2)
@@ -383,8 +436,10 @@ module Ruiby_dsl
         begin
            w.instance_eval { @currentCanvasCtx=[w,cr] }
            blk.call(w,cr) 
+           $RUIBY_CANVAS_ERROR=false
            #w.instance_eval { @currentCanvasCtx=nil }
         rescue Exception => e
+         $RUIBY_CANVAS_ERROR=true
          after(1) { error(e) }
         end  
     end
