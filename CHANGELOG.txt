@@ -1,4 +1,5 @@
-3.24.4
+3.24.5
+    canvas.rb : text bg position and special traitment for exception in drawing
     README.md : gradient
     ruiby_dsl3.rb : color parse take care of Array for color name
     plot.rb : no bordures for plot zone
@@ -499,4 +500,3 @@
     draw.png : t
     make_doc.rb : opt
     gol2.rb : opt
-0.129.0 : 2013-11-13 22:20:06 +0100
