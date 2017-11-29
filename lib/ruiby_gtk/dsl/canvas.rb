@@ -197,7 +197,7 @@ module Ruiby_dsl
       scale(x,y,scale) {  
         if bgcolor
           a=cr.text_extents(text)
-          w.draw_rectangle(0,-1,a.width,-a.height-3,1,bgcolor,bgcolor,0)
+          w.draw_rectangle(0,1,a.width,-a.height,1,bgcolor,bgcolor,0)
           cr.set_source_rgba(*Ruiby_dsl.cv_color_html(color || @currentColorFg ))
         end
         cr.move_to(0,0)
@@ -427,7 +427,6 @@ module Ruiby_dsl
   def on_canvas_draw(&blk)
     _accept?(:handler)
     @currentCanvas.signal_connect(  'draw' ) do |w,cr| 
-        next if defined?($RUIBY_CANVAS_ERROR) &&  $RUIBY_CANVAS_ERROR==true
         cr.set_line_join(Cairo::LINE_JOIN_ROUND)
         cr.set_line_cap(Cairo::LINE_CAP_ROUND)
         cr.set_line_width(2)
@@ -436,11 +435,13 @@ module Ruiby_dsl
         begin
            w.instance_eval { @currentCanvasCtx=[w,cr] }
            blk.call(w,cr) 
-           $RUIBY_CANVAS_ERROR=false
+           w.set_memo(false)
            #w.instance_eval { @currentCanvasCtx=nil }
         rescue Exception => e
-         $RUIBY_CANVAS_ERROR=true
-         after(1) { error(e) }
+         ( after(1) { error(e) } ) if w.get_memo()!=true
+         w.draw_text(5,20,"Canvas ERROR...",1,"#EEE","#000")
+         w.draw_text(5,30,e.to_s,1,"#EEE","#000")
+         w.set_memo(true)
         end  
     end
   end  
