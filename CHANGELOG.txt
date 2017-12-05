@@ -1,4 +1,3 @@
-3.24.5
     canvas.rb : text bg position and special traitment for exception in drawing
     README.md : gradient
     ruiby_dsl3.rb : color parse take care of Array for color name

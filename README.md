@@ -18,7 +18,7 @@ Doc: [Reference+Exemples.](https://rawgithub.com/glurp/Ruiby/master/doc.html)
 
 Gem : https://rubygems.org/gems/Ruiby
 
-Based on Ruby-Gmome2 : 
+Based on Ruby-Gmome2 :
 * [Sources, Issues](https://github.com/ruby-gnome2/ruby-gnome2)
 * [API](http://ruby-gnome2.osdn.jp/hiki.cgi?Ruby%2FGTK)
 
@@ -32,12 +32,12 @@ Now, plotters and dashboard can have beautiful background :)
 
 
 
-TODO  :
+TO DO  :
 
 * [x] improve graphics quality on canvas : linear gradient
 * [x] improve graphics quality on canvas : radial  gradient
 * [x] improve graphics quality on canvas : transparency
-* [ ] refactor samples demos with last improve: dynvar/autoslot...
+* [ ] refactoring samples demos with last improve: dynvar/autoslot...
 * [ ] resolve 100% gtk3 deprecated warning
 * [ ] complete rspec => 99% coverage ?
 
@@ -113,7 +113,7 @@ Ruiby.start { Win.new("application title",350,10) }
 
 ```
 
-By include, calling ruiby_component() :
+By include, calling ruiby-component() :
 
 ```ruby
 class Win < Gtk::Window
@@ -137,7 +137,7 @@ Ruiby.start { Win.new("application title",350,10) }
 ```
 
 Autonomous DSL, for  little application (most of demo in samples/ are
-done with this patern) :
+done with this pattern) :
 
 ```ruby
 require  'Ruiby'
@@ -169,7 +169,7 @@ require 'Ruiby'
 ```
 
 
-Usage with Event Machine: preload event-machine before Ruiby :
+Usage with Event Machine: load event-machine before Ruiby :
 
 ```ruby
 require 'em-proxy'
@@ -186,7 +186,7 @@ Ruiby.app do
 end
 ```
 
-See samples/spygui.rb, for exemple of gui with EM.
+See samples/spygui.rb, for example of GUI with EM.
 
 
 Threading
@@ -195,9 +195,9 @@ Ruiby does not have confidence in gtk multi threading, so all Ruiby commands mus
 main thread context. A Ruiby delegate is provided in Kernel module for support multi-threading
 
 A Queue is polled by main-window thread :
-* main window poll Queue , messagers are proc to be instance_eval() in the main window context
-* everywere, a thread can invoke ```invoke_gui {ruiby code}```. this send to the main queue the proc,
-   which will be evaluated asynchroniously
+* main window poll Queue , messages are proc to be instance_eval() in the main window context
+* everywhere, a thread can invoke ```invoke_gui {ruiby code}```. this send to the main queue the proc,
+   which will be evaluated asynchronously
 
 instance_eval is avoided in ruiby. He is used only for thread invoker : gui_invoke().
 
@@ -241,8 +241,8 @@ Observed Object/Variable
 Dynamic variable
 ----------------
 Often, a widget (an entry, a label, a slider...) show the value of a ruby variable.
-each time a code mofify this variable, it must modify the widget, and vice-versa...
-This is very tyring :)
+each time a code modify this variable, it must modify the widget, and vice-versa...
+This is very tiring :)
 
 With data binding, this notifications are done by the framework
 
@@ -264,7 +264,8 @@ That works ! the entry and the slider will be updated.
 A move on slider will update foo.value and the entry.
 Idem for a key in the entry : slider and foo.value will be updated.
 
-if you want to be notified for your own traitment, you can observ a DynVar :
+if you want to be notified for your own treatment, you can observe a DynVar :
+
 ```ruby
   foo.observ { |v| @socket.puts(v.to_s) rescue nil }
 ```
@@ -272,20 +273,22 @@ if you want to be notified for your own traitment, you can observ a DynVar :
 Here, a modification of foo variable will be send on the network...
 
 Warning !! the block will always be executed in the main thread context (mainloop gtk context).
-So DynVar is a ressource internal to Ruiby framework.
+So DynVar is a resource internal to Ruiby framework.
 
 Widget which accept DynVar are : entry, ientry, islider, label, check_button,
 
-```must be extend to button, togglebutton, combo, radio_button ... list, grid,...```
+```
+must be extend to button, togglebutton, combo, radio_button ... list, grid,...
+```
 
 
 Dynamic Object
 --------------
 
-Often, this kind of Dyn variables are members of a 'record', which should be organised by an
+Often, this kind of Dyn variables are members of a 'record', which should be organized by an
 Ruby Object (a Struct...)
 
-So ```DynObject``` create a class, which is organised by a hash  :
+So ```DynObject``` create a class, which is organized by a hash  :
 * packet of variable name
 * put initial value for each
 * each variable will be a DynVar
@@ -304,8 +307,8 @@ So ```DynObject``` create a class, which is organised by a hash  :
 
 Dynamic Stock Object
 --------------------
-DynObject can be persisted to filesystem : use ```make_StockDynObject```, and
-instantiate with an object persistant ID
+DynObject can be persisted to file system : use ```make_StockDynObject```, and
+instantiate with an object persistent ID
 
 ```ruby
   FooClass=make_StockDynClass("v1"=> 1 , "v2" => 2, "s1" => 'Hello...')
@@ -315,8 +318,7 @@ instantiate with an object persistant ID
   button("Exit") { ruiby_exit} # on exit, foo1 and foo2 will been saved to {tmpdir}/<$0>.storage  
   ....
 ```
-
-```make_StockDynObject``` do both : Class creation **and** class instanciation.
+`make_StockDynObject` do both : Class creation **and** class instantiation.
 
 ```ruby
   foo=make_StockDynObject("v1"=> 1 , "v2" => 2, "s1" => 'Hello...')
@@ -328,16 +330,16 @@ instantiate with an object persistant ID
 
 Component
 =========
-Ruiby is not realy object : most of DSL words are simple method in Ruby_dsl module.
+Ruiby is not really object-orented : most of DSL words are simple method in Ruby_dsl module.
 
-Sometime, this is not good enaugh :
-* when a compenent must have many specifique methods
+Sometime, this is not good enough :
+* when a component must have many specific methods
 * when component have (model) state : variable member must be used
 
-So Component concept has been added (Fev 2016).It authorise to define a
-class, childr of AbstractComponent, which can be used by a dsl Word.
+So Component concept has been added (Fev 2016).It authorize to define a
+class, child of AbstractComponent, which can be used by a DSL Word.
 
-Components code seem very close to a Ruiby window : free constructor, 
+Components code seem very close to a Ruiby window : free constructor,
 define ```component()``` method for draw the widgets
 
 Create a component:
@@ -347,7 +349,7 @@ class AAA < AbstractComposant
       @name= name
       @state=1
    end
-   def component() 
+   def component()
     framei("Component Comp:#{@name}") do
       label_clickable("B#{@name}...") { @state=2 }
       entry(@name,4)
@@ -357,7 +359,7 @@ class AAA < AbstractComposant
 end
 ```
 
-Define a word which instantiate a composant of class AAA:
+Define a word which instantiate a component of class AAA:
 ```ruby
 module Ruiby_dsl
   def aaa(*args)
@@ -378,11 +380,11 @@ Use the component:
 
 A demo is at ```samples/composant.rb```.
 
-TODO:
+TO-DO:
 * Canvas and Plot must be converted to Component, soon :)
 * Define ```destroy()```
-* Hook for auto-generate dsl word
-* Test Stock, Dynvar, threading, 
+* Hook for auto-generate DSL word
+* Test Stock, Dynvar, threading,
 * Tests, tests, test...
 
 
@@ -392,7 +394,7 @@ Ruiby                   : LGPL, CC BY-SA
 
 fafamfam rasters images : CC Attribution 4.0 http://www.famfamfam.com/
 
-Crystal Clear icon set  : LGPL 
+Crystal Clear icon set  : LGPL
 
 Farm Fresh icon set     :  CC Attribution 3.0 License http://www.fatcow.com/free-icons
 
@@ -400,4 +402,3 @@ Exemples
 ========
 See samples in "./samples" directory (run all.rb)
 See at end of Doc reference : [Ex.](https://rawgithub.com/glurp/Ruiby/master/doc.html#code)
-
