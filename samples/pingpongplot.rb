@@ -1,6 +1,6 @@
 # LGPL and Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 #################################################################
-#  pingpongplot.rb : measure (tcp) ping on sommes url
+#  pingpongplot.rb : measure (tcp) ping on somme url
 #
 # can be use with pipeplot Ruiby gem
 # Usage :
