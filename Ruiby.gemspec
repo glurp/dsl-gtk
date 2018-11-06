@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.2'
   s.date     = Time.now.to_s.split(/\s+/)[0]
   s.summary  = "A  DSL for building GUI ruby/gtk application"
+  
   s.description = <<EEND
 A DSL for building simple GUI ruby application, based on Gtk.
 EEND
@@ -24,6 +25,8 @@ EEND
   s.executables   = `ls bin/*`.split("\n").map{ |f| File.basename(f) }
 
   s.add_runtime_dependency  'gtk3'
+  s.add_runtime_dependency  'pango'  # dependency missing somtime, on windows
+  s.add_runtime_dependency  'cairo'  # dependency missing somtime, on windows
   s.add_runtime_dependency  'gtksourceview3'
   
 
