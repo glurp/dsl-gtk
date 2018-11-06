@@ -6,7 +6,7 @@
 require_relative '../lib/Ruiby' 
 #require 'Ruiby'
 
-Ruiby.app(title: "Text Animation", width: 900, height: 300) do
+Ruiby.app(title: "Text my Animation", width: 900, height: 300) do
 	l,size=nil,40
 	stack  { l=label("Hello Ruiby...",font: "Arial bold #{1}",bg: "#05A") }
 	after(500) do
