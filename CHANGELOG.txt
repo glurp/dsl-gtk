@@ -1,3 +1,11 @@
+3.24.6
+    video.rb : debug
+    pipeplot.rb : update
+    pingpongplot.rb : comment
+    ex.rb : concole correction
+    animtext.rb : title
+    ruiby_dsl3.rb : validation
+    Ruiby.gemspec : add pango and cairo as dependency
     canvas.rb : text bg position and special traitment for exception in drawing
     README.md : gradient
     ruiby_dsl3.rb : color parse take care of Array for color name
@@ -492,10 +500,3 @@
     ruiby_dsl3.rb : doc plot
     make_doc.rb : add plot.rb
     ruiby_dsl3.rb : presentation
-    ruiby_dsl3.rb : add plot word
-    ruiby_default_dialog3.rb : indentations
-    draw.svg : c
-    sketchi.rb : indentations
-    draw.png : t
-    make_doc.rb : opt
-    gol2.rb : opt
