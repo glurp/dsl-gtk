@@ -380,7 +380,7 @@ module Ruiby_dsl
           }
         end
           if options[:edit]
-            sloti(button("Validation") { 
+            sloti(button(options[:btext] || "Validation") { 
               nhash=widget.get_data()
               if block_given? 
                 yield(nhash)
