@@ -12,7 +12,6 @@ p ClutterGst
 p ClutterGst.constants
 p ClutterGst.included_modules
 p ClutterGst.methods.sort
-exit(0)
 
 Ruiby.app width: 600,height: 400 do
   video_file= ARGV[0] || "d:/usr/XT.avi"
@@ -29,7 +28,7 @@ Ruiby.app width: 600,height: 400 do
       buttoni("  Exit  ") { exit!(0) }
     }
   end
-  @v.play rescue p $!
+  @v.play rescue puts $!.to_s
   after(10000) { 
     @v.view.rotation_center_x=Clutter::Vertex.new(300,200,0)
     anim(50) {
