@@ -1,3 +1,6 @@
+# encoding: utf-8
+# Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
+# LGPL
 #####################################################################
 #  ex.rb : simple text (ruby) editorend test view
 #####################################################################
@@ -40,7 +43,7 @@ class RubyApp < Ruiby_gtk
           ).editor
           @edit.buffer.text=Ruiby.stock_get("text1","")
           flowi {
-            @bt=button("Test in concole...") { Ruiby.stock_put("text1",@edit.buffer.text); execute_console() }
+            @bt=button("Test in console...") { Ruiby.stock_put("text1",@edit.buffer.text); execute_console() }
             @bt=button("Test in canvas...") { Ruiby.stock_put("text1",@edit.buffer.text);execute_canvas() }
             @bt=button("Test in stack...") { Ruiby.stock_put("text1",@edit.buffer.text);execute_stack() }
           }
