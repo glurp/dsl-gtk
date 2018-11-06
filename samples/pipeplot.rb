@@ -37,14 +37,15 @@ $fgcolor=[
 ]
 class Measure
 	class << self
-		def create(argv)
+		def create(argv,dxlabel)
 			noc=argv.shift.to_i
 			y0=(argv.shift||"0.0").to_f
 			y1=(argv.shift||"100.0").to_f
 			label=argv.shift||"?"
 			autoscale=argv.size>0
+      @dxlabel=dxlabel
 			@lcurve||=[]
-			@lcurve << Measure.new(noc,y0,y1,label,autoscale)
+			@lcurve << Measure.new(noc,y0,y1,label,dxlabel,autoscale)
 			@lcurve.size-1
 		end
     def resize()
@@ -70,11 +71,12 @@ class Measure
     end
 	end
   attr_reader :label,:name
-	def initialize(noc,min,max,label,auto_scale)
+	def initialize(noc,min,max,label,dxlabel,auto_scale)
 	  @noc=noc
     @min,@max=min,max
 	  @div,@offset=calc_coef(@min,0.0,@max,1.0)
 	  @name=label
+    @dxlabel=dxlabel
 	  @value= 0
 	  @curve=[]
 	  @label=@name
@@ -154,7 +156,7 @@ class Measure
 	end		
 	def plot_label(index,ctx)
 		style(ctx,3,$fgcolor[index]) 
-		ctx.move_to(5+60*index,HHEAD-5)
+		ctx.move_to(@dxlabel+4,HHEAD-5)
 		ctx.show_text(@label)
 	end
 end
@@ -176,7 +178,7 @@ def run_window()
     fn=Ruiby::MEDIA+"/famfamfam/chart_curve.png"
     set_icon(fn) if File.exists?(fn)
     set_resizable(true)
-		chrome(false)
+		chrome(true)
     @pos_markeur=[0,0]
     @comment=""
 		stack do 
@@ -283,11 +285,14 @@ if $0==__FILE__
 	else
 		$W,$H=200,100
 	end  
-
+  dxlabel=0
 	while ARGV.size>0
 	  argv=[]
 	  argv << ARGV.shift  while ARGV.size>0 && ARGV.first!="--"
-	  Measure.create(argv)
+    s=(argv[3]|| "   ").size*8
+	  Measure.create(argv,dxlabel)
+    dxlabel+=s
+    p dxlabel,argv
 	  ARGV.shift if ARGV.size>0 && ARGV.first=="--"
 	end
 	run_window
